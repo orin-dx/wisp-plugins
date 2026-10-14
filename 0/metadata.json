@@ -1,0 +1,112 @@
+{
+  "cli_version": "0.11.5-nightly.202610130630.4203b3d42",
+  "checkpoint_id": "01M4Y1WM7SD95P1GD70MSRFGZG",
+  "session_id": "bbc88500-1c22-4b17-a7aa-f01c453ffafa",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-14T20:33:18.307039Z",
+  "branch": "docs/ecosystem-changelog-catchup",
+  "checkpoints_count": 1,
+  "save_step_count": 71,
+  "files_touched": null,
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 1356,
+    "cache_creation_tokens": 3378448,
+    "cache_read_tokens": 310175042,
+    "output_tokens": 557811,
+    "api_call_count": 678
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01Ceji4FyqdZb3WPd7vQeMiy",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "artifact-design"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1731,
+        "end": 1732,
+        "entry_ids": [
+          "ea19d1e0-3d11-4a98-b2fa-f528617695bd"
+        ],
+        "tool_use_id": "toolu_01Ceji4FyqdZb3WPd7vQeMiy"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Ceji4FyqdZb3WPd7vQeMiy"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: artifact-design",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "summary": {
+    "intent": "Split the overloaded `delta` skill (and other multi-verb plugin skills) into targeted skills, add a consumer-focused changeset/semver model with a shared docs-voice standard, and harden the repo with validation scripts and CI.",
+    "outcome": "Split delta into six skills and canon/graph/basis similarly, added changeset@2/release-artifact@2 schemas, docs-voice.md, topic-based changeset apportionment, three check scripts with shared lib, and a CI workflow. Pushed to main and tagged delta--v2.1.1.",
+    "learnings": {
+      "repo": [
+        "Before this session every plugin had exactly one skill directory, with a thin dispatcher fanning out to subagents; delta, canon, graph and basis were later split into multiple skills, and the constitution was amended to allow it.",
+        "shared/constitution.md makes schemas immutable: a breaking change requires a new @N+1 file (changeset@2, release-artifact@2) and all consumers must be repointed.",
+        "Skill naming: default is a single word, but a specific multi-word name (e.g. post-review) is preferred over a <plugin>-<stage> prefix, since plugin:skill invocation already disambiguates.",
+        "Two marketplace manifests are both sources of truth and are synced manually: root marketplace.json (id/path/version per plugin) and .claude-plugin/marketplace.json (Claude Code schema, no per-plugin version).",
+        "changesets.md has a skip list (pure docs, reference updates, internal refactors) that must be checked before the semver table; tooling-only changes need no bump.",
+        "Changeset apportionment priority: shared linked_spec/plan/requirement, then explicitly stated shared scope, then shared cause inferred from the diff; it is not a proxy for file/package/commit count, and both over-bundling and over-splitting are failure modes.",
+        "Unquoted @ in Mermaid labels breaks rendering under the newer grammar and must be quoted; verify by rendering with @mermaid-js/mermaid-cli, not by reading source.",
+        "Standing rule: never hard-wrap markdown, changesets, commit messages, or PR bodies.",
+        "macOS BSD grep lacks -P; use -E in scripts.",
+        "claude plugin tag plugins/<name> --push creates <plugin>--v<version> tags validated against the marketplace entry."
+      ],
+      "code": [
+        {
+          "path": "scripts/lib/report.sh",
+          "finding": "Shared report_check() holds the OK/FAILED summary used by check-mermaid.sh, check-versions.sh and check-skills-doc.sh; each script passes its own wording and the exit 1 propagates under set -e."
+        },
+        {
+          "path": "scripts/check-skills-doc.sh",
+          "finding": "Matches only table rows of the form | `plugin/skill` | because free prose in READMEs legitimately negates fictional skills (e.g. 'no `proof/scan`'), which caused false positives."
+        },
+        {
+          "path": "scripts/check-versions.sh",
+          "finding": "Compares four sources by string equality: plugin.json version, README **Version:** line, top CHANGELOG ## [X.Y.Z] entry, and root marketplace.json per-plugin version."
+        }
+      ],
+      "workflow": [
+        "Verify against authoritative sources (gh api, WebFetch, actually running tools) instead of reconstructing from memory; memory-based CODE_OF_CONDUCT and Mermaid assumptions produced real errors.",
+        "Test new checks by injecting deliberate drift and confirming they fail, so they don't pass vacuously.",
+        "Plan mode before large restructures, as the user asked, helped catch the constitution violations on audit.",
+        "Use shellcheck from the scripts directory so source directives resolve; invoking from the repo root with -x produced a spurious failure.",
+        "Verify a git staging area before committing: pre-staged git rm deletions leaked into an unrelated release commit and had to be fixed with reset --soft.",
+        "Research subagents (style guides, prior art) kept the main context focused on synthesis."
+      ]
+    },
+    "friction": [
+      "Initially edited changeset@1/release-artifact@1 in place, violating schema immutability; reverted and created @2 files.",
+      "Named a skill post-review then renamed it post and reverted back after user pushback, costing churn across several files.",
+      "Early SKILL.md files were hard-wrapped before the user's no-wrap rule and needed rework.",
+      "First release commit accidentally included unrelated staged deletions.",
+      "Tagged v3.0.0 with no earlier history and bumped for pure doc changes (v3.1.0); needed backfilled tags and a process fix.",
+      "check-versions.sh failed first on BSD grep -P; check-skills-doc.sh false-positived on negation prose.",
+      "Several mid-session reconstructions from memory (CODE_OF_CONDUCT, Mermaid) were wrong and had to be redone.",
+      "The callisto fork committed to the wrong branch and was fixed by cherry-picking onto main."
+    ],
+    "open_items": [
+      "Plan Phase 4 (dogfood delta/changeset against this repo's own diff) was never run.",
+      "Markdown tooling deferred: markdownlint-cli2 vs Prettier vs Vale (Vale could enforce docs-voice.md banned words, but it is a Go binary breaking the npx precedent).",
+      "Pre-existing unused-field warnings in plugin.json surfaced by claude plugin tag --dry-run were not addressed.",
+      "The skills/<id>/SKILL.md directory layout was amended in the constitution, but whether other plugins (proof, vector, lambda, trace, axiom) should split was judged unnecessary because they are linear pipelines.",
+      "Possible future naming collision: canon's 'changeset' concept (spec corrections) versus delta's changeset skill if canon splits further."
+    ]
+  },
+  "kind": "imported"
+}
