@@ -1,0 +1,100 @@
+{
+  "cli_version": "0.11.5-nightly.202610130630.4203b3d42",
+  "checkpoint_id": "01M4Y1PJ3S4FDC5K1F4037BY8Z",
+  "session_id": "486ef10f-4007-4f9a-8f61-0f909b76893e",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-14T20:29:58.022531Z",
+  "branch": "docs/ecosystem-changelog-catchup",
+  "checkpoints_count": 1,
+  "save_step_count": 19,
+  "files_touched": null,
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 372,
+    "cache_creation_tokens": 1819069,
+    "cache_read_tokens": 54989681,
+    "output_tokens": 264903,
+    "api_call_count": 186
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01Lc8o4F7GFzWABrX21zNAuF",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "proof:proof"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1498,
+        "end": 1499,
+        "entry_ids": [
+          "7378a737-3adc-449e-a064-1177bd2fb247"
+        ],
+        "tool_use_id": "toolu_01Lc8o4F7GFzWABrX21zNAuF"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Lc8o4F7GFzWABrX21zNAuF"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: proof:proof",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "summary": {
+    "intent": "Establish a succinct, reader-scoped writing standard (doc comments, commits, PRs, specs) across the agent-plugins ecosystem, then reduce token usage across agents and ship the result with proper semver and changelogs.",
+    "outcome": "Added a Reader-Scoped Writing standard wired into implementer, reviewer, drafter and auditor, unwrapped hard-wrapped markdown across the repo, trimmed descriptions, split hazard references, and added a byte-identical <constitution> section to all 38 agents (ADR-006). Fixed basis scaffolder/auditor, bumped versions across all 9 plugins with changelogs, and committed as 3074819 (v3.3.0); the behavioral smoke test is deferred.",
+    "learnings": {
+      "repo": [
+        "shared/constitution.md is authoring-time only and runtime agents do not load it, so rules only take effect when baked into agent prompts (goal/judgment/output) and enforced by a fresh-context reviewer or auditor.",
+        "Reference files work for short single-purpose agents via <load_first>; for multi-step loops like implementer, baking the rule into the prompt body is more reliable.",
+        "docs-voice.md covers prose artifacts (commits, PRs, changesets, docs); code-comments.md was added for doc/inline comments.",
+        "plugins/*/subagents and plugins/*/shared are symlinks to agents/ and root shared/, so 335 glob matches are only 117 real .md files; dedupe by realpath before sweeping.",
+        "Agent files now use a 5-part structure with <constitution> first, then backstory/goal/judgment/output. The constitution block must be copied byte-for-byte, since paraphrasing breaks cache sharing.",
+        "basis:scaffolder and basis:auditor encode the agent structure; any structural change must update them or the auditor will fail every conformant agent.",
+        "Version consistency requires plugin.json, README Version line, per-plugin CHANGELOG top entry and the marketplace.json entry to agree (scripts/check-versions.sh). The marketplace aggregate version bumps to the max semver level of the release.",
+        "ADRs and CHANGELOGs are historical records: add a new ADR plus a superseded/extended-by note instead of rewriting.",
+        "Agent and skill description frontmatter loads into every session as a fixed tax, so it is the highest-leverage token target; guideline is 80-200 words.",
+        "Reference files have a ~120-line cap, now enforced by the new scripts/check-reference-size.sh.",
+        "Markdown must not be hard-wrapped (the user has a standing feedback memory); YAML >-folded descriptions were also wrapped in 28 of 34 agent files.",
+        "`claude plugin validate --strict <dir>` is a useful structural check that all 9 plugins pass.",
+        "The proof skill invoked in-session loads from the marketplace cache (~/.claude/plugins/cache/orin-dx-agent-plugins/...), not the local checkout, so local edits cannot be behaviorally tested until pushed and the plugin updated."
+      ],
+      "code": [],
+      "workflow": [
+        "Measure with real diffs and word counts before claiming savings, and report where the change adds cost as well as where it saves.",
+        "Read an agent's actual task before changing its model tier; graph/intake looked like a haiku candidate but needs real intent inference.",
+        "Propose before changing when the user asks, and escalate architectural rule changes (e.g. the 4-part structure) instead of amending them unilaterally.",
+        "Script byte-identical edits across many files and verify with a set-of-distinct-blocks check rather than editing by hand.",
+        "Heuristic wrap detectors give many false positives (label pairs, conditional branches); verify by hand before bulk edits.",
+        "Structural checks (YAML, versions, mermaid) do not substitute for behavioral testing of new conditional prompt logic.",
+        "Pushing to a remote needs explicit user approval, separate from a request to run a smoke test."
+      ]
+    },
+    "friction": [
+      "Repeatedly hard-wrapped markdown despite the user's standing rule, which prompted an angry correction and a repo-wide cleanup.",
+      "The initial doc-comment sweep offer was based on a toposort_impl example that was from another repo (callisto).",
+      "The wrap-detection heuristic produced noisy false positives, requiring several passes and manual review.",
+      "The plugin cache mismatch blocked a live behavioral test of the local edits.",
+      "The constitution rollout initially left basis scaffolder/auditor stale, which would have failed every conformant agent; found only during the extra cleanup pass.",
+      "The <constitution> block adds ~177 words per invocation to agents with no offsetting savings."
+    ],
+    "open_items": [
+      "Run the behavioral smoke test (proof against the toy target) after pushing to orin-dx/agent-plugins, running `claude plugin update`, and restarting the session; adversary's taxonomy-branching <load_first> and scanner's hazard-focus branching are unverified.",
+      "Commit 3074819 is local and has not been pushed.",
+      "Interactive Claude Code sessions outside the plugin pipeline have no reviewer/exit-gate backstop; the user accepted this.",
+      "Further description trims risk losing routing signal; adversary, architect and canon/exit-gate were left dense by choice."
+    ]
+  },
+  "kind": "imported"
+}
