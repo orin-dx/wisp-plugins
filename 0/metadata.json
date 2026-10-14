@@ -1,0 +1,58 @@
+{
+  "cli_version": "0.11.5-nightly.202610130630.4203b3d42",
+  "checkpoint_id": "01M4Y1MVNN6PXZN4SGM2QDJVS0",
+  "session_id": "247ad93d-34f5-4700-80e8-873be6f73283",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-14T20:29:01.61415Z",
+  "branch": "docs/ecosystem-changelog-catchup",
+  "checkpoints_count": 1,
+  "save_step_count": 31,
+  "files_touched": null,
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 9329,
+    "cache_creation_tokens": 2049791,
+    "cache_read_tokens": 68903507,
+    "output_tokens": 298214,
+    "api_call_count": 346
+  },
+  "summary": {
+    "intent": "Improve the agent-plugins repo (canon/vector/lambda/delta) so spec-driven and test-driven development no longer depends on the lossy context window, by persisting specs to disk and adding traceability between criteria, tasks, and code.",
+    "outcome": "Implemented spec_file_path persistence, covers_criteria, a separate canon-drift-checker agent, a spec correction loop, and criteria_evidence traceability. Also fixed docs (including the false axiom-as-inline-gate claim), synced versions and changelogs, and committed and pushed to main as 6537a35.",
+    "learnings": {
+      "repo": [
+        "Agents follow a 4-part structure (backstory, goal, judgment, output). EARS rules belong only in <output> sections, and markdown bodies must not be hard-wrapped. Multi-line YAML `>-` frontmatter descriptions are the repo convention and are not wrapping violations.",
+        "Version numbers live in several places (plugin.json, SKILL.md frontmatter, marketplace.json, README headers, CHANGELOG). They drifted repeatedly across rounds, e.g. lambda and vector SKILL.md were stuck at old versions while plugin.json read 1.2.0.",
+        "Cognitive-mode separation is a repo principle: analysis agents run at sonnet/medium, judgment gates at opus/high, recon at haiku/low. This drove splitting canon-drift-checker out of canon-verifier and moving spec file writes into the canon skill orchestrator.",
+        "changeset@1 is produced by delta-changeset-analyzer, not lambda. Lambda docs and the root README/ARCHITECTURE wrongly claimed otherwise, and this was corrected.",
+        "axiom is standalone: plugin.json has `consumes: []`, and lambda-exit-gate and canon-exit-gate independently reimplement its protocol rather than calling it. shared/scripts/validate-wiring.sh confirms this. The old 'internal dependency' and 'inline gate' claims in axiom/README.md and ARCHITECTURE.md were false.",
+        "The repo is pure prompt and schema with no CI or package.json. jq is the only tool touching JSON, and it is used only for manifest validation. RTK rules in .agents/rules/ already wrap git/grep/find output compression.",
+        "Constitution Tool Language rule: agents reference tools abstractly (e.g. 'your search tool', 'your shell tool') and never name literal commands or binaries.",
+        "The repo had no .gitignore, so .DS_Store sat untracked until one was added."
+      ],
+      "code": [],
+      "workflow": null
+    },
+    "friction": [
+      "The user interrupted a tool call mid-exploration and the work had to be resumed.",
+      "An Edit to canon-drift-checker.md accidentally dropped the opening <goal> tag. It was caught only by a later automated tag-balance check.",
+      "A README edit failed because the bold markdown formatting in the match text was missed, and it had to be retried.",
+      "The first draft of canon-drift-checker.md had hard-wrapped prose and had to be rewritten.",
+      "Pre-existing hard-wrapped paragraphs in canon-drafter.md and canon/SKILL.md were inherited when appending text, so they had to be repaired.",
+      "The wrap-detection heuristic was too noisy, flagging frontmatter and pre-existing content, so scoping via git diff was needed.",
+      "The design was initially mis-scoped by assuming lambda produces changeset@1, which was only discovered mid-implementation.",
+      "Version and doc sync gaps from earlier rounds went unnoticed until a later audit pass.",
+      "The trust-boundary hardening was added at length, then the user said a malicious CLAUDE.md is not a current concern."
+    ],
+    "open_items": [
+      "Possible TOON pilot for uniform-array runtime payloads (plan@1.tasks, criteria_evidence) was proposed but not decided. Persisted data would stay JSON.",
+      "Rust AST-based code search tool (tree-sitter/ast-grep, with outline/search/symbol/structural diff subcommands) is only at the brainstorming stage. Location (tools/ dir, RTK subcommand, or separate repo) and wrap-versus-embed are undecided.",
+      "Whether the AST tool should be general-purpose or purpose-built for canon/lambda/proof context burn is unresolved.",
+      "The original Callisto Track B and Track E work (idempotent apply_version_plan, PackageId specificity ordering and diagnostic) was never run through the pipeline in this session. Only the plugin improvements were done.",
+      "The axiom pipeline diagram choice (standalone dashed gate) was applied. Any future decision to actually wire axiom into canon/lambda remains open."
+    ]
+  },
+  "kind": "imported"
+}
