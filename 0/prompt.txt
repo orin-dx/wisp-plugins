@@ -1,0 +1,43 @@
+So the only way to keep good claude access is keeping using claude code. Should we use open code to access all the other models or just use the other models in some other way in claude code? What's the best way to coordinate across claude code and other models to maximize work and reduce cost?
+
+---
+
+Can we dig into claude-code-router or another way to do this? How are others doing it?
+
+---
+
+The fonts in the 2026 in one map diagram are really tiny
+
+---
+
+UX and design principles don't seem to be respected in this report, artifact. Some fonts are tiny. the diagrams are not clean and easily readable. We should have round-rects instead of sharp corners for a more modern look right?
+
+---
+
+[Image #2]
+
+You call this high quality design? If I shared this in a job application I would not even get an interview right? What else in this page does not meet the mustard?
+
+---
+
+How can we make this better? Improved header? Information layout, flow, breakdown, less prose and wall of text and perhaps more bullets? What of the color schema?
+
+Think UX and design patterns and best practices. What is modern, what is fresh and light
+
+---
+
+[Image #3]
+
+Should this be two columns? It seems crammed, is that easy to read and scan? How can you say with a straight face that you're following UX and design best practices?
+
+[Image #4]
+
+When everything is a call out box and everything calls attention nothing does and it all feels super busy. Like a used-car dealership with a million stickers on the cars. Or am I wrong here? This is embarassing
+
+---
+
+Does our layout and flow work well in desktop and mobile?
+
+---
+
+Can we make sure this report looks amazing in both desktop and mobile?  The tables and diagrams are specially tricky

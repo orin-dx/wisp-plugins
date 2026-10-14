@@ -1,0 +1,119 @@
+{
+  "cli_version": "0.11.5-nightly.202610130630.4203b3d42",
+  "checkpoint_id": "01M4Y1XM28D4KWT76QNWP12NYB",
+  "session_id": "da5f8841-096a-4b09-8f58-04074bff697a",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-14T20:33:48.015583Z",
+  "branch": "docs/ecosystem-changelog-catchup",
+  "checkpoints_count": 1,
+  "save_step_count": 50,
+  "files_touched": null,
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 680,
+    "cache_creation_tokens": 1943654,
+    "cache_read_tokens": 182615205,
+    "output_tokens": 474381,
+    "api_call_count": 340
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01LjRBtGLKTopWrZK9wMPPca",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "artifact-design"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 119,
+        "end": 120,
+        "entry_ids": [
+          "8ba22d76-1623-4d9a-9e64-7c91b27d9331"
+        ],
+        "tool_use_id": "toolu_01LjRBtGLKTopWrZK9wMPPca"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LjRBtGLKTopWrZK9wMPPca"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: artifact-design",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01HDxGCQyW54gG6rUQSSmcML",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "artifact-diagramming"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 176,
+        "end": 177,
+        "entry_ids": [
+          "f2f5c075-8cd3-4a8e-93c9-432ab294d2a4"
+        ],
+        "tool_use_id": "toolu_01HDxGCQyW54gG6rUQSSmcML"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01HDxGCQyW54gG6rUQSSmcML"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: artifact-diagramming",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "summary": {
+    "intent": "Research the current plugin/harness landscape (Claude Code, AGY, Codex, opencode, OpenRouter, Augment, etc.), including using Qwen/Kimi/GLM under Claude Code, and publish it as a high-quality, scannable report artifact that looks excellent on desktop and mobile.",
+    "outcome": "Published a 7-section, light-theme report artifact at a single stable URL, built from two research workflows, with a verified Playwright+PIL rendering pipeline. Fixed diagram clipping, callout overuse, topnav contrast, table and nav scroll affordances, and diagram scaling across 390–1440px widths.",
+    "learnings": {
+      "repo": [
+        "The main artifact is a single HTML file, coding-agent-landscape.html, in the session scratchpad. Every edit is republished to the same artifact URL rather than creating a new artifact.",
+        "Inline SVG diagrams must use `max-width:100%; height:auto` plus explicit width/height attributes matching the viewBox. `width:100%` with `overflow-x:auto` silently clips content behind an invisible macOS overlay scrollbar.",
+        "SVG `rx` can be set via CSS (`figure.diagram svg rect { rx: 7px; }`) to round every diagram rect in one line.",
+        "Design restraint is required: callouts are only for genuine warnings (4 remain), notes are plain text, and multi-column grids are only for light content. Dense cards stay single-column.",
+        "Anthropic ToS bans reusing a Claude Max/Pro subscription outside Claude Code (opencode issue #6930), and claude-code-router cannot pass through OAuth subscriptions. The viable cost architecture is two separate Claude Code lanes (subscription vs ANTHROPIC_BASE_URL to cheap models), coordinated externally."
+      ],
+      "code": [],
+      "workflow": [
+        "Verify layout claims by rendering with Playwright and tiling full-page PNGs with PIL, rather than reasoning about CSS blind. This was forced by repeated user frustration with unverified fixes.",
+        "Playwright `fullPage` screenshots duplicate position:sticky/fixed elements, producing false-positive bugs. Confirm with a DOM element count plus a scroll-to-element viewport screenshot.",
+        "Sweep viewport widths (390/768/1440 and more) with scripted measurements. Tablet widths and undiscoverable-overflow bugs (tables, nav pills, diagrams) only showed up this way.",
+        "A forked subagent returned with 0 tool calls. Relaunch as general-purpose with an explicit instruction to use WebSearch/WebFetch.",
+        "Fact-check stats before they go in the report. A '65% reasoning failures' stat did not exist in the cited paper and was replaced with the verified figures."
+      ]
+    },
+    "friction": [
+      "Repeated user frustration with unverified design claims (clipped diagram text, tiny fonts, callout overload, crammed columns), which led to strongly worded feedback.",
+      "Piecemeal edits were criticized, and the user wanted holistic report-wide updates.",
+      "The Playwright fullPage sticky-element artifact looked like a real topnav duplication bug and took extra investigation to disprove.",
+      "The initial diagram fix (bumping font sizes) missed the real root cause, the width:100% scaling and hidden overflow.",
+      "Multiple hidden-overflow bugs of the same class (diagrams, tables, nav pills) were found one at a time rather than all at once."
+    ],
+    "open_items": [
+      "The user's question about the sticky pill nav vs a hamburger was answered (keep the pills), but this was not tested on real devices.",
+      "Stripe's OpenRouter acquisition is pending and should be re-checked once it closes.",
+      "The report is mostly verified by headless Chromium only; real-device and Safari rendering were not checked.",
+      "Some community-sourced claims in the report (e.g. skill counts, ToxicSkills 36%) were rated 'likely' rather than confirmed."
+    ]
+  },
+  "kind": "imported"
+}
