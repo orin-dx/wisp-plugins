@@ -1,0 +1,3 @@
+<send_user_message_question_reply>
+[{"answer":"I have no idea, I was getting hook errors, check them all","question":"Which hooks are behaving oddly, and what did you observe? A command, error message, or expected behavior would help me focus the review.","questionItemId":"[\"request_user_input_async\",\"call_19bb94853b9b4f19b5bccca065abdd92\",0]"}]
+</send_user_message_question_reply>
