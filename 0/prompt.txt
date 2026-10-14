@@ -1,0 +1,53 @@
+Are the new issues in the released version or do we do another release?
+
+---
+
+Check on marketplace/changelog cross-check fork; once complete, fix confirmed defects (axiom SKILL.md stale authoring-time ref + any marketplace/changelog findings) and report a calibrated confidence answer to the user.
+
+---
+
+Anything left to address or look into?
+
+---
+
+Is our artifact up-to-date with everything we've done?
+
+---
+
+The little moving thin in the header is neat but it's overlapping with the text. Is there a better way to do something similar in the header and not have this looking weird. Think of a11y, UX and desing best practices for our report/artifact across the board, not just the header
+
+---
+
+Still feels like you're not digging deep enough into your UX knowledge and design best practices for the industry overall. This feels a bit lacking
+
+---
+
+How do we feel about the header? Use of spacing, layout, flow of information?
+
+---
+
+[Image #2] [Image #3]
+
+You call this good UX, good spacing and flow? You're still not trying at all.
+
+Any improvements to the color scheme?
+
+---
+
+What kind of fucked-up grid layout have you been on and is the proposed fix any metter?
+
+---
+
+Our diagrams have super-tiny font right?
+
+---
+
+Still seems small for the smallest ones
+
+---
+
+Does our layout and flow work well in desktop and mobile?
+
+---
+
+Can we address the bugs and make sure the whole thing looks amazing in both desktop and mobile?
