@@ -1,0 +1,139 @@
+{
+  "cli_version": "0.11.5-nightly.202610130630.4203b3d42",
+  "checkpoint_id": "01M4Y1RN1JDNX5YZX8SHFHV2XZ",
+  "session_id": "5ecd9de8-2c05-4dfb-95d2-d928d11fdf96",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-14T20:31:09.868087Z",
+  "branch": "docs/ecosystem-changelog-catchup",
+  "checkpoints_count": 1,
+  "save_step_count": 74,
+  "files_touched": null,
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 672,
+    "cache_creation_tokens": 1869361,
+    "cache_read_tokens": 150453820,
+    "output_tokens": 398477,
+    "api_call_count": 336
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01442xYsCwUw7oLLCcdD4jDB",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "artifact-diagramming"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 728,
+        "end": 729,
+        "entry_ids": [
+          "29705317-e6c7-4585-b065-a7ab9719e1a2"
+        ],
+        "tool_use_id": "toolu_01442xYsCwUw7oLLCcdD4jDB"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01442xYsCwUw7oLLCcdD4jDB"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: artifact-diagramming",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01Kn3jcgvpfThAvN2cVtte9F",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "artifact-design"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1124,
+        "end": 1125,
+        "entry_ids": [
+          "bcd39f33-faf3-4e59-ba02-d5a9e7a43797"
+        ],
+        "tool_use_id": "toolu_01Kn3jcgvpfThAvN2cVtte9F"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Kn3jcgvpfThAvN2cVtte9F"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: artifact-design",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "summary": {
+    "intent": "Research how the TDAD paper and Curtis's spec-driven UI article apply to the agent-plugins repo, then rename the plugin family with a memorable persona-based naming scheme (adding a frontend/design plugin for Lumen), and simplify agent prompts based on the findings (drop mandatory test-first ordering, bulletize prose, reduce over-prescription).",
+    "outcome": "Ran two multi-agent research workflows producing prioritized integration proposals. The family was renamed to the 'Wisp' umbrella with 10 persona plugins including a new `muse`, and that rename merged as PR #1. Test-first ordering was removed from smith/navigator (ADR-008), 21 agent judgment sections were bulletized, and implementer shape latitude plus compilation-boundary task sizing were added (ADR-009). All of it is on PR #2, which is green and targets main.",
+    "learnings": {
+      "repo": [
+        "Plugin family is now Wisp: loom/weaver, lantern/vanguard, oracle/scribe, navigator, smith, ranger, sentinel, courier, mason, muse. Directory names are the shipped personas, e.g. plugins/smith, plugins/navigator, plugins/scribe.",
+        "Every plugin version change must be synced across plugin.json, README masthead, CHANGELOG, both marketplace files, and the root marketplace/README badge/CHANGELOG. scripts/check-versions.sh and shared/scripts/validate-wiring.sh enforce this.",
+        "Repo precedent is to record significant behavior changes as ADRs in docs/adr/ (008 drop-test-first-ordering, 009 implementer-shape-latitude) and not to rewrite historical ADRs such as ADR-003; cross-reference them instead.",
+        "shared/constitution.md reserves EARS notation for <constitution>/<output> sections. A grep confirmed it hasn't leaked into backstory/goal/judgment across the 41 agent files.",
+        "The constitution block is byte-identical across agents and prompt-cached, so per-agent unique content (backstory/goal/judgment) is where context cost actually accrues.",
+        "shared/agent-best-practices.md already had a batching rule contradicting the planner's '15 minute task' cap; the cap was replaced with compilation-boundary sizing.",
+        "Research-workflow critique rejected speculative new schemas/plugins (component-spec@1, swatch) because no producer or consumer existed. Surviving proposals were extensions of proof/canon (a11y hazard taxonomy, drafter component-criterion guidance, token-drift smells)."
+      ],
+      "code": [
+        {
+          "path": "plugins/navigator/agents/planner.md",
+          "finding": "Planner previously mandated exact implementation code per task and a 15-minute task cap; both were reframed (code as baseline, compilation-boundary sizing). Line numbers weren't given in the transcript."
+        },
+        {
+          "path": "plugins/navigator/agents/challenger.md",
+          "finding": "Has an 'over-specified' check dimension that only catches cosmetic rigidity (private variable naming), not structural over-prescription like mandatory exact code."
+        },
+        {
+          "path": "plugins/smith/agents/implementer.md",
+          "finding": "Judgment section was rewritten for no-test-first flow but not bulletized until a later pass. It was wrongly described as already bulletized when briefing subagents."
+        }
+      ],
+      "workflow": [
+        "Verify primary sources directly. Fetching Böckeler's article corrected an earlier second-hand paraphrase: TDD cost 2.96-8.5x more tokens with no quality gain, and the effect traces to test-first ordering rather than the presence of tests.",
+        "Parallel subagent passes with a precise worked example and an explicit 'leave alone if no 2+ enumeration' rule produced consistent mechanical refactors. Spot-checking the agents' self-flagged judgment calls was worthwhile.",
+        "Checking PR state directly rather than assuming (PR #1 had merged externally) caught a stale base branch, which was fixed by retargeting PR #2 to main.",
+        "Unexpected untracked files (.codex/hooks.json) were inspected and excluded before the commit, then committed separately once the user asked.",
+        "Adversarial critique passes in the research workflows were effective at rejecting speculative infrastructure."
+      ]
+    },
+    "friction": [
+      "Naming took many rounds (Muse, Hachi/Apis/Agora, Genii, Familiar, finally Wisp) because early suggestions were too dictionary-derived or constrained to bee imagery.",
+      "A hard constraint emerged mid-conversation that the user wanted to avoid one name family and famous-engineer names, forcing re-proposals.",
+      "Earlier edits left a stray covers_criteria bullet and a wrong relative path in navigator SKILL.md; both were caught and fixed later.",
+      "The assistant misreported implementer.md as already bulletized, which only surfaced on later review.",
+      "Workflow output was truncated in notifications, so the full report had to be read from the output file.",
+      "The initial grep for TDD-ordering mentions missed alternate phrasings, which needed additional sweeps."
+    ],
+    "open_items": [
+      "Backend research proposals remain unbuilt: check-schema-refs.sh, check-schema-immutability.sh, check-plugin-agents.sh, a verdict@3 regressions[] evidence trail, canon/scribe drift-checker severity tiering, an axiom/sentinel downstream-consumer check, and reviewer search-backed sibling-gap enumeration.",
+      "FE work for Lumen is not yet implemented: the proof/ranger a11y hazard taxonomy (typescript-hazards-a11y.md), token-drift smells, and muse/drafter component-criterion guidance were only partially or not at all built.",
+      "The basis/mason calibrator is gated on a manual auditor.md simplification pilot with fixtures, to be done before any automation.",
+      "Whether backstory narratives should be bulletized is an open question, to be settled by an outcome-measured pilot rather than by feel.",
+      "The pilot for dropping test-first ordering needs measurement against real Smith tasks (cost and quality).",
+      "A GIVEN/WHEN/SHALL (EARS-plus-context) acceptance-criteria phrasing for scribe/muse drafters and navigator's planner was proposed, with the user's go-ahead unclear.",
+      "Add a Define/Design/Build/Verify/Ship category-band table to the README, and make sure every name is paired with a role tag (especially muse, to avoid the mockup-generation reading).",
+      "PR #2 (3+ commits) is awaiting review and merge."
+    ]
+  },
+  "kind": "imported"
+}
