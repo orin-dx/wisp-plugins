@@ -1,0 +1,9 @@
+We need to adjust our setup to account for the repo rename: https://github.com/orin-dx/wisp-plugins
+
+---
+
+that includes renaming the folder lcocally
+
+---
+
+Why are we writing python here???? WTF
