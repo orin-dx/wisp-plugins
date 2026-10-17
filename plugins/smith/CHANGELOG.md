@@ -2,6 +2,11 @@
 
 — smith
 
+## [2.4.5] - 2026-09-28
+
+### Added
+- Optional Wisp implementation-context preflight for explicit plan selections, with native Claude/AGY and Codex fallback and drift behavior preserved.
+
 ## [2.4.4] - 2026-09-27
 
 ### Added
