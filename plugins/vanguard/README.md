@@ -21,7 +21,7 @@ One skill, one pipeline: map sources, read only what the map points at, synthesi
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install vanguard
 ```
 

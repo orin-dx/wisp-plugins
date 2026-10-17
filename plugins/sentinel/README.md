@@ -23,7 +23,7 @@ Sentinel is standalone. Its `plugin.json` declares `consumes: []`, and nothing i
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install sentinel
 ```
 

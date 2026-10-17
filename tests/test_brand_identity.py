@@ -42,10 +42,14 @@ class BrandIdentityTests(unittest.TestCase):
         logo = (REPOSITORY_ROOT / "assets/logo.svg").read_text(encoding="utf-8")
         claude = read_json(".claude-plugin/marketplace.json")
 
-        self.assertIn('alt="Wisp Plugins"', readme)
+        self.assertIn('alt="Wisp Plugins', readme)
         self.assertIn(">WISP</text>", logo)
         self.assertIn(">PLUGINS</text>", logo)
-        self.assertEqual(claude["plugins"][0]["source"]["url"], "https://github.com/orin-dx/agent-plugins.git")
+        self.assertTrue(all(plugin["source"]["url"] == "https://github.com/orin-dx/wisp-plugins.git" for plugin in claude["plugins"]))
+        for manifest in (REPOSITORY_ROOT / "harnesses/codex/plugins").glob("*/.codex-plugin/plugin.json"):
+            metadata = json.loads(manifest.read_text(encoding="utf-8"))
+            if "repository" in metadata:
+                self.assertEqual(metadata["repository"], "https://github.com/orin-dx/wisp-plugins")
 
 
 if __name__ == "__main__":

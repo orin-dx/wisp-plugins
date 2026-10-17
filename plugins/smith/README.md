@@ -24,7 +24,7 @@ Smith never assembles a changeset itself. It hands `criteria_evidence` — exact
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install smith
 ```
 

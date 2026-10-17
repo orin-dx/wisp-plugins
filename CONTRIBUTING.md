@@ -213,8 +213,8 @@ This isn't automated. `mason:audit-plugin` checks structural conformance; it doe
 ## Development Setup
 
 ```bash
-git clone https://github.com/orin-dx/agent-plugins.git
-cd agent-plugins
+git clone https://github.com/orin-dx/wisp-plugins.git
+cd wisp-plugins
 
 # Install pinned documentation-check dependencies (just and pnpm must be on PATH)
 just install

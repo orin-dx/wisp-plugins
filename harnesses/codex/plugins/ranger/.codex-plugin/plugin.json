@@ -6,8 +6,8 @@
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
   },
-  "homepage": "https://github.com/orin-dx/agent-plugins",
-  "repository": "https://github.com/orin-dx/agent-plugins",
+  "homepage": "https://github.com/orin-dx/wisp-plugins",
+  "repository": "https://github.com/orin-dx/wisp-plugins",
   "license": "MIT",
   "keywords": ["bug-hunting", "audit", "security", "rust", "typescript", "python", "go"],
   "skills": "./skills/",
@@ -18,7 +18,7 @@
     "developerName": "Gabriel Castro (Orin DX)",
     "category": "Developer Tools",
     "capabilities": ["Interactive", "Read"],
-    "websiteURL": "https://github.com/orin-dx/agent-plugins",
+    "websiteURL": "https://github.com/orin-dx/wisp-plugins",
     "defaultPrompt": ["Audit this repository for bugs", "Verify this suspected defect", "Scan this Rust service for reachable hazards"]
   }
 }

@@ -25,7 +25,7 @@ One skill, not several — see [Behavior](#behavior) below for how it adapts to 
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install navigator
 ```
 

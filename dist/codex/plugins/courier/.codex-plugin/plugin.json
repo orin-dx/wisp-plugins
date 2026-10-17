@@ -6,8 +6,8 @@
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
   },
-  "homepage": "https://github.com/orin-dx/agent-plugins",
-  "repository": "https://github.com/orin-dx/agent-plugins",
+  "homepage": "https://github.com/orin-dx/wisp-plugins",
+  "repository": "https://github.com/orin-dx/wisp-plugins",
   "license": "MIT",
   "keywords": ["git", "github", "release", "changeset", "review"],
   "skills": "./skills/",
@@ -18,7 +18,7 @@
     "developerName": "Gabriel Castro (Orin DX)",
     "category": "Productivity",
     "capabilities": ["Interactive", "Read", "Write"],
-    "websiteURL": "https://github.com/orin-dx/agent-plugins",
+    "websiteURL": "https://github.com/orin-dx/wisp-plugins",
     "defaultPrompt": ["Prepare a commit from my staged changes", "Draft a PR from this verified work", "Create changesets for these changes"]
   }
 }

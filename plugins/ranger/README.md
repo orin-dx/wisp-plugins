@@ -27,7 +27,7 @@ Adversarial bug hunting on live Rust, TypeScript, JavaScript, Python, and Go cod
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install ranger
 ```
 

@@ -1,6 +1,6 @@
 # Wisp Plugins AI Agent & Skill Specification (`AGENTS.md`)
 
-This guide defines the top-level repository guidelines for AI coding agents (Claude Code, AGY, Cursor, Copilot, Codex) working on or utilizing the Wisp Plugins repository (`orin-dx/agent-plugins`).
+This guide defines the top-level repository guidelines for AI coding agents (Claude Code, AGY, Cursor, Copilot, Codex) working on or utilizing the Wisp Plugins repository (`orin-dx/wisp-plugins`).
 
 ---
 

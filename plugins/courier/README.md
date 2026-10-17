@@ -25,7 +25,7 @@ Courier does not critique code quality or spec conformance — that's the built-
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install courier
 ```
 
