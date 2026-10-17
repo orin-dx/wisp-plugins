@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.11.6-nightly.202610141814.4b8cdfaf0",
+  "checkpoint_id": "01M55D36G4MEWCKHBS8NFKWGDK",
+  "strategy": "manual-commit",
+  "branch": "docs/ecosystem-changelog-catchup",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "dist/codex/plugins/mason/shared/schemas/implementation-context@1.json",
+    "dist/codex/plugins/smith/.codex-plugin/plugin.json",
+    "dist/codex/plugins/smith/shared/schemas/implementation-context@1.json",
+    "dist/codex/plugins/smith/skills/implement/SKILL.md",
+    "harnesses/codex/catalog.json",
+    "harnesses/codex/plugins/smith/.codex-plugin/plugin.json",
+    "harnesses/codex/plugins/smith/skills/implement/SKILL.md",
+    "marketplace.json",
+    "plugins/smith/CHANGELOG.md",
+    "plugins/smith/README.md",
+    "plugins/smith/plugin.json",
+    "plugins/smith/skills/implement/SKILL.md",
+    "tests/test_smith_wisp_integration.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 90968,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1287552,
+    "output_tokens": 11009,
+    "api_call_count": 32,
+    "subagent_tokens_complete": true
+  }
+}
