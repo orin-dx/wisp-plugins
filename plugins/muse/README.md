@@ -28,7 +28,7 @@ Muse specs the component, not the code that implements it — for code-level acc
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install muse
 ```
 

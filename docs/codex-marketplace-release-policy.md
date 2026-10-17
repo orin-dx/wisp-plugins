@@ -41,7 +41,7 @@ Its test validates fixture documents against the source schemas, confirms the sa
 6. Register the published bundle with Codex using its marketplace root:
 
    ```bash
-   codex plugin marketplace add orin-dx/agent-plugins
+   codex plugin marketplace add orin-dx/wisp-plugins
    ```
 
    Codex discovers the root manifest and registers this source as `wisp-plugins`; install a plugin with `codex plugin add <plugin>@wisp-plugins`. A source previously registered as `orin-dx-agent-plugins` must be removed and re-added after this release.

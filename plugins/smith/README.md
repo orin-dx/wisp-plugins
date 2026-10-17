@@ -1,6 +1,6 @@
 # smith — Implementation
 
-**Stage:** Code · **Output:** code, `implementation-review@2`, `verdict@3` · **Version:** 2.4.4
+**Stage:** Code · **Output:** code, `implementation-review@2`, `verdict@3` · **Version:** 2.4.5
 
 Smith executes each plan batch through implementation, mutation, defect-family review, and an independent exit gate. Review finds syntactic and semantic siblings, records their shared cause, and checks for missing domain concepts or architectural constraints. No plan yet? Give it a `spec@1` directly.
 
@@ -24,7 +24,7 @@ Smith never assembles a changeset itself. It hands `criteria_evidence` — exact
 
 **Claude Code** — add the marketplace once, then install by ID:
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install smith
 ```
 
@@ -83,6 +83,8 @@ flowchart LR
 ```
 
 Each batch runs in a fresh `implementer` context. Mutation survivors return as precision tests. Reviewer findings return for scoped repair or route to `scribe:architect`; only approved reviews reach exit-gate.
+
+When an explicit plan selection and the optional Wisp CLI are available, Smith can consume its verified `implementation-context@1` packet to avoid reassembling selected plan/spec context. An unavailable or rejected result falls back to each harness's native workflow and spec-drift behavior; code inspection and verification remain required.
 
 ---
 

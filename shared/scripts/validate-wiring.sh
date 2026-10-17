@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Wiring validator for agent-plugins.
+# Wiring validator for Wisp Plugins.
 # Checks that all schema references in plugin.json resolve to files in
 # shared/schemas/, and that consumes/produces arrays are internally consistent.
 #

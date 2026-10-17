@@ -1,5 +1,13 @@
 {
   "enabled": true,
+  "strategy_options": {
+    "push_checkpoints": true,
+    "push_checkpoints_on_exit": true,
+    "push_sessions": true,
+    "summarize": {
+      "enabled": true
+    }
+  },
   "telemetry": true,
   "checkpoints": {
     "primary": {

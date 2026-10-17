@@ -12,7 +12,7 @@
       "description": "Meta-plugin for scaffolding and auditing plugins, skills, and subagents. Generates plugin directory structure, validates conformance to ecosystem schemas, and designs shared schema contracts. Skills: scaffold-plugin, audit-plugin, design-schema, scaffold-subagent.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/mason",
         "ref": "main"
       }
@@ -22,7 +22,7 @@
       "description": "Cross-language bug hunting. Finds real bugs in live code through recon, hazard scanning, adversarial verification, and exit-gate verdict. Supersedes bug-hunter-rust and bug-hunter-ts.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/ranger",
         "ref": "main"
       }
@@ -32,7 +32,7 @@
       "description": "Cross-cutting verification gate. Confirms that any stage artifact meets its criteria before the next stage begins. One skill, one recon-verify-judge pipeline, reused unchanged against any artifact type.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/sentinel",
         "ref": "main"
       }
@@ -42,7 +42,7 @@
       "description": "Need definition plugin. Captures and structures requirements before implementation begins. Integrates with GitHub Issues by default; extensible to Linear, Jira, or any issue tracker that produces the requirement@1 schema. Skills: capture-need, clarify-requirement, prioritize-backlog, connect-requirement, audit-backlog.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/weaver",
         "ref": "main"
       }
@@ -52,7 +52,7 @@
       "description": "Research plugin. Investigates questions and requirements to build a documented evidence base before committing to a solution direction. Produces research-report@1.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/vanguard",
         "ref": "main"
       }
@@ -62,7 +62,7 @@
       "description": "Specification plugin. Turns requirements and research reports into unambiguous, testable specs. Detects spec drift against actual code. Skills: draft-spec, verify-spec, spec-drift, audit-spec, gate-spec, correct-spec, architect.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/scribe",
         "ref": "main"
       }
@@ -72,7 +72,7 @@
       "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs \u2014 props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/muse",
         "ref": "main"
       }
@@ -82,7 +82,7 @@
       "description": "Planning plugin. Decomposes specs into sequenced, bite-sized implementation plans with an implementation approach, exact code as a baseline, and the tests proving each criterion \u2014 no write-test-first mandate. Tasks are sized to compilation boundaries, not a clock-time estimate. No TBDs. A developer with zero domain context can execute the plan mechanically.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/navigator",
         "ref": "main"
       }
@@ -92,7 +92,7 @@
       "description": "Implementation plugin. Executes plans by designing the approach, implementing, and writing comprehensive tests proving each acceptance criterion \u2014 verified by mutation testing, not a write-test-first mandate. The plan's code is a baseline implementer may improve on in shape, not scope. Produces committed, tested code verified by the sentinel exit gate.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/smith",
         "ref": "main"
       }
@@ -102,7 +102,7 @@
       "description": "Shipping plugin. Shepherds completed code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release.",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/orin-dx/agent-plugins.git",
+        "url": "https://github.com/orin-dx/wisp-plugins.git",
         "path": "plugins/courier",
         "ref": "main"
       }

@@ -1,6 +1,6 @@
 # Repository Hooks
 
-These hooks apply only while working in `orin-dx/agent-plugins`. They are project configuration, not distributable plugin behavior.
+These hooks apply only while working in `orin-dx/wisp-plugins`. They are project configuration, not distributable plugin behavior.
 
 ## Commit-time integrity guard
 

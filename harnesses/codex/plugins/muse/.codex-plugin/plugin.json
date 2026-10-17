@@ -6,8 +6,8 @@
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
   },
-  "homepage": "https://github.com/orin-dx/agent-plugins",
-  "repository": "https://github.com/orin-dx/agent-plugins",
+  "homepage": "https://github.com/orin-dx/wisp-plugins",
+  "repository": "https://github.com/orin-dx/wisp-plugins",
   "license": "MIT",
   "keywords": ["ui", "components", "accessibility", "specification", "design"],
   "skills": "./skills/",
@@ -18,7 +18,7 @@
     "developerName": "Gabriel Castro (Orin DX)",
     "category": "Developer Tools",
     "capabilities": ["Interactive", "Read", "Write"],
-    "websiteURL": "https://github.com/orin-dx/agent-plugins",
+    "websiteURL": "https://github.com/orin-dx/wisp-plugins",
     "defaultPrompt": ["Write a component spec from this design", "Audit this component spec", "Make this UI intent implementation-ready"]
   }
 }

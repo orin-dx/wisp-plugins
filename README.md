@@ -120,7 +120,7 @@ Claude agents are not renamed and shipped as Codex agents. Each Codex skill has 
 Add the repository marketplace from inside Claude Code, then install the plugins you want:
 
 ```
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 /plugin install weaver
 /plugin install vanguard
 /plugin install scribe
@@ -142,7 +142,7 @@ If you registered the previous marketplace identity, replace it before installin
 
 ```
 /plugin marketplace remove orin-dx-agent-plugins
-/plugin marketplace add orin-dx/agent-plugins
+/plugin marketplace add orin-dx/wisp-plugins
 ```
 
 ### Codex
@@ -150,7 +150,7 @@ If you registered the previous marketplace identity, replace it before installin
 Codex discovers the generated root manifest at `.agents/plugins/marketplace.json`; it points at the generated `dist/codex` bundle. Register the repository once, then add only the plugins you need:
 
 ```bash
-codex plugin marketplace add orin-dx/agent-plugins
+codex plugin marketplace add orin-dx/wisp-plugins
 codex plugin add weaver@wisp-plugins
 codex plugin add vanguard@wisp-plugins
 codex plugin add scribe@wisp-plugins
@@ -182,7 +182,7 @@ If you previously registered the marketplace as `orin-dx-agent-plugins`, migrate
 
 ```bash
 codex plugin marketplace remove orin-dx-agent-plugins
-codex plugin marketplace add orin-dx/agent-plugins
+codex plugin marketplace add orin-dx/wisp-plugins
 codex plugin add <plugin>@wisp-plugins
 ```
 
@@ -195,14 +195,14 @@ Entire-managed adapters expose the same repository-history search skill to Codex
 Install individual plugins via the native CLI (uses a Git URL):
 
 ```bash
-agy plugin install https://github.com/orin-dx/agent-plugins.git
+agy plugin install https://github.com/orin-dx/wisp-plugins.git
 ```
 
 Or use [`agy-plugins-cli`](https://github.com/ZaunEkko/agy-plugins-cli) for an interactive TUI with update tracking:
 
 ```bash
 npm install -g agy-plugins-cli
-agy-plugin marketplace add orin-dx/agent-plugins
+agy-plugin marketplace add orin-dx/wisp-plugins
 agy-plugin add weaver@wisp-plugins
 agy-plugin add vanguard@wisp-plugins
 agy-plugin add scribe@wisp-plugins
@@ -310,7 +310,7 @@ See [`shared/references/README.md`](./shared/references/README.md) for the maint
 ## Repository Structure
 
 ```
-agent-plugins/
+wisp-plugins/
 ├── marketplace.json              ← Plugin registry
 ├── .claude-plugin/               ← Claude marketplace metadata
 ├── ARCHITECTURE.md               ← System architecture

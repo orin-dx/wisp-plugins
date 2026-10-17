@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "implementation-context@1",
+  "title": "Implementation Context",
+  "description": "A bounded, artifact-only handoff for one explicit plan task or batch.",
+  "oneOf": [
+    { "$ref": "#/$defs/success" },
+    { "$ref": "#/$defs/failure" }
+  ],
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["path", "schema_id", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "schema_id": { "type": "string", "enum": ["plan@1", "spec@1"] },
+        "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "files", "steps", "commit_message"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "files": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "create": { "type": "array", "items": { "type": "string" } },
+            "modify": { "type": "array", "items": { "type": "string" } },
+            "test": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "steps": { "type": "array", "items": { "type": "string" } },
+        "commit_message": { "type": "string" },
+        "depends_on": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "covers_criteria": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "criterion": {
+      "type": "object",
+      "required": ["id", "criterion"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "criterion": { "type": "string", "minLength": 1 },
+        "is_error_case": { "type": "boolean" },
+        "judgment_call": { "type": "boolean" },
+        "rationale": { "type": "string" }
+      }
+    },
+    "gap": {
+      "type": "object",
+      "required": ["kind", "finding"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": ["missing_modify_target", "missing_test_target", "dependency_completion_unverified"]
+        },
+        "finding": { "type": "string", "minLength": 1 },
+        "task_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "success": {
+      "type": "object",
+      "required": [
+        "contract_id",
+        "status",
+        "selection",
+        "sources",
+        "plan_context",
+        "spec_context",
+        "tasks",
+        "criteria",
+        "checks",
+        "gaps",
+        "evidence_scope",
+        "output_limit_bytes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": { "const": "implementation-context@1" },
+        "status": { "const": "ok" },
+        "selection": {
+          "type": "object",
+          "required": ["mode", "id", "task_ids", "criterion_ids"],
+          "additionalProperties": false,
+          "properties": {
+            "mode": { "enum": ["batch", "task"] },
+            "id": { "type": "string", "minLength": 1 },
+            "task_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+            "criterion_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+          }
+        },
+        "sources": {
+          "type": "object",
+          "required": ["plan", "spec"],
+          "additionalProperties": false,
+          "properties": {
+            "plan": { "$ref": "#/$defs/source", "properties": { "schema_id": { "const": "plan@1" } } },
+            "spec": { "$ref": "#/$defs/source", "properties": { "schema_id": { "const": "spec@1" } } }
+          }
+        },
+        "plan_context": {
+          "type": "object",
+          "required": ["goal", "architecture"],
+          "additionalProperties": false,
+          "properties": {
+            "goal": { "type": "string" },
+            "architecture": { "type": "string" }
+          }
+        },
+        "spec_context": {
+          "type": "object",
+          "required": ["id", "purpose", "scope", "non_goals"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "purpose": { "type": "string" },
+            "scope": { "type": "string" },
+            "non_goals": { "type": "array", "items": { "type": "string" } },
+            "api_surface": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "signature", "description"],
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "type": "string" },
+                  "signature": { "type": "string" },
+                  "description": { "type": "string" },
+                  "error_conditions": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        },
+        "tasks": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/task" } },
+        "criteria": { "type": "array", "items": { "$ref": "#/$defs/criterion" } },
+        "checks": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["id", "result"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "enum": ["plan_schema", "spec_schema", "source_links", "spec_hash", "selection", "input_stability"]
+              },
+              "result": { "const": "passed" }
+            }
+          }
+        },
+        "gaps": { "type": "array", "items": { "$ref": "#/$defs/gap" } },
+        "evidence_scope": { "const": "artifacts_only" },
+        "output_limit_bytes": { "type": "integer", "minimum": 256, "maximum": 1048576 }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "required": ["contract_id", "status", "error"],
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": { "const": "implementation-context@1" },
+        "status": { "const": "error" },
+        "error": {
+          "type": "object",
+          "required": ["code", "check", "message"],
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "enum": [
+                "invalid_input",
+                "unsafe_path",
+                "missing_source",
+                "invalid_json",
+                "schema_violation",
+                "link_mismatch",
+                "spec_drift",
+                "invalid_selection",
+                "inputs_changed",
+                "budget_exceeded",
+                "filesystem_error"
+              ]
+            },
+            "check": { "type": "string", "minLength": 1 },
+            "path": { "type": "string", "minLength": 1 },
+            "message": { "type": "string", "maxLength": 160 }
+          }
+        }
+      }
+    }
+  }
+}
