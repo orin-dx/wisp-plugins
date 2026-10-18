@@ -21,4 +21,6 @@ Most web pages were read through summarizing fetchers, so quotes are the fetcher
 | `S3-community-practitioners.md` | Practitioners, anti-slop skills, exploration skills |
 | `M1-anthropic-guidance.md` | Claude 5 family prompting and agent guidance |
 | `M2-openai-guidance.md` | GPT-6 and Codex guidance (partial; some pages were 403) |
+| `Z1-claude-platform.md` | Claude Code and Anthropic agent-platform capabilities; its premise of a 290-line constitution per agent is wrong (catalog amendment P8) |
+| `Z2-other-harnesses.md` | Codex, Antigravity, Cursor, Copilot, cross-harness standards, UI-agent evals |
 | `X-conversation-findings.md` | User guidance, uSpec, TanStack Intent, ICAO, Caveman, rtk, Netflix |

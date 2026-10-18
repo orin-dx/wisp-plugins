@@ -11,6 +11,7 @@ The plugins were used on two brand sites (techworx and orin-dx). This evaluation
 | Path | What it is |
 | :-- | :-- |
 | `CATALOG.md` | The plan: 144 work packages, a dependency graph, six waves, 10 proposed ADRs, 20 conflicts with resolutions, and post-verification amendments (section 5) |
+| `ARCHITECTURE-REVIEW.md` | Each architectural assumption tested against what current agent platforms can do, measured repo facts, 16 more work packages (WP-601 to WP-616, 160 in total), and the resulting direction: thinner prompts, thicker harness |
 | `traceability/` | Five matrices mapping about 1,000 individual findings to WPs, each with contradictions, claims to verify, and proposed new WPs. `WP-draft.md` is the first draft the matrices were built against |
 | `verification/` | `VERIFY-1.md` (transcript and repo claims) and `VERIFY-2.md` (web and documentation claims). They correct errors in the evidence notes |
 | `evidence/` | The raw research notes. Index and tag legend in `evidence/README.md` |
@@ -57,7 +58,7 @@ Corrected after verification; see `verification/VERIFY-2.md` for evidence.
 
 ## The plan
 
-144 work packages, none dropped. Eight overlap another WP and are merged into it with a reason; about 20 more overlap and are kept with the reason stated. Full table in `CATALOG.md`.
+144 work packages from the evidence mapping, none dropped, plus 16 from the architecture review (160 in total). Eight overlap another WP and are merged into it with a reason; about 20 more overlap and are kept with the reason stated. Full table in `CATALOG.md`.
 
 | Wave | Theme | WPs | Needs first |
 | :-- | :-- | :-- | :-- |
@@ -76,6 +77,16 @@ Highlights:
 - **Wave 4:** ablations of the constitution and prompt structure measured net of cache hits, tier re-checks per model, Codex role cards, an AGENTS.md strategy, and skill versioning and maintenance.
 
 Design choices made in the catalog's conflict table (section 4): 3 options per round and 4 directions only at the first direction-commit; 3 parallel writers by default and up to 5 for disjoint work; scanners report everything and a separate stage filters while gates stay scoped to stated requirements (test first in WP-60); no tier changes on vendor claims until measured (WP-63).
+
+## Architecture review (summary)
+
+Full text in `ARCHITECTURE-REVIEW.md`. Measured facts: 10 plugins, 30 skills, 44 agents; agents use only five frontmatter keys and none of the platform's native controls (`tools`, `maxTurns`, `isolation`, `skills`, `memory`); no plugin ships hooks, validators, workflows or code-intelligence servers.
+
+- **Keep:** the schemas as the cross-harness contract, progressive disclosure, and the differentiators no harness provides natively: falsifiable specs, adversarial refutation, fail-by-default binding gates, enforced self-audit.
+- **Change:** enforcement. Retry caps, schema validity and "no pass without evidence" move from prompts into hooks or workflow scripts where the harness supports it, with the prompt path as the cross-harness fallback (the retry cap failed in the `pages` session because it lived only in a prompt). Plans become outcome-level and resumable for longer autonomous runs. Visual evidence comes from capability-detected native browsers.
+- **Test before deciding:** whether role-based agent splits pay for their cost (Anthropic recommends splitting by context, not role; multi-agent runs cost 3 to 15 times a single agent). WP-601 sets up `claude plugin eval` with a no-plugin baseline.
+- **Lower priority than first thought:** the constitution is a 6-line block in each agent, not 290 lines. The 290-line file is the authoring-time rulebook (catalog amendment P8).
+- **Shape:** Codex has its own native plugin format in `harnesses/codex/`; AGY's format is similar to Claude Code's and shares the authored tree. AGY workflows stop working on 2026-10-19, so author skills only.
 
 ## How the user's guidance is covered
 
