@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Td21Z5Nn8DPYLSM337FNDz",
+  "agent_id": "ad495e0e8f6971161",
+  "subagent_type": "general-purpose",
+  "task_description": "Research Codex and other agent harnesses",
+  "token_usage": {
+    "input_tokens": 28,
+    "cache_creation_tokens": 103067,
+    "cache_read_tokens": 884556,
+    "output_tokens": 241,
+    "api_call_count": 14
+  },
+  "started_at": "2026-10-17T20:21:22.709841-07:00",
+  "completed_at": "2026-10-17T20:24:37.188834-07:00"
+}

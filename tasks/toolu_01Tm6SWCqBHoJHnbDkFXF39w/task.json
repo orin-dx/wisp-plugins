@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Tm6SWCqBHoJHnbDkFXF39w",
+  "agent_id": "acdbec194efa49109",
+  "subagent_type": "general-purpose",
+  "task_description": "Research Claude agent platform capabilities",
+  "token_usage": {
+    "input_tokens": 26,
+    "cache_creation_tokens": 192244,
+    "cache_read_tokens": 1548201,
+    "output_tokens": 255,
+    "api_call_count": 13
+  },
+  "started_at": "2026-10-17T20:21:22.710266-07:00",
+  "completed_at": "2026-10-17T20:25:24.136012-07:00"
+}
