@@ -11,9 +11,9 @@ The plugins were used on two brand sites (techworx and orin-dx). This evaluation
 | Path | What it is |
 | :-- | :-- |
 | `CATALOG.md` | The plan: 144 work packages, a dependency graph, six waves, 10 proposed ADRs, 20 conflicts with resolutions, and post-verification amendments (section 5) |
-| `ARCHITECTURE-REVIEW.md` | Each architectural assumption tested against what current agent platforms can do, measured repo facts, 16 more work packages (WP-601 to WP-616, 160 in total), and the resulting direction: thinner prompts, thicker harness |
+| `ARCHITECTURE-REVIEW.md` | Each architectural assumption tested against what current agent platforms can do, measured repo facts, 28 more work packages (WP-601 to WP-628, 172 in total) added by the review and its verification, and the resulting direction: thinner prompts, thicker harness. Its section 7.1 overrides earlier rows where verification corrected them |
 | `traceability/` | Five matrices mapping about 1,000 individual findings to WPs, each with contradictions, claims to verify, and proposed new WPs. `WP-draft.md` is the first draft the matrices were built against |
-| `verification/` | `VERIFY-1.md` (transcript and repo claims) and `VERIFY-2.md` (web and documentation claims). They correct errors in the evidence notes |
+| `verification/` | `VERIFY-1.md` (transcript and repo claims), `VERIFY-2.md` (web and documentation claims), `VERIFY-3.md` (first-hand measurements: refusal scan, live probe, gate cost, repo structure), `Y1` to `Y6` (full primary-source reads of Claude Code, Anthropic, Codex, AGY and standards, design sources, aviation and evals), and `scripts/` that reproduce the measurements. They correct errors in the evidence notes |
 | `evidence/` | The raw research notes. Index and tag legend in `evidence/README.md` |
 
 Paths written `<refs>/...` in the catalog and matrices are *proposed* reference files that do not exist yet. The repo's reference-integrity test validates every literal `shared/references/` path, so proposals are marked this way.
@@ -39,7 +39,7 @@ Scope: about 812 transcript files, but only a handful are real top-level session
 - No schema for a direction, brief, wireframe, prototype, copy deck or critique, and no divergent cognitive mode.
 - Muse's docs point three times to "ranger's accessibility hazard taxonomy"; ranger has none, so implemented accessibility is never checked (WP-01, WP-44).
 - Every build path runs recon, mutation, review and a binding exit-gate; there is no spike or sketch mode. Constitution rules (default-fail gates, no TBDs) make an unfinished idea an invalid artifact.
-- 29 of 31 schemas carry a mandatory `reasoning` scratchpad field (constitution line 242). Anthropic's refusals documentation names exactly this pattern as a `reasoning_extraction` trigger on the current Claude 5 tiers, with no fallback model and billed pre-output refusals. Whether it fires for Wisp's schemas is untested, so WP-61 tests before any rename.
+- 29 of 31 schemas carry a mandatory `reasoning` scratchpad field (constitution line 242). Anthropic's refusals documentation names a `reasoning`, `thinking` or `trace` field as a `reasoning_extraction` trigger. First-hand evidence (`verification/VERIFY-3.md`): zero refusals in 72k+ Sonnet 5.5 and Opus 5.5 messages from the sessions, and a live probe in which the real `muse:drafter` prompt with its scratchpad field completed normally twice while one added line demanding verbatim chain of thought was refused and billed. The trigger is wording that asks for reproduced reasoning, not the field's existence. WP-625 adds a wording lint and a per-model-generation probe.
 
 ## What the industry shows
 
@@ -58,7 +58,7 @@ Corrected after verification; see `verification/VERIFY-2.md` for evidence.
 
 ## The plan
 
-144 work packages from the evidence mapping, none dropped, plus 16 from the architecture review (160 in total). Eight overlap another WP and are merged into it with a reason; about 20 more overlap and are kept with the reason stated. Full table in `CATALOG.md`.
+144 work packages from the evidence mapping, none dropped, plus 28 from the architecture review and its verification (172 in total). Eight overlap another WP and are merged into it with a reason; about 20 more overlap and are kept with the reason stated. Full table in `CATALOG.md`.
 
 | Wave | Theme | WPs | Needs first |
 | :-- | :-- | :-- | :-- |
@@ -88,6 +88,15 @@ Full text in `ARCHITECTURE-REVIEW.md`. Measured facts: 10 plugins, 30 skills, 44
 - **Lower priority than first thought:** the constitution is a 6-line block in each agent, not 290 lines. The 290-line file is the authoring-time rulebook (catalog amendment P8).
 - **Shape:** Codex has its own native plugin format in `harnesses/codex/`; AGY's format is similar to Claude Code's and shares the authored tree. AGY workflows stop working on 2026-10-19, so author skills only.
 
+## Conformance findings from primary-source verification
+
+Details in `verification/Y1` to `Y6` and `ARCHITECTURE-REVIEW.md` section 7.1.
+
+- **Claude Code.** `claude plugin validate plugins/<id>` reports a pass after checking components only, because the manifests sit at the plugin root and not at `.claude-plugin/plugin.json`. Validated explicitly, each manifest gets 3 warnings (`id`, `consumes`, `produces` are ignored at load time) and `--strict` would fail all 10. Agent `role` and skill `version` frontmatter have no runtime effect. Each plugin's `shared` symlink points outside the plugin directory. Subagents deliver reports through a `SubagentHandback` tool in auto mode (since 2.1.271), so a `SubagentStop` validator would read the wrong field. Stop-hook continuations are hard-capped at 8, and a failing or timed-out hook does not block unless `onFailure: "block"` (needs 2.1.295; local CLI is 2.1.292). The 15,000-token agent-description limit is a startup warning, not an error.
+- **Codex.** The roles README names retired or unknown model ids (`gpt-5.6-luna`, `-terra`, `-sol`; current: `gpt-6-luna`, `gpt-6.1-sol`, `gpt-6-astra`). 18 skills phrase delegation as "teams" or "teammates"; Codex delegates only when told to, so only the sequential fallback runs today. Role cards cannot enforce read-only (subagents inherit the parent sandbox). Only the legacy `.codex-plugin/plugin.json` exists, and `capabilities` carries an undocumented value (`agent-teams-optional`).
+- **Antigravity and standards.** The `$schema` URLs in the root `marketplace.json` and AGY's documented plugin schema both return 404, and no third-party AGY marketplace schema is documented, so that file is repo-private. Agent Plugins 1.0.0 requires `$schema` and `name` in its manifest and rejects paths leaving the plugin root. AGY workflows stop on 2026-10-19 (primary page).
+- **Claims corrected.** The harness-simplification result (6h/$200 vs 3h50m/$124.70) compares different models and prompts and kept the planner and evaluator; the "31-minute UK AISI horizon" is not in the cited paper; "Astra about 40 minutes per task" is a vendor latency simulation, not an autonomy duration; Caveman's "65%" is stale (its repo now reports 3% over a concise-control for the basic mode); `taste-skill` v2 has no dials; "verify" is FAA usage, ICAO and UK material uses "confirm"; AFIS and IFR claims needed qualification.
+
 ## How the user's guidance is covered
 
 | Guidance | Where |
@@ -101,14 +110,14 @@ Full text in `ARCHITECTURE-REVIEW.md`. Measured facts: 10 plugins, 30 skills, 44
 
 ## Open items and limits
 
-- **Unverified here:** pages commit counts (git was blocked for that repo), the `a859e2f` origin claim, the 271 KB JS budget, whether SPEC-013 supersedes 26 of SPEC-001's and 35 of SPEC-003c's criteria, Shopify and Airbnb figures, the Figma 25k response cap, GPT-6 effort `none`, Atlassian's earlier 34% and 16% figures, and the ICAO terminology (written from knowledge, not fetched; check Annex 10/11 and Docs 4444 and 9432 before any normative use).
+- **Unverified here:** pages commit counts (repo history access was blocked for that repo), the `a859e2f` origin claim, the 271 KB JS budget, whether SPEC-013 supersedes 26 of SPEC-001's and 35 of SPEC-003c's criteria, Shopify and Airbnb figures, the Figma 25k response cap, whether Codex loads Claude agents or hooks from `.claude-plugin` formats, install behavior of the `shared` symlink in each harness, whether `skills-ref` rejects a top-level `version`, and the refusal probe on Opus 5.5 and Fable 5.1 (only Sonnet 5.5 was probed). The aviation items were checked against UK CAP 413 and SKYbrary, not ICAO documents directly; see `verification/Y6-aviation-evals.md`.
 - **Weak evidence by nature:** vendor self-benchmarks and small samples (Vercel's six pages, Atlassian's single task). WP-401 proposes tagging them.
-- **One project:** all transcript evidence is from two sessions in one body of work. Gate cost in tokens and time was not measured (WP-03, WP-91).
-- **Not read:** several Anthropic engineering posts and Claude Code pages, OpenAI launch and system-card pages that returned 403, and uSpec's repository contents.
+- **One project:** all transcript evidence is from two sessions in one body of work. Gate cost was measured from those sessions (`verification/VERIFY-3.md`) and covers subagent-reported tokens only, not a bill or main-session tokens.
+- **Not read:** several newer Anthropic posts (infrastructure noise, eval awareness, auto mode), the Codex computer-use and MCP pages and release notes before 0.162, and ICAO Annex 10/11, Doc 4444 and Doc 9432 directly.
 - **User configuration untouched:** `~/.claude/RTK.md` installs rtk with the same hook JetBrains tested. Whether it helps this workflow is an open paired test (WP-68), not a recommendation to change it.
 
 ## Next decisions
 
 1. Accept or amend the wave order, in particular Wave 1 before Wave 2.
-2. Write ADR N1 (exploratory mode, amending ADR 003) and N6 (the `reasoning` field), and run the WP-61 refusal test.
+2. Write ADR N1 (exploratory mode, amending ADR 003) and N6 (the `reasoning` field policy: keep the field, lint the wording), and start with the Wave 0 conformance fixes (WP-617, WP-620, WP-622, WP-624, WP-625).
 3. Decide whether sketch and promote live as skills in `muse` (which already owns UI) or in a new plugin; `AGENTS.md` allows several skills in one plugin when intents are heterogeneous, and the catalog assumes `muse`.
