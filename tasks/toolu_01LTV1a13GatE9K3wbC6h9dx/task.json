@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01LTV1a13GatE9K3wbC6h9dx",
+  "agent_id": "ad80aa8ab495139f6",
+  "subagent_type": "general-purpose",
+  "task_description": "Research big-tech design workflows A",
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 78313,
+    "cache_read_tokens": 611234,
+    "output_tokens": 204,
+    "api_call_count": 11
+  },
+  "started_at": "2026-10-17T12:55:52.935358-07:00",
+  "completed_at": "2026-10-17T12:58:12.068463-07:00"
+}

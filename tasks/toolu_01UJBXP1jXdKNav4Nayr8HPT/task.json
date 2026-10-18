@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01UJBXP1jXdKNav4Nayr8HPT",
+  "agent_id": "a3886af1154761413",
+  "subagent_type": "general-purpose",
+  "task_description": "Map findings B+C to work packages",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 93587,
+    "cache_read_tokens": 196643,
+    "output_tokens": 62,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-17T19:53:08.777027-07:00",
+  "completed_at": "2026-10-17T19:56:10.845828-07:00"
+}

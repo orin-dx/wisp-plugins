@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01HqXmaW2hmnFRmy5mEBLgaZ",
+  "agent_id": "aca3f7fce225f65df",
+  "subagent_type": "general-purpose",
+  "task_description": "Research Claude Design and AI design tools",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 60976,
+    "cache_read_tokens": 190117,
+    "output_tokens": 157,
+    "api_call_count": 5
+  },
+  "started_at": "2026-10-17T12:44:32.2141-07:00",
+  "completed_at": "2026-10-17T12:45:45.019225-07:00"
+}

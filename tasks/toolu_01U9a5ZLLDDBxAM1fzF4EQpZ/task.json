@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01U9a5ZLLDDBxAM1fzF4EQpZ",
+  "agent_id": "a8018efc560be16bd",
+  "subagent_type": "general-purpose",
+  "task_description": "Research Figma MCP workflows",
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 66953,
+    "cache_read_tokens": 314073,
+    "output_tokens": 200,
+    "api_call_count": 7
+  },
+  "started_at": "2026-10-17T12:44:32.214671-07:00",
+  "completed_at": "2026-10-17T12:45:58.340289-07:00"
+}

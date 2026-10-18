@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01EHD8qtx7WoacALFwUWnYVc",
+  "agent_id": "a541e7dff6702b5a9",
+  "subagent_type": "general-purpose",
+  "task_description": "Map findings R1-R4 to work packages",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 90289,
+    "cache_read_tokens": 147862,
+    "output_tokens": 444,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-17T19:53:08.778894-07:00",
+  "completed_at": "2026-10-17T19:56:00.041882-07:00"
+}

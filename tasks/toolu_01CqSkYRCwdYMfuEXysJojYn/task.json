@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01CqSkYRCwdYMfuEXysJojYn",
+  "agent_id": "aaf36a173633fab3b",
+  "subagent_type": "general-purpose",
+  "task_description": "Verify web and documentation claims",
+  "token_usage": {
+    "input_tokens": 62,
+    "cache_creation_tokens": 107530,
+    "cache_read_tokens": 2687512,
+    "output_tokens": 695,
+    "api_call_count": 31
+  },
+  "started_at": "2026-10-17T19:57:22.875717-07:00",
+  "completed_at": "2026-10-17T20:01:32.545378-07:00"
+}

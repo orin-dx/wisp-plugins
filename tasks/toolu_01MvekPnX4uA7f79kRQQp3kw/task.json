@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01MvekPnX4uA7f79kRQQp3kw",
+  "agent_id": "abb16054743863a7b",
+  "subagent_type": "general-purpose",
+  "task_description": "Research community agentic design workflows",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 69208,
+    "cache_read_tokens": 384292,
+    "output_tokens": 213,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-17T12:55:52.919716-07:00",
+  "completed_at": "2026-10-17T12:57:21.181352-07:00"
+}

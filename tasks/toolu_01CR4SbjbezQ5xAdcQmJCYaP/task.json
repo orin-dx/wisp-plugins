@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01CR4SbjbezQ5xAdcQmJCYaP",
+  "agent_id": "a813a219f701211a3",
+  "subagent_type": "general-purpose",
+  "task_description": "Research Anthropic Claude 5.5 prompting guidance",
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 196808,
+    "cache_read_tokens": 1051753,
+    "output_tokens": 359,
+    "api_call_count": 11
+  },
+  "started_at": "2026-10-17T18:10:48.623586-07:00",
+  "completed_at": "2026-10-17T18:13:29.663885-07:00"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01MFRuFAsqJ2wyfHQ8QARW8h",
+  "agent_id": "adf9f8ff648a2fb05",
+  "subagent_type": "general-purpose",
+  "task_description": "Map findings M1, M2, X to work packages",
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 101046,
+    "cache_read_tokens": 304144,
+    "output_tokens": 55,
+    "api_call_count": 6
+  },
+  "started_at": "2026-10-17T19:53:08.775864-07:00",
+  "completed_at": "2026-10-17T19:56:29.595733-07:00"
+}
