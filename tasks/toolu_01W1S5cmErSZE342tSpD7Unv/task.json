@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01W1S5cmErSZE342tSpD7Unv",
+  "agent_id": "a1099d194445f965b",
+  "subagent_type": "general-purpose",
+  "task_description": "AGY, Agent Plugins, MCP specs and conformance",
+  "token_usage": {
+    "input_tokens": 50,
+    "cache_creation_tokens": 157786,
+    "cache_read_tokens": 2253790,
+    "output_tokens": 729,
+    "api_call_count": 25
+  },
+  "started_at": "2026-10-17T20:31:59.943437-07:00",
+  "completed_at": "2026-10-17T20:36:38.94645-07:00"
+}

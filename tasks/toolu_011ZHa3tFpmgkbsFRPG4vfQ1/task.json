@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_011ZHa3tFpmgkbsFRPG4vfQ1",
+  "agent_id": "a61e5e8f55088b453",
+  "subagent_type": "general-purpose",
+  "task_description": "Verify evals papers, ICAO, token-saver claims",
+  "token_usage": {
+    "input_tokens": 102,
+    "cache_creation_tokens": 177990,
+    "cache_read_tokens": 5635602,
+    "output_tokens": 943,
+    "api_call_count": 51
+  },
+  "started_at": "2026-10-17T20:31:59.939649-07:00",
+  "completed_at": "2026-10-17T20:40:31.958364-07:00"
+}
