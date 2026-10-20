@@ -73,3 +73,21 @@ Reading: gates are cheap per call and costly in rounds; ad hoc ideation and buil
 | Codex skills describing delegation as "teams" or "teammates" | 18 |
 | Codex manifests with `capabilities` containing `agent-teams-optional` | at least `vanguard`, `smith`, `weaver`, `navigator`, `scribe` |
 | Only reader of the 290-line `shared/constitution.md` at runtime | the `mason` auditor |
+
+## 5. Recorded gate verdicts against the verdict schemas
+
+`scripts/handback-conformance.py` validates the 45 persisted verdict files in `~/projects/pages/docs/specs` against `verdict@1` and `verdict@3` using the validator in `tools/validate-handback.py`.
+
+| Shape of the recorded verdict | Conforming | Violating |
+| :-- | :-- | :-- |
+| `verdict@3`-shaped (has `verified_scope`) | 27 | 8 |
+| `verdict@1`-shaped | 6 | 4 |
+
+All 12 violations are the same rule: `verdict_summary` longer than the schema's 300 characters (median length 288, maximum 745, 12 of 45 over the limit). Every other schema rule held, including the conditional ones (a `pass` carries no blockers; a `fail` names at least one).
+
+Two consequences:
+
+- A deterministic check would have asked for a trim on about 27% of recorded gate verdicts, and nothing else. The schema's rules are being followed except the length cap, which prompts alone do not enforce.
+- 35 of 45 verdicts are `verdict@3`-shaped although `muse` documents `verdict@1`. The validator therefore accepts either version for the `muse` gate until `muse` migrates (WP-02).
+
+Limits: the files were written by an orchestrator from the gate agents' handbacks and may have been edited on the way, so they approximate the handbacks. One project, two sessions.

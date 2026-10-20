@@ -1,6 +1,6 @@
 # Front-end and design-ideation evaluation of the Wisp plugins
 
-Status: proposal and evidence base. No plugin, schema, constitution or ADR was changed by this work. Every change below is a work package (WP) awaiting a decision.
+Status: proposal and evidence base, with Wave 0 started (see `IMPLEMENTATION-LOG.md`): the Codex role-card model ids, generated Claude manifests with validation, a reasoning-wording lint, and a hook-validator spike are done; nothing is released. Beyond Wave 0, every change below is a work package (WP) awaiting a decision. No ADR, constitution rule or published schema has changed.
 
 ## Why this exists
 
@@ -11,6 +11,7 @@ The plugins were used on two brand sites (techworx and orin-dx). This evaluation
 | Path | What it is |
 | :-- | :-- |
 | `CATALOG.md` | The plan: 144 work packages, a dependency graph, six waves, 10 proposed ADRs, 20 conflicts with resolutions, and post-verification amendments (section 5) |
+| `IMPLEMENTATION-LOG.md` | What Wave 0 changed so far, what it found, the change record the repo requires, and the release bookkeeping deliberately not done |
 | `ARCHITECTURE-REVIEW.md` | Each architectural assumption tested against what current agent platforms can do, measured repo facts, 28 more work packages (WP-601 to WP-628, 172 in total) added by the review and its verification, and the resulting direction: thinner prompts, thicker harness. Its section 7.1 overrides earlier rows where verification corrected them |
 | `traceability/` | Five matrices mapping about 1,000 individual findings to WPs, each with contradictions, claims to verify, and proposed new WPs. `WP-draft.md` is the first draft the matrices were built against |
 | `verification/` | `VERIFY-1.md` (transcript and repo claims), `VERIFY-2.md` (web and documentation claims), `VERIFY-3.md` (first-hand measurements: refusal scan, live probe, gate cost, repo structure), `Y1` to `Y6` (full primary-source reads of Claude Code, Anthropic, Codex, AGY and standards, design sources, aviation and evals), and `scripts/` that reproduce the measurements. They correct errors in the evidence notes |
