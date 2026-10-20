@@ -1,0 +1,73 @@
+{
+  "cli_version": "0.11.6-nightly.202610200625.37c909353",
+  "checkpoint_id": "01M5DCT661BGF60XDMBRH3AY0E",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-20T19:32:49.591017Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "5267af4e0754",
+  "checkpoint_transcript_start": 2064,
+  "transcript_lines_at_start": 2064,
+  "compact_transcript_start": 226,
+  "token_usage": {
+    "input_tokens": 176,
+    "cache_creation_tokens": 641564,
+    "cache_read_tokens": 49805404,
+    "output_tokens": 95585,
+    "api_call_count": 88,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 49
+  },
+  "summary": {
+    "intent": "Get a front-end/design-ideation plan for the wisp-plugins repo reviewed as a formatted artifact, then start implementing Wave 0 conformance and enforcement fixes (WP-617, 620, 622, 624, 625) on the local evaluation branch without pushing.",
+    "outcome": "Created a private Docs artifact of the proposal. Implemented WP-617 (Codex model ids, bundle regenerated, committed), WP-620 (generated .claude-plugin manifests, validate recipe), WP-625 (reasoning-wording lint), and WP-624 as a spike (handback validator tested against 45 real verdicts). WP-622 is only partly done (root $schema removed). Only the Codex commit was made in this segment; the other changes were still uncommitted and nothing was pushed.",
+    "learnings": {
+      "repo": [
+        "Plugin manifests sat at plugin root, so `claude plugin validate plugins/<id>` false-passed; tools/sync-claude-manifests.py now generates plugins/<id>/.claude-plugin/plugin.json and `just claude-validate` checks all 10 plugins under --strict.",
+        "Codex bundle in dist/codex is generated; after editing harnesses/codex/agent-roles/README.md run `just marketplace-sync` then `just marketplace-check` per the release policy.",
+        "Cross-harness source changes need a change record per shared/harness-authoring.md; this was written to docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md.",
+        "Gate verdict schemas use allOf with if/then and list-valued types such as [\"string\",\"null\"]; a validator must support both.",
+        "muse documents verdict@1 but 35 of 45 recorded verdicts are verdict@3-shaped, so the hook validator accepts either until muse migrates (WP-02).",
+        "All 12 recorded verdict violations were the same rule: verdict_summary over 300 characters (12 of 45, max 745).",
+        "Codex role-card model ids now are gpt-6-luna, gpt-6.1-sol and gpt-6-astra, checked against the Codex models page on 2026-10-20."
+      ],
+      "code": [],
+      "workflow": [
+        "Run tests against real persisted data, not just synthetic fixtures: real verdicts exposed a list-of-types bug the unit tests missed.",
+        "Verify a lint by planting a violating file, confirming the test fails, then removing it.",
+        "The command guard rejects compound shell scripts and shell variables; use the file tools or single-purpose commands instead.",
+        "Commit by topic and use /usr/bin/git explicitly; keep a reproducing script for each measured finding."
+      ]
+    },
+    "friction": [
+      "Docs connector `update` calls repeatedly failed on the placement of the `as` key beside `from` (three times), plus one malformed call, each needing a resend.",
+      "The command guard rejected a compound Python heredoc edit, forcing a switch to Read/Edit tools.",
+      "The earlier push was denied, so all work stays local on the branch.",
+      "Some Bash invocations needed rewriting (e.g. quoting --include globs, avoiding shell loops and variables)."
+    ],
+    "open_items": [
+      "Commit the remaining Wave 0 work (manifest generator, justfile and CI changes, lint test, handback validator and tests, docs and catalog updates); only the Codex fix is committed so far.",
+      "Push the branch and open a draft PR once the user gives explicit approval.",
+      "Finish WP-622: verify whether agy-plugins-cli discovers only top-level plugin directories, which would miss plugins under plugins/, and test in an isolated environment before changing the README.",
+      "Test a live SubagentStop/handback hook in auto mode and enable it first for smith, scribe, sentinel and ranger gates; onFailure:\"block\" needs CLI 2.1.295 and the current CLI is 2.1.292.",
+      "Migrate muse from verdict@1 to verdict@3 (WP-02).",
+      "Re-run the refusal probe on Opus 5.5, Fable 5.1 and Haiku 5.5; check install behavior of the `shared` symlink per harness.",
+      "Check whether skills-ref rejects a top-level `version` and whether Codex loads Claude agents or hooks.",
+      "Add the user's note that the early Storybook experiment used Opus 4.5 and the matching Sonnet, after confirming those version names.",
+      "No version or changelog bumps were made; releases remain to be handled per policy."
+    ]
+  }
+}
