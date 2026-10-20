@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "option-set@1",
+  "title": "Option Set",
+  "description": "A non-binding sketch: several structurally different options for one brief, each with a status and a reason, plus a log of decisions. It is not a spec. It carries no gate and may hold open questions. Nothing here enters planning until a promote step turns the chosen option into a requirement.",
+  "type": "object",
+  "required": ["id", "title", "brief", "status", "round", "options", "fidelity", "reasoning"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^SKETCH-[0-9]{3,}$",
+      "description": "Unique sketch identifier (e.g. SKETCH-001)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What is being explored, in a few words"
+    },
+    "brief": {
+      "type": "object",
+      "required": ["problem", "audience"],
+      "additionalProperties": false,
+      "description": "The anchor brief. Re-read it at the start of every round so options do not drift from it.",
+      "properties": {
+        "problem": { "type": "string", "minLength": 1, "description": "The problem or goal the options answer" },
+        "audience": { "type": "string", "minLength": 1, "description": "Who it serves, as a role or persona" },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Fixed facts the options must respect (brand, stack, tokens, content)"
+        },
+        "non_goals": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "What this exploration deliberately does not cover"
+        }
+      }
+    },
+    "direction": {
+      "type": "string",
+      "description": "The committed overall direction (for design work, the aesthetic direction), once one is chosen"
+    },
+    "status": {
+      "enum": ["exploring", "decided", "abandoned"],
+      "description": "exploring while options are open; decided once an option is chosen; abandoned when the exploration is dropped"
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The current round of options within the chosen direction"
+    },
+    "options": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "description": "Structurally different options. Three per round is the default; five is the cap.",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "summary", "structure", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^OPT-[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Stable option identifier within the sketch (e.g. OPT-rail). Never reused for a different option."
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1, "description": "What this option is, in one or two sentences" },
+          "structure": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What makes this option structurally different from the others, not a variation of color or spacing"
+          },
+          "status": {
+            "enum": ["open", "parked", "chosen", "rejected"],
+            "description": "open while undecided; parked to revisit; chosen as the direction forward; rejected with a reason"
+          },
+          "reason": { "type": "string", "minLength": 1, "description": "Why the option was parked, chosen or rejected. Required for every status except open." },
+          "assumptions": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Assumptions the option makes that are not verified"
+          },
+          "open_questions": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Unresolved questions. Allowed here; a spec may not carry them."
+          },
+          "renders": {
+            "type": "array",
+            "description": "Where the option can be seen",
+            "items": {
+              "type": "object",
+              "required": ["kind", "location"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": { "enum": ["file", "url", "screenshot"] },
+                "location": { "type": "string", "minLength": 1, "description": "A workspace-relative path or a URL" },
+                "viewport": { "type": "string", "description": "For example 390x844 or 1440x900" },
+                "theme": { "type": "string", "description": "For example light, dark, or a brand name" }
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "status": { "enum": ["parked", "chosen", "rejected"] } }, "required": ["status"] },
+            "then": { "required": ["reason"] }
+          }
+        ]
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "description": "The decision log. Append only; never rewrite an earlier entry.",
+      "items": {
+        "type": "object",
+        "required": ["option_id", "decision", "reason", "date"],
+        "additionalProperties": false,
+        "properties": {
+          "option_id": { "type": "string", "pattern": "^OPT-[a-z0-9]+(-[a-z0-9]+)*$" },
+          "decision": { "enum": ["chosen", "rejected", "parked"] },
+          "reason": { "type": "string", "minLength": 1 },
+          "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }
+        }
+      }
+    },
+    "fidelity": {
+      "const": "sketch",
+      "description": "Marks the artifact as a non-binding sketch so nobody mistakes it for a spec"
+    },
+    "reasoning": {
+      "type": "string",
+      "description": "Private scratchpad; not forwarded downstream."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "decided" } }, "required": ["status"] },
+      "then": { "required": ["decisions"], "properties": { "decisions": { "minItems": 1 } } }
+    }
+  ]
+}

@@ -85,6 +85,8 @@ def validate(instance: Any, schema: dict[str, Any], path: str = "$") -> list[str
             errors.append(f"{path}: expected at least {schema['minLength']} characters")
         if isinstance(schema.get("maxLength"), int) and len(instance) > schema["maxLength"]:
             errors.append(f"{path}: expected at most {schema['maxLength']} characters")
+        if isinstance(schema.get("pattern"), str) and not re.search(schema["pattern"], instance):
+            errors.append(f"{path}: expected to match {schema['pattern']}")
     if isinstance(instance, int) and not isinstance(instance, bool):
         if isinstance(schema.get("minimum"), int) and instance < schema["minimum"]:
             errors.append(f"{path}: expected at least {schema['minimum']}")

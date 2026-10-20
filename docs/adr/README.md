@@ -14,3 +14,4 @@ Index of accepted architectural decisions. Read the record before changing what 
 | [008](./008-drop-test-first-ordering.md) | Accepted | Feature implementation does not require a failing test first | None | Do not restore mandatory test-first ordering for feature work without a new ADR |
 | [009](./009-implementer-shape-latitude.md) | Accepted | Plan code is a baseline; tasks use compilation boundaries | None | Do not size tasks by clock time without a new ADR |
 | [010](./010-wisp-plugins-brand.md) | Accepted | The ecosystem brand is Wisp Plugins | Supersedes the umbrella-brand clause of 007 | Do not use "Wisp" alone for the ecosystem without a new ADR |
+| [011](./011-exploration-modes.md) | Accepted | Exploration modes are non-binding and enter the pipeline only through promote | Applies 003 to a new divergent mode | Do not give `sketch` or `spike` a gate, a spec or a test requirement, or let their artifacts enter planning without `promote`, without a new ADR |
