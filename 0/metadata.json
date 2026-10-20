@@ -1,0 +1,66 @@
+{
+  "cli_version": "0.11.6-nightly.202610200625.37c909353",
+  "checkpoint_id": "01M5DCVVTKSBPE9DX6KTVEGDWC",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-20T19:33:37.961451Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "5267af4e0754",
+  "checkpoint_transcript_start": 3044,
+  "transcript_lines_at_start": 3044,
+  "compact_transcript_start": 319,
+  "token_usage": {
+    "input_tokens": 2,
+    "cache_creation_tokens": 615,
+    "cache_read_tokens": 642720,
+    "output_tokens": 702,
+    "api_call_count": 1
+  },
+  "session_metrics": {
+    "turn_count": 49
+  },
+  "summary": {
+    "intent": "Commit a spike PreToolUse hook that validates gate handbacks against their verdict schemas, and log the Wave 0 findings in the evaluations docs.",
+    "outcome": "Two commits were made: one adding tools/validate-handback.py with tests/test_handback_validator.py, and one updating docs/evaluations with the Wave 0 log and findings. The hook is not yet registered by any plugin.",
+    "learnings": {
+      "repo": [
+        "Gate agents' output schemas are not reliably enforced by prompts alone, which motivated a validator hook.",
+        "In auto mode a SubagentStop hook only sees the closing text, because the delivered report goes through SubagentHandback. Validation therefore has to be a PreToolUse hook reading tool_input.message.",
+        "The validator checks exit-gate handbacks against verdict@1 or verdict@3, including conditional rules. It denies with the errors, caps denials at three per agent, and fails open on internal errors.",
+        "Run over 45 recorded gate verdicts, the only violation class found was verdict_summary over 300 characters (12 of 45).",
+        "Muse gates mostly emit verdict@3 even though muse documents verdict@1, so the docs and behavior disagree.",
+        "The cross-harness authoring guide requires a change record for this kind of work, and the evaluations log now includes one.",
+        "No version, changelog or tag changed for the Wave 0 work."
+      ],
+      "code": [
+        {
+          "path": "tools/validate-handback.py",
+          "finding": "The validator had a bug with list-typed schema properties. It was fixed and covered by a regression test in tests/test_handback_validator.py."
+        }
+      ],
+      "workflow": [
+        "Commit the tooling spike and the docs/evaluations log as separate commits, with the second recording what the first found.",
+        "Include a script that reproduces a finding in the docs so the result can be verified.",
+        "Fail-open hooks with a denial cap keep an experimental validator from blocking agents."
+      ]
+    },
+    "friction": [
+      "A SubagentStop hook cannot validate delivered reports in auto mode, which forced a different hook placement.",
+      "Prompt-only instructions did not keep gates to their output schema.",
+      "The 300-character limit on verdict_summary was violated in 12 of 45 recorded verdicts."
+    ],
+    "open_items": [
+      "Register the validator hook in a plugin. It is not registered anywhere yet.",
+      "Resolve the mismatch between muse's documented verdict@1 and the verdict@3 that muse gates actually emit.",
+      "Investigate how the community Antigravity CLI discovers plugins.",
+      "Check symlink behavior after install.",
+      "Address the verdict_summary length violations, either through prompts or through enforcement by the hook.",
+      "Continue the remaining Wave 0 work packages."
+    ]
+  }
+}
