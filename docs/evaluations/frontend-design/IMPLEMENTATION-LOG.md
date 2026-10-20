@@ -58,3 +58,26 @@ The repo's contribution checklist asks for a plugin version bump, a plugin chang
 | WP-90 | Mostly done | Six primary-source verification reads and the register's "not verified" list | The listed unverified items |
 
 Still open in Wave 0: WP-109 (defect-corpus fixtures for `mason:evaluate`), WP-440 (instruction-file linter), the `mason:evaluate` integration of the new analysis tool, the committed plugin-eval suite, and the isolated install test for WP-621 and WP-622.
+
+## Wave 1: exploration modes
+
+Decision record: `docs/adr/011-exploration-modes.md` (written as Accepted by the author on this branch; it needs the reviewer's confirmation in the pull request). Pilots: `investigations/exploration-pilots.md`.
+
+| WP | Status | What exists | Not yet done |
+| :-- | :-- | :-- | :-- |
+| WP-10 exploratory-mode decision | Done | ADR 011 and its index row | Review |
+| WP-18 mode router | Done as a reference | `shared/references/architecture/modes.md` (modes, rules, moving between them, one line for a repository's `AGENTS.md`), loaded by the three skills | A router skill; consumer-repo adoption |
+| WP-11 `sketch` | Done | `muse/sketch` skill, `muse/explorer` agent (sonnet, medium), `option-set@1`, Codex counterpart; piloted | Evaluation against ad hoc exploration |
+| WP-14a promote (lightweight) | Done | `muse/promote` skill producing a `requirement@1`, Codex counterpart; piloted | The full `spec@2` version (Wave 3) |
+| WP-15 `spike` | Done | `smith/spike` skill, `spike-report@1`, Codex counterpart; piloted | Evaluation |
+| WP-211 show-first | Done inside `sketch` | Render, then show, then describe; honest "not rendered" fallback; mode and skipped-gates lines | A deterministic render check |
+| WP-12 rendering medium | Partly | Static pages plus a `board.html`, browser capability used when present, fallback when not | Capability detection per harness; a tested board generator |
+| WP-13 decision log | Partly | Append-only `decisions` inside the sketch, with reasons | Cross-session retrieval and rule promotion; a place in consumer repos beyond `docs/sketches/` |
+| WP-16 direction commit | Partly | Four directions offered at the first round | Anti-slop controls (ban lists, named clusters, a scanner) |
+| WP-305, WP-306 divergence and re-anchoring | Partly | Re-anchor after about four revisions; the explorer's judgment section rejects variation-only options | An automated divergence check |
+| WP-512 write guard | Not done as a guard | Scratch-only writes are an instruction | A deterministic hook (needs the hook work in WP-602) |
+| WP-19, WP-20, WP-21, WP-309 | Not started | | |
+
+Also added: `tests/test_exploration_schemas.py` (the two new schemas, with the failure cases each rule exists for), `tests/test_agent_structure.py` (the five-part agent structure, the byte-identical constitution and tiers, for all 45 agents), `pattern` support in the validator tool, and README updates for `muse`, `smith` and the root schema table.
+
+Counts after Wave 1: 10 plugins, 33 skills, 45 agents, 33 schemas; `just check` runs 103 tests.

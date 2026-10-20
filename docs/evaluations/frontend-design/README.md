@@ -1,6 +1,6 @@
 # Front-end and design-ideation evaluation of the Wisp plugins
 
-Status: proposal and evidence base, with Wave 0 started (see `IMPLEMENTATION-LOG.md`): the Codex role-card model ids, generated Claude manifests with validation, a reasoning-wording lint, and a hook-validator spike are done; nothing is released. Beyond Wave 0, every change below is a work package (WP) awaiting a decision. No ADR, constitution rule or published schema has changed.
+Status: evidence base and plan, with Wave 0 and the core of Wave 1 built (see `IMPLEMENTATION-LOG.md`). Done: the Codex role-card model ids, generated Claude manifests with validation, platform-limit and cross-reference checks, a reasoning-wording lint, the `muse` gate aligned to `verdict@3`, tools for transcript metrics and paired analysis, registers of assumptions and verified facts, and the exploration modes (`muse/sketch`, `muse/promote`, `smith/spike`, the `explorer` agent, two new schemas, ADR 011), each piloted once. Nothing is released: no plugin version, changelog or tag changed. The rest of the 172 work packages below are awaiting a decision or not started. ADR 011 was written as Accepted by the author and needs review.
 
 ## Why this exists
 
