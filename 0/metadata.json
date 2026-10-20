@@ -1,0 +1,60 @@
+{
+  "cli_version": "0.11.6-nightly.202610200625.37c909353",
+  "checkpoint_id": "01M5DCV8YKGX7YNWTE35J59G84",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-20T19:33:18.372606Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "5267af4e0754",
+  "checkpoint_transcript_start": 3039,
+  "transcript_lines_at_start": 3039,
+  "compact_transcript_start": 318,
+  "token_usage": {
+    "input_tokens": 2,
+    "cache_creation_tokens": 473,
+    "cache_read_tokens": 642247,
+    "output_tokens": 536,
+    "api_call_count": 1
+  },
+  "session_metrics": {
+    "turn_count": 49
+  },
+  "summary": {
+    "intent": "Land two separate commits: remove a dead Antigravity $schema URL from the root marketplace.json, and add a test that fails when prompt text demands reproduced reasoning.",
+    "outcome": "Both changes were committed as separate commits (a chore for marketplace.json and a test for tests/test_reasoning_wording.py) and the last two commits were listed with git log --oneline -2.",
+    "learnings": {
+      "repo": [
+        "The root marketplace.json had a $schema pointing at antigravity.google, which returns 404. Antigravity documents no third-party marketplace schema, and no tests, scripts or CI read the field.",
+        "Commit messages in this repo use conventional-commit prefixes (chore(marketplace), test:) and carry a Claude-Session trailer URL.",
+        "The requirement@1 schema is immutable, so it is the one documented exception in the reasoning-wording test.",
+        "The reasoning-wording test scans agent and skill prompts, Codex role cards, runtime references and schema descriptions."
+      ],
+      "code": [
+        {
+          "path": "tests/test_reasoning_wording.py",
+          "finding": "New test that flags text demanding verbatim or reproduced chain of thought. It targets the demand, not the presence of a scratchpad field, and exempts the immutable requirement@1 schema."
+        },
+        {
+          "path": "marketplace.json",
+          "finding": "The $schema field was removed because it pointed at a dead Antigravity URL (404) that nothing consumed."
+        }
+      ],
+      "workflow": [
+        "Anthropic's refusals documentation names a request to reproduce internal reasoning as the reasoning_extraction trigger.",
+        "A live probe showed the real drafter prompt, with its scratchpad field, completing normally, while one added line demanding verbatim chain of thought was refused and billed. A scratchpad field is safe and the demand is what triggers the refusal.",
+        "Staging and committing each logical change separately, with explicit file paths in git add, keeps the history clean."
+      ]
+    },
+    "friction": [
+      "A prompt wording that demands reproduced reasoning gets refused and billed, and this is only discoverable through a live probe, which motivated the new guard test."
+    ],
+    "open_items": [
+      "requirement@1 remains an exemption in the reasoning-wording test because the schema is immutable; revisit if a successor schema version is introduced."
+    ]
+  }
+}
