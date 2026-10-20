@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-specification = importlib.util.spec_from_file_location("validate_handback", REPOSITORY_ROOT / "tools" / "validate-handback.py")
+specification = importlib.util.spec_from_file_location("validate_handback", REPOSITORY_ROOT / "shared" / "hooks" / "validate-handback.py")
 assert specification is not None and specification.loader is not None
 validator = importlib.util.module_from_spec(specification)
 specification.loader.exec_module(validator)

@@ -76,7 +76,7 @@ Reading: gates are cheap per call and costly in rounds; ad hoc ideation and buil
 
 ## 5. Recorded gate verdicts against the verdict schemas
 
-`scripts/handback-conformance.py` validates the 45 persisted verdict files in `~/projects/pages/docs/specs` against `verdict@1` and `verdict@3` using the validator in `tools/validate-handback.py`.
+`scripts/handback-conformance.py` validates the 45 persisted verdict files in `~/projects/pages/docs/specs` against `verdict@1` and `verdict@3` using the validator in `shared/hooks/validate-handback.py`.
 
 | Shape of the recorded verdict | Conforming | Violating |
 | :-- | :-- | :-- |

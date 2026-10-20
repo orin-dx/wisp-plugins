@@ -3,7 +3,7 @@
 Usage: python3 -I handback-conformance.py <directory> [glob]
 Example: python3 -I handback-conformance.py ~/projects/pages/docs/specs '*verdict*.json'
 
-Uses the validator from tools/validate-handback.py (the WP-624 spike). A file counts as
+Uses the validator from shared/hooks/validate-handback.py (the WP-624 spike). A file counts as
 conforming when it validates against verdict@1 or verdict@3. The persisted files were written by
 an orchestrator from the gate agents' handbacks, so they approximate, and may not equal, the
 handbacks themselves.
@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[5]
-spec = importlib.util.spec_from_file_location("validate_handback", root / "tools" / "validate-handback.py")
+spec = importlib.util.spec_from_file_location("validate_handback", root / "shared" / "hooks" / "validate-handback.py")
 validate_handback = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(validate_handback)
 

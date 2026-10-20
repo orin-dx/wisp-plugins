@@ -9,6 +9,7 @@ Sources are files under `docs/evaluations/frontend-design/verification/` unless 
 | Fact | Source | Tag | Re-check when |
 | :-- | :-- | :-- | :-- |
 | In auto mode, since Claude Code 2.1.271, a subagent delivers its report through the `SubagentHandback` tool, so a `SubagentStop` hook's `last_assistant_message` holds only the closing text; the report is `tool_input.message` | Y1 | P | A Claude Code release changes subagent delivery |
+| A `PreToolUse` hook with matcher `SubagentHandback` fires for a plugin subagent in `claude -p --permission-mode auto`: `agent_type` is `<plugin>:<agent>`, the report is `tool_input.message`, and a deny reason reaches the subagent, which corrected its report and was accepted on the third attempt (Claude Code 2.1.292, one run) | First-hand live run, 2026-10-20; `IMPLEMENTATION-LOG.md` hook enforcement section | F | A Claude Code release changes subagent delivery or hook matching |
 | `Stop` and `SubagentStop` hooks receive `stop_hook_active`; continuations are hard-capped at 8 in a row and the count resets when a tool is called; past the cap the turn ends | Y1 | P | Hooks documentation changes |
 | A hook that fails or times out does not block unless `onFailure: "block"` is set, which needs 2.1.295 | Y1 | P | CLI upgraded past 2.1.295 |
 | Plugin-shipped agents ignore `hooks`, `mcpServers`, `permissionMode` and `initialPrompt` | Y1 | P | Plugins reference changes |

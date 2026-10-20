@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Claude Code hook that validates a gate subagent's handback against its verdict schema.
 
-Spike for the deterministic-enforcement work (WP-602, WP-624); not registered by any plugin.
+Deterministic enforcement of gate output (WP-602, WP-624, ADR 012); registered by the gate plugins' hooks/hooks.json.
 
 Why a PreToolUse hook on `SubagentHandback`: in auto mode (Claude Code 2.1.271 and later) a
 subagent delivers its report through the `SubagentHandback` tool, so a `SubagentStop` hook's
@@ -12,7 +12,7 @@ and hand back again.
 Wire it (plugin `hooks/hooks.json`), scoped so it only inspects gate agents:
 
   {"hooks": {"PreToolUse": [{"matcher": "SubagentHandback", "hooks": [
-    {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/../../tools/validate-handback.py"}]}]}}
+    {"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/shared/hooks/validate-handback.py\""}]}]}}
 
 Behavior
   - Reads the hook JSON from stdin. Acts only for `agent_type` values in ROUTES (the exit-gate
@@ -24,6 +24,9 @@ Behavior
     for one `agent_id` it lets the handback through, so the invalid artifact reaches the
     orchestrator, which owns human escalation. This is the retry cap of 3, enforced here and
     not in a prompt.
+  - Enforces the retry cap in the report itself: a `retry_count` above RETRY_CAP is accepted only
+    as a `fail` carrying an `escalation_required` blocker, so a gate cannot pass a fourth retry.
+  - Set WISP_HANDBACK_TRACE to a file path to append one JSON line per inspected event.
   - Fails open: an internal error exits 1, which does not block (only exit code 2 or a deny
     decision blocks). A broken validator therefore cannot stall every subagent.
 
@@ -42,10 +45,11 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-SCHEMA_DIRECTORY = REPOSITORY_ROOT / "shared" / "schemas"
+SCHEMA_DIRECTORY = Path(__file__).resolve().parent.parent / "schemas"
 MAX_DENIALS = 3
 MAX_REPORTED_ERRORS = 5
+RETRY_CAP = 3
+ESCALATION_CRITERION = "escalation_required"
 
 # A handback passes when it conforms to any listed schema. Every gate produces verdict@3; the
 # muse gate moved from verdict@1 in WP-02 (26 of its 36 recorded verdicts were already
@@ -161,6 +165,25 @@ def record_denial(state_directory: Path, agent_id: str) -> None:
     path.write_text(json.dumps(counts), encoding="utf-8")
 
 
+def retry_cap_errors(report: dict[str, Any]) -> list[str]:
+    """A report past the retry cap must hand the decision to a human, not pass."""
+    count = report.get("retry_count")
+    if not isinstance(count, int) or isinstance(count, bool) or count <= RETRY_CAP:
+        return []
+    blockers = report.get("blockers")
+    escalated = isinstance(blockers, list) and any(isinstance(b, dict) and b.get("criterion") == ESCALATION_CRITERION for b in blockers)
+    if report.get("verdict") == "fail" and escalated:
+        return []
+    return [f"$.retry_count: {count} exceeds the cap of {RETRY_CAP}; return verdict 'fail' with a blocker whose criterion is '{ESCALATION_CRITERION}'"]
+
+
+def trace(event: dict[str, Any], outcome: str) -> None:
+    path = os.environ.get("WISP_HANDBACK_TRACE")
+    if path:
+        with open(path, "a", encoding="utf-8") as handle:
+            handle.write(json.dumps({"agent_type": event.get("agent_type"), "agent_id": event.get("agent_id"), "tool_input_keys": sorted((event.get("tool_input") or {}).keys()), "outcome": outcome}) + "\n")
+
+
 def decide(event: dict[str, Any], state_directory: Path, max_denials: int = MAX_DENIALS) -> dict[str, Any] | None:
     """Return a hook decision to deny the handback, or None to let it through."""
     if event.get("tool_name") != "SubagentHandback":
@@ -175,16 +198,19 @@ def decide(event: dict[str, Any], state_directory: Path, max_denials: int = MAX_
         errors = ["no JSON object found in the handback"]
     else:
         results = [validate(report, load_schema(name)) for name in schema_names]
-        if any(not result for result in results):
-            return None
-        errors = min(results, key=len)
+        errors = [] if any(not result for result in results) else min(results, key=len)
+        if not errors:
+            errors = retry_cap_errors(report)
     schema_name = " or ".join(schema_names)
     if not errors:
+        trace(event, "accepted")
         return None
     if denial_count(state_directory, agent_id) >= max_denials:
         print(f"validate-handback: cap of {max_denials} denials reached for {agent_id}; passing the report on", file=sys.stderr)
+        trace(event, "cap-reached")
         return None
     record_denial(state_directory, agent_id)
+    trace(event, "denied")
     shown = "; ".join(errors[:MAX_REPORTED_ERRORS])
     more = f" (+{len(errors) - MAX_REPORTED_ERRORS} more)" if len(errors) > MAX_REPORTED_ERRORS else ""
     return {

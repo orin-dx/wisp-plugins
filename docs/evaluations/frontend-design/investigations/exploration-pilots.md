@@ -4,7 +4,7 @@ Date: 2026-10-20. Question: do the new `sketch`, `promote` and `spike` skills an
 
 ## Method
 
-Each run used `claude -p --model claude-sonnet-5-5 --plugin-dir <plugin under test> --no-session-persistence` in a throwaway project directory outside `~/.claude` (a directory under it is treated as sensitive and blocks writes), with a budget cap and `--permission-mode acceptEdits` or `auto`. The prompt was a plain request, never naming the skill. Artifacts were validated against the real schemas with `tools/validate-handback.py`. The throwaway directories were deleted afterwards, so only the numbers and findings below are kept.
+Each run used `claude -p --model claude-sonnet-5-5 --plugin-dir <plugin under test> --no-session-persistence` in a throwaway project directory outside `~/.claude` (a directory under it is treated as sensitive and blocks writes), with a budget cap and `--permission-mode acceptEdits` or `auto`. The prompt was a plain request, never naming the skill. Artifacts were validated against the real schemas with `shared/hooks/validate-handback.py`. The throwaway directories were deleted afterwards, so only the numbers and findings below are kept.
 
 ## Runs
 

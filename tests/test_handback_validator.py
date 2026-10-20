@@ -1,4 +1,4 @@
-"""Cover the SubagentHandback validator spike (tools/validate-handback.py).
+"""Cover the SubagentHandback validator spike (shared/hooks/validate-handback.py).
 
 The hook denies a gate agent's handback when it does not conform to its verdict schema, caps
 denials per agent, ignores other agents, and fails open on internal errors. These tests exercise
@@ -17,7 +17,7 @@ import unittest
 from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-TOOL = REPOSITORY_ROOT / "tools" / "validate-handback.py"
+TOOL = REPOSITORY_ROOT / "shared" / "hooks" / "validate-handback.py"
 
 specification = importlib.util.spec_from_file_location("validate_handback", TOOL)
 assert specification is not None and specification.loader is not None
@@ -108,6 +108,23 @@ class HandbackValidatorTests(unittest.TestCase):
         self.assertEqual(validate_handback.validate({"value": None}, schema), [])
         self.assertEqual(validate_handback.validate({"value": "text"}, schema), [])
         self.assertEqual(validate_handback.validate({"value": 3}, schema), ["$.value: expected string or null"])
+
+    def test_a_retry_past_the_cap_must_escalate_instead_of_passing(self) -> None:
+        late_pass = {**VALID_PASS_V3, "retry_count": 4}
+        denied = self.decide(event(json.dumps(late_pass), agent_id="late"))
+        self.assertIn("escalation_required", denied["hookSpecificOutput"]["permissionDecisionReason"])
+        escalated = {**VALID_FAIL_V3, "retry_count": 4, "blockers": [{"criterion": "escalation_required", "finding": "Cap reached."}]}
+        self.assertIsNone(self.decide(event(json.dumps(escalated), agent_id="late2")))
+        self.assertIsNone(self.decide(event(json.dumps({**VALID_PASS_V3, "retry_count": 3}), agent_id="late3")))
+
+    def test_trace_records_each_inspected_event(self) -> None:
+        trace_file = self.state / "trace.jsonl"
+        os.environ["WISP_HANDBACK_TRACE"] = str(trace_file)
+        self.addCleanup(os.environ.pop, "WISP_HANDBACK_TRACE", None)
+        self.decide(event(json.dumps(VALID_PASS_V3)))
+        self.decide(event("not json", agent_id="t2"))
+        outcomes = [json.loads(line)["outcome"] for line in trace_file.read_text().splitlines()]
+        self.assertEqual(outcomes, ["accepted", "denied"])
 
     def test_missing_json_is_denied(self) -> None:
         denied = self.decide(event("I reviewed it and it looks fine."))
