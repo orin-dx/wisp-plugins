@@ -91,3 +91,25 @@ Two consequences:
 - The 45 files mix `scribe` gates (SPEC-002*, 9 files, all `verdict@3`) and `muse` gates (36 files). 26 of the 36 `muse` verdicts (SPEC-001 and SPEC-003*) are `verdict@3`-shaped although `muse` documented `verdict@1`; the other 10 (SPEC-005 to SPEC-012 and two of SPEC-001) are `verdict@1`-shaped. (An earlier version of this note said 35 of 45 were `muse` verdicts; that mixed in the `scribe` files.) The `muse` gate prompt also told the agent to set `verdict` to `"escalate"`, a value neither schema allows. WP-02 moved `muse` to `verdict@3` and made escalation a blocker, as in the other four gates.
 
 Limits: the files were written by an orchestrator from the gate agents' handbacks and may have been edited on the way, so they approximate the handbacks. One project, two sessions.
+
+## 6. Gate rounds, retry counts and tool-output share
+
+`tools/transcript-metrics.py` (the maintained version of `scripts/gate-cost.py`; same plugin and other-agent totals) over the same two projects and the persisted verdict files.
+
+**Blockers per gate round, from the verdict files** (`gates` subcommand):
+
+| Spec | Rounds | Blockers per round | Final persisted verdict |
+| :-- | :-- | :-- | :-- |
+| SPEC-001 | 13 | 18, 5, 6, 0, 0, 2, 0, 6, 2, 3, 2, 8, 3 | fail |
+| SPEC-003a | 7 | 5, 2, 0, 2, 4, 1, 0 | pass |
+| SPEC-003c | 4 | 3, 3, 1, 0 | pass |
+| SPEC-002b (scribe) | 4 | 6, 4, 1, 1 | fail, one escalation blocker |
+| SPEC-005 to SPEC-012 | 1 persisted each | 0 | pass, with `retry_count` 4, 5, 6, 6, 6, 8, 9 and 6 |
+
+- **Gates were not monotonic.** SPEC-001 reached 0 blockers in rounds 4, 5 and 7 and then had 6, 2, 3, 2, 8 and 3 again; SPEC-003a went 0, then 2, then 4. Blockers return after a clean round, which is the pattern WP-212 (non-monotonicity detection) and WP-50 (gate hygiene) target.
+- **Every one of the eight later specs passed with a recorded `retry_count` above the cap of 3** (4 to 9). The cap was not enforced.
+- **Five specs' last persisted verdict is `fail`** (SPEC-001, SPEC-002, SPEC-002b, SPEC-002c, SPEC-003). Later rounds may not have been persisted, so this is a lower bound on how often work proceeded without a persisted pass, not a count.
+
+**Tool-result characters by tool** (`outputs` subcommand, top-level sessions only): Bash was 77.5% of tool-result characters in the `pages` session (5.28M of 6.82M) and 51.9% in the `orin-dx` session. A compressor that sees only Bash output and removes 70% of it therefore bounds its saving at about 54% and 36% of tool-result characters in those sessions. This is a ceiling on fresh tool-result text, not on the bill: cached re-reads dominate cost, and the JetBrains replay of SkillsBench transcripts found only about 20% of tool output compressible. Your workflow, with Playwright scripts, builds and long Bash output, differs from that benchmark, which is why WP-68 (a paired test of `rtk` on this workflow) is worth keeping.
+
+**Skills versus agents** (`skills` subcommand): 7 Skill calls across the 812 transcripts, none of them a plugin skill other than `muse:component` once; see `../investigations/unused-agents.md`.
