@@ -88,6 +88,6 @@ All 12 violations are the same rule: `verdict_summary` longer than the schema's 
 Two consequences:
 
 - A deterministic check would have asked for a trim on about 27% of recorded gate verdicts, and nothing else. The schema's rules are being followed except the length cap, which prompts alone do not enforce.
-- 35 of 45 verdicts are `verdict@3`-shaped although `muse` documents `verdict@1`. The validator therefore accepts either version for the `muse` gate until `muse` migrates (WP-02).
+- The 45 files mix `scribe` gates (SPEC-002*, 9 files, all `verdict@3`) and `muse` gates (36 files). 26 of the 36 `muse` verdicts (SPEC-001 and SPEC-003*) are `verdict@3`-shaped although `muse` documented `verdict@1`; the other 10 (SPEC-005 to SPEC-012 and two of SPEC-001) are `verdict@1`-shaped. (An earlier version of this note said 35 of 45 were `muse` verdicts; that mixed in the `scribe` files.) The `muse` gate prompt also told the agent to set `verdict` to `"escalate"`, a value neither schema allows. WP-02 moved `muse` to `verdict@3` and made escalation a blocker, as in the other four gates.
 
 Limits: the files were written by an orchestrator from the gate agents' handbacks and may have been edited on the way, so they approximate the handbacks. One project, two sessions.
