@@ -16,6 +16,8 @@ Shared sources preserve lifecycle identity and interoperable artifacts. Harness 
 
 Codex role cards are portable plugin resources. They are not TOML configuration: host TOML controls local runtime defaults and is never a marketplace contract.
 
+Codex's own custom agents are TOML files (`.codex/agents/<name>.toml` with `name`, `description` and `developer_instructions`, and optionally a model and reasoning effort). A subagent inherits the parent's sandbox and approvals, and an agent file cannot override them, so a role card cannot make a role read-only by itself: the skill states the write boundary in its delegation packet and the primary agent checks the result. Codex also starts subagents only when the skill or the user asks, so a delegating skill must say which role to start and with what packet; "when teams are available" never triggers delegation. Whether to offer an optional, non-contract generator that turns role cards into TOML for users who want named Codex agents is an open decision (proposed decision record N8).
+
 ## Change procedure
 
 1. Classify the change before editing: shared identity, shared artifact contract, Claude/AGY workflow, Codex workflow, or distribution only.

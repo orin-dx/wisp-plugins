@@ -40,3 +40,21 @@ Verification: just check; just claude-validate; python3 -m unittest discover -s 
 ## Release bookkeeping not done
 
 The repo's contribution checklist asks for a plugin version bump, a plugin changelog entry and a matching marketplace entry when a plugin's behavior changes, and the version check compares all of them. These changes touch every plugin's packaged files (the Codex role README, a new Claude manifest), so a release would bump all ten plugins and the ecosystem version together. That is a release decision, so no version, changelog or tag was changed. Until then `just versions` passes because nothing it compares moved, and the generated Claude manifests copy whatever version `plugin.json` has.
+
+## Second pass (Wave 0 completion)
+
+| WP | Status | What exists | Not yet done |
+| :-- | :-- | :-- | :-- |
+| WP-03, WP-91, WP-515, WP-516 transcript metrics | Done | `tools/transcript-metrics.py` (`agents`, `skills`, `gates`, `outputs`) with `tests/test_transcript_metrics.py`; results in `verification/VERIFY-3.md` sections 3 to 6 | Per-spec time to first visual and post-gate defect counts need a labelled corpus, not a script |
+| WP-04, WP-508, WP-615 platform and cross-reference checks | Done for these checks | `scripts/check-platform-limits.py` in `just check` and CI: cross-references, skill metadata, agent description budget (now about 6.8k of 15k tokens), Codex description budget; `tests/test_platform_limits.py` | Authoring-conformance checks beyond these (for example frontmatter key policy for `role` and `version`, which Claude Code ignores) |
+| WP-05 repo claims | Done | The README and `ARCHITECTURE.md` counts (ten plugins, 44 agents, 30 skills, 31 schemas) were checked and are accurate | none |
+| WP-56 unused agents | Done | `investigations/unused-agents.md`: the skills were never invoked, so agents reachable only through them never ran | Acting on it is Wave 1 (skills as the entry point, a router) |
+| WP-60, WP-514, WP-422 evaluation method | Done as tooling and method | `tools/paired-analysis.py` (paired medians, exact tests, Cohen's kappa) with `tests/test_paired_analysis.py`; `docs/evaluation-methodology.md` | Wiring into `mason:evaluate` and its runner (a plugin change) |
+| WP-517, WP-601 native plugin eval | Assessed | `investigations/plugin-eval-assessment.md` with a first eight-case suite design | The suite is not committed or run: cost is unverified ($6 to $16 per full run is an estimate), and the eval copy may not resolve the `shared` symlink |
+| WP-609 assumptions register | Done | `docs/architecture-assumptions.md` | Reviews on each model generation |
+| WP-626, WP-401 facts and evidence quality | Done as documents | `docs/verified-facts.md`, `docs/evidence-quality.md` | Runtime wiring into `vanguard` (a plugin change) |
+| WP-510 Codex TOML policy | Done | `shared/harness-authoring.md` now states that Codex custom agents are TOML, that role cards cannot enforce read-only, and that Codex delegates only when told; the optional generator stays an open decision (proposed record N8) | The decision itself |
+| WP-61, WP-518, WP-616 | Done | Probe and scan (`VERIFY-3`); hook questions answered by the Claude Code and Codex reads | Probe on Opus 5.5, Fable 5.1 and Haiku 5.5 |
+| WP-90 | Mostly done | Six primary-source verification reads and the register's "not verified" list | The listed unverified items |
+
+Still open in Wave 0: WP-109 (defect-corpus fixtures for `mason:evaluate`), WP-440 (instruction-file linter), the `mason:evaluate` integration of the new analysis tool, the committed plugin-eval suite, and the isolated install test for WP-621 and WP-622.
