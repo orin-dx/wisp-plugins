@@ -71,12 +71,22 @@ class HandbackValidatorTests(unittest.TestCase):
             with self.subTest(message=message[:40]):
                 self.assertIsNone(self.decide(event(message)))
 
-    def test_muse_gate_accepts_either_verdict_version_until_it_migrates(self) -> None:
-        self.assertIsNone(self.decide(event(json.dumps(VALID_V1), "muse:exit-gate")))
+    def test_muse_gate_is_checked_against_verdict_3_like_the_others(self) -> None:
         self.assertIsNone(self.decide(event(json.dumps(VALID_PASS_V3), "muse:exit-gate")))
-        denied = self.decide(event(json.dumps({"verdict": "pass"}), "muse:exit-gate"))
+        denied = self.decide(event(json.dumps(VALID_V1), "muse:exit-gate"))
         reason = denied["hookSpecificOutput"]["permissionDecisionReason"]
-        self.assertIn("verdict@1 or verdict@3", reason)
+        self.assertIn("verdict@3", reason)
+        self.assertIn("verified_scope", reason)
+
+    def test_escalation_is_a_blocker_not_a_verdict_value(self) -> None:
+        escalate = {**VALID_PASS_V3, "verdict": "escalate"}
+        denied = self.decide(event(json.dumps(escalate), "muse:exit-gate"))
+        self.assertIn("expected one of", denied["hookSpecificOutput"]["permissionDecisionReason"])
+        escalation_blocker = {
+            **VALID_FAIL_V3,
+            "blockers": [{"criterion": "escalation_required", "finding": "Retry cap reached; human review needed."}],
+        }
+        self.assertIsNone(self.decide(event(json.dumps(escalation_blocker), "muse:exit-gate", agent_id="esc")))
 
     def test_summary_over_300_characters_is_the_recorded_real_world_violation(self) -> None:
         too_long = {**VALID_PASS_V3, "verdict_summary": "x" * 301}

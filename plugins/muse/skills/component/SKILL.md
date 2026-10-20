@@ -8,7 +8,7 @@ version: 1.0.0
 # Muse — Component Spec Skill
 
 <overview>
-Turns UI or design intent into a component spec a developer could implement — including its accessibility behavior — without asking a single clarifying question. One skill, one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. Muse audits the spec, not the implementation; for code-level accessibility hazard scanning after the component is built, see `ranger`'s accessibility hazard taxonomy.
+Turns UI or design intent into a component spec a developer could implement — including its accessibility behavior — without asking a single clarifying question. One skill, one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. Muse audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by `ranger`.
 </overview>
 
 <dispatch>
@@ -20,12 +20,12 @@ Turns UI or design intent into a component spec a developer could implement — 
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/verdict@1.json`
+`shared/schemas/spec@1.json`, `shared/schemas/verdict@3.json`
 </references>
 
 <io>
 **Consumes**: `requirement@1`, or free-text design intent describing the component
-**Produces**: `spec@1` (persisted to disk only after `exit-gate` passes) and, on failure, a `verdict@1` with blockers routed back to `drafter`. On pass, route the persisted `spec@1` — with `spec_file_path` set — to `navigator`.
+**Produces**: `spec@1` (persisted to disk only after `exit-gate` passes) and, on failure, a `verdict@3` with blockers routed back to `drafter`. On pass, route the persisted `spec@1` — with `spec_file_path` set — to `navigator`.
 </io>
 
 <circuit_breaker>

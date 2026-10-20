@@ -47,11 +47,11 @@ SCHEMA_DIRECTORY = REPOSITORY_ROOT / "shared" / "schemas"
 MAX_DENIALS = 3
 MAX_REPORTED_ERRORS = 5
 
-# A handback passes when it conforms to any listed schema. The muse gate documents verdict@1 but
-# 35 of the 45 verdicts recorded in the pages project are verdict@3-shaped, so both are accepted
-# until muse moves to verdict@3 (WP-02).
+# A handback passes when it conforms to any listed schema. Every gate produces verdict@3; the
+# muse gate moved from verdict@1 in WP-02 (26 of its 36 recorded verdicts were already
+# verdict@3-shaped, and its prompt told it to emit a verdict value the schema does not allow).
 ROUTES = {
-    "muse:exit-gate": ("verdict@1", "verdict@3"),
+    "muse:exit-gate": ("verdict@3",),
     "ranger:exit-gate": ("verdict@3",),
     "scribe:exit-gate": ("verdict@3",),
     "sentinel:exit-gate": ("verdict@3",),

@@ -267,13 +267,13 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `requirement@1` | weaver | vanguard, scribe |
 | `research-report@1` | vanguard | scribe |
 | `spec@1` | scribe, muse | navigator, sentinel |
-| `verdict@1` | muse | component-spec gate consumers |
+| `verdict@1` | none (Muse moved to `verdict@3`) | retained for existing artifacts |
 | `plan@1` | navigator | smith |
 | `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
 | `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |
 | `implementation-review@2` | smith | smith exit-gate, scribe architect |
 | `changeset@2` | courier | courier release, sentinel |
-| `verdict@3` | scribe, smith, ranger, sentinel | gate consumers and humans |
+| `verdict@3` | muse, scribe, smith, ranger, sentinel | gate consumers and humans |
 | `candidate-assessment@1` | ranger adversary | ranger report aggregation |
 | `finding-report@2` | ranger | scribe architect, humans |
 | `field-survival-map@1` | boundary-tracer | adversary |
@@ -284,7 +284,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `arch-model@2` | scribe | scribe architecture checks and remediation |
 | `release-artifact@2` | courier | humans |
 
-`verdict@1` remains Muse's component-spec gate contract. Other current gates use `verdict@3`; immutable schema versions are not rewritten in place.
+Every current gate, including Muse's component-spec gate, produces `verdict@3`. `verdict@1` is retained unchanged for artifacts that already use it; immutable schema versions are not rewritten in place.
 
 ---
 

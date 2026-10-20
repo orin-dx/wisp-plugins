@@ -20,7 +20,7 @@ One skill, one draft-audit-gate pipeline — reused unchanged regardless of whic
 
 **Invoke with:** `"Spec this component"`, `"Draft a component spec for this design"`, `"Audit this component spec"`, `"Is this component spec ready?"`, `"Gate this component spec"`
 
-Muse specs the component, not the code that implements it — for code-level accessibility hazard scanning after the component is built, see **[ranger](../ranger/)**'s accessibility hazard taxonomy.
+Muse specs the component, not the code that implements it. Code-level accessibility scanning of the built component is not yet covered: **[ranger](../ranger/)** has no accessibility hazard pack.
 
 ---
 
@@ -100,7 +100,7 @@ Drafter/auditor review loops are capped at 2 iterations before reaching the exit
 | `revision_note` | no | Set only on a correction — what changed and why, citing the affected criterion_id |
 | `reasoning` | yes | Scratchpad — never forwarded downstream |
 
-**`verdict@1`** — produced by `exit-gate` only; see `shared/schemas/verdict@1.json`
+**`verdict@3`** — produced by `exit-gate` only; see `shared/schemas/verdict@3.json`
 
 ---
 
