@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.11.6-nightly.202610200625.37c909353",
+  "checkpoint_id": "01M5DFAC3CDZQZWE59EA5AWP9H",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-20T20:16:35.555154Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "fb722eae4225",
+  "checkpoint_transcript_start": 4884,
+  "transcript_lines_at_start": 4884,
+  "compact_transcript_start": 485,
+  "token_usage": {
+    "input_tokens": 2,
+    "cache_creation_tokens": 1728,
+    "cache_read_tokens": 907862,
+    "output_tokens": 1496,
+    "api_call_count": 1
+  },
+  "session_metrics": {
+    "turn_count": 50
+  }
+}
