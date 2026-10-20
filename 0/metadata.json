@@ -1,0 +1,77 @@
+{
+  "cli_version": "0.11.6-nightly.202610200625.37c909353",
+  "checkpoint_id": "01M5DF9VDQD20XSPH28FGCMY3P",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-20T20:16:20.348739Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "fb722eae4225",
+  "checkpoint_transcript_start": 3758,
+  "transcript_lines_at_start": 3758,
+  "compact_transcript_start": 385,
+  "token_usage": {
+    "input_tokens": 170,
+    "cache_creation_tokens": 153775,
+    "cache_read_tokens": 71392256,
+    "output_tokens": 97010,
+    "api_call_count": 85
+  },
+  "session_metrics": {
+    "turn_count": 50
+  },
+  "summary": {
+    "intent": "Complete Wave 0 of the frontend-design evaluation plan and build Wave 1 exploration modes (sketch, promote, spike skills, explorer agent, new schemas, ADR 011) in the wisp-plugins worktree, piloting each and logging honest status.",
+    "outcome": "Wave 0 second pass was logged and committed. Wave 1 was built: option-set@1 and spike-report@1 schemas, explorer agent, sketch/promote/spike skills with Codex counterparts, ADR 011, modes reference, README and manifest wiring, and new tests. Each skill was piloted with claude -p, and the findings were recorded. `just check` passes (103 tests). The Wave 1 commits had not yet been made.",
+    "learnings": {
+      "repo": [
+        "Codex skills under harnesses/codex are native sources checked by tests/test_codex_native_sources.py. Editing one without running `just marketplace-sync` fails the drift test, so always resync after changing them.",
+        "Codex only delegates when explicitly told, so Codex skills must use explicit 'start a subagent with this packet' wording. Role cards cannot enforce read-only because subagents inherit the parent sandbox.",
+        "Manifest and marketplace files are generated or synced via `just claude-manifests-sync` and `just marketplace-sync`. Codex plugin.json files use inline arrays, so a json.dump rewrite creates noisy diffs. Use targeted text edits instead.",
+        "New ADRs must also be added to the docs/adr/README.md index. tests/test_reference_integrity.py enforces this.",
+        "scripts/check-reference-size.sh warns on reference file word count, so modes.md had to be trimmed to fit.",
+        "shared/scripts/validate-wiring.sh reports one pre-existing warning about an external optional schema, unrelated to this work.",
+        "`claude plugin validate` takes a component directory (e.g. plugins/muse/skills), not a single file path. A single file is parsed as JSON.",
+        "Agents share a five-part structure with a byte-identical constitution and tiers, now enforced for all 45 agents by tests/test_agent_structure.py.",
+        "Final counts: 10 plugins, 33 skills, 45 agents, 33 schemas."
+      ],
+      "code": [
+        {
+          "path": "tools/validate-handback.py",
+          "finding": "Extended with `pattern` support, since the new schemas option-set@1 and spike-report@1 use regex patterns. Tested in tests/test_exploration_schemas.py."
+        }
+      ],
+      "workflow": [
+        "Pilot new skills with `claude -p --plugin-dir ... --permission-mode auto --max-budget-usd N` in a clean /private/tmp directory, then validate the produced artifacts against the schemas.",
+        "Schema files were not reliably readable at run time in pilots. Inlining the record shape in each skill dropped schema violations from 22 to 0 on the same prompt.",
+        "Long compound shell commands were rejected by the command guard. Putting prompts in files and splitting run and inspect into separate commands worked.",
+        "`--permission-mode acceptEdits` plus `--allowedTools` did not suffice for the spike pilot. `--permission-mode auto` worked.",
+        "The Playwright browser blocks file: URLs, so a temporary localhost http.server was used to view the pilot output, then stopped and cleaned up.",
+        "Writing status tables with explicit Done/Partly/Not started and a 'Not yet done' column keeps implementation logs honest."
+      ]
+    },
+    "friction": [
+      "Pilot runs from the .claude/jobs tmp directory behaved differently from a clean /private/tmp directory, so the pilot had to be rerun elsewhere.",
+      "The first pilot sketch record did not conform to option-set@1 (22 violations) because the schema file was not reliably read at run time.",
+      "The Codex manifest edit via JSON dump reformatted the files and had to be reverted with git checkout.",
+      "The Codex source edit triggered the drift test until the bundle was regenerated.",
+      "An earlier stray space ('implementation ; code-level') in a description needed fixing.",
+      "A preview board was clipped, which led to adding a board-frame tip to both skills."
+    ],
+    "open_items": [
+      "The Wave 1 changes are uncommitted. The final step was `git status`, and the commits are meant to be split by topic.",
+      "ADR 011 was written as Accepted by the author and needs reviewer confirmation in the pull request.",
+      "Wave 0 still open: WP-109 defect-corpus fixtures, WP-440 instruction-file linter, wiring the analysis tool into mason:evaluate, the committed plugin-eval suite, and the isolated install test for WP-621/622.",
+      "Wave 1 not started: WP-19, WP-20, WP-21, WP-309.",
+      "Partly done: WP-12 (capability detection and a tested board generator), WP-13 (cross-session decision retrieval), WP-16 (anti-slop controls), WP-305/306 (automated divergence check).",
+      "WP-512 write guard is only an instruction, and a deterministic hook depends on WP-602.",
+      "A mode-router skill, the full spec@2 promote (Wave 3), the critique skill, and the muse recon and copy agents are not built.",
+      "Evaluation of sketch and spike against ad hoc exploration is not done.",
+      "The per-harness probe on Opus 5.5, Fable 5.1 and Haiku 5.5 is not done, and the open decision on the Codex TOML generator (N8) remains."
+    ]
+  }
+}
