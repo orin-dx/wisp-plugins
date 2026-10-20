@@ -81,3 +81,11 @@ Decision record: `docs/adr/011-exploration-modes.md` (written as Accepted by the
 Also added: `tests/test_exploration_schemas.py` (the two new schemas, with the failure cases each rule exists for), `tests/test_agent_structure.py` (the five-part agent structure, the byte-identical constitution and tiers, for all 45 agents), `pattern` support in the validator tool, and README updates for `muse`, `smith` and the root schema table.
 
 Counts after Wave 1: 10 plugins, 33 skills, 45 agents, 33 schemas; `just check` runs 103 tests.
+
+## Install check (WP-621, Claude Code)
+
+| Finding | Action | Evidence |
+| :-- | :-- | :-- |
+| Installed from the marketplace's sparse-checkout sources, every plugin got a dangling `shared` symlink and no schemas or shared references | All ten `.claude-plugin/marketplace.json` entries now use relative-path sources (`./plugins/<id>`); `tests/test_claude_marketplace_sources.py` guards it; `tests/test_brand_identity.py` now accepts relative sources while still requiring the publisher repository and the `orin-dx/wisp-plugins` install line | `verification/VERIFY-3.md` section 7: before and after installs of all ten plugins in isolated configs, and the red-to-green test run |
+
+This explains why a pilot run could not read `option-set@1.json`, and it means the schema-file reads that every skill relies on could not have worked for a marketplace install. Sessions in the two projects may have run plugins from a local checkout, where the symlink resolves. Still open: Antigravity and Codex install behavior, and a GitHub-sourced install after merge.

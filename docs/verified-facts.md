@@ -83,3 +83,10 @@ Sources are files under `docs/evaluations/frontend-design/verification/` unless 
 ## Not verified
 
 The Figma 25,000-token response cap, Shopify and Airbnb figures, GPT-6 effort `none` support on every model, Atlassian's earlier 34% and 16% figures, whether Codex loads Claude agents or hooks from `.claude-plugin` formats, install behavior of the `shared` symlink in each harness, whether `skills-ref` rejects a top-level `version`, and the pages repository's commit counts.
+
+## Plugin installation (checked 2026-10-20, Claude Code 2.1.292)
+
+| Fact | Source | Tag | Re-check when |
+| :-- | :-- | :-- | :-- |
+| Claude Code dereferences a plugin symlink whose target is elsewhere in the same marketplace when it copies the plugin into its cache; a target outside the marketplace is skipped | Claude Code documentation (host marketplace), `evaluations/frontend-design/verification/VERIFY-3.md` section 7 | P, F | CLI upgrade |
+| A `git-subdir` source is fetched with a sparse checkout of one subdirectory, so a `../../shared` symlink target is absent and the installed `shared` dangles; a relative-path source installs the whole marketplace's files | Claude Code documentation, first-hand install into an isolated config | P, F | CLI upgrade |

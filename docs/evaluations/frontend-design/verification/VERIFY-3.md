@@ -113,3 +113,17 @@ Limits: the files were written by an orchestrator from the gate agents' handback
 **Tool-result characters by tool** (`outputs` subcommand, top-level sessions only): Bash was 77.5% of tool-result characters in the `pages` session (5.28M of 6.82M) and 51.9% in the `orin-dx` session. A compressor that sees only Bash output and removes 70% of it therefore bounds its saving at about 54% and 36% of tool-result characters in those sessions. This is a ceiling on fresh tool-result text, not on the bill: cached re-reads dominate cost, and the JetBrains replay of SkillsBench transcripts found only about 20% of tool output compressible. Your workflow, with Playwright scripts, builds and long Bash output, differs from that benchmark, which is why WP-68 (a paired test of `rtk` on this workflow) is worth keeping.
 
 **Skills versus agents** (`skills` subcommand): 7 Skill calls across the 812 transcripts, none of them a plugin skill other than `muse:component` once; see `../investigations/unused-agents.md`.
+
+## 7. Installed plugins and the `shared` symlink
+
+Each plugin has a `shared -> ../../shared` symlink that its skills and agents use to read schemas and references. Whether it survives installation was open (WP-621). Tested on 2026-10-20 with Claude Code 2.1.292, each case in a fresh isolated config directory (`CLAUDE_CONFIG_DIR`) so nothing touched the real configuration.
+
+| Case | Marketplace source type | Result in the installed copy |
+| :-- | :-- | :-- |
+| A. Local marketplace, plugin `muse` | relative path (`./plugins/muse`) | `shared` is a real directory with the schemas inside: the installer dereferenced the symlink |
+| B. This repository's marketplace as it was, installed from the GitHub `main` branch | `git-subdir` (`path: plugins/muse`) | `shared` is a **dangling symlink** to `../../shared`; `shared/schemas` is missing |
+| C. This repository's marketplace after changing every entry to a relative path, all 10 plugins | relative path | `shared` is a real directory in every plugin with all 33 schemas |
+
+The primary documentation agrees: a symlink whose target is elsewhere in the same marketplace is dereferenced into the cache, `git-subdir` fetches "one subdirectory of a git repository, with a sparse checkout", and a relative path is the type to use "for a plugin in a subdirectory of the marketplace repository itself". So installing any plugin from this repository's marketplace gave it no schemas and no shared references. The Claude marketplace entries now use relative paths, and `tests/test_claude_marketplace_sources.py` fails on the old configuration (10 failures) and passes on the new one.
+
+Limits: case C added the marketplace from a local directory, not from GitHub (the docs say a GitHub-added marketplace also has the files, so relative paths resolve). The change reaches users only after it is merged to the branch the marketplace tracks and they update. The Codex bundle already materializes `shared` as regular files (no symlinks); Antigravity install behavior was not tested.
