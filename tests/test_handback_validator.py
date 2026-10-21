@@ -172,6 +172,16 @@ class HandbackValidatorTests(unittest.TestCase):
                 plugin, _, agent = agent_type.partition(":")
                 self.assertTrue((REPOSITORY_ROOT / "plugins" / plugin / "agents" / f"{agent}.md").is_file())
 
+    def test_every_exit_gate_agent_is_routed_and_its_plugin_registers_the_hook(self) -> None:
+        for gate in sorted((REPOSITORY_ROOT / "plugins").glob("*/agents/exit-gate.md")):
+            plugin = gate.parents[1].name
+            with self.subTest(plugin=plugin):
+                self.assertIn(f"{plugin}:exit-gate", validate_handback.ROUTES)
+                registration = json.loads((gate.parents[1] / "hooks" / "hooks.json").read_text(encoding="utf-8"))
+                entry = registration["hooks"]["PreToolUse"][0]
+                self.assertEqual(entry["matcher"], "SubagentHandback")
+                self.assertIn("shared/hooks/validate-handback.py", entry["hooks"][0]["command"])
+
 
 if __name__ == "__main__":
     unittest.main()
