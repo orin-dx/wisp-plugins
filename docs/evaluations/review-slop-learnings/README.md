@@ -2,69 +2,58 @@
 
 Evaluation date: 2026-11-02. Status: proposal, nothing implemented. No plugin version, schema or constitution text changed.
 
-## Evidence and limits
+## Verdict
 
-| Source | What it gave | Limit |
-|---|---|---|
-| Caliper "Road to v1 Alpha" (`ad4b3461`) | 22 Entire reviewer findings (7 runs, caliper/115, /117, /65), 71 findings distilled by the agent, user pushback | Findings fetched for 3 of 88 changes. Sweep claims are relayed, unverified. |
-| Callisto sessions `01a16130` (adversarial review), `01a0e02c`, `01a0e02f-*` (research lanes), `a33915af`, `15c732d1` | Release-workflow and redaction defects, user pushback, adopted `AGENTS.md` rules | Codex sessions. Only selected turns of 40-140 MB transcripts read. |
-| Plugin inventory of this repo | Current review, evidence and overclaim controls | Partial: not every agent file opened. |
+Add less than first proposed. Most of what Entire's reviewer caught is plain logic bugs that no rule prevents. The rule-addressable remainder fits in four one-line additions to existing reference files. A new schema, agent, reference pack or `entire` dependency is not justified by this evidence.
 
-- Callisto has no Entire review profile, so it has no Entire reviewer or judge output. Its "reviewer" evidence comes from a Codex adversarial review and workflow subagents. No "Callisto alpha" session exists.
-- Entire's reviewer produced false positives: 4 caliper/65 findings were already fixed and still show as current. Findings need reproduction on current main before action.
-- Entire findings carry no slop-versus-bug category.
-- Evidence comes from two projects by one author. Patterns are plausible, not proven general.
+## Evidence
 
-## Pattern catalogue
+- All Entire trail findings for `orin-dx/caliper` and `orin-dx/callisto`, pulled with `entire trail finding list` for open, resolved and dismissed: **167 changes, 37 findings** (19 open, 18 resolved, 0 dismissed). Findings exist on 7 changes (3 Caliper, 4 Callisto). Open and resolved findings were read in full.
+- Transcripts of 126 sessions harvested (71 MB) but **not read in bulk**. Reading them would add volume, not signal. They stay available for targeted lookup.
+- Session-level learnings from earlier lanes: Caliper `ad4b3461`, Callisto `01a16130`, `01a0e02c`, `01a0e02f-*`, `a33915af`, `15c732d1`. Callisto reported no local `entire review` runs, yet its trail has 14 findings on changes 37 to 40. The finding author was not checked. Its adversarial review (`01a16130`) came from Codex.
+- Entire's reviewer had false positives: 4 Caliper findings on caliper/65 were already fixed and still show as open. Reproduce on current main before acting.
+- Two projects, one author. Patterns are plausible, not proven general.
 
-Coverage = what the plugins do today.
+## What the 37 findings were
 
-| # | Pattern | Evidence | Coverage today |
+| Group | Count | Examples | A rule helps? |
 |---|---|---|---|
-| P1 | Test cannot fail: stub with hand-typed JSON, string-assertion generator tests, tests that `return` when a tool is missing, tests that run in no CI job | Callisto a33915af, E281, 01a0e02f; Caliper SWP-23 | `smith:mutator` checks discrimination, but nothing rejects stub-fed contract tests or skip-on-missing |
-| P2 | Failure read as absence: failed lookup, unparsed history, or missing tool becomes "no problem" | Callisto 01a16130 (#290 guard), 01a0e02f-4ede; Caliper graceful degradation | `ranger` hazard packs do not name it |
-| P3 | Projection taken for authority: green check on stale PR, manifest path, shortened ID | Callisto 01a16130 (#248: 12 checks green, 15 of 32 changesets) | None |
-| P4 | Harness differs from the real consumer (config defaults, warm vs cold cache) | Caliper `checker_modes_session.mjs`, `provider.ts:69` | `mason:evaluate` covers plugin fixtures only |
-| P5 | Producer-consumer boundary never crossed: `release-pr decide` output piped into `verify` fails; `less precise` vs `less_precise` key | Callisto E281; Caliper 01M6FC4227XS64CDFPTB1HT752 | `ranger:boundary-tracer` exists; contract-test requirement is missing |
-| P6 | Hand-copied lists and string keys that drift (four credential lists, 2,000-entry allow-list) | Callisto 15c732d1; Caliper patterns 1, 2 | `smith:reviewer` sibling search is the closest control |
-| P7 | Docs and specs written from intent: 10 of 30 doc claims false, ~14% of ~95 spec criteria false, `alias_expanded` stated as fact | Caliper sweeps; Callisto V1-REVIEW | `scribe:spec-drift` checks specs against code. Nothing checks README, changelog or docs claims. |
-| P8 | Briefs name symbols that do not exist (`redact_native_output`, `ScopedKey`) | Callisto 15c732d1 | Constitution "API Grounding Invariant" covers `spec@1`, `arch-spec@1`, `plan@1` only, not implementer briefs or worker prompts |
-| P9 | Premature "done": merged and green reported as published; worker numbers relayed as conclusions | Callisto a33915af; Caliper ("repeated worker numbers as conclusions") | `smith:exit-gate` and `sentinel` reject "implementer said so". Nothing requires an externally observed outcome (tagged, published). |
-| P10 | Review output not consulted until the user relayed it | Caliper | None |
-| P11 | Unrequested gates and over-engineering ("veneer", ~2,800 lines of gate scripts) | Caliper; Callisto "owner did not state it" | Nothing |
-| P12 | Prose slop: filler, vague names ("Durable"), history comments, wordy changesets | Both | `shared/references/authoring/voice.md` and `comments.md` cover the writing. They rely on banned words. Review agents do not load them for non-comment slop. |
-| P13 | Fix the symptom, not the family | Callisto 01a0e02c, a33915af | `smith:reviewer` sibling search and `scribe:architect` exist |
+| Logic and behavior bugs | 13 | `memo(forwardRef())` panic that drops a file's components; `less_precise` vs `less precise` key; substring PID filter reporting the wrong RSS; `errexit` disabled by `\|\|` leading to a duplicate comment; failure note in a job that never runs on the usual failures | No. Found by reading the diff adversarially. |
+| Tests that cannot fail or leave a path untested | 7 | Asserts only `!success()` where an E-code is specified; stub ignores `--jq`, so a broken filter passes; new call has no test; `--list` path never exercised | Yes |
+| Duplication, hand-copied values, hardcoded names | 5 | Helpers copied between two oracles; `report_name` hardcodes strings that exist as `Report::COMMAND`; local `stderr` helper duplicates `stderr_of` | Yes |
+| Harness differs from the real consumer | 4 | Benchmark uses the NAPI default instead of the addon's `collapseInheritedProps: 'none'`; `pgrep` inside the timed loop; `sleep` inside `wall_ms`; "first 50" over 12 components | Yes |
+| Docs and comments that misstate behavior | 4 | Module docstring describes the wrong scoring; stale comment on a removed field; `alias_expanded` is a text-length guess stated as fact | Yes |
+| Dead code | 2 | Unused field and parameters | Weakly |
+| Error swallowed or contract bent | 2 | `run_json` discards the exit code; spec now permits stray stderr before JSON | Weakly |
 
-## Proposals
+13 of 37 findings are logic bugs. The reviewer found them because it read each change independently, not because a rule told it what to look for. The Caliper agent did not look at the review output until the user relayed it, so the gap is that the pass was not consulted.
 
-Ordered by value over effort. "Decision" marks anything that touches a constitution, schema or release version, which is yours to approve.
+## Proposed changes
 
-### A. Extend what exists
+Each is one or two lines added to an existing file, justified by at least four findings. None adds a file, schema, agent or constitution text.
 
-1. **`ranger` hazard pack: failure-as-absence and projection-as-authority** (P2, P3). Add two hazards under `shared/references/hazards/*`: an absent, unknown or failed check result must not count as "no finding"; a status, path or truncated ID must not stand in for the object it names. Candidates need a runtime construct to refute, as `adversary` already requires. Effort: small. Decision: none.
-2. **`smith:reviewer` and `smith:mutator`: reject tests that cannot fail** (P1, P5). Add to `implementation-review.md` and `evidence.md`: contract tests must consume real producer output, not a stub; tests that skip silently on a missing tool fail under CI; a test must fail on the original defect. `mutator` records a stub-fed oracle as a coverage gap. Effort: small. Decision: none.
-3. **`sentinel` and `smith:exit-gate`: externally observed outcome** (P9). For release, publish or deploy criteria, the evidence must be the observed outcome (tag exists, package resolves), not "merged and green". Unobserved becomes `pending_checks`, not pass. `verdict@3` already has the fields. Effort: small. Decision: none.
-4. **`navigator:challenger` and constitution API grounding for briefs** (P8). Extend the invariant from specs and plans to any brief or worker prompt that names a function or type, and make `challenger` check named symbols against live code. Effort: small. Decision: constitution text change.
-5. **`scribe:auditor` and `drift-checker`: claim grounding in docs** (P7). Allow `drift-checker` to take a docs file (README, changelog, ADR) as the claim source and report each claim as covered, uncovered or drifted. Effort: medium. Decision: none, if it stays within the existing `drift-report` shape; schema bump otherwise.
+1. **Specific assertions** (7 findings). In `shared/references/verification/evidence.md`: a test for a specified error asserts that error's code or message, not only failure; a stub applies the logic it stands in for.
+2. **Single source** (5 findings). In `shared/references/verification/implementation-review.md`, next to the existing sibling search: before adding a helper, string or list, check whether the codebase already defines it, and reuse it.
+3. **Harness fidelity** (4 findings). In `evidence.md`: a measurement uses the consumer's configuration and times only the measured work; the report states the configuration and sample size.
+4. **Claims match code** (4 findings). In `shared/references/authoring/comments.md`: a comment or doc states what the code does today; a heuristic is labeled as one.
 
-### B. New capability
+Process, not plugin code: run the independent review pass and read its output before declaring work done. This is the largest gap in the evidence and no plugin text fixes it.
 
-6. **Slop review of workspace code** (P6, P7, P11, P12, P13). No agent owns this (see inventory). Recommended shape: a `smith:reviewer` reference pack (a new file beside `evidence.md` in `shared/references/verification/`), not a new agent, per ADR 003 keeping enumeration and judgment separate. The pack lists observable checks: duplicated helpers, hand-copied lists with no single source, history comments, comments restating signatures, dead code, unrequested gates, docs claims with no matching code. Each check requires a file and line. Effort: medium. Decision: none for the pack. A new agent would need ADR review.
-7. **Judge-style consolidation of multiple reviewer reports** (P10, plus Entire false positives). Add a `sentinel` step that takes reviewer reports (Entire findings, `ranger` candidates, `smith` review), reproduces each on current code, deduplicates, and grades CONFIRMED or PLAUSIBLE, refuting before confirming. Caliper's worker brief already does this by hand. Effort: medium to large. Decision: new artifact schema (`findings-consolidation@1`) and routing.
-8. **Review-output intake as a workflow step** (P10). `sentinel:gate` and `courier:pr` check for outstanding Entire review findings on the change before a pass. Needs an Entire reachability fallback, since `entire` calls failed under the sandbox here. Effort: small. Decision: whether plugins may call `entire` at all.
+## Held back
 
-### C. Process for the plugin authors (not plugin code)
+Each needs a second source before it earns a place.
 
-9. **Harness fidelity** (P4): `mason:evaluate` fixtures should copy the real consumer's config. Effort: small.
-10. **Succinct-writing and owner-confirmation rules** (P11, P12): both projects' `AGENTS.md` already carry these. Lift them into `voice.md` as detection rules (empty claims, repetition, unrequested gates) rather than banned words, which the earlier voice-guide review flagged as the weak spot. Effort: small.
+- **Failure-as-absence and projection-as-authority hazards for `ranger`.** Evidence is one Codex adversarial review on Callisto. Zero of the 37 Entire findings are this class.
+- **Docs-versus-code checking in `scribe:drift-checker`.** 4 findings are doc errors, but they were caught inside a normal review. Not shown to need a new capability.
+- **Judge-style consolidation, new schema, slop-review pack, `entire` dependency.** Entire's reviewer already has a judge. The plugins would duplicate it.
+- **Constitution change to extend API grounding to briefs.** One Callisto incident (`redact_native_output`). Revisit on a second.
+- **The 14-class sweep from the Callisto-to-Caliper prompt.** Useful as a one-off script-first audit. It is prescriptive for a plugin default, and its own rules (hotspot table, shards, verifier per finding) cost more than the 37 findings it would reproduce.
 
-## Recommended first batch
+## Next step before adding anything
 
-Proposals 1, 2, 3 and 6 (pack only). Together they cover P1 to P3, P5 to P7, P9 to P13 without a schema or constitution change, and each is a reference edit with a focused test in `tests/`.
+Audit the plugins' current instruction cost. The inventory found a constitution plus per-agent rules, schemas and hazard packs already in place, and both source projects complained about over-engineering and unrequested gates. Each addition above should displace a line, and the audit identifies which lines. Proposed as a separate evaluation using `mason:audit-plugin`'s instruction-economy check.
 
 ## Open decisions
 
-- Constitution change for proposal 4.
-- Whether to commission proposal 7 and its schema.
-- Whether plugins may depend on the `entire` CLI (proposal 8).
-- Whether to re-run this evaluation after pulling Entire findings for the 85 Caliper changes not checked here.
+- Approve the four one-line additions, or hold all additions until the cost audit.
+- Whether to run the cost audit first.
