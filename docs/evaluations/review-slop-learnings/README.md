@@ -86,13 +86,43 @@ Held back for lack of a second source: failure-as-absence hazards for `ranger`, 
 - The Codex build tool and its tests, `check-versions.sh`, reference-integrity test, the schema-immutability hook.
 - `dist/codex` committed, until C9 is resolved.
 
+## Part 3: Fit to current models and guidance
+
+Sources: the prompt-audit and model-migration guidance bundled with the Claude API skill (Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 5.5), and a Claude Code docs lookup (skills, sub-agents, hooks, plugin evals, prompt caching). The docs lookup is secondhand and its page claims were not re-fetched. The guidance's own rule applies to this audit: cut specific outdated instructions, not length; context and the reasons behind constraints are never cruft; "an audit that finds nothing should change nothing".
+
+### What the plugins already get right (measured)
+
+Zero hits for the classic dated patterns across all agents, skills and references: no "think step by step" or scratchpad tags, no "think harder/less", no tool-use discouragement, no "be thorough / do not be lazy", no update suppressors, no anti-formatting rules, no CRITICAL/IMPORTANT caps, no retired model names. Emphasis is light (31 NEVER, 4 MUST, 0 ALWAYS in about 23,000 words). Skill descriptions are within the documented 1,536-character cap (max 824, median 497). 37 of 44 backstories give the reason behind a constraint, which is context and stays. The problem is structure and volume, not shouting, so a rewrite campaign is not justified.
+
+### Confirmed by the guidance
+
+- **B1 descriptions:** trim enumerations of trigger phrases to intent categories; keep when-to-use and when-not-to-use, because routing text may carry calibrated urgency and skills under-trigger. Validate with `/skill-doctor` and `claude plugin eval` instead of guessing.
+- **C4 planner exact code:** the guidance says prompts and skills written for earlier models are often too prescriptive for current ones and reduce output quality; A/B with the scaffolding removed. Keep exact scripts only for fragile operations. Run the A/B through `mason:evaluate` or `claude plugin eval` before changing the planner.
+- **C1, C6, C5, C7:** the audit's architecture group names two defects directly. An LLM executor for a deterministic plan belongs in code (`release-summarizer`, `review-preprocessor`, `estimator`). Specialist agents with near-duplicate prompts that differ in a filter should be one agent taking the distinction as input (muse versus scribe; the repeated gate mechanics).
+- **A2 validator and A6/A7:** instructions nothing enforces carry little signal; enforce in code what code can enforce.
+- **Part 1 additions:** do not invent wording. Anthropic publishes tested snippets for exactly these failures, so adopt them in `smith` and the gates: audit each progress claim against a tool result from this session; run a real check that exercises the change before reporting it done (a syntax-only check does not count); do not add features, refactors or abstractions beyond the task. The guidance also reports that separate fresh-context verifiers outperform self-critique, which supports keeping independent gates and verifiers (section D).
+
+### Changed by the guidance
+
+| # | Item | Revised view |
+|---|---|---|
+| R1 | Tier changes (C2, C3) | Low value. Per-million-token prices: Haiku 5.5 0.10 in / 0.50 out, Sonnet 5.5 2 / 10, Opus 5.5 4 / 20, Fable 5.1 10 / 50. Opus costs 2x Sonnet, so moving a gate down saves little; the levers are fewer calls, Haiku for mechanical work, and Opus instead of Fable for `arch-auditor` check mode (2.5x). The guidance says to measure the most capable model at lower effort before keeping a multi-model cascade, because caches are model-scoped. Do not churn tiers without an eval. Two cheap fixes: use the `fable` alias instead of the pinned `claude-fable-5-1` in the two agents that pin it; consider Haiku recon at medium effort, since a recon miss silently narrows everything downstream. |
+| R2 | Byte-identical constitution block | The stated reason is prompt-cache sharing across agents. The block is about 323 tokens, below the 512-token minimum cacheable prefix on current models, and per the docs lookup the cache key includes model, speed and effort and subagents build their own caches (tools also render first and differ per agent). Cross-agent sharing therefore looks unsupported; repeated calls to the same agent cache regardless. Verify with the cache-read ratio in `/usage` before acting. If confirmed, drop the byte-identity invariant, keep the trust-boundary and report-concern rules, and let the other three (trained defaults) go. Needs an ADR 006 amendment. |
+| R3 | The `reasoning` scratchpad | New and potentially the largest item. 44 agents tell the model to fill it, 30 show it in their output example, 12 schemas require it, and it is discarded. The audit guidance names a reasoning, thinking or trace field in JSON output as an item to remove: thinking is native (always on in Opus 5.5 and Fable 5.1), output tokens cost five times input, and on Fable 5.1, Opus 5.5 and Sonnet 5.5 instructing reasoning reproduction may trigger a `reasoning_extraction` refusal that fallback does not retry. Our field asks for scratchpad notes, not reproduced thinking, so the refusal risk is unmeasured. Medium confidence. Test on the gates first; if outputs hold, make the field optional in new schema versions and drop the instruction. Needs a constitution change and schema versions. |
+| R4 | Hooks (A6) | Claude Code plugins can ship hooks (a hooks file or the manifest, with the plugin-root variable). The two scripts inject one language's hazard file at subagent start (an if/elif chain, so polyglot repos get one). Agents already load references themselves. Default recommendation is delete the scripts and fix the docs, not wire them. |
+| R5 | EARS and SHALL density | 191 SHALL and 186 rule lines in `<output>` sections. Contract rules (retry caps, schema pins, ordering that protocols require) should stay exact. For judgment rules, prefer a sentence with its reason; do this opportunistically while editing a plugin, not as a campaign. |
+| R6 | Mason overlap | `claude plugin validate` (manifest, paths), `claude plugin eval` (graders, baseline versus no plugin) and `/skill-doctor` (usage, cost per skill) now exist first-party. Check what `mason:evaluate`, its runner and adjudicator, and the manifest scripts add beyond them before maintaining both. The hidden-oracle adjudication may still earn its place. |
+
+Smaller notes: effort changes now preserve the prompt cache on Opus 5.5, Sonnet 5.5, Haiku 5.5 and Fable 5.1, so per-agent effort needs no consolidation; subagent caches default to a 5-minute lifetime and the docs lookup reports an environment variable for 1 hour, relevant only to pipelines that call gates minutes apart; the skill count is 30, not 33.
+
 ## Suggested order
 
 1. A1 to A7 (defects and false text): small, no judgment calls.
-2. B1 (descriptions): largest runtime saving; do per plugin.
-3. B2 and C8 together: retire dead schemas and add a real validator.
-4. Part 1 additions, each paired with a B-item deletion so net text shrinks.
-5. B3 to B10, then decide C-items one at a time.
+2. B1 (descriptions), validated with `claude plugin eval` and `/skill-doctor`.
+3. B2 with C8: retire dead schemas and add a real validator.
+4. Part 1 additions using Anthropic's tested snippets, each paired with a B-item deletion so net text shrinks.
+5. Measure before deciding: the cache-read ratio (R2), gate outputs without the `reasoning` field (R3), planner without exact code (C4).
+6. B3 to B10, then decide the remaining C-items one at a time.
 
 ## Open decisions
 
