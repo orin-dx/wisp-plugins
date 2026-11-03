@@ -1,0 +1,108 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M6FR2EP6DVPWVFXDQPCBCSBG",
+  "session_id": "45cd44b5-781a-45e8-a872-1586b14a92ce",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-03T03:43:40.276389Z",
+  "branch": "worktree-review-slop-evaluation",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "eca6ee657bb1",
+  "checkpoint_transcript_start": 1455,
+  "transcript_lines_at_start": 1455,
+  "compact_transcript_start": 143,
+  "token_usage": {
+    "input_tokens": 42,
+    "cache_creation_tokens": 46564,
+    "cache_read_tokens": 8800617,
+    "output_tokens": 23465,
+    "api_call_count": 21,
+    "subagent_tokens": {
+      "input_tokens": 34,
+      "cache_creation_tokens": 29190,
+      "cache_read_tokens": 287017,
+      "output_tokens": 6756,
+      "api_call_count": 4
+    }
+  },
+  "redaction": {
+    "replacements": 21,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 21,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01KtyALW1JhR3VGTdaEsve2A",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-api"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "132889ffbdb9",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1260,
+        "end": 1261,
+        "entry_ids": [
+          "10865392-55e7-4028-87d2-711fbb4fb3f5"
+        ],
+        "tool_use_id": "toolu_01KtyALW1JhR3VGTdaEsve2A"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01KtyALW1JhR3VGTdaEsve2A"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-api",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 22
+  },
+  "summary": {
+    "intent": "Evaluate the wisp-plugins prompts/agents against current Anthropic guidance on review slop, then investigate still-failing code reviews on Callisto changes (40, 42, 43, 44, 46) and fold the findings into the evaluation doc.",
+    "outcome": "Committed Part 3 of the evaluation doc (0f508236, signed, not pushed) with six revised suggestions, then pulled and read diffs and findings for Callisto changes 40/42/43/44/46 and added a trail 198 update to the evaluation README, with checks run and committed. The user was left to decide between running the first batch or measuring the reasoning-field and cache questions first.",
+    "learnings": {
+      "repo": [
+        "Evaluation doc lives at docs/evaluations/review-slop-learnings/README.md in the worktree .claude/worktrees/review-slop-evaluation of wisp-plugins; `just check` gates commits.",
+        "Plugins are largely free of dated prompt patterns (no 'think step by step', CRITICAL caps, retired model names); emphasis is light (31 NEVER, 4 MUST, 0 ALWAYS in ~23k words). The issue is structure and volume.",
+        "30 skills exist (not 33); descriptions are within the 1,536-char cap.",
+        "44 agents instruct a `reasoning` scratchpad, 30 show it in output examples, 12 schemas require it, and nothing consumes it.",
+        "The byte-identical constitution block (ADR 006) is justified by cross-agent cache sharing, but it is ~323 tokens, below the 512-token cacheable minimum, so the rationale looks unsupported.",
+        "Plugin hook scripts are unwired and only inject one language's hazards; the recommendation is to delete them and fix docs.",
+        "mason:evaluate and manifest scripts may overlap first-party `claude plugin validate`, `claude plugin eval` and `/skill-doctor`.",
+        "Entire has not ingested the hold-note session because its checkpoint is unpushed, so the local transcript must be read instead."
+      ],
+      "code": [],
+      "workflow": [
+        "When Entire lacks a session, fall back to the local transcript for the same session.",
+        "Verify suspect facts from diffs (e.g., whether RETRY_RESET is real, tokenizer behavior on chunk-e409.js) before characterizing review findings.",
+        "Prefer Anthropic's tested prompt snippets over invented wording; A/B overly prescriptive prompts before rewriting.",
+        "Tier changes save little since Opus is 2x Sonnet; better levers are fewer calls, Haiku for mechanical work, and Opus instead of Fable for arch-auditor check mode.",
+        "Use fresh-context verifiers (independent gates) rather than self-critique."
+      ]
+    },
+    "friction": null,
+    "open_items": null
+  }
+}
