@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01MUbJCUKRXYygkpztAzdmH8",
+  "agent_id": "a9d9f33fe8b334b5d",
+  "subagent_type": "general-purpose",
+  "task_description": "Caliper learnings and review outputs",
+  "token_usage": {
+    "input_tokens": 50,
+    "cache_creation_tokens": 121681,
+    "cache_read_tokens": 2333431,
+    "output_tokens": 10382,
+    "api_call_count": 25
+  },
+  "started_at": "2026-11-02T16:45:58.833749-08:00",
+  "completed_at": "2026-11-02T16:48:31.745404-08:00"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Uo151ef8GHHZfZ9TGDGZv4",
+  "agent_id": "ac2d71a3af23e03c3",
+  "subagent_type": "general-purpose",
+  "task_description": "Callisto learnings and review outputs",
+  "token_usage": {
+    "input_tokens": 84,
+    "cache_creation_tokens": 158332,
+    "cache_read_tokens": 4986792,
+    "output_tokens": 17835,
+    "api_call_count": 42
+  },
+  "started_at": "2026-11-02T16:45:58.829675-08:00",
+  "completed_at": "2026-11-02T16:50:33.483297-08:00"
+}

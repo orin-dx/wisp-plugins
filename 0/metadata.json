@@ -1,0 +1,111 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M6FEB5V78G3ZQKCSVP3DG77Y",
+  "session_id": "45cd44b5-781a-45e8-a872-1586b14a92ce",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-03T00:53:46.325889Z",
+  "branch": "worktree-review-slop-evaluation",
+  "checkpoints_count": 5,
+  "save_step_count": 5,
+  "files_touched": [
+    "docs/evaluations/review-slop-learnings/README.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "44a61191af83",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 54,
+    "cache_creation_tokens": 78151,
+    "cache_read_tokens": 2043465,
+    "output_tokens": 15298,
+    "api_call_count": 24,
+    "subagent_tokens": {
+      "input_tokens": 148,
+      "cache_creation_tokens": 328223,
+      "cache_read_tokens": 7517598,
+      "output_tokens": 33243,
+      "api_call_count": 74
+    }
+  },
+  "redaction": {
+    "replacements": 13,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 13,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 5
+  },
+  "summary": {
+    "intent": "Evaluate how to improve the wisp-plugins (ranger, smith, sentinel, scribe, etc.) based on learnings from Entire's review/slop agents, using the Caliper 'road-to-v1-alpha' and Callisto sessions as evidence.",
+    "outcome": "Three research lanes were dispatched and synthesized into docs/evaluations/review-slop-learnings/README.md in a worktree (branch worktree-review-slop-evaluation). It was staged and `just check` passed, but the commit was blocked by gpg sandbox failure; a retry outside the sandbox was being attempted and the push was denied. No plugin changes were made.",
+    "learnings": {
+      "repo": [
+        "wisp-plugins has no agent or skill that owns slop review of workspace code (filler, dead code, duplicated helpers, fabricated APIs, overclaimed docs); smith:reviewer covers scope/verification/siblings and ranger hunts reachable defects only.",
+        "Nothing checks README/changelog/docs claims against code; scribe:spec-drift only compares specs to code, and check-versions.sh/check-skills-doc.sh only check version and skill-dir consistency.",
+        "No judge-style consolidation of multiple reviewer reports exists; sentinel gates, courier:receive-feedback, mason adjudicator and vanguard:synthesizer each handle a different artifact.",
+        "Each agent embeds a byte-identical copy of the constitution (shared/constitution.md); ADRs 001-010 are in docs/adr/, while ADR 011/012 exist only in the frontend-design-evaluation worktree.",
+        "The constitution's API Grounding Invariant covers specs and plans but not implementer briefs or worker prompts.",
+        "tests/test_reference_integrity.py fails when docs mention a nonexistent path (e.g. a proposed slop.md), so proposals must not be written as file paths.",
+        "verdict@3 and implementation-result@1 schemas already require evidence fields (criteria_evidence, verified_scope, coverage_gaps), so evidence-based gating can be extended without schema changes.",
+        "Caliper had Entire reviewer findings (22 across 7 runs); Callisto has no Entire review profile, and no 'Callisto alpha' session exists (only Caliper's Road to v1 Alpha)."
+      ],
+      "code": [
+        {
+          "path": "plugins/smith/agents/reviewer.md",
+          "finding": "Returns implementation-review@2; names search theater/test theater as failure modes but has no slop-detection checklist and loads comments.md only when the diff touches comments."
+        },
+        {
+          "path": "shared/constitution.md",
+          "line": 64,
+          "finding": "API Grounding Invariant (approx. line 64) is the rule to extend to briefs and worker prompts."
+        },
+        {
+          "path": "plugins/smith/agents/exit-gate.md",
+          "line": 67,
+          "finding": "Must read the exact file and line of each criteria_evidence pointer and confirm it proves the criterion."
+        },
+        {
+          "path": "plugins/smith/agents/implementer.md",
+          "line": 58,
+          "finding": "Must populate criteria_evidence when status is done."
+        }
+      ],
+      "workflow": [
+        "Subagent reports are model output, not verified fact; the Caliper lane itself flagged that sweep claims were unverified and only 3 of 88 changes had findings fetched.",
+        "Entire findings can be stale (4 already-fixed findings still shown as current); reproduce findings on current main before treating them as real.",
+        "Recurring failure patterns across both projects: hand-copied lists that drift, string keys across boundaries, failure treated as absence, harness differing from real consumer, stub-fed tests that cannot fail, 'merged and green' reported as done, docs written from intent.",
+        "`entire checkpoint explain` can't resolve Codex session ids; Codex sessions live in ~/.codex/sessions/*.jsonl.zst and Claude transcripts in ~/.claude/projects/.",
+        "Sandbox blocks writes to ~/.local/share/entire (Brain lock file) and ~/.gnupg (gpg signing), and Entire search needed an outside-sandbox retry due to TLS trust failure.",
+        "Adopted process fixes from the source projects: refute-first and failing-test-first worker briefs, self-review before reporting, fresh-context audit passes, real-binary contract tests, registry tests that fail instead of skip in CI."
+      ]
+    },
+    "friction": [
+      "Initial request was ambiguous; the learnings could not be found in Entire history until the user named the road-to sessions.",
+      "Brain brief failed because the sandbox blocks its lock file under ~/.local/share/entire.",
+      "Entire search hit a TLS trust failure in the sandbox and had to be retried outside it.",
+      "Commit signing failed because the sandbox blocked gpg from ~/.gnupg; the user was frustrated, believing their SSH key setup was at fault.",
+      "Pushing the branch was denied by the permission classifier.",
+      "Initial draft mentioned a nonexistent slop.md path and broke the reference-integrity test.",
+      "Entire retrieval limits: checkpoint explain returned nothing usable, `entire review --findings` showed no local runs, and the incident file was not on disk."
+    ],
+    "open_items": [
+      "Commit the staged evaluation (retry outside sandbox) and push the branch if desired.",
+      "Decide whether to extend the constitution's API Grounding Invariant to briefs and worker prompts.",
+      "Decide whether to add a judge-style consolidation step for multiple reviewer reports, which needs a new schema.",
+      "Decide whether plugins may depend on the entire CLI.",
+      "Implement the first batch: failure-as-absence and projection-as-authority hazards in the ranger pack; smith reviewer/mutator rejecting tests that cannot fail; sentinel and smith exit-gate requiring externally observed outcomes; a slop-review reference pack loaded by smith:reviewer.",
+      "Add docs-versus-code claim checking, likely in scribe.",
+      "Fetch Entire findings for the remaining 85 Caliper changes and read the Callisto transcripts more fully to validate that patterns generalize beyond two projects by one author."
+    ]
+  }
+}
