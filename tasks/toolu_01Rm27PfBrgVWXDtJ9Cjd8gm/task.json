@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Rm27PfBrgVWXDtJ9Cjd8gm",
+  "agent_id": "a0072dc36b3354733",
+  "subagent_type": "general-purpose",
+  "task_description": "Full read: muse, navigator, smith, sentinel",
+  "token_usage": {
+    "input_tokens": 30,
+    "cache_creation_tokens": 158049,
+    "cache_read_tokens": 1562579,
+    "output_tokens": 27719,
+    "api_call_count": 15
+  },
+  "started_at": "2026-11-02T17:26:14.346737-08:00",
+  "completed_at": "2026-11-02T17:29:50.818635-08:00"
+}

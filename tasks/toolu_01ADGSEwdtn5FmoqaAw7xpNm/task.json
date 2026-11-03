@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01ADGSEwdtn5FmoqaAw7xpNm",
+  "agent_id": "aeb45851fe2ddf7c9",
+  "subagent_type": "general-purpose",
+  "task_description": "Full read: ranger, courier, mason",
+  "token_usage": {
+    "input_tokens": 36,
+    "cache_creation_tokens": 182711,
+    "cache_read_tokens": 2192876,
+    "output_tokens": 38769,
+    "api_call_count": 18
+  },
+  "started_at": "2026-11-02T17:26:14.34939-08:00",
+  "completed_at": "2026-11-02T17:31:38.158471-08:00"
+}

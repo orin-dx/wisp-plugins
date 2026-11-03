@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_0173sAbf8pHJaUfQXfcDAyCy",
+  "agent_id": "a3f989ee7a8d43b62",
+  "subagent_type": "general-purpose",
+  "task_description": "Full read: schemas and their consumers",
+  "token_usage": {
+    "input_tokens": 86,
+    "cache_creation_tokens": 171902,
+    "cache_read_tokens": 5573951,
+    "output_tokens": 30093,
+    "api_call_count": 43
+  },
+  "started_at": "2026-11-02T17:26:14.362942-08:00",
+  "completed_at": "2026-11-02T17:30:58.279797-08:00"
+}

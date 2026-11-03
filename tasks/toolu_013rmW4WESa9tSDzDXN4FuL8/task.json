@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_013rmW4WESa9tSDzDXN4FuL8",
+  "agent_id": "a16e78ba409b5ad8e",
+  "subagent_type": "general-purpose",
+  "task_description": "Full read: docs, ADRs, tests, tooling",
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 184955,
+    "cache_read_tokens": 1438087,
+    "output_tokens": 21195,
+    "api_call_count": 12
+  },
+  "started_at": "2026-11-02T17:26:14.353152-08:00",
+  "completed_at": "2026-11-02T17:29:05.678584-08:00"
+}

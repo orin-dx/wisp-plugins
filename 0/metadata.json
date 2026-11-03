@@ -1,0 +1,121 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M6FGMR2C7X5MPFT9JFRG2992",
+  "session_id": "45cd44b5-781a-45e8-a872-1586b14a92ce",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-03T01:34:03.573575Z",
+  "branch": "worktree-review-slop-evaluation",
+  "checkpoints_count": 9,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "156b08893019",
+  "checkpoint_transcript_start": 798,
+  "transcript_lines_at_start": 798,
+  "compact_transcript_start": 77,
+  "token_usage": {
+    "input_tokens": 62,
+    "cache_creation_tokens": 105499,
+    "cache_read_tokens": 5412587,
+    "output_tokens": 38773,
+    "api_call_count": 24,
+    "subagent_tokens": {
+      "input_tokens": 308,
+      "cache_creation_tokens": 1138465,
+      "cache_read_tokens": 17699030,
+      "output_tokens": 186605,
+      "api_call_count": 154
+    }
+  },
+  "redaction": {
+    "replacements": 17,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 17,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 19
+  },
+  "summary": {
+    "intent": "Find where the wisp-plugins ecosystem is over-engineered, first from sampled measurements and then via full reads of every plugin, shared file, schema, doc, test and tool, so pruning decisions rest on complete evidence rather than assumptions.",
+    "outcome": "Seven parallel full-read lanes reported back. The assistant re-verified top claims with scripts, folded the findings into the evaluation doc `docs/evaluations/review-slop-learnings/README.md`, and ran checks and a commit. Nothing is pushed and no pruning edits were made.",
+    "learnings": {
+      "repo": [
+        "Agents carry only a 5-line `<constitution>` block, identical in 44 of 44 agents for prompt-cache sharing (ADR-006). The 290-line `shared/constitution.md` is authoring-time only, so its cost is maintenance and misplacement, not runtime tokens. No test checks the block's byte identity; only the LLM `mason:auditor` does.",
+        "`dist/codex` (241 files) must stay committed. The root `.agents/plugins/marketplace.json` points at `./dist/codex/plugins/...`, and it is unverified whether `codex plugin marketplace add` can pin a branch or tag. The Codex build copies files without rewriting, only flattening symlinks. 46% of dist bytes are duplicates, e.g. `spec@1.json` in 7 plugins.",
+        "No real JSON-schema validation runs. CI only runs `jq .` on schema files, and the one validator is a hand-rolled one in `tests/test_cross_harness_artifacts.py` that supports no `$ref`, `oneOf`, `anyOf` or `pattern`. ARCHITECTURE.md:128 and ADR 004 claim validation that does not happen.",
+        "Schema immutability is enforced only by the local hook `scripts/authoring-integrity-hook.py`, and CI has no equivalent. Deleting a dead schema is blocked by the hook and by `just marketplace-check` until dist is regenerated. The hook also uses `tools/build-codex-marketplace.py` as its repo marker, so removing Codex would silently disable the guard.",
+        "Eight schema files are removable: six superseded versions with zero references, plus the orphans `arch-spec@1` and `codex-adaptation@1`. `verdict@1` is not dead because `muse` uses it, and `muse:exit-gate` emits `\"escalate\"`, which `verdict@1`'s enum cannot hold. Moving muse to `verdict@3` would fix that.",
+        "Several documented gates are not wired in: `validate-wiring.sh` is listed in ARCHITECTURE.md but not in the justfile or CI. `shared/hooks/pre-command.sh` and `subagent-start.sh` are wired nowhere though the docs call them active. `authoring/voice.md` is loaded by no agent, and the reference-integrity test counts `shared/hooks` as a runtime caller.",
+        "The constitution contradicts the repo in several places. It says exit gates are sonnet/medium, but all five run opus/high. It prefers modern CLI tools, while `cli.md` says repo-native commands take priority. It caps loops at 2 rounds, while gates repeat a 3-retry rule. best-practices says 38 agents (there are 44) and names a nonexistent remediator.",
+        "Several tests cannot fail: substring checks on prose, a 120-line reference cap when the largest file is 95 lines, and `check-skills-doc.sh`, which passes with zero checks if the table format changes. Adding one agent takes about 8 hand edits, and a plugin's version lives in 6 places.",
+        "Many unused or duplicated schema fields exist, such as `spec@1`'s `judgment_call` and `release-artifact@2`'s `pr_url`. `reasoning` is required in 13 of 31 schemas and read by nothing. Navigator's challenger has a binding pass/fail JSON with no schema."
+      ],
+      "code": [
+        {
+          "path": "shared/constitution.md",
+          "line": 102,
+          "end_line": 176,
+          "finding": "About 75 lines of plugin-specific workflow policy (spec persistence, correction loop, retry caps, subsystem batching) sit in the shared constitution, which its own placement rule at line 88 says belongs in the owning skill or agent."
+        },
+        {
+          "path": "tests/test_cross_harness_artifacts.py",
+          "line": 24,
+          "end_line": 93,
+          "finding": "The hand-rolled schema validator runs against 5 fixtures and supports no `$ref`, `oneOf`, `anyOf`, `uniqueItems` or `pattern`, so `implementation-review@2`'s `$ref` targets are never validated."
+        },
+        {
+          "path": "plugins/muse/agents/exit-gate.md",
+          "line": 40,
+          "finding": "It tells the agent to set verdict to \"escalate\", but the `verdict@1` enum is only pass/fail, so that output could never validate."
+        },
+        {
+          "path": "scripts/authoring-integrity-hook.py",
+          "line": 52,
+          "end_line": 59,
+          "finding": "It rebuilds and compares dist on every commit, and blocks commits when dist is stale. Line 15 uses the Codex build tool as a repo marker."
+        },
+        {
+          "path": "scripts/check-reference-size.sh",
+          "line": 16,
+          "finding": "`cap=120` hard-fails, but the largest reference is 95 lines, so it cannot fail today. CONTRIBUTING.md:145 calls thresholds review signals."
+        },
+        {
+          "path": "plugins/ranger/agents/adversary.md",
+          "line": 45,
+          "finding": "The \"once per session\" constitution sweep contradicts the agent running once per candidate, and the output schemas have no slot for its finding."
+        }
+      ],
+      "workflow": [
+        "The user's push for full reads over sampling was justified. The first-pass claims relied on counts and descriptions, and the full reads corrected them: harnesses has 50 files not 40, the build rewrites nothing, and `verdict@1` is not dead.",
+        "Fan-out read-only lanes were run in parallel, each required to report a manifest of fully read, partially read and unread files. Top claims were then re-verified independently with scripts (`verify.py`, `verify2.py`) before going into the evaluation doc.",
+        "Subagent hand-backs were flagged by the harness for instruction-shaped text. They were treated as reports, not as user authority, and no directives were found in them."
+      ]
+    },
+    "friction": [
+      "Subagent lanes had overlapping but incomplete coverage: the docs lane never read the constitution, schemas or agent prompts, and the Codex lane never read the other plugins. Cross-lane claims needed independent re-verification.",
+      "The first verification pass needed a second script (`verify2.py`) to exclude symlinked `shared` copies that inflated the counts.",
+      "The harness flagged subagent reports for settings-json instruction-like patterns, which needed manual inspection."
+    ],
+    "open_items": [
+      "Decide whether to audit the plugins' instruction cost first (recommended, via `mason:audit-plugin`) or approve the four rule additions to `evidence.md`, `implementation-review.md` and `comments.md`.",
+      "Pruning candidates are not yet acted on: shorten the 44 agent descriptions (avg 607 chars), retire the dead schema versions through a 'retired' mechanism, and move constitution workflow policy to the owning skills.",
+      "Add a real JSON-schema validator to CI, or soften the validation claims in ARCHITECTURE.md and ADR 004.",
+      "Add a test that the `<constitution>` block is byte-identical across all agents.",
+      "Move `muse` to `verdict@3` and fix the contradictions between the constitution and the gate and CLI behavior.",
+      "Verify whether `codex plugin marketplace add` can pin a ref before ever moving dist to CI-built output.",
+      "Collapse the version-sync ritual by deriving the Codex manifest version and the README line from `plugin.json`.",
+      "The branch `worktree-review-slop-evaluation` is committed but not pushed. Push with `git push -u origin worktree-review-slop-evaluation` from the worktree.",
+      "The 126 harvested transcripts (71 MB) remain unread and are kept on disk for targeted lookups."
+    ]
+  }
+}
