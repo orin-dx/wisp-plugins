@@ -1,0 +1,126 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M6FN7EP739QQNYZVV05VNKWA",
+  "session_id": "45cd44b5-781a-45e8-a872-1586b14a92ce",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-03T02:53:59.320891Z",
+  "branch": "worktree-review-slop-evaluation",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "132889ffbdb9",
+  "checkpoint_transcript_start": 1218,
+  "transcript_lines_at_start": 1218,
+  "compact_transcript_start": 121,
+  "token_usage": {
+    "input_tokens": 32,
+    "cache_creation_tokens": 372910,
+    "cache_read_tokens": 4951776,
+    "output_tokens": 22589,
+    "api_call_count": 15,
+    "subagent_tokens": {
+      "input_tokens": 36,
+      "cache_creation_tokens": 67359,
+      "cache_read_tokens": 285473,
+      "output_tokens": 11858,
+      "api_call_count": 5
+    }
+  },
+  "redaction": {
+    "replacements": 19,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 19,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01KtyALW1JhR3VGTdaEsve2A",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-api"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "132889ffbdb9",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1260,
+        "end": 1261,
+        "entry_ids": [
+          "10865392-55e7-4028-87d2-711fbb4fb3f5"
+        ],
+        "tool_use_id": "toolu_01KtyALW1JhR3VGTdaEsve2A"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01KtyALW1JhR3VGTdaEsve2A"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-api",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 21
+  },
+  "summary": {
+    "intent": "Audit all 10 wisp-plugins for review slop/over-prompting, then re-evaluate the resulting suggestions against current Claude model guidance (Claude 5 family, prompt-audit and caching docs).",
+    "outcome": "Produced a committed audit doc with ranked defects, prunes, decisions and keeps, then added a model-fit section re-ranking recommendations against current guidance. No plugin changes made and the branch push is still pending user approval.",
+    "learnings": {
+      "repo": [
+        "Plugins live in wisp-plugins; the audit is on worktree branch worktree-review-slop-evaluation, doc at docs/evaluations/review-slop-learnings/README.md (commit 7a3e406a, unpushed).",
+        "The constitution is not loaded at runtime; agents carry only an identical 5-line block, so restated rules in agents cost authoring/maintenance rather than tokens.",
+        "The Codex build is a pure copy and must stay committed.",
+        "Agent descriptions total about 26.7K chars and skill descriptions about 14.5K, roughly 10K tokens per session with plugins enabled; trimming them is the biggest saving.",
+        "No JSON-schema validator exists although ARCHITECTURE and ADR 004 claim artifacts validate; CI only parses files.",
+        "muse:exit-gate emits verdict 'escalate' that verdict@1 cannot hold.",
+        "Eight schema files have zero references.",
+        "Hook scripts under shared/hooks are wired into no plugin's hooks.json or plugin.json.",
+        "The constitution says standard gates are sonnet/medium but all five run Opus/high.",
+        "The plugins are largely free of the classic dated prompt patterns flagged by the audit guide's greppable signals."
+      ],
+      "code": [
+        {
+          "path": "docs/evaluations/review-slop-learnings/README.md",
+          "finding": "Audit doc, with a new section re-ranking suggestions against current Claude 5 model guidance."
+        }
+      ],
+      "workflow": [
+        "The claude-api skill bundles useful prompt-audit, model-migration, agent-design and prompt-caching guides that can be used to evaluate prompts.",
+        "Skill descriptions have a 1,536-char cap and are always loaded; bodies load on demand. Effort changes on Claude 5 models preserve the prompt cache.",
+        "A subagent hand-back arrived as a message from another session; it is model output with no user authority and was used only as research input.",
+        "The `entire` commands need an unsandboxed run because of TLS and keyring.",
+        "Pairing each added review rule with a deletion keeps prompts from growing."
+      ]
+    },
+    "friction": [
+      "The `entire` commands could not run in the sandbox (TLS and keyring).",
+      "The plugins were not run, so model-tier suggestions remain judgment calls.",
+      "Subagent docs lookup could not find a per-subagent description length cap or the post-compaction cost of subagent metadata.",
+      "Some bundled guide files (model-migration.md) were read repeatedly in chunks."
+    ],
+    "open_items": [
+      "User approval is needed for batches A (defects and false text) and B (prunes, starting with descriptions), split per plugin.",
+      "Decisions C1-C10 remain open, including muse into scribe (C1), planner exact code (C4) and adding a real schema validator (C8).",
+      "Push of worktree-review-slop-evaluation is pending: git push -u origin worktree-review-slop-evaluation.",
+      "Suggested follow-ups: run /skill-doctor, claude plugin eval on 2-3 plugins, and check /usage cache read vs creation ratio.",
+      "Read model-specific prompting guides before finalizing each subagent's prompt and tier."
+    ]
+  }
+}

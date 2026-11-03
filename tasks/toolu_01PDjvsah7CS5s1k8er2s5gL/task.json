@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01PDjvsah7CS5s1k8er2s5gL",
+  "agent_id": "a393a666dd97888b6",
+  "subagent_type": "claude-code-guide",
+  "task_description": "Claude Code plugin guidance lookup",
+  "token_usage": {
+    "input_tokens": 68,
+    "cache_creation_tokens": 84952,
+    "cache_read_tokens": 401376,
+    "output_tokens": 8128,
+    "api_call_count": 8
+  },
+  "started_at": "2026-11-02T18:49:53.762919-08:00",
+  "completed_at": "2026-11-02T18:51:33.035123-08:00"
+}
