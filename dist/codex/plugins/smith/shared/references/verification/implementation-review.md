@@ -17,7 +17,8 @@ Load only the evidence needed for the current review.
 - Behavior: tests prove specified outcomes rather than implementation shape.
 - Verification: method choice, boundary coverage, environment assumptions, and external-state freshness follow `shared/references/verification/evidence.md`.
 - Hazards: changed code does not introduce a language-specific violation.
-- Siblings: the search covers matching syntax and candidate sites with equivalent domain behavior.
+- Siblings: the search covers matching syntax and candidate sites with equivalent domain behavior, lists the sites searched, and pairs each fix with a regression test that fails on the pre-fix source.
+- Reuse: a new helper, string, or list does not duplicate one the codebase already defines.
 - Structure: repeated defects are assessed for a missing concept, state, operation, boundary, abstraction, invariant, or enforcement mechanism.
 
 A taxonomy match is a search lead, not proof. Cite live code for every issue and structural assessment.

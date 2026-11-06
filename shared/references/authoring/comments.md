@@ -15,6 +15,7 @@ If neither reader would gain anything actionable from the comment, don't write i
 - A narrated alternative not taken ("Instead of X, we use Y because...") — a structural choice belongs in a decision record, because later agents load records and not PR bodies; any other alternative belongs in the PR body. Neither belongs in the code.
 - Process narration ("After investigating, we found...") — belongs in the PR body
 - Hedge and filler: "essentially," "basically," "in order to," "it's worth noting that"
+- A claim the code does not support: state what the code does today, and label a heuristic as one rather than as fact
 
 ## Keep, at whatever length it takes
 
