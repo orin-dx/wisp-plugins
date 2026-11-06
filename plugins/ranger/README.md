@@ -57,7 +57,7 @@ Unlike `courier` or `scribe`, ranger has exactly one skill directory (`skills/au
 | `recon` | Workspace Recon | haiku / low | Traces imports from entry points to build a verified live/dead file manifest. All downstream agents operate only on live files. |
 | `scanner` | Hazard Scanner | sonnet / medium | Loads language-specific hazard taxonomies, searches candidate signals across live files, and emits every match as a candidate@1 entry. It does not adjudicate candidates. |
 | `boundary-tracer` | Data Flow Tracer | sonnet / medium | Conditional. Invoked for T7 and T10 candidates only. Traces each field of the flagged struct or type from construction site to execution boundary and produces a field survival map for the adversary. |
-| `adversary` | Adversarial Verifier | opus / high | Invoked once per candidate. Tries hard to refute before confirming. Runs a one-time constitution sweep for Invisible Invariants. Confirms only when a concrete failing scenario can be stated. |
+| `adversary` | Adversarial Verifier | opus / high | Invoked once per candidate. Tries hard to refute before confirming. Tests each candidate against the project's stated invariants. Confirms only when a concrete failing scenario can be stated. |
 | `exit-gate` | Exit Verifier | opus / high | Re-reads current code, checks syntactic and semantic siblings, verifies structural assessment, compilation, and tests. |
 
 ---

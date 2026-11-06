@@ -84,6 +84,8 @@ flowchart LR
 
 Each batch runs in a fresh `implementer` context. Mutation survivors return as precision tests. Reviewer findings return for scoped repair or route to `scribe:architect`; only approved reviews reach exit-gate.
 
+**Fix pass.** For a list of review findings, a defect, or a diff-sized change with no spec or plan, Smith runs the same cycle on one batch built from a brief: the claims to fix, the invariants that must hold, and the sites to search. Each fix carries a regression test that fails on the pre-fix source, and each claim in the report names the command that proves it.
+
 When an explicit plan selection and the optional Wisp CLI are available, Smith can consume its verified `implementation-context@1` packet to avoid reassembling selected plan/spec context. An unavailable or rejected result falls back to each harness's native workflow and spec-drift behavior; code inspection and verification remain required.
 
 ---

@@ -19,6 +19,7 @@ Load only the evidence needed for the current review.
 - Hazards: changed code does not introduce a language-specific violation.
 - Siblings: the search covers matching syntax and candidate sites with equivalent domain behavior, lists the sites searched, and pairs each fix with a regression test that fails on the pre-fix source.
 - Reuse: a new helper, string, or list does not duplicate one the codebase already defines.
+- Invariants: the change respects the project's stated invariants (`shared/references/workspace/conventions.md`); a violated or convention-only invariant is a sibling-search lead.
 - Structure: repeated defects are assessed for a missing concept, state, operation, boundary, abstraction, invariant, or enforcement mechanism.
 
 A taxonomy match is a search lead, not proof. Cite live code for every issue and structural assessment.
