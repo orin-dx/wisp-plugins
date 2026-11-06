@@ -15,9 +15,6 @@ One skill, one pipeline — not a menu of separately-invokable modes. `recon` ma
 
 ---
 
-<language_agnostic_note>
-Recon detects the workspace language from manifest files present (Cargo.toml → Rust, package.json → Node/TypeScript, pyproject.toml → Python, etc.), then loads the appropriate shared/references search heuristics for that ecosystem. The skill is not language-specific.
-</language_agnostic_note>
 
 ---
 

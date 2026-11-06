@@ -46,5 +46,8 @@ jobs:
       - name: Check Mermaid diagram syntax
         run: just mermaid
 
+      - name: Source wiring
+        run: just wiring
+
       # just fmt-check is not yet in `just check`: the repo isn't formatted
       # with oxfmt yet. Add this step back once that lands.

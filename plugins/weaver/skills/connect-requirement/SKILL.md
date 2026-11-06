@@ -8,13 +8,13 @@ version: 2.0.0
 # Weaver — Connect Requirement
 
 <overview>
-The single-requirement version of `weaver/audit-backlog` — same agent, narrower scope. Delegates to `auditor` in its connect mode: given one requirement instead of the whole open backlog, it surfaces what that one requirement relates to.
+The single-requirement version of `weaver/audit-backlog` — same agent, narrower scope. Delegates to `auditor` with one requirement instead of the whole open backlog, so it surfaces what that one requirement relates to.
 </overview>
 
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **auditor** (connect mode) | sonnet / medium | One requirement@1 (or a small named set) needs its coverage, duplicates, and related artifacts checked without sweeping the full backlog. |
+| **auditor** | sonnet / medium | One requirement@1 (or a small named set) needs its coverage, duplicates, and related artifacts checked without sweeping the full backlog. |
 </dispatch>
 
 <references>

@@ -72,7 +72,7 @@ flowchart TD
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
     Diff["Git diff"] --> Changeset["<b>changeset</b><br/>changeset-analyzer"] --> CS(["changeset@2"])
-    CS --> PR["<b>pr</b><br/>pr-narrator"] --> PROut(["PR opened"])
+    Diff --> PR["<b>pr</b><br/>pr-narrator"] --> PROut(["PR opened"])
     CS --> Release["<b>release</b><br/>release-summarizer"] --> RelOut(["release-artifact@2"])
 
     Staged["Staged diff"] --> Commit["<b>commit</b><br/>commit-analyzer"] --> CommitOut(["conventional commit"])

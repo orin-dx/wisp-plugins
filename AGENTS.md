@@ -54,7 +54,7 @@ Agents are organized by **cognitive mode** (enumeration, tracing, adversarial, s
 10. **Verification evidence** — match checks to risk; require generators and oracles, independently derived semantic candidates, fresh state, terminal results, and explicit gaps when relevant.
 11. **Cross-harness review** — preserve identity, skill routes, artifact contracts, evidence, and acceptance intent in Claude/AGY and Codex sources; native wording and delegation may differ.
 12. **Manifest registration** — add an entry to root `marketplace.json` and validate: `jq . marketplace.json`.
-13. **Legal attribution** — set `"author": "Gabriel Castro (Orin DX)"` in `plugin.json`.
+13. **Legal attribution** — set `author` in `plugin.json` to the `{name, email}` object shown in `CONTRIBUTING.md`.
 
 ---
 

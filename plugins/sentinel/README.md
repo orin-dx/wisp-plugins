@@ -95,7 +95,7 @@ Recon and verifier are deliberately separate: recon makes no judgments, verifier
 
 ## Retry Protocol
 
-On `fail`, the orchestrator returns the `blockers` array directly to the producing agent for a **targeted patch** — not a full regeneration. On retry 2, escalate to a higher-effort model. After 3 retries, escalate to the human.
+On `fail`, the orchestrator returns the `blockers` array directly to the producing agent for a **targeted patch** — not a full regeneration. After 3 retries, escalate to the human.
 
 `retry_count` is tracked in `verdict@3` and incremented by the exit gate on each attempt.
 

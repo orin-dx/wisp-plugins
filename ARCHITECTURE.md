@@ -124,7 +124,7 @@ Schemas in `shared/schemas/` are the inter-agent API surface. Rules:
 - **Strict:** `additionalProperties: false` on all schemas — unknown fields are rejected at validation time
 - **Scratchpad:** every schema includes `reasoning: string`, a private reasoning field that is never forwarded downstream
 - **Immutable versions:** `requirement@1.json` never changes; breaking changes produce `requirement@2.json`
-- **Validation timing:** build checks validate wiring; each produced artifact validates before downstream consumption
+- **Validation timing:** build checks validate wiring and that schemas parse; fixture artifacts are validated against their schemas in tests; agents are told to conform to the cited schema, and no runtime validator runs
 
 `implementation-review@2` carries lineage, independent semantic candidate sites, boundary and input-space evidence, coverage gaps, related instances, structural assessments, and disposition. `verdict@3` separates verified scope, blockers, gaps, and pending checks.
 

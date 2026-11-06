@@ -37,7 +37,7 @@ One skill, one pipeline: map sources, read only what the map points at, synthesi
 | :--- | :--- | :--- | :--- |
 | `recon` | Source Mapper | haiku / low | Maps available sources — internal specs/docs/code, dependency manifests, external search terms — without reading them. Narrows scope to `internal`, `external`, or `both` based on what the question actually needs. |
 | `reader` | Source Reader | sonnet / medium | Reads each source recon mapped and extracts findings with confidence classification. Reads only what was mapped — no wandering. |
-| `synthesizer` | Synthesizer | sonnet / medium | Aggregates findings into a coherent `research-report@1`. Resolves contradictions and notes open questions. |
+| `synthesizer` | Synthesizer | sonnet / medium | Aggregates findings into a coherent `research-report@1`. Surfaces contradictions without choosing a side and notes open questions. |
 | `risk-assessor` | Risk Assessor | sonnet / medium | Reviews the proposed approach for technical risks before the spec is written. Can run standalone against an already-decided approach, or against synthesizer's own output. Surfaces risks neutrally, no recommendation on whether to proceed. |
 
 There is one skill here, not a menu of commands — vanguard is this pipeline, and the pipeline adapts to what's asked rather than exposing separate named modes for "full survey" versus "just the risk check."

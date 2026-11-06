@@ -1,7 +1,7 @@
 ---
 name: capture-need
 description: >-
-  Trigger when the user describes a raw need in free text: "we need X", "the problem is Y", "users are asking for Z". Converts unstructured text into a structured requirement@1 draft — id, statement, stakeholder, why, done_when — without asking clarifying questions. Fields that cannot be inferred are omitted, not fabricated. out_of_scope is intentionally left empty for weaver/connect-requirement or a human to fill in.
+  Trigger when the user describes a raw need in free text: "we need X", "the problem is Y", "users are asking for Z". Converts unstructured text into a structured requirement@1 draft — id, statement, stakeholder, why, done_when — without asking clarifying questions. Fields that cannot be inferred are omitted, not fabricated. out_of_scope is intentionally left empty for weaver/clarify-requirement or a human to fill in.
 version: 2.0.0
 ---
 

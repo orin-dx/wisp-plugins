@@ -11,7 +11,7 @@ Every agent body uses five named XML sections. This is the only structure — no
 ```
 <constitution>
 Byte-for-byte identical across every agent in the ecosystem — see constitution.md's
-Static Prompt Prefix Invariant. Never edit one agent's copy without editing all 38;
+Static Prompt Prefix Invariant. Never edit one agent's copy without editing every agent's;
 never add agent-specific content here. This is what makes cross-agent prompt-cache
 sharing real instead of aspirational.
 </constitution>
@@ -97,7 +97,7 @@ Agents are dispatched by the cognitive mode they require, not by pipeline positi
 | Systemic | Cross-finding pattern recognition | architect |
 | Behavioral testing | Tool execution and gap identification | mutator |
 | Judgment | Weighing competing evidence for a binding decision | exit-gate, verifier |
-| Repair | Minimum change, verified by tests | remediator, implementer |
+| Repair | Minimum change, verified by tests | implementer |
 
 Do not combine modes in a single agent. A scanner that also verdicts its findings is worse at both jobs.
 
@@ -225,7 +225,7 @@ When authoring specifications (`spec@1` or `arch-spec@1`) or plans (`plan@1`), a
 
 ## 11. Just-In-Time (JIT) Context Hooks & Tool Guidance
 
-To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks (`shared/hooks/`):
+To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds reference scripts; no plugin manifest wires them yet:
 
 - **`PreToolUse` shell hook:** injects a short modern CLI hint on first shell use.
 - **`SubagentStart` language hook:** detects manifests and binds the language hazard taxonomy.
