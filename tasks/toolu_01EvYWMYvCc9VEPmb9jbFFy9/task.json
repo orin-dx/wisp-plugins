@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01EvYWMYvCc9VEPmb9jbFFy9",
+  "agent_id": "aee8558de2545cfe7",
+  "subagent_type": "general-purpose",
+  "task_description": "Trim vanguard prompt weight",
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 62430,
+    "cache_read_tokens": 203800,
+    "output_tokens": 2610,
+    "api_call_count": 5
+  },
+  "started_at": "2026-11-06T10:48:26.57878-08:00",
+  "completed_at": "2026-11-06T10:49:00.569439-08:00"
+}

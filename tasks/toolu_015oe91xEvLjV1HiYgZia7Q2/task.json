@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_015oe91xEvLjV1HiYgZia7Q2",
+  "agent_id": "a370383dba391cead",
+  "subagent_type": "general-purpose",
+  "task_description": "Trim weaver prompt weight",
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 63247,
+    "cache_read_tokens": 443249,
+    "output_tokens": 5116,
+    "api_call_count": 9
+  },
+  "started_at": "2026-11-06T10:48:26.576932-08:00",
+  "completed_at": "2026-11-06T10:49:34.637163-08:00"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01J1A6z5JYjRYyfQBgjfieSW",
+  "agent_id": "a8607281886d2c8c6",
+  "subagent_type": "general-purpose",
+  "task_description": "Trim mason prompt weight",
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 66825,
+    "cache_read_tokens": 461141,
+    "output_tokens": 4891,
+    "api_call_count": 9
+  },
+  "started_at": "2026-11-06T10:48:26.563067-08:00",
+  "completed_at": "2026-11-06T10:49:25.762298-08:00"
+}

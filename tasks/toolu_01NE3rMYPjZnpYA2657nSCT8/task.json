@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01NE3rMYPjZnpYA2657nSCT8",
+  "agent_id": "ac154e4d26db142bc",
+  "subagent_type": "general-purpose",
+  "task_description": "Trim courier prompt weight",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 67685,
+    "cache_read_tokens": 545105,
+    "output_tokens": 6599,
+    "api_call_count": 10
+  },
+  "started_at": "2026-11-06T10:48:26.587279-08:00",
+  "completed_at": "2026-11-06T10:49:40.02703-08:00"
+}

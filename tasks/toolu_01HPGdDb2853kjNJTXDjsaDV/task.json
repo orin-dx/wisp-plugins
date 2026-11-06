@@ -1,0 +1,22 @@
+{
+  "tool_use_id": "toolu_01HPGdDb2853kjNJTXDjsaDV",
+  "agent_id": "ae918c8e7823d45f1",
+  "subagent_type": "general-purpose",
+  "task_description": "Trim navigator prompt weight",
+  "files": [
+    "plugins/navigator/README.md",
+    "plugins/navigator/agents/challenger.md",
+    "plugins/navigator/agents/estimator.md",
+    "plugins/navigator/agents/planner.md",
+    "plugins/navigator/skills/plan/SKILL.md"
+  ],
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 75713,
+    "cache_read_tokens": 610888,
+    "output_tokens": 10482,
+    "api_call_count": 11
+  },
+  "started_at": "2026-11-06T10:48:26.555437-08:00",
+  "completed_at": "2026-11-06T10:49:59.37325-08:00"
+}
