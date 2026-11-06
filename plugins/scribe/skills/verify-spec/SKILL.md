@@ -1,7 +1,7 @@
 ---
 name: verify-spec
 description: >-
-  Trigger when the user asks whether a spec matches its source: "is this grounded?", "does this spec match the requirement?", "check this spec against the requirement". Given a draft spec@1 plus the originating requirement@1 and optional research-report@1, checks whether each acceptance criterion is grounded in the source artifacts. Classifies criteria as supported, unsupported, or overfitted. Collects evidence only — does not produce a pass/fail verdict. Use before implementation, not after — for post-implementation drift, use scribe/spec-drift instead.
+  Trigger when the user asks whether a spec matches its source: "is this grounded?", "does this spec match the requirement?", "check this spec against the requirement". Given a draft spec@1, the requirement@1, and optional research-report@1, classifies criteria as supported, unsupported, or overfitted. Evidence only, no verdict; use before implementation.
 version: 2.0.0
 ---
 

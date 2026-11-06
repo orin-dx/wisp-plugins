@@ -1,7 +1,7 @@
 ---
 name: audit-architecture
 description: >-
-  Trigger when a draft spec@1 needs checking against the workspace's whole-system architecture — not another spec, and not a single signature — before it reaches scribe/gate-spec: "check this spec against our architecture", "does this fit the system", "audit this against the arch model". Given a spec@1, checks it against the persisted arch-model@2 for boundary violations, competing abstractions, and invariant conflicts, building or refreshing the model first if it's absent or stale for the area the spec touches. Returns specific, rewritten fixes on fail, the same standard as scribe/audit-spec but at system scope instead of spec scope.
+  Trigger when a draft spec@1 needs checking against whole-system architecture, before scribe/gate-spec: "check this spec against our architecture", "does this fit the system", "audit this against the arch model". Checks a spec@1 against the persisted arch-model@2 (building or refreshing it if absent or stale) and returns specific rewritten fixes on fail.
 version: 1.0.0
 ---
 

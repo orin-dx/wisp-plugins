@@ -100,7 +100,7 @@ Drafter/auditor review loops are capped at 2 iterations before reaching the exit
 | `revision_note` | no | Set only on a correction — what changed and why, citing the affected criterion_id |
 | `reasoning` | yes | Scratchpad — never forwarded downstream |
 
-**`verdict@1`** — produced by `exit-gate` only; see `shared/schemas/verdict@1.json`
+**`verdict@3`** — produced by `exit-gate` only; see `shared/schemas/verdict@3.json`
 
 ---
 

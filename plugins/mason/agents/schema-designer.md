@@ -4,7 +4,7 @@ role: Inter-Agent Schema Designer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when the user wants to design a new JSON Schema for an inter-agent artifact — a structured payload passed between producers and consumers in the plugin ecosystem. Provide a description of what the artifact represents, who produces it, and who consumes it. The designer produces a JSON Schema following ecosystem conventions (draft 2020-12, $id as name@version, all fields documented, reasoning scratchpad field always present, additionalProperties false, required fields listed), checks for conflicts with existing schemas in shared/schemas/, and returns the schema object with a recommended filename.
+  Delegate to design a new JSON Schema for an inter-agent artifact. Input is what the artifact represents, who produces it, and who consumes it. Returns the schema object and a recommended filename, after checking shared/schemas/ for conflicts.
 ---
 
 <constitution>

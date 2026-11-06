@@ -1,14 +1,14 @@
 ---
 name: audit-spec
 description: >-
-  Trigger when the user asks to review a spec's quality: "review this spec", "is this spec complete?", "audit this spec". Given a spec@1, adversarially reviews it for untestable criteria, ambiguous language, missing error cases, scope overlap with other specs, and incomplete sections. Returns a structured issue list with specific rewritten suggested fixes, not generic guidance. Named audit-spec rather than audit because the bare word audit is already ranger's plugin-level skill name (code/bug auditing) — a different domain entirely.
+  Trigger when the user asks to review a spec's quality: "review this spec", "is this spec complete?", "audit this spec". Adversarially reviews a spec@1 on its own terms and returns a structured issue list with rewritten suggested fixes.
 version: 2.0.0
 ---
 
 # Scribe — Audit Spec
 
 <overview>
-Checks whether a spec, taken on its own terms, is complete, unambiguous, and implementable without a single clarifying question — a different question from `scribe/verify-spec`'s "does it vanguard back to the requirement?". Delegates to `auditor`.
+Checks whether a spec, taken on its own terms, is complete, unambiguous, and implementable without a single clarifying question — a different question from `scribe/verify-spec`'s "does it trace back to the requirement?". Delegates to `auditor`.
 </overview>
 
 <dispatch>

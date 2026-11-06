@@ -267,7 +267,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `requirement@1` | weaver | vanguard, scribe |
 | `research-report@1` | vanguard | scribe |
 | `spec@1` | scribe, muse | navigator, sentinel |
-| `verdict@1` | muse | component-spec gate consumers |
+| `verdict@3` | muse, sentinel, smith, scribe, ranger | gate consumers |
 | `plan@1` | navigator | smith |
 | `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
 | `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |
@@ -284,7 +284,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `arch-model@2` | scribe | scribe architecture checks and remediation |
 | `release-artifact@2` | courier | humans |
 
-`verdict@1` remains Muse's component-spec gate contract. Other current gates use `verdict@3`; immutable schema versions are not rewritten in place.
+Every current gate uses `verdict@3`; earlier versions are immutable and no longer referenced.
 
 ---
 

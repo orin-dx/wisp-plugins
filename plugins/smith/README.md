@@ -16,8 +16,6 @@ Smith never assembles a changeset itself. It hands `criteria_evidence` — exact
 
 **Invoke with:** `"Implement this"`, `"Execute the plan"`, `"Build this feature"`
 
-> The skill also triggers on "generate tests for X," "explain what this code does," and "refactor this without changing behavior" — but no agent here implements those as distinct modes. They fall through to the same pipeline below, which only fits some of them. See [Capability Gaps](#capability-gaps).
-
 ---
 
 ## Install
@@ -84,6 +82,8 @@ flowchart LR
 
 Each batch runs in a fresh `implementer` context. Mutation survivors return as precision tests. Reviewer findings return for scoped repair or route to `scribe:architect`; only approved reviews reach exit-gate.
 
+**Fix pass.** For a list of review findings, a defect, or a diff-sized change with no spec or plan, Smith runs the same cycle on one batch built from a brief: the claims to fix, the invariants that must hold, and the sites to search. Each fix carries a regression test that fails on the pre-fix source, and each claim in the report names the command that proves it.
+
 When an explicit plan selection and the optional Wisp CLI are available, Smith can consume its verified `implementation-context@1` packet to avoid reassembling selected plan/spec context. An unavailable or rejected result falls back to each harness's native workflow and spec-drift behavior; code inspection and verification remain required.
 
 ---
@@ -108,17 +108,7 @@ Each `implementer` batch also returns `criteria_evidence` — one `{criterion_id
 
 ## Implementation Cycle (per subsystem batch)
 
-No shortcuts, but no mandated write-order either — tests are validated by the mutation gate below, not by which came first:
-
-1. Read the task's covers_criteria acceptance criteria from the spec before writing any code.
-2. Choose the implementation shape. Treat plan code as a baseline, not a transcript; record any better-shaped deviation in `concerns`.
-3. Write the implementation.
-4. Write tests that fail when each covered criterion is violated.
-5. Run targeted tests, then the relevant full suite.
-6. Record exact implementation and test evidence for each criterion.
-7. Commit only with user authorization.
-
-This departs from strict TDD deliberately — see [ADR-008](../../docs/adr/008-drop-test-first-ordering.md). A controlled comparison found agent-written code produced no measurable quality advantage from write-test-first ordering, at 3–9x the token cost, and that forcing a failing test into existence before any design work suppressed the upfront design agents otherwise did well ([Böckeler, "TDD inside the agent loop"](https://martinfowler.com/articles/exploring-gen-ai/tdd-in-the-agent-loop.html)). The mutation gate below is what actually verifies test quality — mutation score, not write order, is the evidence.
+Smith departs from strict TDD deliberately — see [ADR-008](../../docs/adr/008-drop-test-first-ordering.md). A controlled comparison found agent-written code produced no measurable quality advantage from write-test-first ordering, at 3–9x the token cost, and that forcing a failing test into existence before any design work suppressed the upfront design agents otherwise did well ([Böckeler, "TDD inside the agent loop"](https://martinfowler.com/articles/exploring-gen-ai/tdd-in-the-agent-loop.html)). The mutation gate below is what actually verifies test quality — mutation score, not write order, is the evidence.
 
 ---
 
@@ -146,20 +136,6 @@ Reviewer searches for the same syntax or algorithm and for different code expres
 `exit-gate` runs after all batches have approved reviews. It reads current code independently, validates `implementation-review@2`, derives its own sibling candidates, and verifies each structural disposition and relevant boundary before returning `verdict@3`.
 
 On fail, blockers go back to `implementer` for a targeted fix — three retries, then escalate to a human.
-
----
-
-## Capability Gaps
-
-Three of the skill's trigger phrases have no agent behind them:
-
-| Trigger phrase | What actually happens |
-| :--- | :--- |
-| "generate tests for X" | Only produces a real result if reframed as implementation tasks whose deliverable *is* the test — there's no test-only mode. |
-| "explain what this code does" | Unimplemented. There's no implementation to write for an explanation, so the pipeline doesn't fit — no agent here produces one. |
-| "refactor this without changing behavior" | Unimplemented as a distinct mode. A refactor only runs through this pipeline if it's expressed as tasks with their own red/green cycle proving behavior is unchanged. |
-
-If you need any of these as real capabilities, they'd need a dedicated agent — this is a documentation-accuracy note, not a promise they're coming.
 
 ---
 

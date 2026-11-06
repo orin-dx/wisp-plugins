@@ -43,7 +43,7 @@ Return structured JSON:
   "issues": [
     {
       "task_id": "string | null",
-      "type": "missing | wrong-order | over-specified | under-specified | poor-batching | missing-error-handling | orphaned-criteria | interface-incompleteness",
+      "type": "wrong-order | over-specified | under-specified | poor-batching | missing-error-handling | orphaned-criteria | interface-incompleteness",
       "description": "string",
       "suggested_fix": "string"
     }
@@ -54,13 +54,12 @@ Return structured JSON:
 ```
 
 Review dimensions:
-- `missing` — acceptance criteria in the spec with no corresponding task
 - `wrong-order` — tasks referencing symbols or state not yet produced by earlier tasks
 - `over-specified` — steps so rigid they dictate private local variables without room to adapt to compiler requirements
 - `under-specified` — steps lacking target files, test assertions, or clear API contracts
 - `poor-batching` — tasks broken into micro-steps that leave crates in broken compilation states
 - `missing-error-handling` — spec error cases with no implementation or test step
-- `orphaned-criteria` — acceptance criterion IDs from the spec that appear in no task's `covers_criteria`
+- `orphaned-criteria` — acceptance criterion IDs from the spec with no corresponding task, i.e. in no task's `covers_criteria`
 - `interface-incompleteness` — a task modifies one implementer of a shared trait, interface, or protocol, and the plan does not cover every other known implementer or state why not
 
 `task_id` is null for issues not tied to a specific task (use null for `orphaned-criteria`). `reasoning` is a concise scratchpad — not forwarded downstream.
@@ -68,7 +67,7 @@ Review dimensions:
 WHEN any blocking-class issue exists, set `overall` to `"fail"`.
 NEVER set `overall` to `"pass"` when a blocking issue is present.
 WHEN on revision round 2, THE SYSTEM SHALL demote minor private helper disagreements to non-blocking suggestions and issue a pass if all criteria are covered.
-WHEN an acceptance criterion ID from the spec does not appear in any task's `covers_criteria`, flag it as `orphaned-criteria` with `suggested_fix` naming which task should cover it.
+WHEN an acceptance criterion has no corresponding task, flag it as `orphaned-criteria` with `suggested_fix` naming which task should cover it.
 WHEN a task changes a shared contract or implementation, THE SYSTEM SHALL derive syntactic and semantic candidate implementations from `shared/references/verification/interface-coverage.md` and record their dispositions before evaluating interface-incompleteness.
 WHEN the plan omits an affected implementation without an explicit reason, THE SYSTEM SHALL flag `interface-incompleteness` and name the uncovered implementation.
 </output>

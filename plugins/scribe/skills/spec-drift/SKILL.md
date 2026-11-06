@@ -1,7 +1,7 @@
 ---
 name: spec-drift
 description: >-
-  Trigger when the user asks whether implemented code still matches its spec, weeks or months after implementation: "check spec drift", "does the code still match this spec?", "has this spec drifted?". Given a spec@1 (via spec_file_path) and a workspace root, reads the spec from disk and the implementation from the workspace, and reports each criterion as covered (implemented and tested), uncovered (no matching implementation), or drifted (implementation exists but diverges from the criterion's contract). This is an on-demand diagnostic, not a blocking gate — scribe/gate-spec is the blocking gate.
+  Trigger when the user asks whether implemented code still matches its spec, weeks or months later: "check spec drift", "does the code still match this spec?", "has this spec drifted?". Given spec_file_path and a workspace root, reports each criterion as covered, uncovered, or drifted. On-demand diagnostic, not a gate.
 version: 2.0.0
 ---
 

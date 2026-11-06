@@ -21,7 +21,7 @@ Convert the supplied design intent into a component contract that an implementer
 2. Draft a `spec@1` conforming to `shared/schemas/spec@1.json` with props, variants, state transitions, observable outcomes, error cases, and accessibility criteria.
 3. Make every acceptance criterion falsifiable from outside the implementation. Mark invalid combinations or error paths with `is_error_case: true`.
 4. Audit the draft for missing states, contradictory criteria, ambiguous language, and accessibility gaps.
-5. Emit a `verdict@1` conforming to `shared/schemas/verdict@1.json`. On failure, return only actionable blockers to the draft. On pass, persist the spec at `docs/specs/<id>.json` with `spec_file_path` set, then hand off the persisted artifact.
+5. Emit a `verdict@3` conforming to `shared/schemas/verdict@3.json`. On failure, return only actionable blockers to the draft. On pass, persist the spec at `docs/specs/<id>.json` with `spec_file_path` set, then hand off the persisted artifact.
 
 ## Decisions and stopping
 

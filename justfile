@@ -4,7 +4,7 @@
 # Run every check (same set CI runs)
 # fmt-check is deliberately excluded: the repo isn't formatted yet. Run
 # `just fmt` once, review the diff, commit it, then add fmt-check here.
-check: manifests test versions skills-doc reference-size marketplace-check mermaid
+check: manifests test versions skills-doc reference-size marketplace-check mermaid wiring
 
 # Install pinned tooling dependencies
 install:
@@ -54,3 +54,7 @@ fmt-check:
 # Format the repo in place
 fmt:
     pnpm exec oxfmt --write .
+
+# Check declared agents, skills and schemas exist for every plugin
+wiring:
+    bash shared/scripts/validate-wiring.sh

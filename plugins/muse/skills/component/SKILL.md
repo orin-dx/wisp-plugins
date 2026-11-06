@@ -1,7 +1,7 @@
 ---
 name: component
 description: >-
-  Trigger when the user asks to spec a UI component: "spec this component", "draft a component spec", "write a spec for this design", "audit this component spec", "is this component spec ready?", "gate this component spec". Given a requirement@1 or free-text design intent, produces a spec@1 covering props, variants, per-state observable behavior, and accessibility criteria as testable propositions. Every criterion is falsifiable from outside the implementation; error cases and invalid prop combinations carry is_error_case: true. No TBDs anywhere in the document — genuinely unknown items go in non_goals or the reasoning scratchpad instead. Gated by a binding exit gate before the spec proceeds to planning.
+  Trigger when the user asks to spec a UI component: "spec this component", "draft a component spec", "write a spec for this design", "audit this component spec", "is this component spec ready?", "gate this component spec". Given a requirement@1 or free-text design intent, produces a gated spec@1 covering props, variants, per-state behavior, and accessibility criteria.
 version: 1.0.0
 ---
 
@@ -20,14 +20,14 @@ Turns UI or design intent into a component spec a developer could implement — 
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/verdict@1.json`
+`shared/schemas/spec@1.json`, `shared/schemas/verdict@3.json`
 </references>
 
 <io>
 **Consumes**: `requirement@1`, or free-text design intent describing the component
-**Produces**: `spec@1` (persisted to disk only after `exit-gate` passes) and, on failure, a `verdict@1` with blockers routed back to `drafter`. On pass, route the persisted `spec@1` — with `spec_file_path` set — to `navigator`.
+**Produces**: `spec@1` (persisted to disk only after `exit-gate` passes) and, on failure, a `verdict@3` with blockers routed back to `drafter`. On pass, route the persisted `spec@1` — with `spec_file_path` set — to `navigator`.
 </io>
 
 <circuit_breaker>
-Drafter → auditor review loops are capped at 2 iterations before reaching the exit gate. On round 2, unresolved debates about naming or phrasing are demoted to non-blocking notes rather than looping further. The exit gate itself allows up to 3 retries before escalating to a human reviewer.
+Drafter → auditor loops: max 2 iterations before the exit gate; on round 2, unresolved naming or phrasing debates become non-blocking notes. The exit gate allows up to 3 retries before escalating to a human reviewer.
 </circuit_breaker>

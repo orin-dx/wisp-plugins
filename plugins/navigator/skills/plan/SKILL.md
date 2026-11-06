@@ -1,14 +1,14 @@
 ---
 name: plan
 description: >-
-  Trigger this skill when the user says "write a plan for X", "how do we implement this spec", "break this down into tasks", "what are the implementation steps", "create an implementation plan", or "plan this out". Also activate when a spec (spec@1) exists and the user is ready to move to implementation but hasn't broken it down yet. Produces a plan@1 artifact where every task includes exact file paths, a brief implementation approach, exact implementation code, the exact tests proving each criterion, a conventional commit message, and covers_criteria linking the task to specific acceptance criteria. spec_file_path and linked_requirement are propagated from the source spec. No TBDs. No "implement as appropriate." Every step is mechanically executable by a developer with zero domain context.
+  Trigger when the user asks to plan, break down, or sequence the implementation of a spec ("write a plan for X", "break this down into tasks", "plan this out"), or when a spec@1 exists and implementation is next. Also covers estimating or challenging an existing plan. Produces a plan@1 of executable tasks linked to acceptance criteria.
 version: 1.5.0
 ---
 
 # Navigator Planning Skill
 
 <overview>
-Navigator decomposes a spec@1 into a sequenced, bite-sized plan@1 that a developer or agent can execute without making any design decisions. Every task is independently testable, time-bounded, and fully specified down to exact code and commit messages.
+Navigator decomposes a spec@1 into a sequenced, bite-sized plan@1 that a developer or agent can execute without making any design decisions. Every task is independently testable.
 </overview>
 
 ---
@@ -17,7 +17,7 @@ Navigator decomposes a spec@1 into a sequenced, bite-sized plan@1 that a develop
 
 navigator is one skill, `plan`. Behavior adapts to what's asked, dispatching to whichever agent below fits the request — there is no separate `navigator/estimate` or `navigator/challenge` skill to invoke; estimating and challenging both happen inside this one skill.
 
-- **Decompose a spec** — `planner` creates ordered, subsystem-batched tasks with exact files, approach, baseline code, tests, commit message, and `covers_criteria`.
+- **Decompose a spec** — `planner` creates ordered, subsystem-batched tasks.
   - Read and propagate persisted spec metadata.
   - In amend mode, change only tasks tied to corrected criteria.
 
@@ -66,24 +66,8 @@ Without `plan_file_path` set, `weaver/audit-backlog` and other downstream agents
 
 <implementation_requirement>
 
-Every task in a plan@1 specifies:
-
-- A brief implementation approach chosen before test details
-- Exact implementation code as a feasible baseline, not a mandatory final shape
-- Exact tests proving each `covers_criteria` criterion
-- The full-suite verification command
-- The conventional commit message
-
 Test steps are not required to precede implementation steps within a task. Smith's mutation-testing gate — not step order — is what verifies a test would actually catch a wrong implementation; a controlled comparison found no quality advantage from write-test-first ordering for agent-written code, at several times the token cost, and found it suppressed upfront design work agents otherwise did well ([Böckeler, "TDD inside the agent loop"](https://martinfowler.com/articles/exploring-gen-ai/tdd-in-the-agent-loop.html)).
 
-A task that specifies implementation code with no corresponding test proving a covers_criteria criterion violates this requirement — the criterion has no evidence, regardless of write order. Smith's implementer may still adapt the baseline's shape at execution time, provided the same files, criteria, and tests are satisfied — see [ADR-009](../../../../docs/adr/009-implementer-shape-latitude.md).
+A task that specifies implementation code with no corresponding test proving a covers_criteria criterion violates this requirement — the criterion has no evidence, regardless of write order. For the implementer's latitude over the baseline's shape, see [ADR-009](../../../../docs/adr/009-implementer-shape-latitude.md).
 
 </implementation_requirement>
-
----
-
-<no_placeholders_rule>
-
-Every step must show exact code. "Implement the feature", "add appropriate error handling", and "write tests as needed" are not steps — they are abdications. If the exact code is not known, it must be derived from the spec and documented as a concrete choice, not deferred as a TBD.
-
-</no_placeholders_rule>

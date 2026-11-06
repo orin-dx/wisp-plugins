@@ -1,14 +1,14 @@
 ---
 name: capture-need
 description: >-
-  Trigger when the user describes a raw need in free text: "we need X", "the problem is Y", "users are asking for Z". Converts unstructured text into a structured requirement@1 draft — id, statement, stakeholder, why, done_when — without asking clarifying questions. Fields that cannot be inferred are omitted, not fabricated. out_of_scope is intentionally left empty for weaver/connect-requirement or a human to fill in.
+  Trigger when the user describes a raw need in free text: "we need X", "the problem is Y", "users are asking for Z". Converts unstructured text into a requirement@1 draft without asking clarifying questions.
 version: 2.0.0
 ---
 
 # Weaver — Capture Need
 
 <overview>
-The entry point for turning a raw idea or pain point into something a spec can be drafted from. Delegates to `intake`. Every `done_when` criterion must be a testable proposition confirmable from outside the implementation — not a design decision in disguise.
+The entry point for turning a raw idea or pain point into something a spec can be drafted from. Delegates to `intake`.
 </overview>
 
 <dispatch>

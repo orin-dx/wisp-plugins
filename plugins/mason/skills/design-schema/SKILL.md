@@ -1,7 +1,7 @@
 ---
 name: design-schema
 description: >-
-  Trigger when the user wants to design a new inter-agent artifact schema: "design a schema for X", "add a new schema to shared/schemas", "what should this handoff look like?". Given a description of what the artifact represents, who produces it, and who consumes it, produces a JSON Schema (draft 2020-12) following ecosystem conventions — $id as name@version, additionalProperties false, a reasoning scratchpad field, all fields documented — and checks for conflicts with existing schemas.
+  Trigger when the user wants a new inter-agent artifact schema: "design a schema for X", "add a new schema to shared/schemas", "what should this handoff look like?". Given what the artifact represents, its producer, and its consumer, returns a draft 2020-12 JSON Schema checked for conflicts with existing schemas.
 version: 2.0.0
 ---
 

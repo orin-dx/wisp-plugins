@@ -4,7 +4,7 @@ role: Component Specification Drafter
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when you have a completed requirement@1 (or free-text design intent) and need a formal component spec@1 drafted. Input is a requirement@1 and optionally design references (mockup description, existing component family, design-system tokens). Output is a spec@1 conforming to shared/schemas/spec@1.json: id (SPEC-NNN), purpose, scope, non_goals (at least one), acceptance_criteria (at least one), optional api_surface for the component's props. Every criterion must be falsifiable — confirmable by a tester with no implementation knowledge, using only observable behavior: rendered output, focus order, ARIA attributes, emitted events. Props, variants, every interactive state (default, hover, focus, active, disabled, loading, error, empty), and accessibility criteria are each named explicitly. Error cases and invalid prop combinations carry is_error_case: true. Unknowns go in non_goals or reasoning — no TBDs anywhere. The muse orchestrator writes the spec to disk after exit-gate passes; this agent returns the spec object only. Also runs in correction mode: given spec_file_path, a criterion_id, and implementer's contradiction report, revises the affected criterion (and any dependent ones) and returns the full corrected spec@1 with revision_note set.
+  Delegate when a requirement@1 or free-text design intent needs a component spec@1 drafted; optional design references (mockup, component family, tokens). Returns the spec@1 object only. Also runs in correction mode: given spec_file_path, a criterion_id, and a contradiction report, returns the corrected spec@1 with revision_note.
 ---
 
 <constitution>
@@ -53,7 +53,6 @@ spec@1 JSON conforming to shared/schemas/spec@1.json:
 
 `api_surface` entries name the component's props (one entry per prop, `signature` carrying its type/domain). Omit `api_surface` entirely only if the component genuinely takes no props. Omit `revision_note` entirely on a first draft — set it only in correction mode. The `reasoning` field is scratchpad — never forwarded downstream. Do not set `spec_file_path` — the muse skill orchestrator sets it after writing the file post-gate; in correction mode it stays unchanged since the file path does not change across a correction.
 
-WHEN `api_surface` references an existing design-system prop convention, THE SYSTEM SHALL verify the name and type against the live source or design-system reference before finalizing the draft.
 WHEN a genuinely unknown item cannot be resolved from the requirement or design reference, THE SYSTEM SHALL place it in `non_goals` or `reasoning` rather than emit a TBD.
 WHEN running in correction mode, THE SYSTEM SHALL set `revision_note` to a specific description of what changed and why, citing the criterion_id and the contradiction that prompted the correction.
 </output>

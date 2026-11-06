@@ -7,8 +7,10 @@ Choose evidence from the changed risk and the workspace's available capabilities
 - Examples: bounded behavior with clear representative cases.
 - Property or fuzz testing: parsers, combinatorial inputs, state transitions, graph logic, or round trips. Name the generated domain and a meaningful oracle or invariant; a no-panic check alone rarely proves behavior.
 - Mutation or deliberate fault: show that tests distinguish an important wrong implementation from the intended one.
-- Boundary testing: exercise the contract implicated by the change. Name any mocked segment and why the remaining boundary is sufficient.
-- Environment testing: exercise only environment assumptions that can change the outcome, such as runtime version, PATH, working directory, build tags, packaging, or CI configuration.
+- Boundary testing: exercise the contract implicated by the change, feeding real producer output to the real consumer where a format crosses it; a missing key fails instead of defaulting. Name any mocked segment and why the remaining boundary is sufficient. A test double accepts only what the real tool accepts and applies the logic it stands in for.
+- Environment testing: exercise only environment assumptions that can change the outcome, such as runtime version, PATH, working directory, build tags, packaging, or CI configuration. Run what CI runs, from a clean state, before reporting a change verified; a narrower local check is a coverage gap. A failure seen in only one environment, or only sometimes, is a defect until a cause is shown, including on the main branch.
+- Declared requirements: compare what the change declares (peer ranges, engines, minimum versions, pins) with what the code now needs, and exercise the declared minimum.
+- Generated output: exercise generated files such as workflows, templates, and configs the way their consumer receives them; matching golden bytes does not show they work.
 
 Prefer project-configured commands and installed tools. A missing optional tool is a coverage gap, not permission to install it or fabricate a result.
 
@@ -22,7 +24,7 @@ Run diagnostics after a coherent mutation or subsystem batch, not mechanically a
 
 ## Evidence quality
 
-Record the claim, actual command or inspection, observed result, and remaining gap. Generated tests also record the generator and oracle. External state records an immutable identity and observation time when it affects the decision.
+Record the claim, actual command or inspection, observed result, and remaining gap. Report a claim as done only after reading its result: a check still running is pending, and another agent's or worker's summary is a lead, not evidence. A filter, limit, or skip that drops inputs reports how many and why, so "could not check" differs from "checked, nothing found". A measurement uses the consumer's configuration, times only the measured work, and states its sample size. Generated tests also record the generator and oracle. External state records an immutable identity and observation time when it affects the decision.
 
 A test discriminates behavior when a controlled mutation, deliberate fault, isolated prior revision, or equivalent evidence makes it fail for the relevant wrong behavior and pass for the corrected behavior. Do not modify shared worktrees or user state merely to manufacture a red run.
 

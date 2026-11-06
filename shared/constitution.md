@@ -44,8 +44,8 @@ WHEN an agent is authored, its YAML frontmatter SHALL include: `name`, `role` (s
 
 WHEN assigning `model` and `effort`, the author SHALL apply dynamic routing based on task complexity:
 - `haiku / low` — deterministic enumeration and mechanical validation (recon, formatting, line citation lookups)
-- `sonnet / medium` — analysis and execution (scanning, drafting, planning, implementation, code reviews, standard exit gates)
-- `opus / high` — judgment (Tier 3 cross-crate architectural boundary gates, terminal binding verdicts)
+- `sonnet / medium` — analysis and execution (scanning, drafting, planning, implementation, code reviews)
+- `opus / high` — judgment (exit gates and other terminal binding verdicts, cross-crate architectural boundary gates)
 - `claude-fable-5-1 / high` — system-wide architecture modeling, auditing, or structural remediation
   - Reserve for bounded, single-invocation tasks; never gates or per-finding loops.
 
@@ -55,7 +55,7 @@ WHEN assigning `model` and `effort`, the author SHALL apply dynamic routing base
 
 WHEN authoring agent prompts, THE SYSTEM SHALL maintain the `<constitution>` section as an identical static header — the first content after frontmatter, byte-for-byte the same across every agent in the ecosystem — to maximize prompt cache sharing.
 
-WHEN executing shell operations, THE SYSTEM SHALL prioritize modern CLI tools (ripgrep `rg`, `fd`, `bat`, `jq`, `delta`, `eza`) over legacy builtins (`grep`, `find`, `sed`, `cat`).
+WHEN executing shell operations, THE SYSTEM SHALL use repository-native commands first, then modern CLI tools (ripgrep `rg`, `fd`, `bat`, `jq`, `delta`, `eza`) over legacy builtins, as `shared/references/tooling/cli.md` describes.
 
 WHEN passing task-specific inputs (file paths, line ranges, criteria IDs, blocker arrays), THE CALLER SHALL place them strictly at the tail of the prompt after the static cache breakpoint.
 
@@ -105,6 +105,8 @@ WHEN re-submitting an artifact to exit-gate after a fail verdict, the caller SHA
 
 IF exit-gate emits a blockers array in a fail verdict, the producing agent SHALL address only those blockers in its targeted patch.
 
+IF a blocker's `retry_count` exceeds 3, exit-gate SHALL return fail with an `escalation_required` blocker and the caller SHALL halt automated retries.
+
 ---
 
 ## Spec Persistence
@@ -121,7 +123,7 @@ IF the spec is written to disk but not committed to version control, it SHALL be
 
 WHEN challenger issues an overall pass verdict on a plan@1, the navigator skill orchestrator SHALL write the plan to `<workspace_root>/docs/projects/<linked_spec>.json`, commit the file to version control, set `plan_file_path` to the workspace-relative path in the plan@1, and pass the updated plan to smith.
 
-WHEN any agent consumes a plan@1 to make implementation or verification decisions, it SHALL read from `plan_file_path` when set — the same lossy-context rationale as spec_file_path applies.
+WHEN the smith implement skill is given a plan, it SHALL pass `plan_file_path` to every agent it dispatches, and those agents SHALL read the plan from that path when set — the same lossy-context rationale as spec_file_path applies.
 
 WHEN plan_file_path is absent, agents SHALL proceed with in-context plan content and record a plan_file_unset coverage gap — graceful degradation, not a hard block.
 

@@ -4,7 +4,7 @@ role: Specification Drafter
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when you have a completed requirement@1 and need a formal spec@1 drafted. Input is a requirement@1 and optionally a research-report@1. Output is a spec@1 conforming to shared/schemas/spec@1.json: id (SPEC-NNN), purpose, scope, non_goals (at least one), acceptance_criteria (at least one), optional api_surface. Every criterion must be falsifiable — confirmable by a tester with no implementation knowledge, using only observable behavior. Error cases carry is_error_case: true. Unknowns go in non_goals or reasoning — no TBDs anywhere. The scribe orchestrator writes the spec to disk after exit-gate passes; this agent returns the spec object only. Also runs in correction mode: given spec_file_path, a criterion_id, and implementer's contradiction report, revises the affected criterion (and any dependent ones) and returns the full corrected spec@1 with revision_note set.
+  Delegate to draft a formal spec@1 from a completed requirement@1 and optional research-report@1; returns the spec object only. Also runs in correction mode, given spec_file_path, a criterion_id, and implementer's contradiction report, returning the corrected spec@1 with revision_note.
 ---
 
 <constitution>

@@ -2,7 +2,7 @@
 
 **Stage:** Research · **Output:** `research-report@1` · **Version:** 2.0.2
 
-One skill, one pipeline: map sources, read only what the map points at, synthesize into a report that separates confirmed findings from assumptions, then adversarially assess risk on the resulting approach. Use vanguard before a spec gets written, not after — a spec built on unverified assumptions fails the moment implementation reveals reality.
+One skill, one pipeline: map sources, read only what the map points at, synthesize into a report that separates confirmed findings from assumptions, then adversarially assess risk on the resulting approach. Use vanguard before a spec gets written, not after.
 
 ---
 
@@ -37,10 +37,8 @@ One skill, one pipeline: map sources, read only what the map points at, synthesi
 | :--- | :--- | :--- | :--- |
 | `recon` | Source Mapper | haiku / low | Maps available sources — internal specs/docs/code, dependency manifests, external search terms — without reading them. Narrows scope to `internal`, `external`, or `both` based on what the question actually needs. |
 | `reader` | Source Reader | sonnet / medium | Reads each source recon mapped and extracts findings with confidence classification. Reads only what was mapped — no wandering. |
-| `synthesizer` | Synthesizer | sonnet / medium | Aggregates findings into a coherent `research-report@1`. Resolves contradictions and notes open questions. |
+| `synthesizer` | Synthesizer | sonnet / medium | Aggregates findings into a coherent `research-report@1`. Surfaces contradictions without choosing a side and notes open questions. |
 | `risk-assessor` | Risk Assessor | sonnet / medium | Reviews the proposed approach for technical risks before the spec is written. Can run standalone against an already-decided approach, or against synthesizer's own output. Surfaces risks neutrally, no recommendation on whether to proceed. |
-
-There is one skill here, not a menu of commands — vanguard is this pipeline, and the pipeline adapts to what's asked rather than exposing separate named modes for "full survey" versus "just the risk check."
 
 ---
 
