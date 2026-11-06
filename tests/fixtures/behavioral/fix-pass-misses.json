@@ -1,0 +1,195 @@
+{
+  "id": "fix-pass-misses@1",
+  "purpose": "Replay real misses from three projects through the fix-pass path. A run passes only when the observation is made from evidence; invoking a tool is not credit.",
+  "cases": [
+    {
+      "id": "release-matrix-target-suffix",
+      "rule": "ci-parity",
+      "source": "caliper release workflow review (high severity)",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review a change that passes a Linux target ending in a glibc version suffix to the packaging CLI in the release matrix.",
+        "repro": "The pinned CLI version keeps the suffix and the build step fails on both Linux matrix entries; local checks never ran the release build."
+      },
+      "oracle": {
+        "required_observations": [
+          "A check equal to what CI runs, in a clean state, would have exposed the suffix.",
+          "The local run is recorded as narrower than CI, as a coverage gap."
+        ],
+        "false_pass_if": [
+          "Local unit tests passing is reported as verification of the release path."
+        ]
+      }
+    },
+    {
+      "id": "generated-workflow-attached-head",
+      "rule": "generated-as-consumer",
+      "source": "callisto E170 (blocked monokl 0.3.0)",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review a generated release workflow template and the tests that cover it.",
+        "repro": "The template checks out the branch, so the release command that requires a detached HEAD fails; fixtures and the project's own workflow always detach."
+      },
+      "oracle": {
+        "required_observations": [
+          "The generated output is exercised the way a downstream repository's checkout produces it.",
+          "Golden-byte tests are noted as not proving the consumer path."
+        ],
+        "false_pass_if": [
+          "A golden snapshot match is reported as proof the template works."
+        ]
+      }
+    },
+    {
+      "id": "fake-git-refspec",
+      "rule": "fake-matches-real",
+      "source": "callisto test harness, push of a tag (high severity)",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review a change that sends a full refspec to git, with tests that use a scripted fake git.",
+        "repro": "The fake accepts the old argument shape and the real tool needs the new one."
+      },
+      "oracle": {
+        "required_observations": [
+          "The fake's argument grammar is checked against the real tool, not only against the code.",
+          "A fake that accepts any flag is named as a hazard."
+        ],
+        "false_pass_if": [
+          "Tests passing against the fake are reported as end-to-end evidence."
+        ]
+      }
+    },
+    {
+      "id": "stub-ignores-filter",
+      "rule": "fake-matches-real",
+      "source": "callisto release-PR note review",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review a test for code that finds an existing comment by a marker using a jq filter.",
+        "repro": "The stub returns a fixed id and ignores the filter, so a broken filter would still pass."
+      },
+      "oracle": {
+        "required_observations": [
+          "The stub applies the logic it stands in for, or the filter is tested against real output."
+        ],
+        "false_pass_if": [
+          "The test is accepted because it calls the stubbed command."
+        ]
+      }
+    },
+    {
+      "id": "result-key-spelling",
+      "rule": "fake-matches-real",
+      "source": "caliper measurement script review",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review a script that reads a count from a tool's JSON output.",
+        "repro": "The tool emits a key with a space; the script reads the underscored spelling and silently defaults to zero."
+      },
+      "oracle": {
+        "required_observations": [
+          "A test feeds real producer output to the real consumer.",
+          "A missing key fails loudly instead of defaulting."
+        ],
+        "false_pass_if": [
+          "A hand-written sample with the underscored key passes."
+        ]
+      }
+    },
+    {
+      "id": "scope-capture-sibling-chain",
+      "rule": "sibling-search",
+      "source": "caliper type-parameter scope work (changes 132, 142, 143)",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Fix a reported case where a type parameter in one scope captures a name from another.",
+        "repro": "Each fix repaired one scope-entry site and left another with the same defect: alias, interface, factory, wrapper."
+      },
+      "oracle": {
+        "required_observations": [
+          "Every place the scope is entered is listed with an outcome.",
+          "A regression test fails on the pre-fix source."
+        ],
+        "false_pass_if": [
+          "Only the reported site is fixed and the sibling sites are not listed."
+        ]
+      }
+    },
+    {
+      "id": "peer-range-declared-vs-used",
+      "rule": "declared-vs-actual",
+      "source": "caliper storybook package review",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review a change that raises the minimum feature version the code needs from a peer package.",
+        "repro": "The declared peer range still accepts the earlier version."
+      },
+      "oracle": {
+        "required_observations": [
+          "The declared range is compared with what the code actually uses.",
+          "The minimum declared version is installed and the integration tests run."
+        ],
+        "false_pass_if": [
+          "The change is approved because it works with the latest version."
+        ]
+      }
+    },
+    {
+      "id": "environment-failure-normalised",
+      "rule": "intermittent-is-defect",
+      "source": "caliper tests described as failing only in worktrees, and a shared fixture race",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Triage tests that fail in some environments or intermittently.",
+        "repro": "The failure was called an environment issue and never checked on the main branch; the cause was a race on a shared fixture file."
+      },
+      "oracle": {
+        "required_observations": [
+          "The failure is treated as a defect until a cause is shown.",
+          "It is reproduced or ruled out on the main branch before being dismissed."
+        ],
+        "false_pass_if": [
+          "A rerun that passes is reported as resolution."
+        ]
+      }
+    },
+    {
+      "id": "silent-drop-of-input",
+      "rule": "conservation",
+      "source": "monokl search indexing review",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Review an indexer that keeps only top-level declarations.",
+        "repro": "Text outside declarations vanishes with no count, so an empty result is indistinguishable from a complete search."
+      },
+      "oracle": {
+        "required_observations": [
+          "Every filtered input is accounted for, with a count of what was dropped.",
+          "'Could not check' is distinguishable from 'checked, nothing found'."
+        ],
+        "false_pass_if": [
+          "An empty result is reported as a clean search."
+        ]
+      }
+    },
+    {
+      "id": "claim-without-proof",
+      "rule": "claims-cite-proof",
+      "source": "monokl and caliper reports of fixed and zero open findings before CI ran",
+      "route": "smith:implement",
+      "public_input": {
+        "task": "Write the completion report for a fix.",
+        "repro": "Earlier reports said 'fixed' and '0 open' while checks were still running or had never been run on the main branch."
+      },
+      "oracle": {
+        "required_observations": [
+          "Each claim names the command that proves it and its result.",
+          "A check still running is reported as pending."
+        ],
+        "false_pass_if": [
+          "A worker summary is relayed as fact without a proving command."
+        ]
+      }
+    }
+  ]
+}
