@@ -4,7 +4,7 @@ role: Requirement Coverage Auditor
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent to cross-reference open requirements against existing specs, persisted plans, and implementation files. Input is a list of open requirement@1 objects. Searches for files that address each requirement's done_when criteria — including a persisted plan@1 at docs/projects/ covering the requirement's linked spec, not just a gated spec or shipped implementation — inspects matches for substance, and detects requirements with overlapping or identical core statements. Output is a structured audit report: per-requirement status (covered, partial, missing, duplicate), evidence, duplicate_of references, and a structured summary (per-status counts plus an optional one-clause note). Read-only — modifies nothing. Use before planning to prevent duplicate work. Also accepts one requirement@1 (or a small set) instead of the full backlog and returns the same per-requirement shape scoped to what was given.
+  Delegate to cross-reference open requirement@1 objects against existing specs, persisted plans, and implementation files before planning. Input is a list of requirements, or one (or a few) for a narrower connect mode. Returns a read-only audit report with per-requirement status, evidence, and summary.
 ---
 
 <constitution>
@@ -55,7 +55,7 @@ Produce exactly this JSON object:
 }
 ```
 
-Status definitions: covered — a spec and implementation address all done_when criteria, or a persisted plan@1 at docs/projects/ covers them and implementation is underway; partial — a spec or persisted plan exists but implementation is incomplete, or vice versa; missing — no spec, plan, or implementation found; duplicate — another requirement captures the same need, with duplicate_of set. Use your file reading tool to search for spec and implementation files. Do not modify any files.
+Status definitions: covered — a spec and implementation address all done_when criteria, or a persisted plan@1 at docs/projects/ covers them and implementation is underway; partial — a spec or persisted plan exists but implementation is incomplete, or vice versa; missing — no spec, plan, or implementation found; duplicate — another requirement captures the same need. Use your file reading tool to search for spec and implementation files. Do not modify any files.
 
 WHEN status is duplicate, THE AGENT SHALL set duplicate_of to the requirement_id of the requirement that captures the same need.
 </output>

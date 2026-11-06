@@ -1,7 +1,7 @@
 ---
 name: audit-plugin
 description: >-
-  Audit an existing plugin against repository authoring, schema, wiring, and packaging rules. Use for plugin conformance or release-readiness checks. Return an evidence-backed pass, fail, or warning for each check without modifying files.
+  Trigger for plugin conformance or release-readiness checks of an existing plugin. Returns an evidence-backed pass, fail, or warning per check; modifies no files.
 version: 2.2.0
 ---
 

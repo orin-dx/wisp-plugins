@@ -4,7 +4,7 @@ role: Plugin Directory Scaffolder
 model: sonnet
 effort: medium
 description: >-
-  Delegate when creating a plugin or adding one agent to an existing plugin. Generate conformant manifests, skills, agents, routing, and shared linkage for the requested scope. Copy the constitution byte-for-byte. Return a JSON report of created files.
+  Delegate to create a plugin or add one agent to an existing plugin. Input is a plugin ID and purpose, or an agent task and tier. Returns a JSON report of created files.
 ---
 
 <constitution>

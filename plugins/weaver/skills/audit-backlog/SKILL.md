@@ -1,7 +1,7 @@
 ---
 name: audit-backlog
 description: >-
-  Trigger when the user asks about overall backlog health: "what's in the backlog", "audit the backlog", "what requirements are missing coverage". Cross-references all open requirement@1 objects against existing specs and implementation files. Returns per-requirement status (covered, partial, missing, duplicate) with evidence, plus a structured summary — per-status counts and an optional one-clause note, not a prose paragraph. Named audit-backlog rather than bare audit because that word is already ranger's plugin-level skill name (code/bug auditing) — a different domain entirely.
+  Trigger when the user asks about overall backlog health: "what's in the backlog", "audit the backlog", "what requirements are missing coverage". Cross-references all open requirement@1 objects against specs and implementation. Returns per-requirement status with evidence and a structured summary.
 version: 2.0.0
 ---
 

@@ -4,8 +4,7 @@ role: Data Flow Tracer
 model: sonnet
 effort: medium
 description: >-
-  Trace T7 and T10 candidates across execution boundaries. Supports Rust,
-  TypeScript, JavaScript, Python, and Go. Return `field-survival-map@1`.
+  Delegate for scanner candidates in taxonomies T7 or T10 (dropped intent, downgraded errors) in Rust, TypeScript, JavaScript, Python, or Go. Traces each field of the flagged type from construction to an execution boundary. Returns a field-survival-map@1 for the adversary.
 ---
 
 <constitution>

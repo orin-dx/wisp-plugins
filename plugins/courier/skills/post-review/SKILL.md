@@ -1,7 +1,7 @@
 ---
 name: post-review
 description: >-
-  Trigger when the user has an already-drafted review or reply and wants it posted: "post this review", "reply to this comment", "mark this thread resolved", "submit my review comments". Takes drafted content — from the built-in `code-review` skill's findings, from `courier/receive-feedback`'s response plan, or typed directly by the user — and posts it to GitHub via `gh pr review` or `gh pr comment`. Does not draft content itself; this skill is purely mechanical execution of something already written, gated by explicit user confirmation before any post fires.
+  Trigger when the user has an already-drafted review or reply and wants it posted: "post this review", "reply to this comment", "mark this thread resolved", "submit my review comments". Posts drafted content to GitHub after explicit user confirmation; does not draft.
 version: 2.0.0
 ---
 

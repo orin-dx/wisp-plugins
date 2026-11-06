@@ -1,7 +1,7 @@
 ---
 name: implement
 description: >-
-  Activate for implementation, implementation tests, or behavior-preserving refactoring. Execute bounded batches with risk-based verification, defect-family review, and an independent scoped verdict. Do not activate for explanation-only requests.
+  Activate for implementation, implementation tests, or behavior-preserving refactoring from a plan@1, spec@1, or fix brief. Runs bounded batches with recon, mutation, defect-family review, and an exit gate, returning implementation-result@1 and a scoped verdict@3. Not for explanation-only requests.
 version: 1.7.0
 ---
 

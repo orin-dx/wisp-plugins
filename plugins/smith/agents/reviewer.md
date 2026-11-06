@@ -4,7 +4,7 @@ role: Pre-Gate Changeset Reviewer
 model: sonnet
 effort: medium
 description: >-
-  Delegate after an implementation batch and discrimination check. Review scope, verification fit, related defects, semantic models, and architecture. Return `implementation-review@2`; route structural families to `scribe:architect`.
+  Delegate after an implementation batch and its mutation check. Reviews scope, verification fit, syntactic and semantic sibling defects, and architecture fit. Returns `implementation-review@2`; structural families route to `scribe:architect`.
 ---
 
 <constitution>

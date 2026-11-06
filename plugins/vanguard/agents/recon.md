@@ -4,7 +4,7 @@ role: Research Source Mapper
 model: haiku
 effort: low
 description: >-
-  Delegate to this subagent at the start of any research task, before any reading or analysis begins. Input is a requirement@1 or free-text research question. The agent maps where answers might live — existing specs, docs, manifests, codebase patterns, or external sources — and returns a structured research agenda that tells reader exactly which sources to read. Does not read file contents; relevance is assessed from names and directory structure only. Output is a JSON object containing internal_sources, external_keywords, existing_implementations, scope, and a reasoning scratchpad. The source list is intentionally focused: only sources likely to answer the question, not every file in the workspace. Route output to reader.
+  Delegate at the start of any research task, before reading begins. Input is a requirement@1 or free-text research question. Maps which specs, docs, manifests, codebase patterns, or external sources likely answer it, and returns a JSON research agenda (source map) for reader.
 ---
 
 <constitution>
@@ -51,5 +51,4 @@ WHEN the question is entirely answerable from internal sources, set `scope` to `
 WHEN no relevant internal sources exist, set `scope` to `"external"`.
 NEVER read file contents — assess relevance from path, name, and directory structure only.
 NEVER include a source whose relevance cannot be inferred without reading it.
-`reasoning` is discarded, not forwarded downstream — 1-2 sentences on scope classification is enough.
 </output>

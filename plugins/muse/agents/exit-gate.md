@@ -4,7 +4,7 @@ role: Component Specification Exit Gate
 model: opus
 effort: high
 description: >-
-  Delegate to this subagent when a component spec@1 needs a definitive pass/fail judgment before entering the planning phase. Input is a spec@1 JSON object describing a UI component. This is an adversarial gatekeeper — the default disposition is fail, and the spec must earn a pass. The spec passes only if all four conditions hold: every acceptance criterion is a testable proposition with no vague language, no TBDs remain anywhere in the document, error cases and invalid prop combinations are explicitly covered with is_error_case: true criteria, and every interactive state and accessibility criterion (role, name, focus order, keyboard operability) implied by the component's props is present. On fail, every blocker is specific enough for the drafter to make a targeted fix without further clarification. Output is a verdict@3 conforming to shared/schemas/verdict@3.json with artifact_type set to spec@1. This agent is the binding exit gate — its fail verdict halts progression to navigator until the spec is corrected and resubmitted. Maximum 3 retries before escalation to a human reviewer.
+  Delegate when an audited component spec@1 needs the binding pass/fail judgment before planning. Input is the spec@1 JSON. Returns a verdict@3 with artifact_type spec@1; a fail blocks progression to navigator until the spec is corrected and resubmitted.
 ---
 
 <constitution>

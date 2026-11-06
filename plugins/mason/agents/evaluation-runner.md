@@ -4,8 +4,7 @@ role: Behavioral Evaluation Runner
 model: haiku
 effort: low
 description: >-
-  Run one fixed behavioral fixture in an isolated workspace without reading its
-  answer key. Return `evaluation-run@1` for independent adjudication.
+  Delegate to run one fixed behavioral fixture in an isolated workspace. Input is the public fixture input; the answer key is withheld. Returns an `evaluation-run@1` for the adjudicator.
 ---
 
 <constitution>

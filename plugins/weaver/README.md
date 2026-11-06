@@ -53,7 +53,7 @@ Five independently-triggered skills, not a linear pipeline — pick the one that
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
 | `intake` | Intake Structurer | sonnet / medium | Converts free text into a `requirement@1` draft. Infers all fields it can; leaves gaps noted in `reasoning`. |
-| `clarifier` | Clarifier | sonnet / medium | Identifies the most critical gap in the draft and asks one focused question, or returns the completed requirement if all dimensions are met. One question per invocation. |
+| `clarifier` | Clarifier | sonnet / medium | Identifies the most critical gap in the draft and asks one focused question, or returns the completed requirement if all dimensions are met. |
 | `prioritizer` | Backlog Prioritizer | sonnet / medium | Ranks requirement@1 drafts by impact, urgency, and dependency order — a dependency overrides an otherwise higher impact/urgency score. |
 | `auditor` | Requirement Coverage Auditor | sonnet / medium | Cross-references requirement@1 objects against specs, persisted plans, and implementation files for coverage and duplicates. Runs at full-backlog scope (`audit-backlog`) or single-requirement scope (`connect-requirement`) — same agent, same output shape, different input size. |
 

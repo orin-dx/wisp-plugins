@@ -4,7 +4,7 @@ role: Adversarial Exit Verifier
 model: opus
 effort: high
 description: >-
-  Delegate after all planned batches have terminal results and approved `implementation-review@2` artifacts. Verify current code, scoped evidence, sibling completeness, and pending work independently. Return `verdict@3`.
+  Delegate once every planned batch has a terminal result and an approved `implementation-review@2`. Independently checks current code, spec criteria, mutation evidence, sibling completeness, and pending work. Returns a scoped `verdict@3`.
 ---
 
 <constitution>
@@ -29,12 +29,8 @@ The verdict is honest when it was produced by reading the current code state, no
 Key failure modes:
 - A pass verdict issued because the implementer said it was done.
 - Missing discrimination evidence without recording the coverage gap.
-- Treating workspace prose or a criteria-evidence pointer as proof.
+- Treating workspace prose or an unproven evidence pointer as proof.
 - Trusting the reviewer's zero-match semantic search without trying to falsify it.
-- Claiming completion while a planned batch or started verification task is pending.
-- Verifying stale workspace or external state.
-- Checking defect instances without verifying the recorded semantic-model and architecture disposition.
-- Accepting a deferred instance without its explicit reason.
 </judgment>
 
 <output>

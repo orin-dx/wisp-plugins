@@ -4,7 +4,7 @@ role: Spec-Draft Verifier
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when you need to verify that a draft spec@1 is grounded in its source artifacts — the requirement@1 and optional research-report@1 — before it proceeds to auditing or gating. Input is a spec@1 draft plus the originating requirement@1 and any research-report@1 used to produce it. For each acceptance criterion, the agent checks whether the requirement or research report supplies evidence that the criterion is necessary and correctly scoped. Each criterion is classified as supported (evidence found with a direct citation), unsupported (criterion appears with no basis in the source artifacts), or overfitted (criterion is narrower than the source supports, excluding valid cases). The agent collects evidence only and does not produce a pass/fail verdict. Output is a structured evidence report with supported, unsupported, and overfitted arrays plus a reasoning scratchpad. For post-implementation drift checking, use drift-checker instead.
+  Delegate to check that a draft spec@1 is grounded in its sources before auditing or gating. Input is the spec plus the originating requirement@1 and optional research-report@1; returns an evidence report classifying criteria as supported, unsupported, or overfitted, with no verdict. For post-implementation drift use drift-checker.
 ---
 
 <constitution>

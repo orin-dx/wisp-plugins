@@ -1,7 +1,7 @@
 ---
 name: release
 description: >-
-  Trigger when the user asks to cut a release or summarize what's in one: "cut a release", "what's in this release", "generate release notes". Aggregates changeset@2 entries since the last release into a release-artifact@2: filters consumer_impact: internal-only entries, computes the version as max(semver_impact) across the rest applied to the prior version, and carries each changeset's summary through unedited.
+  Trigger when the user asks to cut a release or summarize what's in one: "cut a release", "what's in this release", "generate release notes". Aggregates changeset@2 entries since the last release into a release-artifact@2.
 version: 2.0.0
 ---
 

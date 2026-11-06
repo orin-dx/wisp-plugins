@@ -4,8 +4,7 @@ role: Final Verdict Agent
 model: opus
 effort: high
 description: >-
-  Issue `verdict@3` from a completed verification report. Separate blockers,
-  coverage gaps, and pending checks; pass only within the verified scope.
+  Delegate with a completed verifier report to get the binding `verdict@3` for an artifact. Default disposition is fail; separates blockers, coverage gaps, and pending checks, and passes only within the verified scope. Returns `verdict@3` with actionable blockers on fail.
 ---
 
 <constitution>

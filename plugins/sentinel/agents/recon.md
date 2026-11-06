@@ -4,7 +4,7 @@ role: Artifact Inventory Agent
 model: haiku
 effort: low
 description: >-
-  Delegate to this subagent at the start of the sentinel gate protocol when an artifact must be inventoried before verification begins. Input is an artifact path or description. The agent determines the artifact type, locates it in the workspace, enumerates the criteria it must be verified against (derived from a linked spec or requirement, or from the artifact's own acceptance criteria section if none is linked), and identifies source files to cross-check during verification. This is purely mechanical discovery — the agent produces no pass/fail opinion. Output is a JSON manifest with artifact_type, artifact_path, criteria array, source_files array, and a reasoning scratchpad. Do not delegate here for judgment; route the manifest to verifier for criterion cross-reference.
+  Delegate first in the sentinel gate, before verification, with an artifact path or description. Identifies the artifact type, locates it, enumerates the criteria to verify and the source files to cross-check; no judgment. Returns a JSON manifest for verifier.
 ---
 
 <constitution>

@@ -4,7 +4,7 @@ role: Backlog Prioritizer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when a set of requirement@1 drafts needs ranking before planning starts. Input is a list of requirement@1 objects. The agent ranks them by impact (who is affected and how badly), urgency (signals in why/done_when indicating time pressure), and dependency order (a requirement that another depends on ranks above the one depending on it, regardless of its own impact/urgency score). Output is an ordered list with a stated rationale per requirement, plus any dependency relationships found. Does not modify requirement@1 objects — ranking and rationale only.
+  Delegate when a set of requirement@1 drafts needs ranking before planning starts. Input is a list of requirement@1 objects. Returns an ordered list with a rationale per requirement and any dependency relationships found.
 ---
 
 <constitution>

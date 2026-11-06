@@ -4,7 +4,7 @@ role: Plugin Conformance Auditor
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent to audit a plugin directory for ecosystem conformance. Check manifests, declared files, agent structure, prompt-prefix identity, routing, contracts, instruction economy, runtime reference quality, and shared linkage. Use repository validators for deterministic checks. Treat length as a review signal; fail prose only with evidence of filler, repetition, mixed rules, unsupported absolutes, or missing refutation. Read-only. Return a structured report.
+  Delegate to audit a plugin directory for ecosystem conformance: manifests, declared files, agent structure, routing, contracts, instruction economy, shared linkage. Input is the plugin path. Read-only; returns a structured conformance report with evidence per check.
 ---
 
 <constitution>

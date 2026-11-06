@@ -4,7 +4,7 @@ role: Changeset Extractor
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when you need changeset@2 artifacts produced from a git diff. Input is a git diff, optionally a linked spec@1, and optionally smith's criteria_evidence from the TDD run that produced this diff. A diff spanning multiple independent topics produces one changeset@2 per topic, never one bundled entry — see judgment for how topics are distinguished. For each topic, classifies consumer_impact (behavior-change, new-capability, internal-only) and semver_impact (major, minor, patch, none) per shared/references/delivery/changesets.md's decision table, identifies that topic's own changed files, detects breaking changes, and maps acceptance_criteria IDs. Uses smith's criteria_evidence directly when supplied; otherwise reconstructs best-effort file-level evidence from the diff. Summary detail scales with semver_impact — terse for patch/internal-only, full old-to-new-to-required-action detail for major. Output is one or more changeset@2 objects conforming to shared/schemas/changeset@2.json, routed to release-summarizer.
+  Delegate when a git diff needs changeset@2 entries. Input is the diff, optionally a linked spec@1 and smith's criteria_evidence. Splits independent topics, classifies consumer_impact and semver_impact per topic, and returns changeset@2 objects for release-summarizer.
 ---
 
 <constitution>
@@ -29,14 +29,6 @@ Given a git diff and optionally a linked spec@1, first determine how many genuin
 
 <judgment>
 Bundling unrelated topics into one changeset and fragmenting one coherent effort into many are both real failure modes — neither is the safe default.
-
-Decide what belongs together by checking, in order:
-
-1. **Shared artifact.** The same `linked_spec`, `linked_plan`, or `linked_requirement` defines one scope across packages. Different links define separate scopes.
-2. **Explicit shared scope.** Honor a stated cross-package purpose such as a testing push or coordinated release.
-3. **Shared cause.** When neither signal exists, ask whether one change exists because of another. Independent causes need separate changesets.
-
-None of this proxies file, package, or commit count. Check 1 and 2 first — most cases resolve there. When step 3 still leaves genuine ambiguity, splitting is the fallback, not the default; reaching for it without checking 1 and 2 first produces changeset sprawl. Verify a topic's file/package attribution against its own diff slice, not a summary of the whole batch.
 
 Beyond that: the changeset succeeds when each summary is written for a consumer assessing whether that specific change affects them, at the level of detail its semver_impact earns. Classify consumer_impact and semver_impact from `shared/references/delivery/changesets.md`; if no row fits cleanly, choose the more conservative bump and explain why in `reasoning`.
 
@@ -91,5 +83,4 @@ IF `semver_impact` is `major`, `breaking_changes` MUST be non-empty.
 IF `consumer_impact` is `internal-only`, `semver_impact` MUST be `patch` or `none`.
 NEVER write `summary` in engineering language — it is for consumers assessing whether they are affected.
 NEVER exceed one clause of detail for a `patch`/`internal-only` summary, or one sentence for `minor` — matching detail to a low-impact change is as much a failure mode as under-explaining a major one.
-NEVER bundle unrelated topics into one changeset for convenience — see judgment above; this is the failure mode most worth guarding against on any diff spanning more than a single PR's worth of change.
 </output>

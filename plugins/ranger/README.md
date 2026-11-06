@@ -129,36 +129,9 @@ Each finding requires:
 
 ---
 
-## Language Detection
-
-Recon inspects the workspace root automatically:
-
-| File found | Language | Hazard reference loaded |
-| :--- | :--- | :--- |
-| `Cargo.toml` | Rust | `shared/references/hazards/rust.md` and/or `shared/references/hazards/rust-boundaries.md`, per agent scope |
-| `package.json` | TypeScript / JavaScript | `shared/references/hazards/typescript.md` and/or `shared/references/hazards/typescript-boundaries.md`, per agent scope |
-| `pyproject.toml`, `requirements.txt`, Python files | Python | `shared/references/hazards/python.md` and/or `shared/references/hazards/python-boundaries.md` |
-| `go.mod`, Go files | Go | `shared/references/hazards/go.md` and/or `shared/references/hazards/go-boundaries.md` |
-
----
-
 ## References
 
-| File | Contents | Loaded by |
-| :--- | :--- | :--- |
-| `shared/references/hazards/rust.md` | Rust T1-T6, T8, and T9 candidate, confirmation, and refutation evidence | scanner (always), adversary (non-T7/T10 candidates) |
-| `shared/references/hazards/rust-boundaries.md` | Rust taxonomies T7 and T10 — boundary-tracer's entire scope | boundary-tracer (always), scanner (full scans), adversary (T7/T10 candidates) |
-| `shared/references/hazards/typescript.md` | TypeScript/JavaScript T1-T6, T8, and T9 candidate, confirmation, and refutation evidence | scanner (always), adversary (non-T7/T10 candidates) |
-| `shared/references/hazards/typescript-boundaries.md` | TypeScript taxonomies T7 and T10 — boundary-tracer's entire scope | boundary-tracer (always), scanner (full scans), adversary (T7/T10 candidates) |
-| `shared/references/hazards/python.md` | Python taxonomies outside T7/T10 | scanner, adversary |
-| `shared/references/hazards/python-boundaries.md` | Python T7/T10 boundary hazards | scanner, boundary-tracer, adversary |
-| `shared/references/hazards/go.md` | Go taxonomies outside T7/T10 | scanner, adversary |
-| `shared/references/hazards/go-boundaries.md` | Go T7/T10 boundary hazards | scanner, boundary-tracer, adversary |
-| `shared/schemas/candidate@1.json` | Scanner output shape | — |
-| `shared/schemas/workspace-manifest@1.json` | Reachability and workspace provenance | recon → scanner and gates |
-| `shared/schemas/finding-report@2.json` | Findings plus defect-family evidence | — |
-| `shared/schemas/candidate-assessment@1.json` | Per-candidate confirmed, plausible, or dismissed judgment | adversary → caller |
-| `shared/schemas/verdict@3.json` | Scoped exit verdict with gaps and pending checks | — |
+Hazard references are loaded per agent; see each agent's `load_first`. Schemas are in `shared/schemas/`: `candidate@1`, `workspace-manifest@1`, `field-survival-map@1`, `candidate-assessment@1`, `finding-report@2`, `verdict@3`.
 
 ---
 

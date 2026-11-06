@@ -1,9 +1,7 @@
 ---
 name: audit
 description: >-
-  Find evidence-backed reachable defects in Rust, TypeScript, JavaScript, Python,
-  or Go. Refute candidates, group defect families, and verify fixes against
-  current code and the relevant execution boundary.
+  Trigger on requests to hunt bugs, audit for vulnerabilities, scan a hazard category, verify a suspected bug, or check whether fixes resolved earlier findings, in Rust, TypeScript, JavaScript, Python, or Go. Refutes candidates, groups defect families, and returns finding-report@2 and verdict@3.
 version: 2.4.0
 ---
 
