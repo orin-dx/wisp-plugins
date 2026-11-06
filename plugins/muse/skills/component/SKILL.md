@@ -20,12 +20,12 @@ Turns UI or design intent into a component spec a developer could implement — 
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/verdict@1.json`
+`shared/schemas/spec@1.json`, `shared/schemas/verdict@3.json`
 </references>
 
 <io>
 **Consumes**: `requirement@1`, or free-text design intent describing the component
-**Produces**: `spec@1` (persisted to disk only after `exit-gate` passes) and, on failure, a `verdict@1` with blockers routed back to `drafter`. On pass, route the persisted `spec@1` — with `spec_file_path` set — to `navigator`.
+**Produces**: `spec@1` (persisted to disk only after `exit-gate` passes) and, on failure, a `verdict@3` with blockers routed back to `drafter`. On pass, route the persisted `spec@1` — with `spec_file_path` set — to `navigator`.
 </io>
 
 <circuit_breaker>

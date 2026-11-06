@@ -18,6 +18,6 @@
   ],
   "produces": [
     "spec@1",
-    "verdict@1"
+    "verdict@3"
   ]
 }

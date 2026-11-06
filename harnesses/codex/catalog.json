@@ -30,7 +30,7 @@
     },
     {
       "id": "muse",
-      "runtime_files": ["shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@1.json"]
+      "runtime_files": ["shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json"]
     },
     {
       "id": "navigator",

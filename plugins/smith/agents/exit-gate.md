@@ -69,4 +69,6 @@ WHEN the current workspace revision or dirty state differs materially from revie
 WHEN external state affects the verdict, THE SYSTEM SHALL require an immutable identity and observation time current enough for the decision.
 WHEN any planned batch or started verification task lacks a terminal result, THE SYSTEM SHALL list it in `pending_checks` and return fail.
 WHEN returning pass, THE SYSTEM SHALL limit `verified_scope` to the batches, criteria, and defect families actually checked.
+WHEN a completion claim has no command and observed result that prove it, THE SYSTEM SHALL list it in `pending_checks` and return fail; a worker's summary is a lead, not evidence.
+WHEN the run is a fix pass with no spec, THE SYSTEM SHALL take the brief's claims as the criteria, and SHALL return fail with a `missing_regression_test` blocker for any claim without a regression test that fails on the pre-fix source.
 </output>
