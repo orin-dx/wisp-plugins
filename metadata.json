@@ -1,0 +1,47 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M6RRV4VSJG0G1S3EGT3RZ5JY",
+  "strategy": "manual-commit",
+  "branch": "worktree-review-slop-evaluation",
+  "checkpoints_count": 15,
+  "files_touched": [
+    "docs/evaluations/review-slop-learnings/README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 240,
+    "cache_creation_tokens": 1802018,
+    "cache_read_tokens": 57150961,
+    "output_tokens": 137337,
+    "api_call_count": 114,
+    "subagent_tokens": {
+      "input_tokens": 188,
+      "cache_creation_tokens": 360985,
+      "cache_read_tokens": 7335689,
+      "output_tokens": 71882,
+      "api_call_count": 94
+    }
+  },
+  "redaction": {
+    "replacements": 62,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 62,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}

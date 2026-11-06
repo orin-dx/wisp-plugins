@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01GizTvdZtJCZ9icLjSGAC4B",
+  "agent_id": "a72b618beb680116a",
+  "subagent_type": "general-purpose",
+  "task_description": "Classify findings batch 2",
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 52430,
+    "cache_read_tokens": 60994,
+    "output_tokens": 6546,
+    "api_call_count": 2
+  },
+  "started_at": "2026-11-06T07:47:10.178005-08:00",
+  "completed_at": "2026-11-06T07:47:52.38728-08:00"
+}
