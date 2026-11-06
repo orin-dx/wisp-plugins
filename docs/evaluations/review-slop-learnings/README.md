@@ -1,6 +1,6 @@
 # Review and slop learnings, and a plugin cost audit
 
-Evaluation date: 2026-11-02. Status: proposal, nothing implemented. No plugin version, schema or constitution text changed.
+Evaluation date: 2026-11-02, updated 2026-11-06. Status: the first change set is implemented on this branch (see Implementation status); the rest is proposal. No plugin version or schema changed.
 
 ## Principle
 
@@ -10,6 +10,33 @@ Spend tokens only where they change an outcome. Two costs, kept apart:
 - **Authoring cost** is paid by maintainers: the constitution, `CONTRIBUTING.md`, tests, scripts, the Codex build. `shared/constitution.md` is not loaded by agents. They carry only the 5-line embedded block, identical in all 44 agents (verified).
 
 Cuts must not remove the checks that catch real failures. Every item below has file evidence. Items marked **verified** were re-checked against source after the full-read lanes reported.
+
+## Implementation status
+
+Implemented in seven signed commits on `worktree-review-slop-evaluation`, in the order of the work plan. `just check` passes (56 tests).
+
+| Workstream | Commit | What changed |
+|---|---|---|
+| 0 Baseline and fixtures | `fcfe974c` | Ten replay fixtures from real misses (`tests/fixtures/behavioral/fix-pass-misses.json`) |
+| 1 Truth repair | `d24be9e0` | A3 to A7 fixed; A2 softened (claim now says no runtime validator runs); source wiring now runs in `just check` and CI |
+| 2 Verification content | `720add75` | D2 and D3 and the Part 1 additions in the three owner references; a test ties each rule to one owner |
+| 3 Fix-pass path | `36bfd751` | D1 light `smith` entry (Claude and Codex skills); D8 project invariants defined once in the workspace conventions reference; `ranger` adversary sweep replaced |
+| 4 Gates | `50bdcf1b` | A1: `muse` gate on `verdict@3` (nothing references `verdict@1` now); claim-evidence rule in the `smith` and `sentinel` gates; fix-pass criteria in the `smith` gate |
+| 5 Hazards | `381c14ea` | D7: script, workflow and template hazard reference, routed from implementation review |
+| 6 Prompt weight | `18e52d5d` | Description text 41,217 to 20,100 characters (agents 26,683 to 11,465; skills 14,534 to 8,635), identity fields unchanged; repeated rules and history narration removed; 294 lines deleted against 116 added |
+| 7 Guards | this commit | `tests/test_prompt_alignment.py`: identical constitution block in all 44 agents, description length caps, gate tier matches the constitution, no retired verdict version referenced |
+
+### Deliberately not done
+
+- **C7, shared gate mechanics:** skipped. A shared reference would add a load to every gate call for less text than the inline rules cost.
+- **B6, Go and Python hazard regexes:** deferred. Removing them changes scanner recall, which needs measuring first.
+- **Schema work (A2 validator, A8, B2 retire, B3 unused fields, R3 `reasoning`):** deferred to one coordinated change, since schemas are immutable, the authoring hook blocks deletes, and `dist/codex` copies them.
+- **Release versions and CHANGELOG entries:** left for you. Every plugin changed. Suggested: `smith` minor (fix pass), `muse` minor or major (its produced verdict moves from `verdict@1` to `verdict@3`, a consumer-visible contract change), the rest patch.
+- **R2 (constitution block cache sharing), R3, C4 (planner exact code):** still to be measured; no change made. The identical-block rule is now at least tested.
+- **R4 hooks:** chose to keep the two scripts and correct the docs, not wire or delete them.
+- **C10:** superseded by D8 and implemented.
+- **D4:** verified, no change needed; the `smith` gate already fails when the mutation gate neither ran nor was reported unavailable.
+- **Untouched:** C1, C5, C6, D5, D6, D9, D10, B9, B10.
 
 ## How this was produced
 
