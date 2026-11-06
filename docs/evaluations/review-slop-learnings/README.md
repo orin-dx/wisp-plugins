@@ -13,24 +13,40 @@ Cuts must not remove the checks that catch real failures. Every item below has f
 
 ## How this was produced
 
-- **Review and slop learnings:** all Entire trail findings for `orin-dx/caliper` and `orin-dx/callisto` (167 changes; 37 findings: 19 open, 18 resolved), plus session learnings from Caliper `ad4b3461` and Callisto `01a16130`, `01a0e02c`, `01a0e02f-*`, `a33915af`, `15c732d1`. Transcripts (126 sessions, 71 MB) were harvested but not read in bulk.
+- **Review and slop learnings:** all Entire trail findings for `orin-dx/caliper`, `orin-dx/callisto` and `orin-dx/monokl`, pulled 2026-11-06 (242 changes; **256 findings**: 111 open, 112 resolved, 33 dismissed). An earlier pull on 2026-11-02 saw only 37; 220 of the 256 were created on 2026-11-03. Each finding was classified from its text and disposition by three read-only agents. Also the Caliper and Monokl sessions' own root-cause write-ups (pasted by the user, not re-verified here) and session learnings from Caliper `ad4b3461` and Callisto `01a16130`, `01a0e02c`, `01a0e02f-*`, `a33915af`, `15c732d1`. Transcripts (126 sessions, 71 MB) were harvested but not read in bulk. Entire has only three Monokl sessions; the sweep and eval session is not checkpointed yet.
 - **Plugin audit:** seven read-only lanes each fully read their files with no sampling: weaver, vanguard and scribe; muse, navigator, smith and sentinel; ranger, courier and mason; the constitution and all references; all 31 schemas with every consumer; docs, ADRs, tests and tooling; the Codex harness build. Not fully read: `dist/` (sampled and diffed against sources) and CHANGELOG bodies (headings only).
-- Limits: two projects by one author; Entire's reviewer had false positives (4 Caliper findings were already fixed and still show open); no lane ran the plugins, so tier suggestions are judgments, not measurements.
+- Limits: three projects by one author; no lane ran the plugins, so tier suggestions are judgments, not measurements; the finding classification is a model judgment from the finding text alone (see Part 4 caveats).
 
 ## Part 1: What review findings show
 
-37 findings: 13 logic bugs, 7 tests that cannot fail or leave a path untested, 5 duplication or hardcoded values, 4 harness-versus-consumer mismatches, 4 docs or comments that misstate behavior, 2 dead code, 2 swallowed errors or bent contracts. Logic bugs are found by reading each change independently; no rule prevents them. The Caliper agent did not consult the review output until the user relayed it.
+The first 37-finding sample (13 logic, 7 weak tests, 5 duplication, 4 harness, 4 docs) was an early snapshot. The full 256 agree on the shape and show a larger documentation class. Counts, classified by defect type:
 
-Proposed additions, one or two lines each in existing reference files, each backed by at least four findings:
+| Class | Count | Share |
+|---|---:|---:|
+| Logic bug or edge case | 72 | 28% |
+| Doc, comment or report states what code does not do | 57 | 22% |
+| Duplicated or hand-copied value, helper, list | 29 | 11% |
+| Test cannot fail, asserts too little, path untested | 24 | 9% |
+| Dead code, unused parameter, scope creep | 18 | 7% |
+| Harness or CI differs from the real consumer | 12 | 4% |
+| Release or CI configuration | 12 | 4% |
+| Swallowed error, silent fallback | 10 | 3% |
+| String key, forged shape, declared versus required | 10 | 3% |
+| Order, race, shared fixture | 8 | 3% |
+| Other (incl. one security) | 4 | 2% |
+
+Entire's reviewer is precise: of 33 dismissals, 17 were already fixed at HEAD or in a follow-up, 7 other, and only 4 were factually wrong and 2 premise errors (6 of 256, 2%).
+
+Proposed additions, one or two lines each in existing reference files, each backed by at least ten findings:
 
 1. Specific assertions: a test for a specified error asserts that error; a stub applies the logic it replaces (verification evidence reference).
 2. Single source: reuse an existing helper, string or list before adding one (implementation-review reference).
 3. Harness fidelity: measurements use the consumer's configuration and time only the measured work (verification evidence reference).
 4. Claims match code: comments state current behavior; heuristics are labeled (comments reference).
 
-Update, 2026-11-03: Callisto trail 198 applied the Caliper sweep to Callisto as fix changes 42, 43, 44 and 46, and change 40 got a second review round. Eight new findings since the harvest (3 on change 40, 5 on the four fixes), all low or medium: 4 logic bugs (a stale writer overwriting a newer hold note, a skipped dispatch path, a failure note naming a superseded run, a tokenizer that still matches `chunk-e409.js`), 1 duplicated fixture, 1 failure message describing behavior that no longer exists, 1 uncached build added to a credential-free CI job, 1 test that covers a helper but not the call-site wiring that was the fix. The classes match the first 37, so no new rule is needed, but two refinements sharpen additions 1 and 4: (a) when a change alters behavior, every message, comment, test name and changeset that described the old behavior changes with it (change 43's stale message; change 46's comment, test name and changeset claim "whole words" while `-` and `.` still split a bundle name); (b) a test for a fix must fail if the call-site wiring regresses, not only if a pure helper does (change 44). Also visible: hardening applied to two of five sibling checks (change 46 left three substring matches), one unrelated fix bundled into a PR about another (change 43's staging-reset retry fix, a real recursion bug but outside the change's stated scope), and the same rationale restated in a doc comment, a test comment and a changeset (change 44). Prose rules about brevity in the consumer repo did not prevent that; a mechanical comment-length check in CI would. Not verified: whether GitHub renders annotations from a problem matcher that no longer captures file and line (change 43), and how the author handled review on change 40 (that session was not yet ingested by Entire, so its transcript was not read).
+Item 4 now has the strongest evidence of the four: 57 findings (22%), 44 of which had no independent control that would have caught them. Both the Caliper and Monokl write-ups independently propose "a claim cites the command that proves it", which is the same rule from the author side.
 
-Held back for lack of a second source: failure-as-absence hazards for `ranger`, a docs-versus-code checker, a judge/consolidation step, an `entire` CLI dependency, a constitution change for briefs. The 14-class sweep from the Callisto prompt is a good one-off audit script, not a plugin default.
+Held back until Part 4's decisions are made: a judge/consolidation step, an `entire` CLI dependency, a constitution change for briefs. Failure-as-absence hazards for `ranger` now have a second source (10 swallowed-error findings plus the Caliper and Callisto write-ups) but remain a small class. The 14-class sweep from the Callisto prompt is a good one-off audit script, not a plugin default.
 
 ## Part 2: Plugin audit
 
@@ -117,14 +133,62 @@ Zero hits for the classic dated patterns across all agents, skills and reference
 
 Smaller notes: effort changes now preserve the prompt cache on Opus 5.5, Sonnet 5.5, Haiku 5.5 and Fable 5.1, so per-agent effort needs no consolidation; subagent caches default to a 5-minute lifetime and the docs lookup reports an environment variable for 1 hour, relevant only to pipelines that call gates minutes apart; the skill count is 30, not 33.
 
+## Part 4: Where the failings happened
+
+Corpus: the 256 findings from Part 1, classified by origin (earliest stage that could have prevented the defect), by the independent control that would plausibly have caught it first, and by the cheapest mechanical guard that would stop the class returning. Judged from the finding text and disposition alone, by model; treat shares as indicative.
+
+| | Result |
+|---|---|
+| Origin | code 65%, author claimed or documented without proof 13%, test authoring 11%, CI or release config 5%, spec 1%, brief 1% |
+| Catcher | no control except an adversarial human read 45%; sibling-site search 23%; fail-on-original-bug or mutation 10%; mechanical lint 9%; clean-room run equal to CI 4%; real-producer contract test 4%; language hazard check 3% |
+| Guard | a regression test 44%, a lint 13%, a CI matrix or rehearsal 3%, a schema or contract validator 2%, none 36% |
+
+- 139 findings (54%) fall in classes that controls the plugins already define would plausibly catch: sibling search (60), mutation (26), clean-room (11), contract (10), hazards (7), plus lint (25). 163 (64%) have a mechanical guard.
+- Findings cluster. 21 changes with five or more findings hold 160 (63%); eight hold 85 (33%). The largest are Caliper's type-parameter scope work (changes 132, 142, 143: 39 findings), where each fix left a sibling site with the same defect, and 4 of 15 findings on change 132 were stale reports already fixed at HEAD.
+- Each project has a different signature. Caliper: resolver logic and sibling chains (67 of 189 are logic). Callisto: tests that cannot fail (9 of 35) and release. Monokl: doc claims that contradict code (12 of 32).
+- Only 3 findings are high severity: the `.2.28` target suffix that would break both Linux builds, committed pending-snapshot files, and a fake `git` in a test harness that diverged from the real call.
+
+### Agreement with the projects' own root causes
+
+The Caliper and Monokl write-ups (pasted; not re-verified) name the same causes independently. The corpus supports most of them:
+
+| Root cause named by the authors | What the 256 findings show |
+|---|---|
+| Fixes are local, verification is narrow, siblings stay | Sibling search is the single largest independent catcher (23%); the scope-chain changes are the clearest case |
+| Green is easy to fake | 24 weak-test findings, 20 of them catchable by a fail-on-original-bug check |
+| Plausible claims cascade; summaries of summaries | 57 doc-claim findings (22%); 34 findings across all classes originate in a claim stated without proof |
+| Local green, CI red | 24 harness and release findings; the three high-severity items |
+| Boundaries are weakly typed | 10 boundary findings, half catchable by a contract test |
+| Review sees only diffs; specs outran code; briefs lacked invariants | Not testable here: a diff reviewer cannot see briefs or specs, so spec and brief origins (2%) are undercounted. The corpus neither confirms nor refutes these. |
+
+### What this means for the plugins
+
+1. **The controls exist; the path to them does not.** Both write-ups say they ran general-purpose agents with hand-written briefs and never invoked the reviewer, mutator or exit gate. Verified cause: the `smith` skill consumes only `plan@1` or `spec@1`. A request like "fix these review findings" or "make this change" has no entry, so the spec-and-plan ceremony gets skipped and the controls with it. The mutation gate is also "when available and relevant", so it can be skipped by design. Adding more controls would repeat the pattern; a light entry point addresses it.
+2. **Caliper's verification gaps look real.** `evidence.md` mentions CI configuration only as an environment assumption. It says nothing about running exactly what CI runs in a clean state, declared versus required ranges (peer ranges, engines, pins), or treating an intermittent failure as a defect until a cause is shown. Each is one line.
+3. **The author-side rule matches the reviewer-side finding.** Both write-ups propose a worker report where each claim names its proving command, says "pending" while checks run, and lists the sites searched for the changed symbol. That is the Part 1 claims rule, from the other direction, and it is the same as Anthropic's tested progress-claim snippet.
+4. **Courier format mismatch is partly verified.** The shared changesets reference defines grouped Breaking Changes, New Features and Bug Fixes headings, but as the release-note shape. Whether `.changeset/` output uses it is unverified; Callisto renders flat bullets.
+5. **Keep the plugins generic.** The projects propose a swap test (would the line hold for a Go CLI?) and a prescription test (does it order steps where order does not matter?). Both are cheap and fit the constitution's reference rules. Project facts such as the gate command, contract sites and platform floors belong in each repo's own docs.
+
+### Decisions
+
+| # | Proposal | Cost and risk |
+|---|---|---|
+| D1 | Give `smith` a light entry: accept a finding list or a diff-sized task, with a brief of the claim to fix, invariants that must hold and sites to search; run implementer, reviewer (both sibling modes, fail-on-original-bug test) and exit gate with a clean-room check; no spec or plan. | Medium: a change to the skill's consumes contract and the implementer input. Highest leverage because it makes the existing controls usable on the commonest task. |
+| D2 | Add three one-line verification rules to the evidence reference: run what CI runs in a clean state; compare declared requirements with actual use; an intermittent failure is a defect until a cause is shown. | Small. Backed by 24 harness and release findings and the Caliper write-up. |
+| D3 | Add a "claims cite their proving command" rule for implementer and gate reports, using Anthropic's tested wording. | Small. Backed by 57 doc-claim findings. |
+| D4 | Treat a skipped mutation or discrimination check as a coverage gap that the gate must carry, not an optional step. The exit gate already fails when the mutator neither ran nor reported unavailable, so this may already hold; confirm before changing. | Small, verify first. |
+| D5 | A source-neutral finding record with reason codes (by-design, factually-wrong, already-fixed, duplicate, nit), proposed by the Monokl session. Entire does retain findings on merged changes (151 of 256 sit on 48 merged changes), so the premise that they vanish on merge is not supported. A snapshot script that records dispositions would still make dismissals labelled data. | Small as a script; do not build adapters or a schema until the data justifies them. |
+| D6 | Fix courier's changeset output to the consumer's format, or make the format an input. | Needs a look at the courier changeset skill. |
+
 ## Suggested order
 
 1. A1 to A7 (defects and false text): small, no judgment calls.
-2. B1 (descriptions), validated with `claude plugin eval` and `/skill-doctor`.
-3. B2 with C8: retire dead schemas and add a real validator.
-4. Part 1 additions using Anthropic's tested snippets, each paired with a B-item deletion so net text shrinks.
-5. Measure before deciding: the cache-read ratio (R2), gate outputs without the `reasoning` field (R3), planner without exact code (C4).
-6. B3 to B10, then decide the remaining C-items one at a time.
+2. D2 and D3 with the Part 1 additions: small reference edits backed by the full corpus, each paired with a B-item deletion so net text shrinks.
+3. D1 (light `smith` entry): decide and design; it is the main structural change this analysis supports.
+4. B1 (descriptions), validated with `claude plugin eval` and `/skill-doctor`.
+5. B2 with C8: retire dead schemas and add a real validator.
+6. Measure before deciding: the cache-read ratio (R2), gate outputs without the `reasoning` field (R3), planner without exact code (C4).
+7. B3 to B10, then decide the remaining C-items one at a time.
 
 ## Open decisions
 
