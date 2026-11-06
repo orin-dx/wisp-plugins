@@ -8,6 +8,7 @@ Load only the evidence needed for the current review.
 - TypeScript or JavaScript: load `shared/references/hazards/typescript.md` and `shared/references/hazards/typescript-boundaries.md` for defect checks; load `shared/references/architecture/typescript.md` for semantic-model and architecture signals.
 - Python: load `shared/references/hazards/python.md` and `shared/references/hazards/python-boundaries.md` for defect checks; load `shared/references/architecture/python.md` for semantic-model and architecture signals.
 - Go: load `shared/references/hazards/go.md` and `shared/references/hazards/go-boundaries.md` for defect checks; load `shared/references/architecture/go.md` for semantic-model and architecture signals.
+- Shell scripts, CI workflow YAML, `jq` filters, or generated templates: load `shared/references/hazards/scripts-and-workflows.md` for defect checks.
 - Other languages: perform the core review and record the missing language pack as a coverage gap.
 - If the diff adds or changes comments, load `shared/references/authoring/comments.md`.
 
