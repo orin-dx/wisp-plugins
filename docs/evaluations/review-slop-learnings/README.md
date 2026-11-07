@@ -72,6 +72,14 @@ Fix review findings, bugs, and diff-sized changes with the smith fix pass (`smit
 - Report each claim with the command that proves it. A check still running is pending.
 ```
 
+CI-equivalent command per project (from each justfile; confirm before relying on it):
+
+| Project | Command | Parity |
+|---|---|---|
+| Monokl | `just ci` (lint, test, doc-check, deny, machete, typos, zizmor, changesets, coverage 90) | its justfile says it is everything the CI jobs run; the release path is not rehearsed |
+| Callisto | `just ci` | Callisto's own analysis says it is a strict subset of GitHub CI (CI also runs machete, features-boundary, check-api, per-crate coverage, a `--locked` check, MSRV, artifact preflight and two contract scripts); its next step is a `verify` command equal to CI, which should replace this entry |
+| Caliper | `just ci` (lint, test, deny, typos, zizmor, doc-check, machete, semver, msrv, coverage 90) | parity with the CI workflow not checked; its analysis proposes a clean-room verify command |
+
 ## How this was produced
 
 - **Review and slop learnings:** all Entire trail findings for `orin-dx/caliper`, `orin-dx/callisto` and `orin-dx/monokl`, pulled 2026-11-06 (242 changes; **256 findings**: 111 open, 112 resolved, 33 dismissed). An earlier pull on 2026-11-02 saw only 37; 220 of the 256 were created on 2026-11-03. Each finding was classified from its text and disposition by three read-only agents. Also the Caliper and Monokl sessions' own root-cause write-ups (pasted by the user, not re-verified here) and session learnings from Caliper `ad4b3461` and Callisto `01a16130`, `01a0e02c`, `01a0e02f-*`, `a33915af`, `15c732d1`. Transcripts (126 sessions, 71 MB) were harvested but not read in bulk. Entire has only three Monokl sessions; the sweep and eval session is not checkpointed yet.
