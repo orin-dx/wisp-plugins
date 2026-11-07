@@ -17,7 +17,7 @@ Implemented in seven signed commits on `worktree-review-slop-evaluation`, in the
 
 | Workstream | Commit | What changed |
 |---|---|---|
-| 0 Baseline and fixtures | `fcfe974c` | Ten replay fixtures from real misses (`tests/fixtures/behavioral/fix-pass-misses.json`) |
+| 0 Baseline | `fcfe974c` | Replay fixtures from real misses, later removed as unused once the plan moved to measuring real sessions |
 | 1 Truth repair | `d24be9e0` | A3 to A7 fixed; A2 softened (claim now says no runtime validator runs); source wiring now runs in `just check` and CI |
 | 2 Verification content | `720add75` | D2 and D3 and the Part 1 additions in the three owner references; a test ties each rule to one owner |
 | 3 Fix-pass path | `36bfd751` | D1 light `smith` entry (Claude and Codex skills); D8 project invariants defined once in the workspace conventions reference; `ranger` adversary sweep replaced |
@@ -48,7 +48,7 @@ The test is real work, not a replay harness. Baseline taken 2026-11-06, before t
 | `smith` reviewer, mutator and exit gate runs on fix work | effectively none; `smith:implementer` ran 21 times in one session, `ranger` adversary, scanner and recon in one |
 | Entire findings | 256 on 242 changes (111 open, 112 resolved, 33 dismissed); 65 changes have findings, median 3 per change with findings; class mix in Part 1 |
 
-Re-measure after about 20 changes or two weeks of use of the new path (the sample is small and noisy, so read `paired-analysis.py`'s power warning before trusting a difference):
+Re-measure after about 20 changes or two weeks of use of the new path (the sample is small and noisy, so treat a difference cautiously):
 
 ```
 python3 tools/transcript-metrics.py agents --match 'Projects-(callisto|caliper|monokl)'
