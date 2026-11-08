@@ -106,4 +106,6 @@ ADR 012 records the decision. Not done: Codex and Antigravity enforcement, and l
 | :-- | :-- | :-- |
 | No view of what fills the context window; the earlier measure covered tool results only | Added `context` to `tools/transcript-metrics.py` (characters by origin, tool-result and tool-call shares, largest results) with a test | `verification/VERIFY-4.md`: Bash is about 60% of all characters (output and command text together); the largest single results are whole-page `Artifact` reads of 50k characters; delegation is 3% |
 
-Not done: wording in skills to filter command output, write long scripts to files and avoid whole-page reads; porting the description cuts from the review-slop branch; moving the exploration record shapes out of the skill bodies (needs a re-pilot).
+| Skills had no rule for command output, inline scripts or whole-page reads | Added `shared/references/tooling/context.md` and routed it from `smith/implement`, `smith/spike`, `smith/implementer` and the Codex counterparts | `just check`; effect on context is unmeasured |
+
+Not done: the same rule for `ranger`, `sentinel`, `muse` and `scribe` skills (smith first, to measure before spreading); porting the description cuts from the review-slop branch; moving the exploration record shapes out of the skill bodies (needs a re-pilot).

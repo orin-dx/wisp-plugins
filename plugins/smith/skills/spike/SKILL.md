@@ -12,7 +12,7 @@ A spike answers one question by trying it. It is the fast path for finding out w
 </capability>
 
 <references>
-`shared/references/architecture/modes.md`, `shared/schemas/spike-report@1.json`
+`shared/references/architecture/modes.md`, `shared/references/tooling/context.md`, `shared/schemas/spike-report@1.json`
 </references>
 
 <io>

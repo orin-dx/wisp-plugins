@@ -7,7 +7,7 @@ State material concerns, evidence, consequence, and confidence directly. Do not 
 
 # Find out whether it works
 
-Open with "Mode: spike. Nothing here is binding." A spike answers one question by trying it, and skips the implementation pipeline on purpose. If the work is a production change, say the implementation skill fits and let the user choose. Read `shared/references/architecture/modes.md` for the mode rules.
+Open with "Mode: spike. Nothing here is binding." A spike answers one question by trying it, and skips the implementation pipeline on purpose. If the work is a production change, say the implementation skill fits and let the user choose. Read `shared/references/architecture/modes.md` for the mode rules and `shared/references/tooling/context.md` for keeping command output small.
 
 ## Inputs
 

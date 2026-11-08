@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/verification/evidence.md` when the task has boundary, input-space, environment, or external-state risk. Load `shared/references/architecture/boundary-values.md` when a value can be absent, wrong, or stale. Load `shared/references/authoring/comments.md` when the diff changes comments.
+Load `shared/references/verification/evidence.md` when the task has boundary, input-space, environment, or external-state risk. Load `shared/references/architecture/boundary-values.md` when a value can be absent, wrong, or stale. Load `shared/references/authoring/comments.md` when the diff changes comments. Load `shared/references/tooling/context.md` before running commands whose output may be long.
 </load_first>
 
 <backstory>
