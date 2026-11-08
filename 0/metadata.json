@@ -1,0 +1,110 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M6WTMPS4PKTJYCCQYQ1DDS5E",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-08T05:38:47.974347Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "harnesses/codex/plugins/smith/skills/spike/SKILL.md",
+    "plugins/smith/skills/spike/SKILL.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "6a3ba4880af9",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 34,
+    "cache_creation_tokens": 14606,
+    "cache_read_tokens": 2452405,
+    "output_tokens": 7545,
+    "api_call_count": 17,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "redaction": {
+    "replacements": 9,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 5,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "summary": {
+    "intent": "Evaluate how well the Wisp plugins served front-end work and design ideation on the techworx and orin-dx sites by auditing ~810 past sessions, then act on the findings: add non-binding exploration modes, enforce gate output with a hook, and reduce context-window waste.",
+    "outcome": "Audit confirmed the plugins were too rigid for exploratory work and had no visual or ideation support. Exploration modes (ADR 011) and a SubagentHandback validation hook with retry cap (ADR 012) were built and committed locally. A context-composition metric and a context-hygiene reference for the smith skills were also added, with the final commit still pending.",
+    "learnings": {
+      "repo": [
+        "Plugins form a spec-driven lifecycle (weaver, vanguard, scribe/muse, navigator, smith, courier) with typed JSON handoffs in shared/schemas and default-fail gates. None has browser, screenshot, visual or generative capability.",
+        "spec@1 has no fields for tokens, layout, breakpoints or visuals, so a spec can pass muse's exit-gate while saying nothing about appearance.",
+        "Muse docs reference a ranger accessibility taxonomy that was never implemented.",
+        "The orin-dx and pages project dirs hold only a few real sessions; the other hundreds of files are subagent transcripts.",
+        "Gate loops were churn-heavy: 51 muse:exit-gate calls across 8 specs, every spec failing its first gate, and the 3-retry cap not enforced by the orchestrator.",
+        "Validator now lives at shared/hooks/validate-handback.py, reachable by installed plugins through the shared symlink. It is registered via plugins/{muse,scribe,smith,sentinel,ranger}/hooks/hooks.json with matcher SubagentHandback.",
+        "A test requires every plugins/*/agents/exit-gate.md to have a ROUTES entry and the plugin to register the hook.",
+        "Context measurement: Bash is about 60% of conversation characters (output plus inline script text), and the largest single results are whole-page Artifact reads of 50-56k characters. Delegation prompts are only 3%.",
+        "Skill reference files are routed from skills and agents and mirrored to harnesses/codex via `just marketplace-sync`; `just check` is the validation gate."
+      ],
+      "code": [
+        {
+          "path": "shared/hooks/validate-handback.py",
+          "finding": "Added RETRY_CAP=3, an escalation_required blocker rule, and WISP_HANDBACK_TRACE JSONL tracing. A retry_count above the cap is accepted only as a fail carrying an escalation_required blocker."
+        },
+        {
+          "path": "tools/transcript-metrics.py",
+          "finding": "New `context` subcommand attributes characters to user text, assistant text, tool calls, delegation prompts and tool results by tool, and lists the largest results."
+        },
+        {
+          "path": "shared/references/tooling/context.md",
+          "finding": "New context-hygiene reference covering filtered command output, writing long scripts to files, and reading artifacts by path. It is routed from smith implement, spike, implementer and the Codex counterparts."
+        }
+      ],
+      "workflow": [
+        "Subagent hand-back reports are model output and should be treated as unverified. One early corpus-size assumption (~140 sessions) was corrected by a subagent.",
+        "Smoke pilots found skills cannot read schema files when the shared symlink dangles, so record shapes were inlined.",
+        "The sandbox blocks GPG signing and writes under ~/.claude/jobs, so commits run with the sandbox disabled (user approved) and scripts go to $TMPDIR.",
+        "Compound shell commands containing git add/commit were sometimes refused, so splitting them into separate steps worked.",
+        "Measure before cutting: the earlier 77% Bash figure covered results only and understated the real share until command text was included.",
+        "Ideation worked best when rendered options were shown and the user answered with short codes; text-first descriptions made the user repeatedly ask 'show me'."
+      ]
+    },
+    "friction": [
+      "Specs for eight components took ~75 minutes and ~110 agent calls before any visual existed, and the user could not judge them without drawings.",
+      "Gate blockers were largely wording or citation residue, and the gate was not monotonic.",
+      "Large 60-130 KB spec and plan files stalled agent streams.",
+      "Decisions were lost across sessions, frustrating the user.",
+      "Visual defects (NavSheet not full screen, translucency, toggle size) were caught only by the user's eye, not by gates.",
+      "Sandbox restrictions (GPG, job directory writes, refused compound git commands) forced workarounds.",
+      "The first combined add+commit command was refused, requiring retries as separate steps."
+    ],
+    "open_items": [
+      "Wave 2 gate hygiene (WP-50-58): evidence-citing blockers, wording-only blockers downgraded to notes, readback, orchestrator-owned spawning. Needs user decision.",
+      "Waves 3-5: spec@2, render-evidence, workspace-manifest@2, critic agents, ablations, Codex wording.",
+      "Wave 0 leftovers: fixtures, instruction-file linter, plugin-eval suite, wiring paired-analysis into mason.",
+      "Exploration gaps: anti-slop controls, tested board generator, cross-session decision retrieval, scratch-only write-guard hook.",
+      "Hook live runs for scribe, smith, sentinel and ranger; Codex and Antigravity enforcement equivalents.",
+      "Extend the context-hygiene rule to ranger, sentinel, muse and scribe skills after measuring the smith effect.",
+      "Port the description-weight cuts from the review-slop branch.",
+      "Move exploration record shapes out of skill bodies, then re-pilot.",
+      "User review of ADR 011 and ADR 012; recommended accepting ADR 011 and running a paired comparison on a real design task.",
+      "Nothing is pushed; the user has not authorized a push or draft PR.",
+      "The final context-hygiene commit was issued but its result is unconfirmed."
+    ]
+  }
+}
