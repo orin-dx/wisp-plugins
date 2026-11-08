@@ -110,5 +110,27 @@ class TranscriptMetricsTests(unittest.TestCase):
         self.assertEqual(metrics.main(["gates", str(self.root / "no-such-directory")]), 0)
 
 
+class ContextCompositionTests(unittest.TestCase):
+    def test_characters_are_attributed_to_their_origin(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "session.jsonl"
+            records = [
+                {"type": "user", "message": {"content": "hello there"}},
+                assistant({"type": "text", "text": "ok"}, tool_use("t1", "Bash", command="ls"), tool_use("t2", "Agent", prompt="do the thing")),
+                tool_result("t1", "x" * 900),
+                tool_result("t2", [{"type": "text", "text": "y" * 100}]),
+            ]
+            path.write_text("\n".join(json.dumps(record) for record in records), encoding="utf-8")
+            report = metrics.command_context([path], top=1)
+            session = path.parent.name
+        categories = report["by_category"]
+        self.assertEqual(categories["user text"]["characters"], 11)
+        self.assertEqual(categories["assistant text"]["characters"], 2)
+        self.assertGreater(categories["delegation prompts"]["characters"], 0)
+        self.assertEqual(categories["tool results"]["characters"], 1000)
+        self.assertEqual(report["tool_results_by_tool"]["Bash"]["share"], 0.9)
+        self.assertEqual(report["largest_results"], [{"characters": 900, "tool": "Bash", "session": session}])
+
+
 if __name__ == "__main__":
     unittest.main()

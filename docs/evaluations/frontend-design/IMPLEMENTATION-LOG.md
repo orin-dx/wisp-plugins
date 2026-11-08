@@ -99,3 +99,11 @@ This explains why a pilot run could not read `option-set@1.json`, and it means t
 | The hook had not run against a real gate agent | Registered in five plugins; ran `muse:exit-gate` through `claude -p --permission-mode auto`: `agent_type` arrives as `muse:exit-gate`, the report is `tool_input.message`, and the trace shows denied, denied, accepted as the agent corrected its output | `WISP_HANDBACK_TRACE` output of that run (one run, one gate, one model) |
 
 ADR 012 records the decision. Not done: Codex and Antigravity enforcement, and live runs of scribe, smith, sentinel and ranger (same routing, not run). A test now requires every exit-gate agent to have a route and its plugin to register the hook.
+
+## Context composition (new)
+
+| Finding | Action | Evidence |
+| :-- | :-- | :-- |
+| No view of what fills the context window; the earlier measure covered tool results only | Added `context` to `tools/transcript-metrics.py` (characters by origin, tool-result and tool-call shares, largest results) with a test | `verification/VERIFY-4.md`: Bash is about 60% of all characters (output and command text together); the largest single results are whole-page `Artifact` reads of 50k characters; delegation is 3% |
+
+Not done: wording in skills to filter command output, write long scripts to files and avoid whole-page reads; porting the description cuts from the review-slop branch; moving the exploration record shapes out of the skill bodies (needs a re-pilot).

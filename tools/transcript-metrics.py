@@ -15,6 +15,12 @@ Subcommands (all read-only, standard library only):
   outputs  Share of tool-result characters by tool, and the ceiling a compressor that only sees one
            tool (default Bash) could reach: share of that tool times the assumed reduction.
 
+  context  Where characters entering the conversation come from, per category: user text,
+           assistant text, tool calls (agent delegation prompts counted apart), tool results by tool
+           (agent results are the handoffs), plus the single largest results. Characters, not
+           tokens: divide by about 4 for a rough token count. Use it to decide what to keep out of
+           context before cutting anything.
+
 Examples:
   python3 tools/transcript-metrics.py agents --match 'orin-dx$|Projects-pages$'
   python3 tools/transcript-metrics.py gates ~/projects/pages/docs/specs
@@ -209,6 +215,47 @@ def command_outputs(files: list[Path], tool: str, reduction: float) -> dict[str,
     }
 
 
+def command_context(files: list[Path], top: int) -> dict[str, Any]:
+    """Characters by origin across sessions. A tool result is counted once, under the tool that produced it."""
+    categories: collections.Counter[str] = collections.Counter()
+    results: collections.Counter[str] = collections.Counter()
+    calls: collections.Counter[str] = collections.Counter()
+    largest: list[tuple[int, str, str]] = []
+    for path in files:
+        names: dict[str, str] = {}
+        counted: set[str] = set()
+        for record in records(path):
+            kind = record.get("type")
+            for block in content_blocks(record):
+                block_type = block.get("type")
+                if block_type == "text":
+                    categories["assistant text" if kind == "assistant" else "user text"] += len(block.get("text", ""))
+                elif block_type == "tool_use":
+                    names[block["id"]] = str(block.get("name"))
+                    size = len(json.dumps(block.get("input", {})))
+                    calls[str(block.get("name"))] += size
+                    categories["delegation prompts" if block.get("name") in ("Agent", "Task") else "tool calls"] += size
+                elif block_type == "tool_result" and block.get("tool_use_id") in names and block["tool_use_id"] not in counted:
+                    counted.add(block["tool_use_id"])
+                    size = result_characters(block)
+                    name = names[block["tool_use_id"]]
+                    results[name] += size
+                    largest.append((size, name, path.parent.name))
+            message = record.get("message")
+            if isinstance(message, dict) and isinstance(message.get("content"), str):
+                categories["assistant text" if kind == "assistant" else "user text"] += len(message["content"])
+    categories["tool results"] = sum(results.values())
+    total = sum(categories.values())
+    largest.sort(reverse=True)
+    return {
+        "total_characters": total,
+        "by_category": {name: {"characters": count, "share": round(count / total, 4) if total else 0.0} for name, count in categories.most_common()},
+        "tool_results_by_tool": {name: {"characters": count, "share": round(count / categories["tool results"], 4) if categories["tool results"] else 0.0} for name, count in results.most_common()},
+        "tool_call_inputs_by_tool": dict(calls.most_common(8)),
+        "largest_results": [{"characters": size, "tool": name, "session": session} for size, name, session in largest[:top]],
+    }
+
+
 def print_agents(report: dict[str, Any]) -> None:
     print("session agent_type calls total_tokens avg_tokens minutes")
     for (session, kind), v in sorted(report["types"].items(), key=lambda item: -item[1]["tokens"]):
@@ -223,12 +270,14 @@ def print_agents(report: dict[str, Any]) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("agents", "skills", "outputs"):
+    for name in ("agents", "skills", "outputs", "context"):
         p = sub.add_parser(name)
         p.add_argument("--projects-dir", default="~/.claude/projects")
         p.add_argument("--match", default=".")
         if name == "agents":
             p.add_argument("--cliff", type=int, default=200_000)
+        if name == "context":
+            p.add_argument("--top", type=int, default=10)
         if name == "outputs":
             p.add_argument("--tool", default="Bash")
             p.add_argument("--reduction", type=float, default=0.7)
@@ -248,6 +297,8 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "skills":
         for session, v in command_skills(files).items():
             print(session, "skills", v["skills"], "commands", v["commands"], "agents", v["agents"])
+    elif args.command == "context":
+        print(json.dumps(command_context(files, args.top), indent=2))
     else:
         print(json.dumps(command_outputs(files, args.tool, args.reduction), indent=2))
     return 0
