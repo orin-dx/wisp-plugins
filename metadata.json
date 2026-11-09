@@ -1,0 +1,87 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M71BS2RT7CMC3BW8DM0DVKKZ",
+  "strategy": "manual-commit",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".github/workflows/validate.yml",
+    "docs/adr/011-exploration-modes.md",
+    "docs/adr/012-gate-output-enforced-by-hook.md",
+    "docs/adr/README.md",
+    "docs/architecture-assumptions.md",
+    "docs/evaluation-methodology.md",
+    "docs/evaluations/frontend-design/ARCHITECTURE-REVIEW.md",
+    "docs/evaluations/frontend-design/README.md",
+    "docs/evaluations/frontend-design/evidence/README.md",
+    "docs/evaluations/frontend-design/investigations/exploration-pilots.md",
+    "docs/evaluations/frontend-design/investigations/plugin-eval-assessment.md",
+    "docs/evaluations/frontend-design/investigations/unused-agents.md",
+    "docs/evaluations/frontend-design/verification/VERIFY-3.md",
+    "docs/evaluations/frontend-design/verification/scripts/gate-cost.py",
+    "docs/evaluations/frontend-design/verification/scripts/handback-conformance.py",
+    "docs/evaluations/frontend-design/verification/scripts/scan-refusals.py",
+    "docs/evidence-quality.md",
+    "docs/verified-facts.md",
+    "harnesses/codex/agent-roles/README.md",
+    "harnesses/codex/plugins/muse/skills/promote/SKILL.md",
+    "harnesses/codex/plugins/muse/skills/sketch/SKILL.md",
+    "justfile",
+    "marketplace.json",
+    "plugins/muse/README.md",
+    "plugins/muse/skills/promote/SKILL.md",
+    "plugins/muse/skills/sketch/SKILL.md",
+    "plugins/smith/README.md",
+    "scripts/check-platform-limits.py",
+    "shared/harness-authoring.md",
+    "shared/references/architecture/modes.md",
+    "shared/schemas/option-set@1.json",
+    "shared/schemas/spike-report@1.json",
+    "tests/test_agent_structure.py",
+    "tests/test_brand_identity.py",
+    "tests/test_claude_marketplace_sources.py",
+    "tests/test_exploration_schemas.py",
+    "tests/test_handback_validator.py",
+    "tests/test_paired_analysis.py",
+    "tests/test_platform_limits.py",
+    "tests/test_reasoning_wording.py",
+    "tools/sync-claude-manifests.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 4889,
+    "cache_read_tokens": 767494,
+    "output_tokens": 2082,
+    "api_call_count": 5,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "redaction": {
+    "replacements": 11,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 7,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
