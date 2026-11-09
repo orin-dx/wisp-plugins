@@ -1,9 +1,7 @@
 ---
 name: evaluate
 description: >-
-  Evaluate a plugin workflow against a fixed behavioral fixture. Use for release
-  gates, Claude/Codex comparisons, regression checks, and longitudinal plugin
-  quality analysis. Preserve exact execution provenance and hidden-oracle isolation.
+  Trigger for release gates, Claude/Codex comparisons, regression checks, or longitudinal quality analysis of a plugin workflow. Runs it against a fixed behavioral fixture and returns a `harness-evaluation@2`.
 version: 1.0.0
 ---
 

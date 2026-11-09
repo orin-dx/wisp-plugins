@@ -1,7 +1,7 @@
 ---
 name: research
 description: >-
-  Activate when the user says "I need to understand X before deciding", "is there a way to do Y", "what are the options for Z", "research this", "investigate this", "what does the codebase already do for X", "prior art on Y", or "what are the risks of approach Z" — also when the approach for a spec or plan is unclear, when checking what dependencies exist for a feature, or when any design question needs an evidence base before commitment. Investigates the question across internal sources (specs, docs, codebase patterns, manifests) and external sources as needed, then produces a research-report@1 that distinguishes confirmed findings from likely inferences from unverified assumptions, with a falsifiable recommendation and explicit confidence level so a spec writer (scribe) isn't surprised by implementation reality.
+  Activate on "I need to understand X before deciding", "is there a way to do Y", "what are the options for Z", "research this", "investigate this", "what does the codebase already do for X", "prior art on Y", "what are the risks of approach Z", or when a spec or plan's approach is unclear or a design question needs an evidence base. Investigates internal and external sources and returns a research-report@1 with a falsifiable recommendation.
 version: 1.2.1
 ---
 
@@ -15,9 +15,6 @@ One skill, one pipeline — not a menu of separately-invokable modes. `recon` ma
 
 ---
 
-<language_agnostic_note>
-Recon detects the workspace language from manifest files present (Cargo.toml → Rust, package.json → Node/TypeScript, pyproject.toml → Python, etc.), then loads the appropriate shared/references search heuristics for that ecosystem. The skill is not language-specific.
-</language_agnostic_note>
 
 ---
 
@@ -40,5 +37,5 @@ All research concludes in a `research-report@1` (schema: `shared/schemas/researc
 - **likely** — strong inference from evidence
 - **assumed** — unverified, flagged explicitly
 
-The recommendation is falsifiable: a spec or plan written from it will not be surprised by implementation reality.
+The recommendation is falsifiable.
 </output>

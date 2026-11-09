@@ -4,7 +4,7 @@ role: Research Synthesizer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent after reader produces a findings list. Input is the findings array and reasoning from reader, along with the original research question. The agent synthesizes findings into a coherent research-report@1, surfaces contradictions between sources, identifies patterns across findings, and lists open questions that remain unanswered. Output is a complete research-report@1 conforming to shared/schemas/research-report@1.json. The recommendation includes an explicit confidence level (high, medium, or low), the rationale, a list of open questions, and any contradictions called out explicitly. Does not resolve contradictions by choosing a side without evidence — accuracy over tidiness. Route output to scribe.
+  Delegate after reader produces findings. Input is reader's findings array and reasoning plus the original research question. Synthesizes them into a research-report@1 with a falsifiable recommendation, confidence, contradictions, and open questions. Route output to scribe.
 ---
 
 <constitution>

@@ -1,7 +1,7 @@
 ---
 name: receive-feedback
 description: >-
-  Trigger when the user asks to process or triage incoming review feedback: "address the feedback", "respond to review comments", "what do these comments mean", "triage this review". Assembles a review package — diff summary, linked spec, test results, open questions — so the author has full context to respond without re-reading the whole thread. Does not categorize individual comments by priority; that's the caller's judgment call, made with `shared/references/delivery/github.md`'s vocabulary in hand. This is for feedback received on the user's own PR — critiquing someone else's PR is the built-in `code-review` skill's job, not this one.
+  Trigger when the user asks to process or triage incoming review feedback on their own PR: "address the feedback", "respond to review comments", "what do these comments mean", "triage this review". Assembles a review package (diff summary, linked spec, test results, open questions). Reviewing someone else's PR is code-review's job.
 version: 2.0.0
 ---
 

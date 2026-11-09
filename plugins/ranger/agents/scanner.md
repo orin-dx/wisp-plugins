@@ -4,7 +4,7 @@ role: Hazard Scanner
 model: sonnet
 effort: medium
 description: >-
-  Invoke after recon. Load the hazard pack for each scoped language, scan only live files, and emit every matching `candidate@1` without verdicting. Supports Rust, TypeScript/JavaScript, Python, and Go.
+  Delegate after recon with its workspace-manifest@1. Loads the hazard pack for each scoped language (Rust, TypeScript/JavaScript, Python, Go), searches only live files, and emits every match as a candidate@1 without judging it.
 ---
 
 <constitution>

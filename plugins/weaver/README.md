@@ -41,7 +41,7 @@ Five independently-triggered skills, not a linear pipeline — pick the one that
 | `weaver/capture-need` | Converts a free-text need into a `requirement@1` draft — no questions asked, all inferred fields noted | `intake` |
 | `weaver/clarify-requirement` | Identifies the most critical gap in a draft and asks one focused question, or returns it complete with `out_of_scope` populated | `clarifier` |
 | `weaver/prioritize-backlog` | Ranks a set of requirement drafts by impact, urgency, and dependency order, with a rationale per ranking | `prioritizer` |
-| `weaver/connect-requirement` | Checks one requirement (or a small set) against the workspace for coverage, duplicates, and related artifacts | `auditor` (connect mode) |
+| `weaver/connect-requirement` | Checks one requirement (or a small set) against the workspace for coverage, duplicates, and related artifacts | `auditor` |
 | `weaver/audit-backlog` | Cross-references all open requirements against specs and implementation files — gaps, coverage, duplicates | `auditor` |
 
 `audit-backlog` is not bare `audit` — that word is already `ranger`'s plugin-level skill name (code/bug auditing). See `shared/constitution.md`'s Skill Names rule.
@@ -53,7 +53,7 @@ Five independently-triggered skills, not a linear pipeline — pick the one that
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
 | `intake` | Intake Structurer | sonnet / medium | Converts free text into a `requirement@1` draft. Infers all fields it can; leaves gaps noted in `reasoning`. |
-| `clarifier` | Clarifier | sonnet / medium | Identifies the most critical gap in the draft and asks one focused question, or returns the completed requirement if all dimensions are met. One question per invocation. |
+| `clarifier` | Clarifier | sonnet / medium | Identifies the most critical gap in the draft and asks one focused question, or returns the completed requirement if all dimensions are met. |
 | `prioritizer` | Backlog Prioritizer | sonnet / medium | Ranks requirement@1 drafts by impact, urgency, and dependency order — a dependency overrides an otherwise higher impact/urgency score. |
 | `auditor` | Requirement Coverage Auditor | sonnet / medium | Cross-references requirement@1 objects against specs, persisted plans, and implementation files for coverage and duplicates. Runs at full-backlog scope (`audit-backlog`) or single-requirement scope (`connect-requirement`) — same agent, same output shape, different input size. |
 

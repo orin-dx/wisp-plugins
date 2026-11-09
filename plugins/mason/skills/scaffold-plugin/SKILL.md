@@ -1,7 +1,7 @@
 ---
 name: scaffold-plugin
 description: >-
-  Create a complete plugin from an ID and purpose. Use for new plugin requests. Generate the manifest, skill, cognitive-mode agents, shared linkage, routing, and any required schema contracts; validate the result before handoff.
+  Trigger for new plugin requests. Given a plugin ID and purpose, generates the manifest, skill, agents, shared linkage, routing, and any needed schemas, and validates the result.
 version: 2.2.0
 ---
 

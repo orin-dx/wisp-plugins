@@ -267,7 +267,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `requirement@1` | weaver | vanguard, scribe |
 | `research-report@1` | vanguard | scribe |
 | `spec@1` | scribe, muse | navigator, sentinel |
-| `verdict@1` | none (Muse moved to `verdict@3`) | retained for existing artifacts |
+| `verdict@3` | muse, sentinel, smith, scribe, ranger | gate consumers |
 | `plan@1` | navigator | smith |
 | `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
 | `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |

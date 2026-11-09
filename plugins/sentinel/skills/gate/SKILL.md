@@ -1,7 +1,7 @@
 ---
 name: gate
 description: >-
-  Trigger this skill when the user says "verify this", "check this spec", "check this plan", "check this requirement", "check this PR", "is this done?", "review this for completeness", "does this meet the criteria?", "gate this", or "quality check" — also before stage transitions: starting implementation from a spec, shipping from an implementation, opening a PR from a branch. Applies to any stage artifact: requirements, specs, plans, implementations, PRs. Do not activate for general Q&A, code explanation, or exploratory work with no artifact boundary being crossed. The gate either clears the artifact for the next stage or returns specific, actionable blockers to the producing agent.
+  Trigger on "verify this", "check this spec/plan/requirement/PR", "is this done?", "review for completeness", "does this meet the criteria?", "gate this", "quality check", and before stage transitions (spec to implementation, implementation to ship, branch to PR). Not for general Q&A, code explanation, or exploratory work. Clears the artifact or returns blockers as `verdict@3`.
 version: 1.3.0
 ---
 
@@ -13,23 +13,7 @@ Sentinel is a cross-cutting verification gate. It runs whenever a stage artifact
 
 ---
 
-<when_to_activate>
-
-Activate on any of these signals:
-
-- Explicit gate request: "verify", "gate", "is this done?", "does this meet criteria?", "quality check"
-- Stage transition: about to start implementation → gate the spec; about to open PR → gate the implementation
-- Artifact type matches: requirement, spec, plan, implementation, PR
-
-Do not activate for: general code questions, exploratory research, or authoring tasks where no artifact boundary is being crossed.
-
-</when_to_activate>
-
----
-
 <three_stage_flow>
-
-One skill, one three-agent pipeline, reused against whatever artifact type it's handed — requirement, spec, plan, implementation, PR, changeset, finding-report. `recon`'s job is exactly to work out what it's looking at and what criteria apply, so the same chain runs unchanged regardless of artifact type — there is no separate sub-skill or agent set per type.
 
 | Stage | Agent | Model | Effort | Responsibility |
 | :--- | :--- | :--- | :--- | :--- |
@@ -46,8 +30,6 @@ One skill, one three-agent pipeline, reused against whatever artifact type it's 
 The protocol input is: `artifact_type`, `artifact_path`, `criteria` (explicit or derived from linked spec).
 
 The protocol output is `verdict@3`: a scoped pass or fail with blockers, coverage gaps, pending checks, and a short summary.
-
-**Retry behavior**: Up to 3 retries. On each failure, the specific blockers are returned to the producing agent. At retry 3, escalate to the caller — do not loop indefinitely. Track `retry_count` in the verdict.
 
 </axiom_protocol>
 

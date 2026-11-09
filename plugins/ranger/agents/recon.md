@@ -4,7 +4,7 @@ role: Workspace Recon
 model: haiku
 effort: low
 description: >-
-  Invoke before scanning. Detect affected languages, trace reachable files from live entry points, and inventory project capabilities and current workspace state. Return `workspace-manifest@1`; do not judge defects.
+  Delegate first, before scanning. Detects affected languages, traces reachable files from live entry points, and inventories project capabilities and current workspace state. Makes no defect judgments. Returns workspace-manifest@1 listing live files.
 ---
 
 <constitution>

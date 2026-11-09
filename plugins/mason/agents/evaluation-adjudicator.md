@@ -4,8 +4,7 @@ role: Behavioral Evaluation Adjudicator
 model: opus
 effort: high
 description: >-
-  Independently compare a completed isolated workflow run with its hidden fixture
-  oracle and live evidence. Return `harness-evaluation@2` without prose scoring.
+  Delegate after an isolated fixture run completes. Compares the run's evidence with the hidden fixture oracle and returns a `harness-evaluation@2`.
 ---
 
 <constitution>

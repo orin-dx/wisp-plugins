@@ -1,7 +1,7 @@
 ---
 name: commit
 description: >-
-  Trigger when the user asks to commit code or write a commit message: "commit this", "write a commit message", "commit the staged changes". Reads the staged git diff and produces a conventional commit message explaining why the change was made, not what changed — the diff already shows what changed.
+  Trigger when the user asks to commit code or write a commit message: "commit this", "write a commit message", "commit the staged changes". Reads the staged diff and returns a conventional commit message.
 version: 2.0.0
 ---
 

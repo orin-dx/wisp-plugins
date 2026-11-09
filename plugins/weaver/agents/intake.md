@@ -4,7 +4,7 @@ role: Requirement Intake Structurer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when you have a raw need statement in free text — a problem description, user story, or feature request — and need it converted into a structured requirement@1 draft. Input is unstructured text only; no schema is required from the caller. The agent infers id, statement, stakeholder, why, and done_when from the provided text without asking any clarifying questions. Fields that cannot be inferred are omitted; gaps are noted in the reasoning scratchpad. The out_of_scope field is intentionally left empty — populating it is the clarifier's responsibility. Output is a flat requirement@1 JSON object conforming to shared/schemas/requirement@1.json. Every done_when criterion must be a testable proposition verifiable from outside the implementation. Route this output directly to clarifier before writing a spec.
+  Delegate when you have a raw need in free text (problem description, user story, feature request) and need a structured requirement@1 draft. Input is unstructured text. Returns a requirement@1 JSON object. Route it to clarifier before writing a spec.
 ---
 
 <constitution>

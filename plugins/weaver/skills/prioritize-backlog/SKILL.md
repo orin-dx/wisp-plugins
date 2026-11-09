@@ -1,14 +1,14 @@
 ---
 name: prioritize-backlog
 description: >-
-  Trigger when the user asks what to work on first from a set of requirements: "what should we prioritize", "rank the backlog", "what's most urgent". Given a list of requirement@1 drafts, ranks them by impact, urgency, and dependency order — a requirement another depends on ranks above the one depending on it, even if its own impact/urgency score is lower. Returns an ordered list with a concrete rationale per requirement.
+  Trigger when the user asks what to work on first from a set of requirements: "what should we prioritize", "rank the backlog", "what's most urgent". Given requirement@1 drafts, returns an ordered list with a rationale per requirement.
 version: 2.0.0
 ---
 
 # Weaver — Prioritize Backlog
 
 <overview>
-Turns a pile of "high priority" requirements into an actual order, with a rationale that survives being challenged. Delegates to `prioritizer` — new for this split; no existing agent covered ranking before now.
+Turns a pile of "high priority" requirements into an actual order, with a rationale that survives being challenged. Delegates to `prioritizer`.
 </overview>
 
 <dispatch>

@@ -1,7 +1,7 @@
 ---
 name: correct-spec
 description: >-
-  Trigger when implementer reports that a spec criterion contradicts what the system actually does: a spec_contradiction status from smith. Given a spec_file_path, the criterion_id of the affected acceptance criterion, and a contradiction report (what the spec says vs. what the system actually does), revises the affected criterion — and any criteria that depend on it — and returns a corrected spec@1 with revision_note set. Use this when implementation reveals the spec itself is wrong, not merely hard to satisfy.
+  Trigger when implementer reports a spec criterion contradicts what the system actually does (a spec_contradiction status from smith). Given spec_file_path, the criterion_id, and the contradiction report, returns a corrected spec@1 with revision_note set. Use when the spec itself is wrong, not merely hard to satisfy.
 version: 2.0.0
 ---
 

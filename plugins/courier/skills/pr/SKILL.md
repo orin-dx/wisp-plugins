@@ -1,7 +1,7 @@
 ---
 name: pr
 description: >-
-  Trigger when the user asks to open a PR or write a PR description: "open a PR", "create a pull request", "write the PR description". Given a diff, a linked spec, and a linked requirement, produces a PR title and body a reviewer with zero context can act on, then opens the PR via `gh pr create` after user confirmation.
+  Trigger when the user asks to open a PR or write a PR description: "open a PR", "create a pull request", "write the PR description". Produces a PR title and body from the diff and any linked spec or requirement, then opens the PR after user confirmation.
 version: 2.0.1
 ---
 

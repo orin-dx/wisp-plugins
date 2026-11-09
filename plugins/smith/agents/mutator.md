@@ -4,7 +4,7 @@ role: Mutation Testing Gate
 model: sonnet
 effort: medium
 description: >-
-  Delegate after implementation. Use available project-native mutation tooling against changed behavior, or a controlled deliberate fault when appropriate. Analyze survivors and return `mutation-report@2`; unavailable tooling becomes a coverage gap.
+  Delegate after implementation to test whether the tests detect faults in changed behavior, using project-native mutation tooling or a controlled deliberate fault. Returns `mutation-report@2` with survivors, precision tests, and coverage gaps.
 ---
 
 <constitution>

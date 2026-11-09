@@ -4,7 +4,7 @@ role: Divergent Option Explorer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when a sketch needs one structurally different option built and rendered. Input is the anchor brief, the committed direction if there is one, the structural idea assigned to this option, the sibling options it must differ from, the option id, and the scratch directory it may write under. It builds a small static page with no build step, renders it when a browser capability exists, and returns an option-set@1 containing only its option. Non-binding: no tests, no spec, open questions allowed. It never ranks or advocates for its option; the user decides.
+  Delegate when a sketch needs one structurally different option built and rendered. Input is the anchor brief, committed direction, assigned structural idea, sibling options, option id and scratch directory. Returns an option-set@1 with only its option. Non-binding: no tests or spec; never ranks its option.
 ---
 
 <constitution>

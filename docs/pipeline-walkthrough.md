@@ -2,7 +2,7 @@
 
 A concrete example tracing one feature request through the full lifecycle pipeline. The scenario: *"requests to our upstream API sometimes hang forever — we need configurable timeouts."*
 
-This walkthrough shows the actual schema shapes at each handoff, why typed contracts matter, and how the ranger audit loop feeds back into the design stage.
+This walkthrough shows what each handoff carries, why typed contracts matter, and how the ranger audit loop feeds back into the design stage.
 
 ---
 
@@ -20,21 +20,7 @@ The user invokes the `weaver` skill. `intake` (sonnet/medium) converts free text
 
 **Output: `requirement@1`**
 
-```json
-{
-  "id": "req-timeout-001",
-  "title": "Configurable HTTP request timeout",
-  "stakeholders": ["backend-team"],
-  "problem": "Requests to the upstream catalog API hang indefinitely when the service is slow or unreachable, blocking the caller thread with no way to recover.",
-  "success_conditions": [
-    "Caller can specify a timeout in milliseconds at client construction time",
-    "A request that exceeds the timeout returns a structured error, not a hung future",
-    "Default behaviour (no timeout set) is unchanged"
-  ],
-  "out_of_scope": ["Per-request timeout overrides", "Retry logic"],
-  "reasoning": "The stakeholder mentioned 'sometimes hang' which implies the service is reachable but slow, not unreachable — making timeout more appropriate than circuit-breaking."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`; `tests/fixtures/cross-harness/lifecycle.json` holds a validated example chain.*
 
 `reasoning` is a private scratchpad. It is never forwarded to the next stage.
 
@@ -46,30 +32,7 @@ The user invokes the `weaver` skill. `intake` (sonnet/medium) converts free text
 
 **Output: `research-report@1`**
 
-```json
-{
-  "id": "rr-timeout-001",
-  "requirement_id": "req-timeout-001",
-  "findings": [
-    {
-      "type": "prior-art",
-      "summary": "The HTTP client is built with reqwest::ClientBuilder. Connection timeout and read timeout are configured separately via .connection_verbose() and .timeout(). Both accept std::time::Duration.",
-      "evidence_files": ["src/client/builder.rs:42-58"]
-    },
-    {
-      "type": "risk",
-      "summary": "The existing ClientConfig struct has 11 fields. New timeout fields added here have historically been read at construction time but not forwarded to the builder — see the proxy_url field added in commit a3f91d2 that was silently ignored for 6 weeks.",
-      "evidence_files": ["src/client/config.rs", "src/client/builder.rs:61"]
-    },
-    {
-      "type": "constraint",
-      "summary": "Integration tests use a mock server (wiremock). Timeout behaviour can be tested by configuring the mock to delay responses."
-    }
-  ],
-  "recommended_approach": "Add connect_timeout_ms and read_timeout_ms to ClientConfig. Enforce that both reach the ClientBuilder call site — the existing proxy_url precedent is a strong signal to verify field survival explicitly.",
-  "reasoning": "The proxy_url finding is the most important signal here. It predicts exactly how timeout fields will fail."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 ---
 
@@ -79,35 +42,7 @@ The user invokes the `weaver` skill. `intake` (sonnet/medium) converts free text
 
 **Output: `spec@1`**
 
-```json
-{
-  "id": "spec-timeout-001",
-  "requirement_id": "req-timeout-001",
-  "title": "Configurable HTTP timeout via ClientConfig",
-  "acceptance_criteria": [
-    {
-      "id": "ac-1",
-      "statement": "WHEN ClientConfig is constructed with connect_timeout_ms set, THE SYSTEM SHALL pass a Duration of that value to ClientBuilder.connection_verbose() before the client is built.",
-      "test_type": "integration",
-      "verifiable": true
-    },
-    {
-      "id": "ac-2",
-      "statement": "WHEN a request exceeds connect_timeout_ms, THE SYSTEM SHALL return Err(ClientError::Timeout { kind: TimeoutKind::Connect }).",
-      "test_type": "integration",
-      "verifiable": true
-    },
-    {
-      "id": "ac-3",
-      "statement": "WHEN ClientConfig is constructed without timeout fields, THE SYSTEM SHALL build the client identically to the current behaviour.",
-      "test_type": "unit",
-      "verifiable": true
-    }
-  ],
-  "non_goals": ["Per-request timeout override", "Automatic retry on timeout"],
-  "reasoning": "ac-1 is the structural invariant the research flagged as the most likely failure mode. Making it explicit and testable is the main value this spec adds over the raw requirement."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 Notice `ac-1` directly addresses the T7 risk `vanguard` found: the spec requires the field to *reach the builder call site*, not just exist in the struct. This is the enforcement the research recommended.
 
@@ -115,41 +50,11 @@ Notice `ac-1` directly addresses the T7 risk `vanguard` found: the spec requires
 
 ## Stage 4 — navigator: Plan
 
-`planner` (sonnet/medium) decomposes the spec into sequenced tasks, each with an implementation approach, exact code, and the tests proving its criteria. `estimator` (sonnet/medium) adds sizing. `challenger` (opus/high) pressure-tests the sequence for hidden dependencies.
+`planner` (sonnet/medium) decomposes the spec into sequenced tasks, each with an implementation approach, exact code, and the tests proving its criteria. `estimator` (sonnet/medium) adds sizing. `challenger` (sonnet/medium) pressure-tests the sequence for hidden dependencies.
 
 **Output: `plan@1`** (abridged)
 
-```json
-{
-  "id": "plan-timeout-001",
-  "spec_id": "spec-timeout-001",
-  "tasks": [
-    {
-      "id": "t1",
-      "title": "Add timeout fields to ClientConfig",
-      "steps": [
-        "Add connect_timeout_ms: Option<u64> and read_timeout_ms: Option<u64> to ClientConfig",
-        "Update ClientBuilder to map both fields to the reqwest builder before build()",
-        "Write test: ClientConfig with connect_timeout_ms=500 builds a client whose underlying reqwest client has connection_timeout == Duration::from_millis(500)"
-      ],
-      "acceptance_criteria": ["ac-1", "ac-3"],
-      "depends_on": []
-    },
-    {
-      "id": "t2",
-      "title": "Integration test: timeout returns structured error",
-      "steps": [
-        "Configure wiremock to delay response by 2000ms",
-        "Build client with connect_timeout_ms=100",
-        "Assert request returns Err(ClientError::Timeout { kind: TimeoutKind::Connect })"
-      ],
-      "acceptance_criteria": ["ac-2"],
-      "depends_on": ["t1"]
-    }
-  ],
-  "reasoning": "t1 before t2 because the integration test requires the field wiring to exist. challenger flagged that the wiremock delay must exceed connect_timeout_ms by a margin — added 2000ms vs 100ms to avoid flake."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 ---
 
@@ -167,36 +72,7 @@ Notice `ac-1` directly addresses the T7 risk `vanguard` found: the spec requires
 
 **Output: `mutation-report@2`**
 
-```json
-{
-  "languages": ["rust"],
-  "method": "mutation",
-  "tool_used": "cargo-mutants",
-  "commands": ["cargo mutants --in-diff"],
-  "cases_tested": 14,
-  "survived_mutants": [
-    {
-      "id": "mut-01",
-      "file": "src/client/builder.rs",
-      "line": 47,
-      "mutation_description": "Swap connect_timeout_ms binding with read_timeout_ms binding in builder mapping",
-      "why_it_survived": "The test asserts that Duration::from_millis(500) reaches the builder, but does not assert which slot (connection vs read) receives it."
-    }
-  ],
-  "precision_tests": [
-    {
-      "for_case_id": "mut-01",
-      "test_name": "WHEN connect_timeout_ms is set THEN connection_timeout slot receives the value AND read_timeout slot is None",
-      "test_description": "Assert that the reqwest ClientBuilder receives the timeout in the connection_timeout field, not the read_timeout field, when only connect_timeout_ms is configured.",
-      "assertion": "assert_eq!(builder.get_connection_timeout(), Some(Duration::from_millis(500))); assert_eq!(builder.get_timeout(), None);"
-    }
-  ],
-  "coverage_gaps": [],
-  "errors": [],
-  "verdict": "fail",
-  "reasoning": "The surviving mutant reveals that the test cannot distinguish which builder slot receives the timeout. The precision test forces that distinction."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 `mutator` re-invokes `implementer` with the precision test. The implementer fixes the slot assignment and both tests pass. `exit-gate` confirms the mutation evidence and later issues `verdict@3`.
 
@@ -215,56 +91,13 @@ For this codebase, the scanner surfaces a T7 candidate: an `AccessConfig` struct
 
 **Output: `field-survival-map@1`**
 
-```json
-{
-  "candidate_id": "cand-access-001",
-  "struct_or_type": "AccessConfig",
-  "fields": [
-    {
-      "name": "private_registry",
-      "reaches_boundary": false,
-      "boundary_type": "none",
-      "evidence": "Field read at AccessConfig construction (config.rs:88) but not present in any argument passed to publish() at publisher.rs:134.",
-      "last_observed_site": "src/publish/config.rs:88"
-    },
-    {
-      "name": "access_level",
-      "reaches_boundary": true,
-      "boundary_type": "subprocess",
-      "evidence": "Passed as --access flag to npm publish subprocess at publisher.rs:142.",
-      "last_observed_site": "src/publish/publisher.rs:142"
-    }
-  ],
-  "reasoning": "private_registry disappears at the function call boundary at publisher.rs:134. The publish() signature accepts access_level but not registry."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 `adversary` (opus/high) confirms the finding is real — user-specified registry is silently overridden by the hardcoded default. Ranger groups it with related instances before remediation.
 
 **Output: `finding-report@2`** (abridged)
 
-```json
-{
-  "workspace": "example-workspace",
-  "languages": ["rust"],
-  "modules_scanned": ["src/publish"],
-  "findings": [
-    {
-      "id": "fr-access-001",
-      "language": "rust",
-      "file": "src/publish/publisher.rs",
-      "line": 134,
-      "description": "private_registry is captured but never reaches the publish subprocess",
-      "severity": "high",
-      "trigger_condition": "User sets private_registry, but publish() reads only access_level and invokes the public registry.",
-      "root_cause": "The process boundary accepts a narrower shape than AccessConfig.",
-      "verdict": "confirmed"
-    }
-  ],
-  "defect_families": [],
-  "reasoning": "The field-survival map reaches a concrete subprocess boundary."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 ---
 
@@ -279,28 +112,7 @@ For this codebase, the scanner surfaces a T7 candidate: an `AccessConfig` struct
 
 **Output: `spec@1` (structural)**
 
-```json
-{
-  "id": "spec-access-structural-001",
-  "title": "Replace narrow publish() parameter type with full AccessConfig",
-  "acceptance_criteria": [
-    {
-      "id": "ac-1",
-      "statement": "WHEN publish() is called, THE SYSTEM SHALL accept AccessConfig directly and read all fields that have corresponding subprocess flags.",
-      "test_type": "unit",
-      "verifiable": true
-    },
-    {
-      "id": "ac-2",
-      "statement": "WHEN AccessConfig gains a new field with a corresponding npm publish flag, THE SYSTEM SHALL require no change to the publish() call site to forward it.",
-      "test_type": "compile-time",
-      "verifiable": true,
-      "invariant_check": "#[deny(unused_variables)] on the AccessConfig destructure in publish()"
-    }
-  ],
-  "reasoning": "ac-2 is the structural invariant: the compiler enforces field survival, so the T7 class of bug cannot recur without a compile error."
-}
-```
+*Shape: see the schema named above in `shared/schemas/`.*
 
 This spec re-enters the pipeline at `navigator` for planning, then `smith` for implementation. The fix is structural — the next field added to `AccessConfig` reaches the subprocess automatically.
 

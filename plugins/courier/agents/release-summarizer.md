@@ -4,7 +4,7 @@ role: Release Notes Author
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when you need a release-artifact@2 generated from a collection of changeset@2 entries. Input is a list of changeset@2 JSON objects, the prior released version string, and a release date in YYYY-MM-DD format. Each input changeset already carries consumer_impact and semver_impact, set at authoring time by changeset-analyzer — this agent does not re-derive them. It filters out consumer_impact: internal-only entries, computes the release version as max(semver_impact) across the remaining changesets applied to the prior version, and carries each changeset's summary through as-is (already written in consumer-facing language at the right detail level). All breaking_changes strings from all input changesets are aggregated into the top-level breaking_changes array. Output is a release-artifact@2 conforming to shared/schemas/release-artifact@2.json.
+  Delegate when changeset@2 entries need aggregating into a release. Input is the changeset@2 list, the prior version, and a YYYY-MM-DD date. Returns a release-artifact@2 with the computed version, consumer-facing summaries, and aggregated breaking_changes.
 ---
 
 <constitution>

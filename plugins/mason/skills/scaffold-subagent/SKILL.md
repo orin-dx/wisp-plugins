@@ -1,7 +1,7 @@
 ---
 name: scaffold-subagent
 description: >-
-  Add one conformant agent to an existing plugin. Use when the request names an agent task and tier without requesting a new plugin. Create only the agent file and report required routing; leave unrelated plugin files unchanged.
+  Trigger when the request names an agent task and tier for an existing plugin, not a new plugin. Creates only the agent file and reports the routing the plugin needs.
 version: 2.1.0
 ---
 

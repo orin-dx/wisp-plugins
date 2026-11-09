@@ -1,14 +1,14 @@
 ---
 name: clarify-requirement
 description: >-
-  Trigger when a requirement@1 draft from weaver/capture-need has gaps to close before a spec can be written: "is this requirement complete?", "what's missing from this requirement". Given a requirement@1, evaluates gaps in priority order — testability of done_when, specificity of stakeholder, explicitness of out_of_scope — and either asks one focused question or returns the completed requirement with out_of_scope populated. One question per invocation, never a list.
+  Trigger when a requirement@1 draft from weaver/capture-need has gaps to close before a spec can be written: "is this requirement complete?", "what's missing from this requirement". Returns either one clarifying question or the completed requirement@1.
 version: 2.0.0
 ---
 
 # Weaver — Clarify Requirement
 
 <overview>
-Closes the gap between "captured" and "ready for scribe/draft-spec" one question at a time. Delegates to `clarifier`. This skill was previously undocumented as a sub-skill despite having a real backing agent — added here alongside the rest of the split.
+Closes the gap between "captured" and "ready for scribe/draft-spec" one question at a time. Delegates to `clarifier`.
 </overview>
 
 <dispatch>
