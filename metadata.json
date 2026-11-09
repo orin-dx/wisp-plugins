@@ -1,0 +1,67 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M71BSKPAJZQMP0H31WGDYJCG",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "AGENTS.md",
+    "plugins/muse/agents/auditor.md",
+    "plugins/muse/agents/drafter.md",
+    "plugins/muse/agents/exit-gate.md",
+    "plugins/muse/skills/component/SKILL.md",
+    "plugins/navigator/README.md",
+    "plugins/navigator/agents/challenger.md",
+    "plugins/navigator/agents/estimator.md",
+    "plugins/navigator/agents/planner.md",
+    "plugins/navigator/skills/plan/SKILL.md",
+    "plugins/scribe/agents/arch-auditor.md",
+    "plugins/scribe/agents/auditor.md",
+    "plugins/scribe/agents/drift-checker.md",
+    "plugins/scribe/skills/audit-spec/SKILL.md",
+    "plugins/smith/README.md",
+    "plugins/smith/agents/exit-gate.md",
+    "plugins/smith/agents/implementer.md",
+    "plugins/smith/agents/mutator.md",
+    "plugins/smith/agents/recon.md",
+    "plugins/smith/agents/reviewer.md",
+    "plugins/smith/skills/implement/SKILL.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 2,
+    "cache_creation_tokens": 500,
+    "cache_read_tokens": 737940,
+    "output_tokens": 347,
+    "api_call_count": 1,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "redaction": {
+    "replacements": 103,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 103,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
