@@ -117,6 +117,18 @@ class HandbackValidatorTests(unittest.TestCase):
         self.assertIsNone(self.decide(event(json.dumps(escalated), agent_id="late2")))
         self.assertIsNone(self.decide(event(json.dumps({**VALID_PASS_V3, "retry_count": 3}), agent_id="late3")))
 
+    def test_blank_blocker_text_is_denied_but_terse_real_text_is_not(self) -> None:
+        blank = {**VALID_FAIL_V3, "blockers": [{"criterion": "AC-3", "finding": "   ", "location": "AC-3"}]}
+        denied = self.decide(event(json.dumps(blank), agent_id="blank"))
+        self.assertIn("$.blockers[0].finding", denied["hookSpecificOutput"]["permissionDecisionReason"])
+        blank_gap = {**VALID_FAIL_V3, "coverage_gaps": [{"kind": "x", "finding": "\n", "blocking": False}]}
+        denied = self.decide(event(json.dumps(blank_gap), agent_id="blank2"))
+        self.assertIn("$.coverage_gaps[0].finding", denied["hookSpecificOutput"]["permissionDecisionReason"])
+        terse = {**VALID_FAIL_V3, "blockers": [{"criterion": "escalation_required", "finding": "Cap reached."}]}
+        self.assertIsNone(self.decide(event(json.dumps(terse), agent_id="terse")))
+        located = {**VALID_FAIL_V3, "blockers": [{"criterion": "AC-3", "finding": "Quote: 'handles errors'. Replace with the observable result.", "location": "AC-3"}]}
+        self.assertIsNone(self.decide(event(json.dumps(located), agent_id="located")))
+
     def test_trace_records_each_inspected_event(self) -> None:
         trace_file = self.state / "trace.jsonl"
         os.environ["WISP_HANDBACK_TRACE"] = str(trace_file)

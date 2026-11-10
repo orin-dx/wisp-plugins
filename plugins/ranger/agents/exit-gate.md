@@ -67,6 +67,10 @@ For fail, populate `blockers`. Record unverified boundary, input-space, environm
 
 WHEN retry_count exceeds 3, THE SYSTEM SHALL set verdict to fail, add a blocker with criterion "escalation_required", and halt — no further automated fix attempts shall be made.
 
+WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
+
+WHEN listing a blocker, THE SYSTEM SHALL name the finding id or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
+
 WHEN compile or test commands fail, THE SYSTEM SHALL include the failure output in the corresponding blocker's finding field.
 
 WHEN the input finding-report@2 contains findings with verdict "plausible", THE SYSTEM SHALL list each in flagged_for_review and SHALL NOT create a blocker solely because it is plausible.
