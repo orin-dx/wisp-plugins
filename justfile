@@ -4,7 +4,7 @@
 # Run every check (same set CI runs)
 # fmt-check is deliberately excluded: the repo isn't formatted yet. Run
 # `just fmt` once, review the diff, commit it, then add fmt-check here.
-check: manifests test versions skills-doc reference-size marketplace-check mermaid wiring
+check: manifests test versions skills-doc reference-size platform-limits claude-manifests marketplace-check mermaid wiring
 
 # Install pinned tooling dependencies
 install:
@@ -34,6 +34,23 @@ skills-doc:
 # Enforce the reference file line cap
 reference-size:
     ./scripts/check-reference-size.sh
+
+# Check cross-references, skill metadata and the agent/skill description budgets hosts enforce
+platform-limits:
+    python3 scripts/check-platform-limits.py
+
+# Confirm each plugin's .claude-plugin/plugin.json matches its plugin.json
+claude-manifests:
+    python3 tools/sync-claude-manifests.py --check
+
+# Regenerate each plugin's .claude-plugin/plugin.json from its plugin.json
+claude-manifests-sync:
+    python3 tools/sync-claude-manifests.py
+
+# Run `claude plugin validate --strict` on every plugin and the marketplace (needs the claude CLI; not part of `just check`)
+claude-validate:
+    for dir in plugins/*/; do claude plugin validate "$dir" --strict || exit 1; done
+    claude plugin validate .claude-plugin/marketplace.json --strict
 
 # Confirm the generated Codex marketplace matches its authored sources
 marketplace-check:

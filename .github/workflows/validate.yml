@@ -40,6 +40,12 @@ jobs:
       - name: Check reference file size
         run: just reference-size
 
+      - name: Check cross-references and platform description limits
+        run: just platform-limits
+
+      - name: Confirm generated Claude plugin manifests are current
+        run: just claude-manifests
+
       - name: Confirm generated Codex marketplace is current
         run: just marketplace-check
 

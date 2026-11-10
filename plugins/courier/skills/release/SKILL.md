@@ -1,8 +1,8 @@
 ---
 name: release
 description: >-
-  Trigger when the user asks to cut a release or summarize what's in one: "cut a release", "what's in this release", "generate release notes". Aggregates changeset@2 entries since the last release into a release-artifact@2.
-version: 2.0.0
+  Trigger when the user asks to cut a release or summarize what's in one: "cut a release", "what's in this release", "generate release notes". Aggregates changeset@3 entries since the last release into a release-artifact@3, carrying layered summaries through unedited.
+version: 3.0.0
 ---
 
 # Courier — Release
@@ -14,7 +14,7 @@ A release is an aggregation of changesets already written correctly at authoring
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **release-summarizer** | sonnet / medium | A set of `changeset@2` entries needs aggregating into a `release-artifact@2` with a computed version bump. |
+| **release-summarizer** | sonnet / medium | A set of `changeset@3` entries needs aggregating into a `release-artifact@3` with a computed version bump. |
 </dispatch>
 
 <references>
@@ -22,6 +22,6 @@ A release is an aggregation of changesets already written correctly at authoring
 </references>
 
 <io>
-**Consumes**: list of `changeset@2` entries, the prior released version, a release date
-**Produces**: `release-artifact@2` conforming to `shared/schemas/release-artifact@2.json`.
+**Consumes**: list of `changeset@3` entries, the prior released version, a release date
+**Produces**: `release-artifact@3` conforming to `shared/schemas/release-artifact@3.json`.
 </io>

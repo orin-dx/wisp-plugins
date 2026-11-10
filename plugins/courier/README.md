@@ -1,6 +1,6 @@
 # courier — Ship Tooling
 
-**Stage:** Ship · **Output:** `release-artifact@2` · **Version:** 3.0.3
+**Stage:** Ship · **Output:** `release-artifact@3` · **Version:** 3.1.0
 
 Handles everything after implementation: commit messages, PR descriptions, changeset extraction, review triage, posting a review, and release notes. Courier is not a linear pipeline — six independently-triggered skills, each dispatching to the subagent that matches the task. It reads the staged diff, linked spec, and linked requirement at runtime to produce meaningful, context-aware output, not mechanical templates.
 
@@ -15,9 +15,20 @@ Courier does not critique code quality or spec conformance — that's the built-
 - You need full context (diff, spec, tests, open questions) before responding to PR review comments
 - You have an already-drafted review or reply and want it posted to GitHub
 - You're cutting a release and need user-facing release notes
-- You want to extract a `changeset@2` from a git diff for semantic versioning, classified from a consumer's perspective
+- You want to extract a `changeset@3` from a git diff for semantic versioning, classified from a consumer's perspective
 
 **Invoke with:** `"Commit this"`, `"Write a commit message"`, `"Open a PR"`, `"Write the PR description"`, `"Address the feedback"`, `"Respond to review comments"`, `"Post this review"`, `"Cut a release"`, `"What's in this release"`, `"Add a changeset"`
+
+### Use the skill, not freehand text
+
+When a commit, a PR description or a changeset needs writing, invoke the matching skill before drafting it yourself. Each skill carries rules that freehand text skips.
+
+| Writing | Use | Why |
+| :--- | :--- | :--- |
+| A commit message | `courier/commit` | Explains why, in conventional form |
+| A PR title or description | `courier/pr` | Written for a reviewer with no context; reports observed verification and gaps |
+| A changeset or changelog entry | `courier/changeset` | One entry per user-visible outcome, layered, with limits stated; can update an entry or recommend none |
+| Release notes | `courier/release` | Aggregates changesets without rewriting them |
 
 ---
 
@@ -53,10 +64,10 @@ Courier does not critique code quality or spec conformance — that's the built-
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
 | `commit-analyzer` | Commit Author | haiku / low | Reads staged diff and produces a conventional commit message explaining why, not what. |
-| `changeset-analyzer` | Changeset Extractor | sonnet / medium | Classifies `consumer_impact` and `semver_impact` from a git diff per `shared/references/delivery/changesets.md`, then produces a `changeset@2` whose summary detail scales with that classification. |
+| `changeset-analyzer` | Changeset Extractor | sonnet / medium | Classifies `consumer_impact` and `semver_impact` from a git diff per `shared/references/delivery/changesets.md`, then produces a `changeset@3` whose summary detail scales with that classification. |
 | `pr-narrator` | PR Author | sonnet / medium | Writes a PR title and body from the reviewer's perspective — zero prior context assumed. |
 | `review-preprocessor` | Review Package Assembler | haiku / low | Bundles the diff, linked spec, test results, and open questions into a structured review package. Does not categorize comments — that's the caller's call, made with `shared/references/delivery/github.md`'s vocabulary. |
-| `release-summarizer` | Release Author | sonnet / medium | Aggregates `changeset@2` entries into a `release-artifact@2`, computing the version as `max(semver_impact)` and filtering `internal-only` entries. |
+| `release-summarizer` | Release Author | sonnet / medium | Aggregates `changeset@3` entries into a `release-artifact@3`, computing the version as `max(semver_impact)` and filtering `internal-only` entries. |
 
 `courier/post-review` has no subagent — posting is mechanical execution of already-drafted content, gated by user confirmation, not a judgment task.
 
@@ -71,9 +82,9 @@ flowchart TD
     classDef engine fill:#f5f3ff,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95,rx:10px,ry:10px;
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
-    Diff["Git diff"] --> Changeset["<b>changeset</b><br/>changeset-analyzer"] --> CS(["changeset@2"])
+    Diff["Git diff"] --> Changeset["<b>changeset</b><br/>changeset-analyzer"] --> CS(["changeset@3"])
     Diff --> PR["<b>pr</b><br/>pr-narrator"] --> PROut(["PR opened"])
-    CS --> Release["<b>release</b><br/>release-summarizer"] --> RelOut(["release-artifact@2"])
+    CS --> Release["<b>release</b><br/>release-summarizer"] --> RelOut(["release-artifact@3"])
 
     Staged["Staged diff"] --> Commit["<b>commit</b><br/>commit-analyzer"] --> CommitOut(["conventional commit"])
 
@@ -91,8 +102,8 @@ flowchart TD
 
 ## Output Schemas
 
-- `changeset@2` — see `shared/schemas/changeset@2.json` (supersedes `changeset@1`, still valid but legacy — adds required `consumer_impact`/`semver_impact`)
-- `release-artifact@2` — see `shared/schemas/release-artifact@2.json` (supersedes `release-artifact@1`)
+- `changeset@3` — see `shared/schemas/changeset@3.json` (supersedes `changeset@2`: the summary has no length cap and may be layered, and `disposition` lets the analyzer update an existing entry or recommend none)
+- `release-artifact@3` — see `shared/schemas/release-artifact@3.json` (supersedes `release-artifact@1`)
 
 ---
 
@@ -109,4 +120,4 @@ Agents read these at runtime — they are not injected at startup:
 
 ## Previous Stage
 
-Consumes smith's per-task `criteria_evidence` from **[smith](../smith/)** (aggregated across the implementation run) as the precise input to `courier/changeset`, or produces `changeset@2` directly from a staged git diff when no smith run backs the change.
+Consumes smith's per-task `criteria_evidence` from **[smith](../smith/)** (aggregated across the implementation run) as the precise input to `courier/changeset`, or produces `changeset@3` directly from a staged git diff when no smith run backs the change.
