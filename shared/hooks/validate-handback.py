@@ -26,6 +26,8 @@ Behavior
     not in a prompt.
   - Enforces the retry cap in the report itself: a `retry_count` above RETRY_CAP is accepted only
     as a `fail` carrying an `escalation_required` blocker, so a gate cannot pass a fourth retry.
+  - Rejects a blocker or coverage gap whose text field is only whitespace (ADR 013). Evidence
+    citing and complete first rounds are prompt rules; they are not deterministic, so not checked.
   - Set WISP_HANDBACK_TRACE to a file path to append one JSON line per inspected event.
   - Fails open: an internal error exits 1, which does not block (only exit code 2 or a deny
     decision blocks). A broken validator therefore cannot stall every subagent.
@@ -177,6 +179,28 @@ def retry_cap_errors(report: dict[str, Any]) -> list[str]:
     return [f"$.retry_count: {count} exceeds the cap of {RETRY_CAP}; return verdict 'fail' with a blocker whose criterion is '{ESCALATION_CRITERION}'"]
 
 
+def blank_text_errors(report: dict[str, Any]) -> list[str]:
+    """Blockers and coverage gaps must say something; whitespace passes the schema's minLength.
+
+    Deliberately narrow (ADR 013): whether a finding cites evidence or states the change
+    required is a judgment, so only a field with no visible character is rejected.
+    """
+    errors: list[str] = []
+    for key, fields in (("blockers", ("criterion", "finding", "location")), ("coverage_gaps", ("kind", "finding", "location"))):
+        entries = report.get(key)
+        if not isinstance(entries, list):
+            continue
+        for index, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                continue
+            errors.extend(
+                f"$.{key}[{index}].{field}: expected at least one non-space character"
+                for field in fields
+                if isinstance(entry.get(field), str) and entry[field] and not entry[field].strip()
+            )
+    return errors
+
+
 def trace(event: dict[str, Any], outcome: str) -> None:
     path = os.environ.get("WISP_HANDBACK_TRACE")
     if path:
@@ -200,7 +224,7 @@ def decide(event: dict[str, Any], state_directory: Path, max_denials: int = MAX_
         results = [validate(report, load_schema(name)) for name in schema_names]
         errors = [] if any(not result for result in results) else min(results, key=len)
         if not errors:
-            errors = retry_cap_errors(report)
+            errors = retry_cap_errors(report) or blank_text_errors(report)
     schema_name = " or ".join(schema_names)
     if not errors:
         trace(event, "accepted")

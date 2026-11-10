@@ -50,6 +50,8 @@ The verdict must include:
 WHEN spec_file_path is set in the workspace manifest, THE SYSTEM SHALL read the spec@1 from disk at that path using the file reading tool — not from spec content passed through conversation context.
 WHEN spec_file_path is null in the workspace manifest, THE SYSTEM SHALL proceed using the spec@1 passed in context and record a spec_file_unset coverage gap in the verdict — this is a warning, not a hard block, because recon already surfaced it.
 WHEN spec_drift_warning is set in the workspace manifest, THE SYSTEM SHALL record a spec_drifted_since_planning gap in the verdict noting that the plan may not cover criteria added or changed after it was created — this is a warning, not a hard block, because recon already surfaced it.
+WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
+WHEN listing a blocker, THE SYSTEM SHALL name the criterion or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
 WHEN the verdict is fail, THE SYSTEM SHALL return blockers to implementer for targeted fixes.
 WHEN retry_count for a blocker exceeds 3, THE SYSTEM SHALL return fail with an `escalation_required` blocker and halt automated retries.
 WHEN mutator did not run and was not reported as unavailable, THE SYSTEM SHALL return fail with a missing_mutation_gate blocker.

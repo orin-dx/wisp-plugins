@@ -128,3 +128,15 @@ Live run: `courier:changeset-analyzer` on `gh pr diff 483 --repo orin-dx/callist
 
 Not done: changes in the Callisto repo (its AGENTS.md or PR template), which are recommendations only: say in its AGENTS.md to invoke `courier/changeset` for changesets and `courier/pr` for PR text, and add a changeset prompt to its PR template.
 
+## Gate rounds (track B, ADR 013)
+
+| Finding | Action | Evidence |
+| :-- | :-- | :-- |
+| Every spec failed its first gate and blocker counts were non-monotonic (SPEC-001: 18, 5, 6, 0, 0, 2, 0, 6, 2, 3, 2, 8, 3) | Each of the five exit gates now states two output rules, worded the same: round one lists the complete blocker set; a retry cites only unresolved prior blockers or regressions the fix introduced, and any other new issue is a non-blocking `coverage_gaps` entry; every blocker names the criterion, cites quoted text or a location and states the exact change; wording or style issues are notes | `just check` exit 0; `verdict@3` unchanged |
+| Drafters sent unchecked drafts to the gate | New `shared/references/verification/gate-readiness.md` (blocker shape, rounds, spec checklist) loaded by `muse:drafter` and `scribe:drafter`, with a short inline fallback if the path does not resolve; Codex `author` and `judge` role cards updated | `just check` |
+| Blocker shape could not be enforced deterministically without false denials | The hook denies only a blocker or coverage gap whose text is whitespace; evidence citing is not checked | `tests/test_handback_validator.py` |
+
+Live runs, one run each on Sonnet 5.5 (Claude Code 2.1.311, `claude -p --permission-mode auto --plugin-dir`, working directory outside the repository, `WISP_HANDBACK_TRACE` set). The prompt read a task file asking for one delegation to `<plugin>:exit-gate` with a small spec or finding that had known defects. The trace showed `agent_type` `<plugin>:exit-gate` in all four. Scribe, sentinel and smith were accepted on the first report. Ranger was denied once and accepted on the second; the trace does not record the denial reason, so what the first report broke is unknown. All four returned fail with blockers that gave a criterion or finding id, a location and an exact change; the smith report also listed `missing_mutation_gate` and `unresolved_review` as blockers, and the scribe report flagged the TBD and the vague "gracefully" criterion. These runs were round one only: they confirm the hook fires and the gates produce evidence-citing blockers, not that rounds fall. Nothing here measures the retry rule.
+
+Not done: a measured comparison of round counts before and after (needs a paired run of gate, fix and regate, WP-60); passing the prior round's blockers into the gate on retry (the skills do not, so the retry rule depends on the orchestrator); a self-check for `smith:implementer`, `sentinel:verifier` and `ranger` producers; a check that the `shared/...` path resolves from a user's project (see the Courier finding above).
+

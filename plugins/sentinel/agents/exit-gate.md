@@ -52,5 +52,7 @@ Treat unverifiable criteria as failures unless the caller has explicitly waived 
 WHEN retry_count exceeds 3, THE SYSTEM SHALL return fail with an `escalation_required` blocker and halt automated retries.
 WHEN a required check has not reached a terminal result, THE SYSTEM SHALL list it in `pending_checks` and return fail.
 WHEN a completion claim has no command and observed result that prove it, THE SYSTEM SHALL list it in `pending_checks`; another agent's summary is a lead, not evidence.
+WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
+WHEN listing a blocker, THE SYSTEM SHALL name the criterion or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
 IF returning fail, THE AGENT SHALL emit the complete verdict; the caller forwards only `blockers` to the producing agent.
 </output>
