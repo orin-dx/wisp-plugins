@@ -1,6 +1,6 @@
 # muse — Component Specification
 
-**Stage:** Design · **Output:** `spec@1` · **Version:** 1.0.1
+**Stage:** Design · **Output:** `spec@1` · **Version:** 1.1.0
 
 Turns UI or design intent into a component spec a developer can implement — including its accessibility behavior — without a single clarifying question. Muse audits the spec, not the implementation. It also has a light, non-binding path for early work: see options first, decide, then carry the choice forward.
 

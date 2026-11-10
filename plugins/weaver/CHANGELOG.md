@@ -2,6 +2,11 @@
 
 — weaver
 
+## [3.0.4] - 2026-11-10
+
+### Changed
+- Shorter agent and skill descriptions (routing text only). References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [3.0.3] - 2026-09-10
 
 ### Changed

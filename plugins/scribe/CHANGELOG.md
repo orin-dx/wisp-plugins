@@ -2,6 +2,12 @@
 
 — scribe
 
+## [3.5.0] - 2026-11-10
+
+### Changed
+- The exit gate lists the complete blocker set in round one and, on a retry, only unresolved or newly introduced blockers; `drafter` self-checks against the same list (ADR 013). Output is checked by a hook (ADR 012).
+- Skill descriptions lead with the request they serve; the spec-writing, auditing and gating skills say to use them instead of working freehand. Agents that read the workspace broadly load the context-hygiene reference. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [3.4.0] - 2026-09-27
 
 ### Added

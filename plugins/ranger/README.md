@@ -1,6 +1,6 @@
 # ranger — Adversarial Bug Hunting
 
-**Stage:** Cross-cutting · **Output:** `finding-report@2` · **Version:** 3.2.3
+**Stage:** Cross-cutting · **Output:** `finding-report@2` · **Version:** 3.2.4
 
 Adversarial bug hunting on live Rust, TypeScript, JavaScript, Python, and Go code.
 

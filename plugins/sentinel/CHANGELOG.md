@@ -2,6 +2,12 @@
 
 — sentinel
 
+## [2.1.3] - 2026-11-10
+
+### Changed
+- The exit gate lists the complete blocker set in round one, cites a proving command for each claim, and is checked by a hook (ADRs 012, 013).
+- The `gate` skill says to use it instead of a freehand verdict; `recon` and `verifier` load the context-hygiene reference. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [2.1.2] - 2026-09-10
 
 ### Fixed

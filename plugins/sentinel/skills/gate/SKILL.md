@@ -19,7 +19,7 @@ Sentinel is a cross-cutting verification gate. It runs whenever a stage artifact
 | :--- | :--- | :--- | :--- | :--- |
 | 1 — Recon | `recon` | haiku | low | Inventory the artifact: type, location, criteria list, source files to read. No judgment. |
 | 2 — Verify | `verifier` | sonnet | medium | Cross-reference each criterion against the source files. Classify as verified, failed, or unverifiable. Neutral — reports evidence only. |
-| 3 — Exit Gate | `exit-gate` | opus | high | Produce the final verdict. Pass only if all criteria are verified with no unresolved failures. On fail, return specific actionable blockers. |
+| 3 — Exit Gate | `exit-gate` | opus | high | Produce the final verdict. Pass only if all criteria are verified with no unresolved failures. On fail, return specific actionable blockers. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules. |
 
 </three_stage_flow>
 

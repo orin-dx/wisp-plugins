@@ -172,3 +172,14 @@ Live runs, one run each on Sonnet 5.5 (Claude Code 2.1.311, `claude -p --permiss
 
 Not done: a measured comparison of round counts before and after (needs a paired run of gate, fix and regate, WP-60); passing the prior round's blockers into the gate on retry (the skills do not, so the retry rule depends on the orchestrator); a self-check for `smith:implementer`, `sentinel:verifier` and `ranger` producers; a check that the `shared/...` path resolves from a user's project (see the Courier finding above).
 
+## Integration, path resolution and versions
+
+| Finding | Action | Evidence |
+| :--- | :--- | :--- |
+| Relative `shared/...` paths in agents and skills do not resolve reliably: with `shared` a symlink, a probe skill first tried its own directory and a probe agent first tried the working directory, each costing a failed read; an explicit `${CLAUDE_PLUGIN_ROOT}/shared/...` path read on the first try in both | Rewrote 163 references in 66 agent and skill files to the plugin-root form. Codex sources are unchanged because Codex does not substitute the token | Four probe runs (one each, Claude Code 2.1.311, Sonnet 5.5); then `courier:changeset-analyzer` on the Callisto PR 483 diff reported its reference loaded from the full plugin path on the first read |
+| The gate retry rule needs `retry_count` and the prior blockers as input; no skill passed them | One sentence in the gate-calling skills (muse `component`, scribe `gate-spec`, sentinel `gate`, smith `implement`, ranger `audit`) and the Codex counterparts | `just check` |
+| Tracks B to E (gate hygiene, measurement, skill routing, planner) ran in parallel worktrees and were merged here | Merged with log-only conflicts resolved by keeping both sides | `just check` exit 0 after each merge |
+| Nine plugins had changed against `main` with no version or changelog | muse 1.1.0, smith 2.5.0, navigator 2.4.0, scribe 3.5.0, courier 3.1.0; sentinel, ranger, mason, vanguard and weaver patch bumps; ecosystem 4.5.0 | `just versions`, `just check`, `just claude-validate` |
+
+Limits: the path finding rests on single probe runs; Antigravity's handling of `${CLAUDE_PLUGIN_ROOT}` in skill and agent text was not tested, and its format shares the authored tree, so confirm it before releasing. The hook-only plugins (sentinel, ranger) are patch bumps although a gate can now deny a report that used to pass; scribe is a minor because its drafter and skills also changed behavior.
+

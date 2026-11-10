@@ -22,7 +22,7 @@ Make the requested workspace change in bounded batches and return a scoped verdi
 6. Record `implementation-result@1` with exact criterion locations, commands, observations, boundaries, and environment evidence.
 7. Use available mutation tooling against changed behavior or a safe deliberate-fault check. Record `mutation-report@2`; unavailable evidence is a coverage gap.
 8. Produce `implementation-review@2`. Judge verification fit, sibling completeness, semantic models, and architecture.
-9. Before completion, account for every planned batch and started verification task, reread persisted artifacts and current code, independently challenge semantic completeness, and emit scoped `verdict@3`. Commit only after user authorization.
+9. Before completion, account for every planned batch and started verification task, reread persisted artifacts and current code, independently challenge semantic completeness, and emit scoped `verdict@3`. Commit only after user authorization. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 
 ## Defect-family review
 

@@ -29,5 +29,5 @@ Turns UI or design intent into a component spec a developer could implement — 
 </io>
 
 <circuit_breaker>
-Drafter → auditor loops: max 2 iterations before the exit gate; on round 2, unresolved naming or phrasing debates become non-blocking notes. The exit gate allows up to 3 retries before escalating to a human reviewer.
+Drafter → auditor loops: max 2 iterations before the exit gate; on round 2, unresolved naming or phrasing debates become non-blocking notes. The exit gate allows up to 3 retries before escalating to a human reviewer. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 </circuit_breaker>

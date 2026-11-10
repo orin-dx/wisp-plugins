@@ -26,7 +26,7 @@ Ranger reports only defects that survive control-flow and reachability review. P
 6. Aggregate results and defect families using `shared/schemas/finding-report@2.json`.
 7. Group confirmed findings that share a root cause, domain responsibility, or failure state. Derive likely semantic candidate sites from types, calls, state transitions, and boundary adapters before searching them.
 8. When repeated findings suggest a missing concept, state, operation, boundary, abstraction, invariant, or enforcement mechanism, route the report to `scribe:architect` before remediation.
-9. After remediation, issue `shared/schemas/verdict@3.json`. Independently verify each finding, sibling candidates, and the affected boundary against current state. Wait for every started check to finish.
+9. After remediation, issue `shared/schemas/verdict@3.json`. Independently verify each finding, sibling candidates, and the affected boundary against current state. Wait for every started check to finish. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 
 ## Safety and evidence
 

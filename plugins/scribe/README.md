@@ -1,6 +1,6 @@
 # scribe — Specification
 
-**Stage:** Spec · **Output:** `spec@1` · **Version:** 3.4.0
+**Stage:** Spec · **Output:** `spec@1` · **Version:** 3.5.0
 
 Turns requirements into unambiguous, testable specs a developer can implement without a single clarifying question — and keeps them that way after implementation starts.
 

@@ -14,7 +14,7 @@ Sentinel judges an existing artifact; it does not author a replacement. Begin by
 1. Identify `artifact_type`, `artifact_path`, the authoritative criteria, linked artifacts, and source files that can prove or disprove each criterion.
 2. Read persisted files when a path is present rather than relying on conversation summaries.
 3. Build an evidence table that classifies each criterion as verified, failed, or unverifiable, with exact paths and test or inspection evidence.
-4. Produce `verdict@3` conforming to `shared/schemas/verdict@3.json`. Name the verified scope, blockers, coverage gaps, and pending checks.
+4. Produce `verdict@3` conforming to `shared/schemas/verdict@3.json`. Name the verified scope, blockers, coverage gaps, and pending checks. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 5. Pass only when every applicable criterion is verified. On failure, return specific blockers that the producing workflow can act on.
 
 ## Retry protocol

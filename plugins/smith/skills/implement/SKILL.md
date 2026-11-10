@@ -54,7 +54,7 @@ Route the result:
 </review_gate>
 
 <exit_gate>
-After every planned batch has a terminal result and approved review, `exit-gate` reads persisted artifacts and current code independently. It challenges semantic completeness, verifies current state and dispositions, and emits scoped `verdict@3` using `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`.
+After every planned batch has a terminal result and approved review, `exit-gate` reads persisted artifacts and current code independently. It challenges semantic completeness, verifies current state and dispositions, and emits scoped `verdict@3` using `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 </exit_gate>
 
 <subagent_dispatch_matrix>

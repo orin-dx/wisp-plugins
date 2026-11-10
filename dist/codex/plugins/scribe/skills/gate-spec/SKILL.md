@@ -16,7 +16,7 @@ Produce a `verdict@3` that a spec must earn through testable criteria, explicit 
 1. Validate the candidate with `shared/schemas/spec@1.json` and inspect the actual JSON, not a summary passed through conversation.
 2. Confirm each criterion has a falsifiable observation, no unresolved TBD language, and a clear relationship to scope and non-goals.
 3. Read prior grounding, quality, and architecture audit evidence when supplied. Recheck material blockers yourself instead of trusting a label.
-4. Default to fail when evidence is insufficient. On failure, return minimal blockers that name the exact criterion or field and the corrective action.
+4. Default to fail when evidence is insufficient. On failure, return minimal blockers that name the exact criterion or field and the corrective action. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 5. On pass, present the verdict and proposed persistence action. Only after user authorization, write the spec to `docs/specs/<id>.json`, set `spec_file_path`, and commit it as a durable handoff.
 
 ## Contract

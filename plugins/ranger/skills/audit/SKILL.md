@@ -25,7 +25,7 @@ workspace → recon → scanner → [boundary-tracer] → adversary → finding-
 3. `boundary-tracer` produces `field-survival-map@1` for T7 and T10 candidates.
 4. `adversary` emits `candidate-assessment@1` for one candidate. It confirms only a reachable failing scenario; external uncertainty produces `plausible`.
 5. The caller aggregates findings and their families into `finding-report@2`.
-6. After remediation, `exit-gate` independently derives sibling candidates and verifies current code with project-native evidence. It emits `verdict@3`.
+6. After remediation, `exit-gate` independently derives sibling candidates and verifies current code with project-native evidence. It emits `verdict@3`. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 
 ## Defect-family route
 

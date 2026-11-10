@@ -8,7 +8,7 @@ version: 2.1.0
 # Scribe — Gate Spec
 
 <overview>
-The binding exit gate for a spec entering planning. Delegates to `exit-gate`. On pass, this skill — not the agent — performs the disk-write orchestration below; that step is load-bearing, not decoration.
+The binding exit gate for a spec entering planning. Delegates to `exit-gate`. On pass, this skill — not the agent — performs the disk-write orchestration below; that step is load-bearing, not decoration. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 </overview>
 
 <dispatch>

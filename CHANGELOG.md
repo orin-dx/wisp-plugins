@@ -3,6 +3,16 @@
 All notable changes to the Wisp Plugins ecosystem are documented here.
 Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 
+## [4.5.0] - 2026-11-10 — Exploration modes, enforced gates, layered changesets
+
+- Added exploration modes: `muse/sketch`, `muse/promote`, `smith/spike` and the `explorer` agent, with `option-set@1` and `spike-report@1` (ADR 011). Exploration never gates and enters the pipeline only through `promote`.
+- Gate output is checked by a hook in the five gate plugins, including the retry cap (ADR 012). Exit gates list the complete blocker set in round one and drafters self-check (ADR 013).
+- Plans state outcomes and contracts and carry code only where it earns its cost (ADR 014, partially supersedes ADR 009).
+- Courier writes layered changesets without a length cap: `changeset@3` and `release-artifact@3`; `commit-analyzer` and `pr-narrator` follow the repository's own conventions.
+- The `muse` gate returns `verdict@3`; a light `smith` entry handles review findings; a hazard reference covers scripts, CI workflows and templates.
+- Agent and skill descriptions are about half the size, skills lead with the request they serve, and shared references load from the plugin root so agents find them on the first read.
+- Marketplace sources are relative paths, so installed plugins include their shared schemas and references.
+
 ## [4.4.5] - 2026-09-27 — Architecture model decision links
 
 - Added `arch-model@2`: invariants may cite a `decision_ref` naming the governing decision record. `arch-model@1` unchanged; an existing persisted model needs no migration.
