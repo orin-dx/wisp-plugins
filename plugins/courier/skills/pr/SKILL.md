@@ -1,14 +1,14 @@
 ---
 name: pr
 description: >-
-  Trigger when the user asks to open a PR or write a PR description: "open a PR", "create a pull request", "write the PR description". Produces a PR title and body from the diff and any linked spec or requirement, then opens the PR after user confirmation.
-version: 2.0.1
+  Use this, not freehand text, whenever a pull request is opened or its title or description written or updated: "open a PR", "create a pull request", "write the PR description". Produces a PR title and body from the diff and any linked spec or requirement, then opens the PR after user confirmation.
+version: 2.0.2
 ---
 
 # Courier — PR
 
 <overview>
-Produces a PR title and body from a diff plus optional linked spec/requirement, then opens the PR. Delegates the narrative to `pr-narrator`; opening the PR is a visible external action and always requires explicit confirmation before the `gh pr create` call fires.
+Produces a PR title and body from a diff plus optional linked spec/requirement, following the repository's pull request template when it has one, then opens the PR. Delegates the narrative to `pr-narrator`; opening the PR is a visible external action and always requires explicit confirmation before the `gh pr create` call fires.
 </overview>
 
 <dispatch>

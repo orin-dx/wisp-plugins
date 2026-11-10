@@ -17,7 +17,7 @@ Implemented in seven signed commits on `worktree-review-slop-evaluation`, in the
 
 | Workstream | Commit | What changed |
 |---|---|---|
-| 0 Baseline and fixtures | `fcfe974c` | Ten replay fixtures from real misses (`tests/fixtures/behavioral/fix-pass-misses.json`) |
+| 0 Baseline | `fcfe974c` | Replay fixtures from real misses, later removed as unused once the plan moved to measuring real sessions |
 | 1 Truth repair | `d24be9e0` | A3 to A7 fixed; A2 softened (claim now says no runtime validator runs); source wiring now runs in `just check` and CI |
 | 2 Verification content | `720add75` | D2 and D3 and the Part 1 additions in the three owner references; a test ties each rule to one owner |
 | 3 Fix-pass path | `36bfd751` | D1 light `smith` entry (Claude and Codex skills); D8 project invariants defined once in the workspace conventions reference; `ranger` adversary sweep replaced |
@@ -37,6 +37,48 @@ Implemented in seven signed commits on `worktree-review-slop-evaluation`, in the
 - **C10:** superseded by D8 and implemented.
 - **D4:** verified, no change needed; the `smith` gate already fails when the mutation gate neither ran nor was reported unavailable.
 - **Untouched:** C1, C5, C6, D5, D6, D9, D10, B9, B10.
+
+## Measuring the effect
+
+The test is real work, not a replay harness. Baseline taken 2026-11-06, before this change set is used:
+
+| Measure | Baseline |
+|---|---|
+| Subagent tokens in Callisto, Caliper and Monokl sessions | plugin agents 44.6M (26%), other subagents 124.2M (74%). One long session on the pre-rename names (`canon`, `lambda`, `vector`) inflates the plugin share. |
+| `smith` reviewer, mutator and exit gate runs on fix work | effectively none; `smith:implementer` ran 21 times in one session, `ranger` adversary, scanner and recon in one |
+| Entire findings | 256 on 242 changes (111 open, 112 resolved, 33 dismissed); 65 changes have findings, median 3 per change with findings; class mix in Part 1 |
+
+Re-measure after about 20 changes or two weeks of use of the new path (the sample is small and noisy, so treat a difference cautiously):
+
+```
+python3 tools/transcript-metrics.py agents --match 'Projects-(callisto|caliper|monokl)'
+python3 tools/transcript-metrics.py skills --match 'Projects-(callisto|caliper|monokl)'
+python3 tools/entire-findings.py pull --project gh/orin-dx --repos caliper callisto monokl --out findings-<date>.json
+python3 tools/entire-findings.py summary findings-<before>.json findings-<after>.json
+```
+
+What would show it worked: the `smith` reviewer, mutator and gate run on fix work; plugin agents take a larger share of subagent tokens; the weak-test, doc-claim, copied-value, harness and release classes shrink as a share of findings; tokens per fix do not rise sharply. What would show it did not: the controls still never run (then the entry point or the project instructions are the problem), or the class mix is unchanged.
+
+Adoption lever, for each project's `AGENTS.md` (Callisto found its repo instructions did not mention the plugins; using them was a personal memory rule). Replace the placeholder with the project's own CI-equivalent command:
+
+```
+## Fixes and review findings
+
+Fix review findings, bugs, and diff-sized changes with the smith fix pass (`smith:implement`), not ad hoc agents.
+
+- State each claim to fix, the invariants that must hold, and the sites to search for the changed symbol.
+- Give every fix a regression test that fails on the pre-fix source.
+- Verify with the command CI runs, from a clean state: `<ci-equivalent command>`.
+- Report each claim with the command that proves it. A check still running is pending.
+```
+
+CI-equivalent command per project (from each justfile; confirm before relying on it):
+
+| Project | Command | Parity |
+|---|---|---|
+| Monokl | `just ci` (lint, test, doc-check, deny, machete, typos, zizmor, changesets, coverage 90) | its justfile says it is everything the CI jobs run; the release path is not rehearsed |
+| Callisto | `just ci` | Callisto's own analysis says it is a strict subset of GitHub CI (CI also runs machete, features-boundary, check-api, per-crate coverage, a `--locked` check, MSRV, artifact preflight and two contract scripts); its next step is a `verify` command equal to CI, which should replace this entry |
+| Caliper | `just ci` (lint, test, deny, typos, zizmor, doc-check, machete, semver, msrv, coverage 90) | parity with the CI workflow not checked; its analysis proposes a clean-room verify command |
 
 ## How this was produced
 

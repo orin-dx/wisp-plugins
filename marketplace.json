@@ -1,5 +1,4 @@
 {
-  "$schema": "https://antigravity.google/schemas/marketplace.json",
   "name": "wisp-plugins",
   "version": "4.4.5",
   "description": "Wisp Plugins marketplace for AGY and Claude Code, published by Orin DX",
@@ -57,7 +56,7 @@
       "name": "muse",
       "version": "1.0.1",
       "path": "./plugins/muse",
-      "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs \u2014 props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Audits the spec, not the implementation \u2014 see ranger's accessibility hazard taxonomy for code-level scanning."
+      "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs \u2014 props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by ranger. Also sketches options before anything is specified (sketch) and carries a chosen option into a requirement (promote)."
     },
     {
       "id": "navigator",
@@ -71,12 +70,12 @@
       "name": "smith",
       "version": "2.4.5",
       "path": "./plugins/smith",
-      "description": "Implementation plugin. Executes tested plan batches, verifies risk at real boundaries, searches semantic defect siblings, and escalates shared model or architecture gaps."
+      "description": "Implementation plugin. Executes tested plan batches, verifies risk at real boundaries, searches semantic defect siblings, and escalates shared model or architecture gaps. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike)."
     },
     {
       "id": "courier",
       "name": "courier",
-      "version": "3.0.3",
+      "version": "3.1.0",
       "path": "./plugins/courier",
       "description": "Shipping plugin. Shepherds completed code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release."
     }

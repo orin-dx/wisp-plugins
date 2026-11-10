@@ -45,7 +45,15 @@ class BrandIdentityTests(unittest.TestCase):
         self.assertIn('alt="Wisp Plugins', readme)
         self.assertIn(">WISP</text>", logo)
         self.assertIn(">PLUGINS</text>", logo)
-        self.assertTrue(all(plugin["source"]["url"] == "https://github.com/orin-dx/wisp-plugins.git" for plugin in claude["plugins"]))
+        # A relative-path source resolves inside this marketplace repository, which users add as
+        # orin-dx/wisp-plugins; an object source must name that same repository.
+        for plugin in claude["plugins"]:
+            source = plugin["source"]
+            if isinstance(source, str):
+                self.assertTrue(source.startswith("./plugins/"), plugin["name"])
+            else:
+                self.assertEqual(source["url"], "https://github.com/orin-dx/wisp-plugins.git", plugin["name"])
+        self.assertIn("/plugin marketplace add orin-dx/wisp-plugins", readme)
         for manifest in (REPOSITORY_ROOT / "harnesses/codex/plugins").glob("*/.codex-plugin/plugin.json"):
             metadata = json.loads(manifest.read_text(encoding="utf-8"))
             if "repository" in metadata:

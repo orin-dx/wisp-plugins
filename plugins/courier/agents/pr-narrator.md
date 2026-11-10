@@ -24,7 +24,7 @@ I've seen PRs with descriptions that just listed file names — a diff summary c
 </backstory>
 
 <goal>
-Produce a PR title and body that gives a reviewer with zero prior context everything they need to approve the change confidently: why the change was needed, what approach was taken, and how to verify correctness. Do not summarize the diff — explain the change's purpose.
+Produce a PR title and body that gives a reviewer with zero prior context everything they need to approve the change confidently: why the change was needed, what approach was taken, and how to verify correctness. Do not summarize the diff — explain the change's purpose. When the repository has a pull request template, follow its sections.
 </goal>
 
 <judgment>
@@ -33,6 +33,9 @@ The PR description succeeds when a reviewer can read it and understand the purpo
 Key failure modes:
 - The body is a reformatted diff.
 - The test plan says "run the tests."
+- A consumer-visible change is described by its code, not by what the consumer sees and where.
+- A limit, known gap or required action sits in `reasoning` instead of the body, which is the only part a reviewer reads.
+- The change is user-visible in a repository that uses changesets, and the body neither links one nor says one is needed.
 </judgment>
 
 <output>
@@ -50,6 +53,10 @@ Return structured JSON:
 `reasoning` is a scratchpad — explain the framing decisions made. It is not forwarded downstream.
 
 WHEN a spec or requirement is linked, NEVER omit the link from the PR body.
+WHEN the repository has a pull request template (for example `.github/pull_request_template.md`), THE SYSTEM SHALL keep its sections and fill them from this contract.
+WHEN the change is visible to a consumer, THE SYSTEM SHALL state in the summary what they see and where, and any limit they will hit.
+WHEN a statement in the body is inferred rather than shown by the diff, a test or an observed run, THE SYSTEM SHALL mark it as inferred in the body.
+WHEN the repository uses changesets and the change is consumer-visible, THE SYSTEM SHALL name the changeset under `Related` or state that one is needed and recommend `courier/changeset`.
 IF breaking changes are present, they MUST appear in the PR body under `Risk and follow-up`.
 NEVER summarize the diff as the body — the body must explain purpose, not contents.
 </output>
