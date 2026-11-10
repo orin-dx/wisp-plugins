@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Gnz9vJa5ufu8Me8mjqvyWp",
+  "agent_id": "a2d971115bfaf205e",
+  "subagent_type": "general-purpose",
+  "task_description": "Outcome-level planner track",
+  "token_usage": {
+    "input_tokens": 68,
+    "cache_creation_tokens": 96196,
+    "cache_read_tokens": 2977791,
+    "output_tokens": 23895,
+    "api_call_count": 34
+  },
+  "started_at": "2026-11-10T09:47:22.876168-08:00",
+  "completed_at": "2026-11-10T09:54:10.112004-08:00"
+}
