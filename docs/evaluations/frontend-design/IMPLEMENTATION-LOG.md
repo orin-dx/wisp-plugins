@@ -191,3 +191,7 @@ Limits: the path finding rests on single probe runs; Antigravity's handling of `
 
 Codex `author` role: moved from `gpt-6.1-sol` / high to `gpt-6.1-terra` / medium (Terra is about half of Sol's price per token and is positioned for clear writing; the page lists no effort levels for it, so the effort label stays relative). Other roles unchanged. Unmeasured: whether Terra drafts specs, PR text and changesets as well as Sol; run the spec-drafting and courier comparisons in `docs/evaluation-runbook.md`.
 
+## Model and effort fit
+
+Audit of all 45 agents against the constitution's tiers (haiku/low for mechanical work, sonnet/medium for analysis and execution, opus/high for binding judgment). Two clear mismatches changed: `courier:release-summarizer` sonnet/medium to haiku/low (deterministic aggregation), `scribe:drift-checker` opus/high to sonnet/medium (a diagnostic, not a gate). Left alone pending measurement, in order of likely saving: `ranger:adversary` (one opus call per candidate), `scribe:arch-auditor` (opus on every spec), `sentinel:exit-gate` (maps a verifier report to a verdict without re-reading evidence, so it may not need opus), and whether opus gates need `high` rather than the default effort. Gate quality decides retry rounds, so a cheaper gate that misses more can cost more than it saves; test with the spec-gating comparison in `docs/evaluation-runbook.md` before changing them.
+

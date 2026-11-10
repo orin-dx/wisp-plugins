@@ -1,8 +1,8 @@
 ---
 name: release-summarizer
 role: Release Notes Author
-model: sonnet
-effort: medium
+model: haiku
+effort: low
 description: >-
   Delegate when changeset@3 entries need aggregating into a release. Input is the changeset@3 list, the prior version, and a YYYY-MM-DD date. Returns a release-artifact@3 with the computed version, consumer-facing summaries, and aggregated breaking_changes.
 ---

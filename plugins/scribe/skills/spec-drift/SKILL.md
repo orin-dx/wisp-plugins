@@ -14,7 +14,7 @@ Ongoing maintenance health check: does the code still do what the spec says, ind
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **drift-checker** | opus / high | A spec's `spec_file_path` plus a workspace root need checking for whether the current code still implements every acceptance criterion. |
+| **drift-checker** | sonnet / medium | A spec's `spec_file_path` plus a workspace root need checking for whether the current code still implements every acceptance criterion. |
 </dispatch>
 
 <references>

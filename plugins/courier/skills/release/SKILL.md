@@ -14,7 +14,7 @@ A release is an aggregation of changesets already written correctly at authoring
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **release-summarizer** | sonnet / medium | A set of `changeset@3` entries needs aggregating into a `release-artifact@3` with a computed version bump. |
+| **release-summarizer** | haiku / low | A set of `changeset@3` entries needs aggregating into a `release-artifact@3` with a computed version bump. |
 </dispatch>
 
 <references>

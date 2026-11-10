@@ -67,7 +67,7 @@ When a commit, a PR description or a changeset needs writing, invoke the matchin
 | `changeset-analyzer` | Changeset Extractor | sonnet / medium | Classifies `consumer_impact` and `semver_impact` from a git diff per `shared/references/delivery/changesets.md`, then produces a `changeset@3` whose summary detail scales with that classification. |
 | `pr-narrator` | PR Author | sonnet / medium | Writes a PR title and body from the reviewer's perspective — zero prior context assumed. |
 | `review-preprocessor` | Review Package Assembler | haiku / low | Bundles the diff, linked spec, test results, and open questions into a structured review package. Does not categorize comments — that's the caller's call, made with `shared/references/delivery/github.md`'s vocabulary. |
-| `release-summarizer` | Release Author | sonnet / medium | Aggregates `changeset@3` entries into a `release-artifact@3`, computing the version as `max(semver_impact)` and filtering `internal-only` entries. |
+| `release-summarizer` | Release Author | haiku / low | Aggregates `changeset@3` entries into a `release-artifact@3`, computing the version as `max(semver_impact)` and filtering `internal-only` entries. |
 
 `courier/post-review` has no subagent — posting is mechanical execution of already-drafted content, gated by user confirmation, not a judgment task.
 

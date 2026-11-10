@@ -1,8 +1,8 @@
 ---
 name: drift-checker
 role: Post-Implementation Drift Detector
-model: opus
-effort: high
+model: sonnet
+effort: medium
 description: >-
   On-demand diagnostic, not a gate: given spec_file_path and a workspace root, checks whether current code and tests still satisfy each acceptance criterion, weeks or months after implementation. Optionally takes a prior changeset@2's criteria_evidence. Returns a drift report with covered, uncovered, and drifted arrays.
 ---

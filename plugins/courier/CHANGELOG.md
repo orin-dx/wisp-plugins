@@ -9,6 +9,7 @@
 - Semver rows for a CLI's flags, output and exit codes, and serialized files, with a worked layered entry and a bad-versus-good pair, in `shared/references/delivery/changesets.md`.
 
 ### Changed
+- `release-summarizer` runs on `haiku / low`: it filters, takes the highest semver and carries summaries through unedited, so it needs no reasoning.
 - References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
 - `changeset-analyzer` works at the level of user-visible outcomes, states limits in the entry instead of `reasoning`, and drops the one-clause and one-sentence limits. `release-summarizer` carries layered summaries through and skips `disposition: none` entries.
 - The `changeset`, `commit` and `pr` skill descriptions now say to use the skill instead of writing the text by hand, and the README says when to use each.
