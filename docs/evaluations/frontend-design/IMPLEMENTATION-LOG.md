@@ -128,3 +128,12 @@ Live run: `courier:changeset-analyzer` on `gh pr diff 483 --repo orin-dx/callist
 
 Not done: changes in the Callisto repo (its AGENTS.md or PR template), which are recommendations only: say in its AGENTS.md to invoke `courier/changeset` for changesets and `courier/pr` for PR text, and add a changeset prompt to its PR template.
 
+## Paired evaluation runbook (track C)
+
+| Finding | Action | Evidence |
+| :-- | :-- | :-- |
+| Plugin changes were judged from single-run pilots; turns and rework had no measure | Added a `turns` subcommand to `tools/transcript-metrics.py` (human prompts, assistant turns, tool calls, subagent spawns, narrowly defined retries, reported subagent tokens; `--trial` emits a paired-analysis line) | `tests/test_transcript_metrics.py` (`TurnsTests`) |
+| No procedure for running the paired design on real work | `docs/evaluation-runbook.md`: three task kinds with control and treatment arms, fixed settings, capture commands, a blinded scoring sheet, minimum pairs and null-result limits, a results table | `DryRunTests` runs the pipeline on synthetic sessions: turns, trials file, `compare`, `agreement` |
+
+Not done: no real paired run yet, so no claim about the plugin changes follows from this. The control arm for spec gating (`50bdcf1b^`) and the pair counts are proposals for the owner to confirm.
+

@@ -19,6 +19,8 @@ How to decide whether a plugin, a skill, a prompt change or a token-saving tool 
 
 `tools/paired-analysis.py compare <trials> --baseline <arm>` implements rules 2, 3 and 9: per-task medians, an exact two-sided Wilcoxon signed-rank test on paired differences (normal approximation above 60 pairs), the median relative change, and for the quality score an exact two-sided sign test with the counts of better, worse and tied tasks. It reads a JSON list or JSON Lines of trials with `task`, `arm`, `run`, optional `error`, and numeric fields such as `score`, `cost`, `turns`, `tokens`.
 
+`docs/evaluation-runbook.md` applies these rules to three real task kinds (design ideation, spec drafting and gating, changeset and PR text) with task templates, a blinded scoring sheet and `tools/transcript-metrics.py turns` for turns to acceptance and rework.
+
 ## Which tool for which question
 
 | Question | Use |

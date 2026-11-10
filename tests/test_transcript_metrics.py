@@ -132,5 +132,112 @@ class ContextCompositionTests(unittest.TestCase):
         self.assertEqual(report["largest_results"], [{"characters": 900, "tool": "Bash", "session": session}])
 
 
+def human(text: str) -> dict:
+    return {"type": "user", "message": {"content": text}}
+
+
+def assistant_message(message_id: str, *blocks: dict) -> dict:
+    return {"type": "assistant", "message": {"id": message_id, "content": list(blocks)}}
+
+
+def error_result(identifier: str, content: str = "boom") -> dict:
+    record = tool_result(identifier, content)
+    record["message"]["content"][0]["is_error"] = True
+    return record
+
+
+def synthetic_session(path: Path, extra_failures: int) -> None:
+    """One session: 2 prompts, a denial then a changed retry, then `extra_failures` more failed-and-changed pairs."""
+    lines = [
+        human("draft the spec"),
+        assistant_message("m1", tool_use("a", "Bash", command="make test")),
+        assistant_message("m1", tool_use("b", "Agent", subagent_type="muse:exit-gate")),  # same message id, counted once
+        error_result("a"),
+        tool_result("b", "started", agent_id="g1"),
+        notification("g1", 1000, 1000),
+        assistant_message("m2", tool_use("c", "Bash", command="make test V=1")),
+        tool_result("c", "ok"),
+        human("<system-reminder>ignored</system-reminder>"),
+        {"type": "user", "isMeta": True, "message": {"content": "meta"}},
+        human("looks good"),
+    ]
+    for index in range(extra_failures):
+        lines += [
+            assistant_message(f"x{index}", tool_use(f"f{index}", "Read", file_path=f"a{index}")),
+            tool_result(f"f{index}", "Permission denied by user: The user doesn't want to proceed with this tool use."),
+            assistant_message(f"y{index}", tool_use(f"r{index}", "Read", file_path=f"b{index}")),
+            tool_result(f"r{index}", "ok"),
+        ]
+    path.write_text("\n".join(json.dumps(line) for line in lines), encoding="utf-8")
+
+
+class TurnsTests(unittest.TestCase):
+    def test_counts_prompts_turns_calls_spawns_and_narrow_retries(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "abcdef1234.jsonl"
+            synthetic_session(path, extra_failures=0)
+            row = metrics.session_turns(path)
+        self.assertEqual(row, {"prompts": 2, "turns": 2, "tool_calls": 3, "subagents": 1, "retries": 1, "subagent_tokens": 1000})
+
+    def test_same_input_rerun_and_other_tool_are_not_retries(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "s.jsonl"
+            lines = [
+                assistant_message("m1", tool_use("a", "Bash", command="ls")),
+                error_result("a"),
+                assistant_message("m2", tool_use("b", "Bash", command="ls")),  # same input
+                error_result("b"),
+                assistant_message("m3", tool_use("c", "Read", file_path="x")),  # other tool
+                error_result("c"),
+                human("try again"),
+                assistant_message("m4", tool_use("d", "Read", file_path="y")),  # after a human prompt
+            ]
+            path.write_text("\n".join(json.dumps(line) for line in lines), encoding="utf-8")
+            self.assertEqual(metrics.session_turns(path)["retries"], 0)
+
+
+class DryRunTests(unittest.TestCase):
+    """The runbook's commands on synthetic sessions: turns -> trials file -> paired compare."""
+
+    def test_runbook_pipeline_produces_expected_tables(self) -> None:
+        import contextlib
+        import io
+
+        paired = importlib.util.spec_from_file_location("paired_analysis", REPOSITORY_ROOT / "tools" / "paired-analysis.py")
+        assert paired is not None and paired.loader is not None
+        analysis = importlib.util.module_from_spec(paired)
+        paired.loader.exec_module(analysis)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            lines = []
+            for task, (control_failures, treatment_failures) in {"t1": (4, 1), "t2": (3, 0), "t3": (5, 1), "t4": (2, 0)}.items():
+                for arm, failures, score in (("control", control_failures, 0.5), ("treatment", treatment_failures, 0.8)):
+                    session = root / f"{task}-{arm}.jsonl"
+                    synthetic_session(session, failures)
+                    out = io.StringIO()
+                    with contextlib.redirect_stdout(out):
+                        self.assertEqual(metrics.main(["turns", "--file", str(session), "--trial", f"task={task},arm={arm},run=1,score={score}"]), 0)
+                    lines.append(out.getvalue().strip())
+            trials = root / "trials.jsonl"
+            trials.write_text("\n".join(lines), encoding="utf-8")
+            first = json.loads(lines[0])
+            self.assertEqual((first["task"], first["arm"], first["retries"], first["prompts"]), ("t1", "control", 5, 2))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                analysis.main(["compare", str(trials), "--baseline", "control", "--metrics", "score,turns,retries"])
+            table = out.getvalue()
+            labels = root / "labels.json"
+            labels.write_text(json.dumps([{"a": "pass", "b": "pass"}, {"a": "fail", "b": "fail"}, {"a": "pass", "b": "fail"}, {"a": "fail", "b": "fail"}]), encoding="utf-8")
+            agreement = io.StringIO()
+            with contextlib.redirect_stdout(agreement):
+                analysis.main(["agreement", str(labels)])
+        self.assertIn("4 tasks, 4 paired, 0 excluded", table)
+        self.assertIn("treatment versus control", table)
+        self.assertIn("turns: median delta -6 ", table)
+        self.assertIn("retries: median delta -3 ", table)
+        self.assertIn("better 4, worse 0, tied 0", table)
+        self.assertIn("4 items, raw agreement 75.0%, Cohen's kappa 0.50", agreement.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

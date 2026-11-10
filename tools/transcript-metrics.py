@@ -21,7 +21,28 @@ Subcommands (all read-only, standard library only):
            tokens: divide by about 4 for a rough token count. Use it to decide what to keep out of
            context before cutting anything.
 
+  turns    Per session: human prompts, assistant turns, tool calls, subagent spawns, retries and
+           subagent tokens, for "turns to acceptance" and "rework" in a paired evaluation. Select
+           sessions with --file PATH (repeatable) or --projects-dir/--match; --json prints rows;
+           --trial task=t1,arm=control,run=1[,score=0.8] prints one paired-analysis trial line per
+           session, adding the measured turns, prompts, tool_calls, retries, subagents and tokens.
+           Definitions, all approximate:
+             human prompt   a user record that is not a tool result, task notification, system
+                            reminder, local-command echo, meta record or sidechain record, and has
+                            non-empty text. Slash commands count; interrupts do not.
+             assistant turn distinct assistant message ids (one id can span several records),
+                            counting records without an id once each. Sidechain records are skipped.
+             tool call      tool_use blocks. Subagent spawns are the Agent or Task calls among them.
+             retry          a tool call that comes next after a failed result (is_error true, or a
+                            permission denial or user rejection message), uses the same tool name and
+                            has different input. Same-input reruns, a different tool, or a human
+                            prompt in between do not count. One failure yields at most one retry.
+           Limits: a retry with a changed command can be legitimate progress; a failed call retried
+           through another tool is missed; subagent internals live in separate files and are not
+           counted; the tokens are what subagents reported. Use it to compare arms, not to grade one.
+
 Examples:
+  python3 tools/transcript-metrics.py turns --file session-a.jsonl --trial task=t1,arm=control,run=1
   python3 tools/transcript-metrics.py agents --match 'orin-dx$|Projects-pages$'
   python3 tools/transcript-metrics.py gates ~/projects/pages/docs/specs
   python3 tools/transcript-metrics.py outputs --match 'Projects-pages$' --tool Bash --reduction 0.7
@@ -256,6 +277,85 @@ def command_context(files: list[Path], top: int) -> dict[str, Any]:
     }
 
 
+NON_PROMPT_PREFIXES = ("<task-notification", "<system-reminder", "<local-command", "[Request interrupted")
+DENIAL_MARKERS = ("doesn't want to proceed", "has been denied", "was denied", "permission denied by", "user rejected")
+
+
+def human_text(record: dict[str, Any]) -> str:
+    """Return the prompt text of a human user record, or an empty string for anything else."""
+    if record.get("type") != "user" or record.get("isMeta") or record.get("isSidechain"):
+        return ""
+    message = record.get("message")
+    content = message.get("content") if isinstance(message, dict) else None
+    if isinstance(content, str):
+        text = content
+    elif isinstance(content, list) and not any(isinstance(b, dict) and b.get("type") == "tool_result" for b in content):
+        text = "".join(str(b.get("text", "")) for b in content if isinstance(b, dict) and b.get("type") == "text")
+    else:
+        return ""
+    text = text.strip()
+    return "" if not text or text.startswith(NON_PROMPT_PREFIXES) else text
+
+
+def failed_result(block: dict[str, Any]) -> bool:
+    if block.get("is_error"):
+        return True
+    content = block.get("content")
+    text = content if isinstance(content, str) else " ".join(str(p.get("text", "")) for p in content if isinstance(p, dict)) if isinstance(content, list) else ""
+    return any(marker in text[:400] for marker in DENIAL_MARKERS)
+
+
+def session_turns(path: Path) -> dict[str, int]:
+    prompts = tool_calls = spawns = retries = 0
+    message_ids: set[str] = set()
+    anonymous = 0
+    calls: dict[str, tuple[str, Any]] = {}
+    failed: tuple[str, Any] | None = None
+    for record in records(path):
+        if human_text(record):
+            prompts += 1
+            failed = None
+            continue
+        if record.get("isSidechain"):
+            continue
+        message = record.get("message")
+        if record.get("type") == "assistant" and isinstance(message, dict) and message.get("content"):
+            if message.get("id"):
+                message_ids.add(str(message["id"]))
+            else:
+                anonymous += 1
+        for block in content_blocks(record):
+            if block.get("type") == "tool_use":
+                tool_calls += 1
+                spawns += block.get("name") in ("Agent", "Task")
+                if failed and failed[0] == block.get("name") and failed[1] != block.get("input"):
+                    retries += 1
+                failed = None
+                calls[str(block.get("id"))] = (str(block.get("name")), block.get("input"))
+            elif block.get("type") == "tool_result" and str(block.get("tool_use_id")) in calls and failed_result(block):
+                failed = calls[str(block["tool_use_id"])]
+    tokens = sum(task[1] for task in agent_tasks(path).values())
+    return {"prompts": prompts, "turns": len(message_ids) + anonymous, "tool_calls": tool_calls, "subagents": spawns, "retries": retries, "subagent_tokens": tokens}
+
+
+def command_turns(files: list[Path]) -> dict[str, dict[str, int]]:
+    return {path.stem[:8]: session_turns(path) for path in files}
+
+
+def parse_trial(spec: str) -> dict[str, Any]:
+    trial: dict[str, Any] = {}
+    for pair in filter(None, spec.split(",")):
+        key, _, value = pair.partition("=")
+        try:
+            trial[key] = int(value)
+        except ValueError:
+            try:
+                trial[key] = float(value)
+            except ValueError:
+                trial[key] = value
+    return trial
+
+
 def print_agents(report: dict[str, Any]) -> None:
     print("session agent_type calls total_tokens avg_tokens minutes")
     for (session, kind), v in sorted(report["types"].items(), key=lambda item: -item[1]["tokens"]):
@@ -281,9 +381,29 @@ def main(argv: list[str] | None = None) -> int:
         if name == "outputs":
             p.add_argument("--tool", default="Bash")
             p.add_argument("--reduction", type=float, default=0.7)
+    turns = sub.add_parser("turns")
+    turns.add_argument("--projects-dir", default="~/.claude/projects")
+    turns.add_argument("--match", default=".")
+    turns.add_argument("--file", action="append", default=[])
+    turns.add_argument("--json", action="store_true")
+    turns.add_argument("--trial", help="key=value pairs for a paired-analysis trial line, for example task=t1,arm=control,run=1,score=0.8")
     gates = sub.add_parser("gates")
     gates.add_argument("directory")
     args = parser.parse_args(argv)
+
+    if args.command == "turns":
+        files = [Path(f).expanduser() for f in args.file] or session_files(Path(os.path.expanduser(args.projects_dir)), args.match)
+        report = command_turns(files)
+        if args.trial:
+            for row in report.values():
+                print(json.dumps({**parse_trial(args.trial), **{k: v for k, v in row.items()}}))
+        elif args.json:
+            print(json.dumps(report, indent=2))
+        else:
+            print("session prompts turns tool_calls subagents retries subagent_tokens")
+            for session, row in report.items():
+                print(session, row["prompts"], row["turns"], row["tool_calls"], row["subagents"], row["retries"], row["subagent_tokens"])
+        return 0
 
     if args.command == "gates":
         report = command_gates(Path(args.directory).expanduser())
