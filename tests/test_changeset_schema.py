@@ -123,5 +123,29 @@ class CourierSourcesUseTheNewContractTests(unittest.TestCase):
         self.assertNotIn("changeset@2", text)
 
 
+class CommitAndPullRequestGuidanceTests(unittest.TestCase):
+    def read(self, relative: str) -> str:
+        return (REPOSITORY_ROOT / relative).read_text(encoding="utf-8")
+
+    def test_the_commit_analyzer_follows_the_repository_and_keeps_limits_out_of_the_scratchpad(self) -> None:
+        text = self.read("plugins/courier/agents/commit-analyzer.md")
+        self.assertIn("recent commit history", text)
+        self.assertIn("never forwarded", text)
+        self.assertIn("exit code", text)
+
+    def test_the_pr_narrator_follows_the_template_and_links_the_changeset(self) -> None:
+        text = self.read("plugins/courier/agents/pr-narrator.md")
+        self.assertIn("pull request template", text)
+        self.assertIn("courier/changeset", text)
+        self.assertIn("what they see and where", text)
+        self.assertIn("mark it as inferred", text)
+
+    def test_the_references_carry_the_same_rules(self) -> None:
+        self.assertIn("The scope table below applies only to this repository", self.read("shared/references/delivery/commits.md"))
+        github = self.read("shared/references/delivery/github.md")
+        self.assertIn("pull request template", github)
+        self.assertIn("courier/changeset", github)
+
+
 if __name__ == "__main__":
     unittest.main()

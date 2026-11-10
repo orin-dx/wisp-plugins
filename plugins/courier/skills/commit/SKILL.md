@@ -8,7 +8,7 @@ version: 2.0.1
 # Courier — Commit
 
 <overview>
-Reads the staged git diff and produces a conventional commit message. Delegates entirely to `commit-analyzer`.
+Reads the staged git diff and the repository's recent commit history, and produces a conventional commit message in that repository's style. Delegates entirely to `commit-analyzer`.
 </overview>
 
 <dispatch>

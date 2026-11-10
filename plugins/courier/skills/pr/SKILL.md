@@ -8,7 +8,7 @@ version: 2.0.2
 # Courier — PR
 
 <overview>
-Produces a PR title and body from a diff plus optional linked spec/requirement, then opens the PR. Delegates the narrative to `pr-narrator`; opening the PR is a visible external action and always requires explicit confirmation before the `gh pr create` call fires.
+Produces a PR title and body from a diff plus optional linked spec/requirement, following the repository's pull request template when it has one, then opens the PR. Delegates the narrative to `pr-narrator`; opening the PR is a visible external action and always requires explicit confirmation before the `gh pr create` call fires.
 </overview>
 
 <dispatch>

@@ -11,6 +11,7 @@
 ### Changed
 - `changeset-analyzer` works at the level of user-visible outcomes, states limits in the entry instead of `reasoning`, and drops the one-clause and one-sentence limits. `release-summarizer` carries layered summaries through and skips `disposition: none` entries.
 - The `changeset`, `commit` and `pr` skill descriptions now say to use the skill instead of writing the text by hand, and the README says when to use each.
+- `commit-analyzer` follows the repository's own scopes and subject style, puts limits in the body instead of the scratchpad, and marks breaking changes to command output, exit codes and file formats. `pr-narrator` follows a repository's pull request template, states what a consumer sees and the limits they will hit, and names or recommends a changeset.
 
 ## [3.0.3] - 2026-09-10
 
