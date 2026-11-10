@@ -128,3 +128,12 @@ Live run: `courier:changeset-analyzer` on `gh pr diff 483 --repo orin-dx/callist
 
 Not done: changes in the Callisto repo (its AGENTS.md or PR template), which are recommendations only: say in its AGENTS.md to invoke `courier/changeset` for changesets and `courier/pr` for PR text, and add a changeset prompt to its PR template.
 
+
+## Track D: routing wording and context hygiene (ranger, sentinel, muse, scribe)
+
+| Finding | Action | Evidence |
+| :--- | :--- | :--- |
+| Skills were invoked 7 times in 812 transcripts; assistants wrote specs, reviews and verdicts freehand | The skill descriptions now lead with the situation and request phrases; "Use this, not a freehand ..." appears only where a freehand alternative exists (`ranger/audit`, `sentinel/gate`, `muse/component`, `scribe/draft-spec`, `audit-spec`, `gate-spec`); read-only diagnostics (`spec-drift`, `audit-architecture`, `verify-spec`, `architect`, `promote`) make no such claim. `muse/sketch` says to use it instead of describing options in prose. Muse `sketch` and `promote` descriptions cut to 450 characters or fewer. Four READMEs gained one "about to do it by hand" line | `tests/test_skill_routing.py` |
+| Bash output and scripts were about 60% of context | `shared/references/tooling/context.md` is routed from the ranger, sentinel, muse sketch and scribe audit-architecture and spec-drift skills; from the `<load_first>` of ranger recon, scanner, boundary-tracer and adversary, sentinel recon and verifier, scribe arch-auditor, drift-checker and verifier, and muse explorer; from the Codex counterparts; and in the Codex catalog `runtime_files` | `tests/test_skill_routing.py`, `just check` |
+
+Not done: the descriptions' effect on invocation rate cannot be measured here; it needs a transcript comparison after release. The sketch, promote and spike record shapes stay inline pending the path-resolution investigation. The new `load_first` paths are relative to the plugin root, so they carry the working-directory risk recorded in the courier finding above. Exit-gate agents were left to track B.

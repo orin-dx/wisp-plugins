@@ -1,7 +1,7 @@
 ---
 name: promote
 description: >-
-  Trigger when a sketch or a spike should become real work: "promote this option", "let's build option B", "turn the chosen design into a requirement", "that spike worked, make it a feature", "carry this forward". Reads an option-set@1 with a chosen option, or a spike-report@1 that worked or partly worked, and produces a requirement@1 that carries the decision, the visual reference and what was and was not verified. It is the only route from an exploration artifact into the gated stages. It does not build, spec or plan; it names the next stage and stops.
+  Use when a chosen sketch option or a spike that worked should become real work: "promote this option", "let's build option B", "turn the chosen design into a requirement", "that spike worked, make it a feature". Turns an option-set@1 or spike-report@1 into a requirement@1 with the decision, render and what was not verified. The only route from exploration into the gated stages; it does not build, spec or plan.
 version: 1.0.0
 ---
 

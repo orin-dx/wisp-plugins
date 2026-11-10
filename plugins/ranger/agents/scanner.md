@@ -24,6 +24,8 @@ Full scan: load both files for each detected language:
 - Go: `shared/references/hazards/go.md` and `shared/references/hazards/go-boundaries.md`.
 
 Focused scan: load only the applicable file from that list; T7 and T10 use the boundary file.
+
+Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>

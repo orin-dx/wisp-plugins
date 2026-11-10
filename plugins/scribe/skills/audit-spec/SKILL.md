@@ -1,7 +1,7 @@
 ---
 name: audit-spec
 description: >-
-  Trigger when the user asks to review a spec's quality: "review this spec", "is this spec complete?", "audit this spec". Adversarially reviews a spec@1 on its own terms and returns a structured issue list with rewritten suggested fixes.
+  Use this, not a freehand review, whenever a spec's quality is reviewed: "review this spec", "is this spec complete?", "audit this spec", "what is missing from this spec". Adversarially checks a spec@1 on its own terms for untestable criteria, ambiguity, missing error cases and scope overlap; returns issues with rewritten fixes.
 version: 2.0.0
 ---
 

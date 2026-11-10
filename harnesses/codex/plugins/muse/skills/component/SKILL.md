@@ -1,6 +1,6 @@
 ---
 name: component
-description: Turn UI intent into an implementation-ready component specification. Use when the user asks to specify, audit, or gate a component design before planning or implementation.
+description: Turn UI intent into an implementation-ready component specification. Use this, not a freehand spec, when the user asks to specify, audit, or gate a component design before planning or implementation.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.

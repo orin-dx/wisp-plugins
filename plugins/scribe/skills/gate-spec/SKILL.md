@@ -1,7 +1,7 @@
 ---
 name: gate-spec
 description: >-
-  Trigger when a spec@1 needs a binding pass/fail judgment before planning: "gate this spec", "is this spec ready?", "check this spec before we plan it". Default disposition is fail. Checks the spec on its own terms and returns a verdict with blockers specific enough for scribe/draft-spec to act on.
+  Use this, not a freehand verdict, whenever a spec must be judged ready before planning: "gate this spec", "is this spec ready?", "check this spec before we plan it". Default disposition is fail. Checks the spec on its own terms and returns a verdict@3 with blockers specific enough for scribe/draft-spec to act on.
 version: 2.1.0
 ---
 

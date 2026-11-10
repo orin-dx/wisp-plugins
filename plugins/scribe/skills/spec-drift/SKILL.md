@@ -1,7 +1,7 @@
 ---
 name: spec-drift
 description: >-
-  Trigger when the user asks whether implemented code still matches its spec, weeks or months later: "check spec drift", "does the code still match this spec?", "has this spec drifted?". Given spec_file_path and a workspace root, reports each criterion as covered, uncovered, or drifted. On-demand diagnostic, not a gate.
+  Use when asked whether implemented code still matches its spec, weeks or months later: "check spec drift", "does the code still match this spec?", "has this spec drifted?". Given spec_file_path and a workspace root, reports each criterion as covered, uncovered or drifted. On-demand diagnostic, not a gate.
 version: 2.0.0
 ---
 
@@ -19,6 +19,8 @@ Ongoing maintenance health check: does the code still do what the spec says, ind
 
 <references>
 `shared/schemas/spec@1.json`
+
+Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
 </references>
 
 <io>

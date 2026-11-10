@@ -1,7 +1,7 @@
 ---
 name: architect
 description: >-
-  Trigger when `finding-report@2`, `implementation-review@2`, or `implementation-result@1` identifies a structural defect class. Produce the smallest `spec@1` that makes recurrence impossible or machine-detectable through a type, API, boundary, invariant, lint, test, or CI rule.
+  Use when a finding-report@2, implementation-review@2 or implementation-result@1 identifies a structural defect class, or the same kind of defect keeps recurring: "make this class of bug impossible". Produces the smallest spec@1 that makes recurrence impossible or machine-detectable through a type, API, boundary, invariant, lint, test or CI rule.
 version: 2.2.0
 ---
 

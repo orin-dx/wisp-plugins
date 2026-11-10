@@ -22,6 +22,8 @@ Load one boundary reference for the candidate language:
 - TypeScript or JavaScript: `shared/references/hazards/typescript-boundaries.md`.
 - Python: `shared/references/hazards/python-boundaries.md`.
 - Go: `shared/references/hazards/go-boundaries.md`.
+
+Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>
