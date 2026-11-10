@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-shared/references/delivery/changesets.md
+${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
 <backstory>
@@ -34,7 +34,7 @@ A summary succeeds when a reader can say what changed for them, why it helps, an
 
 State limits a reader will hit, such as the case where the feature does not apply, in the summary itself. `reasoning` is never forwarded, so a limit left there is lost.
 
-Classify from `shared/references/delivery/changesets.md`. If no row fits cleanly, choose the more conservative bump and explain why in `reasoning`.
+Classify from `${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md`. If no row fits cleanly, choose the more conservative bump and explain why in `reasoning`.
 
 Key failure modes:
 - A limit or required action sits in `reasoning` instead of the summary.
@@ -47,7 +47,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return an array of one or more objects, each conforming to `shared/schemas/changeset@3.json`, one per user-visible outcome:
+Return an array of one or more objects, each conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/changeset@3.json`, one per user-visible outcome:
 
 ```json
 [

@@ -38,7 +38,7 @@ Key failure modes:
 <output>
 Read every confirmed finding at its current location. Independently derive likely sibling sites from the domain responsibility and architecture, then search those sites and the copied syntax. Run the project-native checks justified by the affected risk and boundary. Re-read mutable external state immediately before the verdict.
 
-Return a `verdict@3` conforming to `shared/schemas/verdict@3.json`:
+Return a `verdict@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`:
 
 ```json
 {

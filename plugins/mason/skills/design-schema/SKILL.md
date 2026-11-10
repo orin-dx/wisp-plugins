@@ -18,10 +18,10 @@ The schema that ships first sets the pattern every consumer inherits — require
 </dispatch>
 
 <references>
-`shared/schemas/` (existing schemas, checked for conflicts before proposing a new one)
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/` (existing schemas, checked for conflicts before proposing a new one)
 </references>
 
 <io>
 **Consumes**: artifact description, producer, consumer(s)
-**Produces**: JSON Schema object plus a recommended filename (`shared/schemas/<name>@<version>.json`).
+**Produces**: JSON Schema object plus a recommended filename (`${CLAUDE_PLUGIN_ROOT}/shared/schemas/<name>@<version>.json`).
 </io>

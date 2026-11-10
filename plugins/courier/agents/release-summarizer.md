@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-shared/references/delivery/changesets.md
+${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
 <backstory>
@@ -37,7 +37,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return a `release-artifact@3` conforming to `shared/schemas/release-artifact@3.json`:
+Return a `release-artifact@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/release-artifact@3.json`:
 
 ```json
 {

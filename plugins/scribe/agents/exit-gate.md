@@ -30,7 +30,7 @@ A pass verdict is genuine only when no condition has been relaxed. The key failu
 </judgment>
 
 <output>
-Return `verdict@3` conforming to `shared/schemas/verdict@3.json`. Set `artifact_type` to `"spec@1"` and include `verified_scope`, `coverage_gaps`, and `pending_checks`.
+Return `verdict@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`. Set `artifact_type` to `"spec@1"` and include `verified_scope`, `coverage_gaps`, and `pending_checks`.
 
 WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
 WHEN listing a blocker, THE SYSTEM SHALL name the criterion_id or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.

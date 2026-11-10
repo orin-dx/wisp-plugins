@@ -18,7 +18,7 @@ Turns a pile of "high priority" requirements into an actual order, with a ration
 </dispatch>
 
 <references>
-`shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

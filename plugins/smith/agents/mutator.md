@@ -16,10 +16,10 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-For Rust workspaces: shared/references/verification/rust.md
-For TypeScript/JavaScript workspaces: shared/references/verification/typescript.md
-For Python workspaces: shared/references/verification/python.md
-For Go workspaces: shared/references/verification/go.md
+For Rust workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/rust.md
+For TypeScript/JavaScript workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/typescript.md
+For Python workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/python.md
+For Go workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/go.md
 </load_first>
 
 <backstory>
@@ -40,7 +40,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return `mutation-report@2` conforming to `shared/schemas/mutation-report@2.json`.
+Return `mutation-report@2` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/mutation-report@2.json`.
 
 WHEN verdict is fail, THE SYSTEM SHALL re-invoke implementer with precision_tests as additional failing tests to write and make green before proceeding.
 WHEN no suitable mutation tool is available, THE SYSTEM SHALL use a safe deliberate fault when it can test the changed claim without risking shared state; otherwise it SHALL return `coverage_gap` with the reason.

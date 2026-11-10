@@ -35,7 +35,7 @@ When a family suggests a missing concept, state, operation, boundary, abstractio
 
 ## Verification depth
 
-Choose evidence by risk, not language ritual. Use the project-native test, mutation, property, fuzz, race, integration, or boundary tools that can discriminate the suspected defect. A property or fuzz check needs a meaningful generator and oracle. Record unsupported or impractical checks as coverage gaps; do not imply coverage. Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
+Choose evidence by risk, not language ritual. Use the project-native test, mutation, property, fuzz, race, integration, or boundary tools that can discriminate the suspected defect. A property or fuzz check needs a meaningful generator and oracle. Record unsupported or impractical checks as coverage gaps; do not imply coverage. Keep command output and scripts out of the thread as `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` says.
 
 ## Dispatch
 
@@ -49,11 +49,11 @@ Choose evidence by risk, not language ritual. Use the project-native test, mutat
 
 ## Contracts
 
-- Candidates: `shared/schemas/candidate@1.json`
-- Candidate assessment: `shared/schemas/candidate-assessment@1.json`
-- Workspace: `shared/schemas/workspace-manifest@1.json`
-- Boundary evidence: `shared/schemas/field-survival-map@1.json`
-- Findings: `shared/schemas/finding-report@2.json`
-- Exit verdict: `shared/schemas/verdict@3.json`
+- Candidates: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/candidate@1.json`
+- Candidate assessment: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/candidate-assessment@1.json`
+- Workspace: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/workspace-manifest@1.json`
+- Boundary evidence: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/field-survival-map@1.json`
+- Findings: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/finding-report@2.json`
+- Exit verdict: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`
 
 Plausible findings pass to `flagged_for_review`; they never become remediation blockers without confirmation.

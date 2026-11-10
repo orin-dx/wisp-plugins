@@ -18,7 +18,7 @@ Reads the staged git diff and the repository's recent commit history, and produc
 </dispatch>
 
 <references>
-`shared/references/delivery/commits.md` — type/scope conventions, commit message rules, and the voice standard for this artifact.
+`${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/commits.md` — type/scope conventions, commit message rules, and the voice standard for this artifact.
 </references>
 
 <io>

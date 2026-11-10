@@ -18,9 +18,9 @@ Ongoing maintenance health check: does the code still do what the spec says, ind
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`
 
-Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
+Keep command output and scripts out of the thread as `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` says.
 </references>
 
 <io>

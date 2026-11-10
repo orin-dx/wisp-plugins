@@ -32,7 +32,7 @@ One skill, one pipeline — not a menu of separately-invokable modes. `recon` ma
 ---
 
 <output>
-All research concludes in a `research-report@1` (schema: `shared/schemas/research-report@1.json`). The report distinguishes:
+All research concludes in a `research-report@1` (schema: `${CLAUDE_PLUGIN_ROOT}/shared/schemas/research-report@1.json`). The report distinguishes:
 - **confirmed** — read directly from source
 - **likely** — strong inference from evidence
 - **assumed** — unverified, flagged explicitly

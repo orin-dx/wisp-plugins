@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>
@@ -40,7 +40,7 @@ Key failure modes:
 </judgment>
 
 <output>
-option-set@1 JSON conforming to shared/schemas/option-set@1.json, containing exactly one entry in `options`:
+option-set@1 JSON conforming to ${CLAUDE_PLUGIN_ROOT}/shared/schemas/option-set@1.json, containing exactly one entry in `options`:
 
 ```json
 {

@@ -8,7 +8,7 @@ version: 2.0.0
 # Courier — Receive Feedback
 
 <overview>
-Bundles a review package — diff summary, linked spec, test results, open questions — so the author can respond without re-reading the whole thread. Delegates entirely to `review-preprocessor`. Mechanical assembly only; `review-preprocessor`'s own judgment explicitly refuses to categorize comment priority, since it has no visibility into whether the underlying code is right — that's what produced the comments in the first place, and it's the caller's call to make, informed by `shared/references/delivery/github.md`'s vocabulary.
+Bundles a review package — diff summary, linked spec, test results, open questions — so the author can respond without re-reading the whole thread. Delegates entirely to `review-preprocessor`. Mechanical assembly only; `review-preprocessor`'s own judgment explicitly refuses to categorize comment priority, since it has no visibility into whether the underlying code is right — that's what produced the comments in the first place, and it's the caller's call to make, informed by `${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md`'s vocabulary.
 </overview>
 
 <dispatch>
@@ -18,10 +18,10 @@ Bundles a review package — diff summary, linked spec, test results, open quest
 </dispatch>
 
 <references>
-`shared/references/delivery/github.md` — the Conventional Comments / Google review-label vocabulary (`praise:`/`nitpick:`/`issue:`/`suggestion:`/`question:` or `Nit:`/`Optional:`/`FYI:`) the caller applies by hand when triaging the assembled package; `review-preprocessor` does not load or apply it.
+`${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md` — the Conventional Comments / Google review-label vocabulary (`praise:`/`nitpick:`/`issue:`/`suggestion:`/`question:` or `Nit:`/`Optional:`/`FYI:`) the caller applies by hand when triaging the assembled package; `review-preprocessor` does not load or apply it.
 </references>
 
 <io>
 **Consumes**: PR diff, optionally linked `spec@1` or `requirement@1`, test results, incoming review comments
-**Produces**: review package (diff summary, linked spec, test results, open questions) — the caller triages the incoming comments against it using `shared/references/delivery/github.md`'s vocabulary; `review-preprocessor` does not categorize them.
+**Produces**: review package (diff summary, linked spec, test results, open questions) — the caller triages the incoming comments against it using `${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md`'s vocabulary; `review-preprocessor` does not categorize them.
 </io>

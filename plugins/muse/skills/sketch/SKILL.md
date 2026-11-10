@@ -20,9 +20,9 @@ The explorer is internal to this skill. Do not call it on its own, and never ask
 </dispatch>
 
 <references>
-`shared/references/architecture/modes.md`, `shared/schemas/option-set@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/references/architecture/modes.md`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/option-set@1.json`
 
-When running render or build commands, keep command output and scripts out of the thread as `shared/references/tooling/context.md` says. Look at one render at a time.
+When running render or build commands, keep command output and scripts out of the thread as `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` says. Look at one render at a time.
 </references>
 
 <io>

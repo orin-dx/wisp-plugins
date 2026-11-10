@@ -18,9 +18,9 @@ Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consist
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/arch-model@2.json`, `shared/schemas/arch-audit@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/arch-model@2.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/arch-audit@1.json`
 
-Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
+Keep command output and scripts out of the thread as `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` says.
 </references>
 
 <orchestration>

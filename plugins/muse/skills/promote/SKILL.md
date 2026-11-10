@@ -16,7 +16,7 @@ None. This skill runs in the primary agent. Do not delegate it.
 </dispatch>
 
 <references>
-`shared/references/architecture/modes.md`, `shared/schemas/option-set@1.json`, `shared/schemas/spike-report@1.json`, `shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/references/architecture/modes.md`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/option-set@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/spike-report@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

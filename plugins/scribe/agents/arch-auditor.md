@@ -16,9 +16,9 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/workspace/conventions.md` before searching for the persisted model — it names where the architecture model and gated specs live on disk, and what an absent model does and doesn't prove.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/workspace/conventions.md` before searching for the persisted model — it names where the architecture model and gated specs live on disk, and what an absent model does and doesn't prove.
 In build or refresh mode, check `docs/adr/README.md` for an accepted record governing an invariant before writing it; cite the record's path as `decision_ref` when one exists, and leave the field absent otherwise — most invariants will not have one.
-Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>
@@ -40,7 +40,7 @@ An architectural fit check is genuine when every issue cites the specific module
 <output>
 Determine mode from the input: build mode when no arch-model@2 is found at `docs/architecture/model.json` and none is supplied, or when a refresh is explicitly requested; check mode otherwise.
 
-**Check mode** — arch-audit@1 conforming to shared/schemas/arch-audit@1.json:
+**Check mode** — arch-audit@1 conforming to ${CLAUDE_PLUGIN_ROOT}/shared/schemas/arch-audit@1.json:
 
 ```json
 {
@@ -58,7 +58,7 @@ Determine mode from the input: build mode when no arch-model@2 is found at `docs
 }
 ```
 
-**Build mode** — arch-model@2 conforming to shared/schemas/arch-model@2.json:
+**Build mode** — arch-model@2 conforming to ${CLAUDE_PLUGIN_ROOT}/shared/schemas/arch-model@2.json:
 
 ```json
 {

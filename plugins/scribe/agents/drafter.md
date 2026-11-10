@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/verification/gate-readiness.md` before drafting; its spec checklist is what the exit gate applies to this spec.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/gate-readiness.md` before drafting; its spec checklist is what the exit gate applies to this spec.
 </load_first>
 
 <backstory>
@@ -37,7 +37,7 @@ Key failure modes, independent of each other:
 </judgment>
 
 <output>
-spec@1 JSON conforming to shared/schemas/spec@1.json:
+spec@1 JSON conforming to ${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json:
 
 ```json
 {
@@ -59,6 +59,6 @@ Omit `api_surface` entirely when the feature has no callable interface. Omit `re
 
 WHEN `api_surface` references existing codebase functions, structs, or types, THE SYSTEM SHALL verify the signature against live source code before finalizing the draft.
 WHEN a genuinely unknown item cannot be resolved from the requirement or research report, THE SYSTEM SHALL place it in `non_goals` or `reasoning` rather than emit a TBD.
-WHEN the draft is complete and before returning it, THE SYSTEM SHALL run every check in the spec checklist of `shared/references/verification/gate-readiness.md` against it, fix each miss, and recheck neighboring criteria; IF the file cannot be read, THE SYSTEM SHALL still check for vague language, TBDs, missing error cases, uncovered requirement behavior, and scope beyond one planning cycle.
+WHEN the draft is complete and before returning it, THE SYSTEM SHALL run every check in the spec checklist of `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/gate-readiness.md` against it, fix each miss, and recheck neighboring criteria; IF the file cannot be read, THE SYSTEM SHALL still check for vague language, TBDs, missing error cases, uncovered requirement behavior, and scope beyond one planning cycle.
 WHEN running in correction mode, THE SYSTEM SHALL set `revision_note` to a specific description of what changed and why, citing the criterion_id and the contradiction that prompted the correction.
 </output>

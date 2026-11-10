@@ -28,7 +28,7 @@ The verdict is genuine when a pass reflects zero ambiguity and a fail produces b
 </judgment>
 
 <output>
-Produce a `verdict@3` conforming to `shared/schemas/verdict@3.json`:
+Produce a `verdict@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`:
 
 ```json
 {

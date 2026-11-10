@@ -30,7 +30,7 @@ Without `spec_file_path` set, downstream agents fall back to reading the spec fr
 </orchestration>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/verdict@3.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`
 </references>
 
 <io>

@@ -26,7 +26,7 @@ IF the same `criterion_id` triggers `spec_contradiction` a second time after alr
 </orchestration>
 
 <references>
-`shared/schemas/spec@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`
 </references>
 
 <io>

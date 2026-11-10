@@ -18,7 +18,7 @@ Checks whether a spec, taken on its own terms, is complete, unambiguous, and imp
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`
 </references>
 
 <io>

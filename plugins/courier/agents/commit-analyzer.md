@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-shared/references/delivery/commits.md
+${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/commits.md
 </load_first>
 
 <backstory>
@@ -49,7 +49,7 @@ Return structured JSON:
 `reasoning` is a scratchpad — explain how type and scope were chosen, in 1-2 sentences. It is not forwarded downstream, so a longer scratchpad buys nothing.
 
 WHEN the change removes or alters a public API, command output, exit code or file format in a way that breaks existing callers or scripts, set `breaking` to `true` and add a `BREAKING CHANGE:` footer stating old behavior, new behavior and the required action.
-WHEN the repository's recent history uses different scopes or subject conventions from `shared/references/delivery/commits.md`, THE SYSTEM SHALL follow the repository's.
+WHEN the repository's recent history uses different scopes or subject conventions from `${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/commits.md`, THE SYSTEM SHALL follow the repository's.
 NEVER use the diff's file names or variable names as the commit message — explain the intent, not the mechanism.
 IF scope cannot be determined from the diff alone, set it to `null`.
 </output>

@@ -18,7 +18,7 @@ Confirms a spec draft actually traces back to what the requirement (and research
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/requirement@1.json`, `shared/schemas/research-report@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/research-report@1.json`
 </references>
 
 <io>

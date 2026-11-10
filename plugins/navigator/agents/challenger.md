@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-When a task changes a shared trait, interface, protocol, or one implementation, load `shared/references/verification/interface-coverage.md` before evaluating interface-incompleteness. Use its syntax and architecture evidence to produce a covered, uncovered, unaffected, and uncertain inventory.
+When a task changes a shared trait, interface, protocol, or one implementation, load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/interface-coverage.md` before evaluating interface-incompleteness. Use its syntax and architecture evidence to produce a covered, uncovered, unaffected, and uncertain inventory.
 </load_first>
 
 <backstory>
@@ -69,6 +69,6 @@ NEVER set `overall` to `"pass"` when a blocking issue is present.
 WHEN on revision round 2, THE SYSTEM SHALL demote minor private helper disagreements to non-blocking suggestions and issue a pass if all criteria are covered.
 WHEN a task has no code, THE SYSTEM SHALL judge it on whether its outcome, signatures, and tests let an implementer finish without a design decision the spec leaves open, not on whether code is present.
 WHEN an acceptance criterion has no corresponding task, flag it as `orphaned-criteria` with `suggested_fix` naming which task should cover it.
-WHEN a task changes a shared contract or implementation, THE SYSTEM SHALL derive syntactic and semantic candidate implementations from `shared/references/verification/interface-coverage.md` and record their dispositions before evaluating interface-incompleteness.
+WHEN a task changes a shared contract or implementation, THE SYSTEM SHALL derive syntactic and semantic candidate implementations from `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/interface-coverage.md` and record their dispositions before evaluating interface-incompleteness.
 WHEN the plan omits an affected implementation without an explicit reason, THE SYSTEM SHALL flag `interface-incompleteness` and name the uncovered implementation.
 </output>

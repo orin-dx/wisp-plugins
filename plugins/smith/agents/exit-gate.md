@@ -34,7 +34,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return `verdict@3` conforming to `shared/schemas/verdict@3.json`.
+Return `verdict@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`.
 
 The verdict must include:
 
@@ -55,7 +55,7 @@ WHEN listing a blocker, THE SYSTEM SHALL name the criterion or section in `crite
 WHEN the verdict is fail, THE SYSTEM SHALL return blockers to implementer for targeted fixes.
 WHEN retry_count for a blocker exceeds 3, THE SYSTEM SHALL return fail with an `escalation_required` blocker and halt automated retries.
 WHEN mutator did not run and was not reported as unavailable, THE SYSTEM SHALL return fail with a missing_mutation_gate blocker.
-WHEN an implementation review does not conform to `shared/schemas/implementation-review@2.json`, THE SYSTEM SHALL return fail with an invalid_implementation_review blocker.
+WHEN an implementation review does not conform to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/implementation-review@2.json`, THE SYSTEM SHALL return fail with an invalid_implementation_review blocker.
 WHEN implementation-review status is not `approved`, THE SYSTEM SHALL return fail with an unresolved_review blocker.
 WHEN reviewing a changed defect, THE SYSTEM SHALL independently derive semantic candidates from current code and architecture rather than repeat the reviewer's search terms; depth SHALL match the scope and risk.
 WHEN a defect family is present, THE SYSTEM SHALL verify every instance, semantic-model assessment, architecture assessment, and disposition against current code.

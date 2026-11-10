@@ -18,14 +18,14 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 <load_first>
 Full scan: load both files for each detected language:
 
-- Rust: `shared/references/hazards/rust.md` and `shared/references/hazards/rust-boundaries.md`.
-- TypeScript or JavaScript: `shared/references/hazards/typescript.md` and `shared/references/hazards/typescript-boundaries.md`.
-- Python: `shared/references/hazards/python.md` and `shared/references/hazards/python-boundaries.md`.
-- Go: `shared/references/hazards/go.md` and `shared/references/hazards/go-boundaries.md`.
+- Rust: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/rust.md` and `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/rust-boundaries.md`.
+- TypeScript or JavaScript: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/typescript.md` and `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/typescript-boundaries.md`.
+- Python: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/python.md` and `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/python-boundaries.md`.
+- Go: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/go.md` and `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/go-boundaries.md`.
 
 Focused scan: load only the applicable file from that list; T7 and T10 use the boundary file.
 
-Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>
@@ -47,7 +47,7 @@ Key failure modes:
 <output>
 Use your search tool to translate each signal into a repository-appropriate search expression. Preserve an explicit reference search when provided. For each match, use your file reading tool to capture enough surrounding code for the excerpt and taxonomy fields. Do not scan `dead_files`.
 
-Return a flat JSON array of candidate@1 entries conforming to shared/schemas/candidate@1.json:
+Return a flat JSON array of candidate@1 entries conforming to ${CLAUDE_PLUGIN_ROOT}/shared/schemas/candidate@1.json:
 
 ```json
 [

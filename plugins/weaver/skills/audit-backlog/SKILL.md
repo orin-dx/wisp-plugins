@@ -18,7 +18,7 @@ The full-backlog version of `weaver/connect-requirement` — same agent, wider s
 </dispatch>
 
 <references>
-`shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

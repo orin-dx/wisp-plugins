@@ -36,7 +36,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Produce a `plan@1` conforming to `shared/schemas/plan@1.json`. Propagate `spec_file_path` and `linked_requirement` from the source spec into the plan, and set `spec_hash` to a content hash of the spec file at plan time. Every task must include:
+Produce a `plan@1` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/plan@1.json`. Propagate `spec_file_path` and `linked_requirement` from the source spec into the plan, and set `spec_hash` to a content hash of the spec file at plan time. Every task must include:
 - The outcome: one or two sentences on what is true after the task
 - Exact file paths to create or modify
 - A brief note on implementation approach, decided before the test steps are written

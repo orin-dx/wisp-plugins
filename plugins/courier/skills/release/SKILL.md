@@ -18,10 +18,10 @@ A release is an aggregation of changesets already written correctly at authoring
 </dispatch>
 
 <references>
-`shared/references/delivery/changesets.md` — the Semver Decision Guide (now machine-enforced via each changeset's `semver_impact`) and Release Notes Generation format.
+`${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md` — the Semver Decision Guide (now machine-enforced via each changeset's `semver_impact`) and Release Notes Generation format.
 </references>
 
 <io>
 **Consumes**: list of `changeset@3` entries, the prior released version, a release date
-**Produces**: `release-artifact@3` conforming to `shared/schemas/release-artifact@3.json`.
+**Produces**: `release-artifact@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/release-artifact@3.json`.
 </io>

@@ -18,10 +18,10 @@ A changeset is the changelog entry, written once at authoring time and later agg
 </dispatch>
 
 <references>
-`shared/references/delivery/changesets.md` — changeset format, disposition, the Semver table (including CLI and serialized-file rows), entry shape, and the voice standard for this artifact.
+`${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md` — changeset format, disposition, the Semver table (including CLI and serialized-file rows), entry shape, and the voice standard for this artifact.
 </references>
 
 <io>
 **Consumes**: git diff (a single PR's, or a larger backlog/catch-up diff since the last release), optionally a linked `spec@1`, optionally smith's aggregated `criteria_evidence`
-**Produces**: one or more `changeset@3` entries conforming to `shared/schemas/changeset@3.json` — one per user-visible outcome, never one entry bundling unrelated outcomes together. Route to `courier/pr` or `courier/release` depending on the next stage.
+**Produces**: one or more `changeset@3` entries conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/changeset@3.json` — one per user-visible outcome, never one entry bundling unrelated outcomes together. Route to `courier/pr` or `courier/release` depending on the next stage.
 </io>

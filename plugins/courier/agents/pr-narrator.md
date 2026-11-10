@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-shared/references/delivery/github.md
+${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md
 </load_first>
 
 <backstory>
@@ -44,7 +44,7 @@ Return structured JSON:
 ```json
 {
   "title": "string (imperative mood, under 70 chars — conventional commit subject style)",
-  "body": "string (markdown — outcome-led Summary, observed Verification, and only the Risk and Related sections that apply; matches shared/references/delivery/github.md)",
+  "body": "string (markdown — outcome-led Summary, observed Verification, and only the Risk and Related sections that apply; matches ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md)",
   "labels": ["string"],
   "reasoning": "string"
 }

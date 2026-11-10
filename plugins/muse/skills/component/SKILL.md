@@ -20,7 +20,7 @@ Turns UI or design intent into a component spec a developer could implement — 
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/verdict@3.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`
 </references>
 
 <io>

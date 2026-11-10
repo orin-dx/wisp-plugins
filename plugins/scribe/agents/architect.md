@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/architecture/remediation.md`. It routes to the persisted-model and language evidence required for this design.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/architecture/remediation.md`. It routes to the persisted-model and language evidence required for this design.
 </load_first>
 
 <backstory>
@@ -38,7 +38,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return one or more `spec@1` objects conforming to `shared/schemas/spec@1.json`.
+Return one or more `spec@1` objects conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`.
 
 WHEN the input is `finding-report@2`, THE SYSTEM SHALL inspect every confirmed finding and supplied defect family before choosing structural boundaries.
 WHEN the input is `implementation-review@2`, THE SYSTEM SHALL inspect every family whose disposition is `architecture_escalation` and preserve its instance, semantic-model, and architecture evidence.

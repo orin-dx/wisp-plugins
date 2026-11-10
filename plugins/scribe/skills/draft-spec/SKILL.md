@@ -18,7 +18,7 @@ Turns a requirement (and optional research report) into a spec a developer could
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

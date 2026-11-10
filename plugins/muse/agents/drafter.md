@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/verification/gate-readiness.md` before drafting; its spec checklist is what the exit gate applies to this spec.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/gate-readiness.md` before drafting; its spec checklist is what the exit gate applies to this spec.
 </load_first>
 
 <backstory>
@@ -37,7 +37,7 @@ Key failure modes:
 </judgment>
 
 <output>
-spec@1 JSON conforming to shared/schemas/spec@1.json:
+spec@1 JSON conforming to ${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json:
 
 ```json
 {
@@ -58,6 +58,6 @@ spec@1 JSON conforming to shared/schemas/spec@1.json:
 `api_surface` entries name the component's props (one entry per prop, `signature` carrying its type/domain). Omit `api_surface` entirely only if the component genuinely takes no props. Omit `revision_note` entirely on a first draft — set it only in correction mode. The `reasoning` field is scratchpad — never forwarded downstream. Do not set `spec_file_path` — the muse skill orchestrator sets it after writing the file post-gate; in correction mode it stays unchanged since the file path does not change across a correction.
 
 WHEN a genuinely unknown item cannot be resolved from the requirement or design reference, THE SYSTEM SHALL place it in `non_goals` or `reasoning` rather than emit a TBD.
-WHEN the draft is complete and before returning it, THE SYSTEM SHALL run every check in the spec checklist of `shared/references/verification/gate-readiness.md` against it, fix each miss, and recheck neighboring criteria; IF the file cannot be read, THE SYSTEM SHALL still check for vague language, TBDs, missing error cases, missing states, missing accessibility criteria, and scope beyond one planning cycle.
+WHEN the draft is complete and before returning it, THE SYSTEM SHALL run every check in the spec checklist of `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/gate-readiness.md` against it, fix each miss, and recheck neighboring criteria; IF the file cannot be read, THE SYSTEM SHALL still check for vague language, TBDs, missing error cases, missing states, missing accessibility criteria, and scope beyond one planning cycle.
 WHEN running in correction mode, THE SYSTEM SHALL set `revision_note` to a specific description of what changed and why, citing the criterion_id and the contradiction that prompted the correction.
 </output>
