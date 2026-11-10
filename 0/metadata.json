@@ -1,0 +1,97 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M73A5B5ER6XXWM3JQRHTQ865",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-10T18:05:30.720198Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "a4dd23f59fcc",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 28,
+    "cache_creation_tokens": 20162,
+    "cache_read_tokens": 4901633,
+    "output_tokens": 12160,
+    "api_call_count": 14
+  },
+  "redaction": {
+    "replacements": 11,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 7,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 17
+  },
+  "summary": {
+    "intent": "Evaluate how well the Wisp plugins served front-end work and design ideation on the orin-dx and techworx (pages) sites by mining ~810 sessions, then act on the findings to reduce turns and context cost and get right results on the first run.",
+    "outcome": "Four investigation agents confirmed the plugins are too rigid for exploratory work and cannot capture visual intent. Four parallel tracks (gate hygiene, measurement, skill routing wording, outcome-level planner) were merged and a ${CLAUDE_PLUGIN_ROOT} path fix was applied across 66 files. Gate retry context was wired into the skills, versions were bumped (ecosystem 4.5.0), and everything was committed locally with `just check` passing; nothing was pushed.",
+    "learnings": {
+      "repo": [
+        "Wisp plugins form a spec-driven lifecycle (weaver, vanguard, scribe/muse, navigator, smith, courier) with typed JSON handoffs in shared/schemas and default-fail gates; there is no browser, screenshot, or visual mode, and spec@1 has no fields for tokens, layout or appearance.",
+        "Relative `shared/...` paths in skills and agents fail first reads because `shared` is a symlink and resolves against the skill dir or user cwd. `${CLAUDE_PLUGIN_ROOT}/shared/...` is substituted by the host in both skill and agent text and works on the first read (single-run evidence).",
+        "Muse docs referenced a ranger accessibility taxonomy that never existed, so implemented a11y was never checked.",
+        "The constitution block is copied byte for byte into every agent (ADR 006), so gate rules were placed in each exit-gate's <output> rather than the constitution.",
+        "plan@1 never required code; 'exact code' appeared only in description strings. ADR 014 partially supersedes ADR 009 without a schema change.",
+        "Version bumps touch plugin.json, README Version line, CHANGELOG, marketplace.json, .claude-plugin/plugin.json and the Codex manifest; run `just claude-manifests-sync`, `just marketplace-sync`, `just versions`, then `just check`.",
+        "Only ~2 real top-level sessions per project dir; the other hundreds of jsonl files are subagent transcripts. Plugin agents appeared in only two top-level sessions (orin-dx b8d16e96, pages 24655582).",
+        "In the audited work, every spec failed its first gate with 9-23 blockers, up to 9 retries, with non-monotonic blocker counts; gates checked internal consistency but caught no rendered/visual defects, so defects surfaced later by user eye or the 16 Oct audit."
+      ],
+      "code": [
+        {
+          "path": "shared/hooks/validate-handback.py",
+          "finding": "Hook now denies blockers or coverage gaps with whitespace-only criterion/kind/finding/location; deliberately does not check evidence citing because escalation_required and missing_mutation_gate blockers legitimately lack a location."
+        },
+        {
+          "path": "shared/references/verification/gate-readiness.md",
+          "finding": "New ~45-line self-check reference (blocker shape, round rules, 10-check checklist) loaded by muse:drafter and scribe:drafter via <load_first>, with inline fallback if the path doesn't resolve."
+        },
+        {
+          "path": "shared/agent-best-practices.md",
+          "line": 226,
+          "end_line": 234,
+          "finding": "Had a stale line claiming no plugin wires the hooks; fixed after the merge."
+        }
+      ],
+      "workflow": [
+        "Parallel tracks in separate worktrees merged cleanly except for append-only conflicts in IMPLEMENTATION-LOG.md and the ADR README index, resolved by keeping both sides with small scripts.",
+        "Probe-plugin experiments with `claude -p --plugin-dir` quickly validated host behavior; a control variant was needed because the first probe leaked the answer by listing the root above the relative path.",
+        "Planner pilot runs were invalid when the temp project lacked shared/schemas, since agents invented forbidden task keys; fixtures must name the schema path.",
+        "Subagent claims were treated as unverified and spot-checked against diffs (e.g. changelog claims for weaver/navigator/ranger) before being written into changelogs.",
+        "User's rule of thumb: explore visually and fast first, then spec and test once the design narrows; text-first descriptions of options repeatedly forced the user to ask 'show me'."
+      ]
+    },
+    "friction": [
+      "Orchestrator ignored the gate's 3-retry escalation and carried on with an 'owner-directed gate pass' without asking the user.",
+      "Large 60-130 KB spec and plan files stalled agent streams (17 failed agent tasks, 32 stall mentions).",
+      "Specs written before visuals settled caused gate churn, stale numbers (1180px, 252px) and rewrites after the user's visual review; approval in prose failed, and ~66 drawings were needed.",
+      "Design decisions were lost across sessions, and the user had to ask for a search of prior sessions.",
+      "Ranger exit-gate's first live denial reason was not recorded, so what broke is unknown.",
+      "Merge commits needed GPG, requiring the sandbox to be disabled in one track.",
+      "Prompt weight grew in some changes (planner prompt, sketch skill) even as output shrank."
+    ],
+    "open_items": [
+      "Push and open a draft PR; tagging and publishing left to the user.",
+      "Retry rule is untested live; no before/after measurement of gate rounds or tokens, and whether new skill wording raises invocation rates is unmeasured.",
+      "Not yet done from the review-slop list: D6 remainder (changeset@3 flat format), D9, D10/D5 dismissed-finding persistence, A2/C8 CI schema validator, B2/B3/B6-B10, C1-C6 and C9 decisions, effect re-measure, and AGENTS.md adoption in Callisto, Caliper and Monokl.",
+      "Gate Wave 3 (visual acceptance evidence before gating) and the reasoning-scratchpad cost/cache question (R2, R3, C4) remain; plan@2 with explicit outcome/signature/test fields is deferred.",
+      "Implementer behavior with outcome-level plans, challenger on the new plan shape, and Codex behavior are untested.",
+      "Other producers (smith:implementer, sentinel:verifier, ranger scanner/adversary, scribe:architect) lack the gate-readiness self-check; ranger/exit-gate may need the context-hygiene load_first line.",
+      "Owner should confirm the gate-rule placement versus a constitution amendment (WP-50), the freehand-claim skill set, and the patch versus minor choice for hook-only plugins.",
+      "Design gaps from the audit remain unaddressed: browser/screenshot capability kind, visual-intent channel in specs, decision log, supersession handling, and the muse verdict schema alignment."
+    ]
+  }
+}
