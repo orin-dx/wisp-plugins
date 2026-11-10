@@ -8,7 +8,7 @@ version: 1.0.0
 # Muse — Component Spec Skill
 
 <overview>
-Turns UI or design intent into a component spec a developer could implement — including its accessibility behavior — without asking a single clarifying question. One skill, one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. Muse audits the spec, not the implementation; for code-level accessibility hazard scanning after the component is built, see `ranger`'s accessibility hazard taxonomy.
+Turns UI or design intent into a component spec a developer could implement — including its accessibility behavior — without asking a single clarifying question. One skill, one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. Muse audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by `ranger`.
 </overview>
 
 <dispatch>

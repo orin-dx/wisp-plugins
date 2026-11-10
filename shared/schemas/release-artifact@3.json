@@ -1,10 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "release-artifact@2",
+  "$id": "release-artifact@3",
   "title": "ReleaseArtifact",
-  "description": "What was in a release: version, changesets, and breaking changes. Supersedes release-artifact@1 — the changesets array now consumes changeset@2's consumer_impact/semver_impact directly instead of redeclaring a separate type field.",
+  "description": "What was in a release: version, changesets, and breaking changes. Supersedes release-artifact@2 — the changesets array carries changeset@3 summaries, which may be layered Markdown.",
   "type": "object",
-  "required": ["version", "date", "changesets"],
+  "required": [
+    "version",
+    "date",
+    "changesets"
+  ],
   "additionalProperties": false,
   "properties": {
     "version": {
@@ -19,23 +23,37 @@
     "changesets": {
       "type": "array",
       "minItems": 1,
-      "description": "changeset@2 entries included in this release. A changeset IS the changelog entry — semver_impact and consumer_impact are set once at authoring time (shared/schemas/changeset@2.json) and consumed here, not re-derived. release-summarizer's version is max(semver_impact) across this array, with consumer_impact: internal-only entries filtered out before this array is built.",
+      "description": "changeset@3 entries included in this release. A changeset IS the changelog entry — semver_impact and consumer_impact are set once at authoring time (shared/schemas/changeset@3.json) and consumed here, not re-derived. release-summarizer's version is max(semver_impact) across this array, with consumer_impact: internal-only entries and disposition: none entries filtered out before this array is built.",
       "items": {
         "type": "object",
-        "required": ["summary", "consumer_impact", "semver_impact"],
+        "required": [
+          "summary",
+          "consumer_impact",
+          "semver_impact"
+        ],
         "additionalProperties": false,
         "properties": {
           "summary": {
             "type": "string",
-            "description": "One sentence describing what changed, written from the consumer's perspective"
+            "minLength": 1,
+            "description": "The changeset's summary carried through unedited. Markdown: a lead line, then bullets or audience sections when the author wrote them."
           },
           "consumer_impact": {
             "type": "string",
-            "enum": ["behavior-change", "new-capability", "internal-only"]
+            "enum": [
+              "behavior-change",
+              "new-capability",
+              "internal-only"
+            ]
           },
           "semver_impact": {
             "type": "string",
-            "enum": ["major", "minor", "patch", "none"]
+            "enum": [
+              "major",
+              "minor",
+              "patch",
+              "none"
+            ]
           },
           "linked_requirement": {
             "type": "string",
@@ -47,7 +65,9 @@
           },
           "commits": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Git SHAs included in this changeset"
           }
         }
@@ -55,7 +75,9 @@
     },
     "breaking_changes": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Human-readable descriptions of all breaking changes in this release"
     },
     "migration_guide": {

@@ -20,6 +20,8 @@ A PR body gives a reviewer with no prior context enough information to understan
 <!-- Include only links that exist: issue, requirement, spec, plan, or changeset. -->
 ```
 
+If the repository has a pull request template, keep its sections and put this content under them. When the change is visible to a consumer, the summary names what they see and where, and the limit they will hit; if the repository uses changesets, `Related` names the changeset or says one is needed (`courier/changeset`).
+
 Omit empty optional sections and placeholder links. Use enough summary bullets to explain one coherent change; if the bullets reveal independent topics, split the PR or explain why they must ship together.
 
 Verification records evidence already observed. Never turn an unrun check into an unchecked instruction without stating why it was not run and what remains unverified.

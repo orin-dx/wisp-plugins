@@ -2,13 +2,15 @@
 
 **Stage:** Design · **Output:** `spec@1` · **Version:** 1.0.1
 
-Turns UI or design intent into a component spec a developer can implement — including its accessibility behavior — without a single clarifying question. Muse audits the spec, not the implementation.
+Turns UI or design intent into a component spec a developer can implement — including its accessibility behavior — without a single clarifying question. Muse audits the spec, not the implementation. It also has a light, non-binding path for early work: see options first, decide, then carry the choice forward.
 
 - **Drafts** a component spec from a requirement or free-text design intent: props, variants, every interactive state, and accessibility criteria as testable propositions
 - **Audits** the draft for missing states, missing accessibility criteria, and unmarked invalid prop combinations
 - **Gates** the spec with a binding, default-fail exit gate before it proceeds to planning
+- **Sketches** structurally different options, rendered and shown before they are described, with a decision log — no gate, no spec, no tests
+- **Promotes** a chosen option into a `requirement@1`, the only route from a sketch into the gated stages
 
-One skill, one draft-audit-gate pipeline — reused unchanged regardless of which component is being specified.
+The `component` skill is one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. `sketch` and `promote` are the exploration path and never gate anything (see `shared/references/architecture/modes.md`).
 
 ---
 
@@ -17,10 +19,11 @@ One skill, one draft-audit-gate pipeline — reused unchanged regardless of whic
 - You have a `requirement@1` (or a design description/mockup) and need a formal component spec
 - You want to check a drafted component spec for missing interactive states or ARIA criteria before it's implemented
 - You need a binding pass/fail gate on a component spec before it enters planning
+- You want to see a few directions for a screen or component before deciding what to build (`sketch`), or a chosen option is ready to become real work (`promote`)
 
-**Invoke with:** `"Spec this component"`, `"Draft a component spec for this design"`, `"Audit this component spec"`, `"Is this component spec ready?"`, `"Gate this component spec"`
+**Invoke with:** `"Spec this component"`, `"Draft a component spec for this design"`, `"Audit this component spec"`, `"Is this component spec ready?"`, `"Gate this component spec"`, `"Show me some options for this screen"`, `"Promote option B"`
 
-Muse specs the component, not the code that implements it — for code-level accessibility hazard scanning after the component is built, see **[ranger](../ranger/)**'s accessibility hazard taxonomy.
+Muse specs the component, not the code that implements it. Code-level accessibility scanning of the built component is not yet covered: **[ranger](../ranger/)** has no accessibility hazard pack.
 
 ---
 
@@ -43,6 +46,8 @@ Muse specs the component, not the code that implements it — for code-level acc
 | Skill | What it does | Subagent |
 | :--- | :--- | :--- |
 | `muse/component` | Drafts, audits, and gates a component `spec@1` — props, variants, per-state behavior, and accessibility criteria as testable propositions | `drafter`, `auditor`, `exit-gate` |
+| `muse/sketch` | Builds and renders three structurally different options per round, shows them before describing them, and keeps a decision log in an `option-set@1`. Non-binding: no gate, no spec, no tests | `explorer` |
+| `muse/promote` | Turns a chosen option (or a spike that worked) into a `requirement@1` that carries the decision, the approved render, and what was and was not verified | none |
 
 `component` is one skill, not three — the request itself determines which stage runs; there is no separate `muse/draft` or `muse/audit` to invoke.
 
@@ -55,6 +60,7 @@ Muse specs the component, not the code that implements it — for code-level acc
 | `drafter` | Component Specification Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` or design intent: props, variants, per-state observable behavior, and accessibility criteria. No TBDs permitted. Also runs in correction mode. |
 | `auditor` | Component Specification Auditor | sonnet / medium | Adversarially reviews the draft for missing interactive states, missing accessibility criteria, and invalid prop combinations not marked as error cases. |
 | `exit-gate` | Component Specification Exit Gate | opus / high | Binding pass/fail verdict before the spec enters planning. Default disposition: fail. Maximum 3 retries before escalation to a human. |
+| `explorer` | Divergent Option Explorer | sonnet / medium | Builds and renders one structurally different option for a sketch and returns an `option-set@1` holding only that option. Writes only to a scratch directory, never ranks options. Internal to `sketch`. |
 
 ---
 
@@ -101,6 +107,10 @@ Drafter/auditor review loops are capped at 2 iterations before reaching the exit
 | `reasoning` | yes | Scratchpad — never forwarded downstream |
 
 **`verdict@3`** — produced by `exit-gate` only; see `shared/schemas/verdict@3.json`
+
+**`option-set@1`** — produced by `sketch`; see `shared/schemas/option-set@1.json`. A non-binding sketch (`fidelity: sketch`): an anchor `brief`, a `status` (`exploring`, `decided`, `abandoned`), a `round`, and one to five structurally different `options`, each with its own `status` (`open`, `parked`, `chosen`, `rejected`), a `reason` for every status except `open`, assumptions, open questions and `renders`; plus an append-only `decisions` log. Open questions are allowed here and not in a spec. Nothing in it enters planning until `promote` turns the chosen option into a requirement.
+
+**`requirement@1`** — produced by `promote` from a decided sketch; see `shared/schemas/requirement@1.json` (the shape `weaver` produces).
 
 ---
 
