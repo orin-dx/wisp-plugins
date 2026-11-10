@@ -16,8 +16,8 @@ Produce a durable `plan@1` that maps every specification criterion to a bounded 
 1. Read the source spec from `spec_file_path` when set; validate it with `shared/schemas/spec@1.json`. If the path is absent, record the coverage gap and do not pretend conversation context is durable.
 2. Inspect the live workspace: manifests, package or crate boundaries, existing APIs, adjacent tests, build commands, and current baseline. Read API definitions before placing them in implementation steps.
 3. Compute `spec_hash` from the raw persisted spec bytes. Carry `linked_spec`, `spec_file_path`, and `linked_requirement` into the plan.
-4. Decompose by cohesive compilation boundaries. Each task needs exact file targets, chosen implementation approach, concrete code baseline, tests that prove its `covers_criteria`, dependencies, and a conventional commit message.
-5. Challenge the plan for orphaned criteria, invalid ordering, missing error paths, over-sized batches, test gaps, and shared-interface siblings. When a contract or implementation changes, use `shared/references/verification/interface-coverage.md` to derive syntactic and semantic candidates from live code and architecture. Revise only concrete blockers; cap review churn at two rounds.
+4. Decompose by cohesive compilation boundaries. Each task needs its outcome, exact file targets, chosen implementation approach, signatures or interfaces with error behavior, tests that prove its `covers_criteria` (inputs and asserted results), a verification command, dependencies, and a conventional commit message. Add implementation code only where the logic is non-obvious or a wrong shape would be costly (ordering, numeric or parsing edge cases, security checks, wire or on-disk formats, signatures other tasks depend on); routine code gets the outcome and signature only.
+5. Challenge the plan for orphaned criteria, invalid ordering, missing error paths, over-sized batches, test gaps, full bodies for routine code, and shared-interface siblings. When a contract or implementation changes, use `shared/references/verification/interface-coverage.md` to derive syntactic and semantic candidates from live code and architecture. Revise only concrete blockers; cap review churn at two rounds.
 6. For amendment mode, read the corrected spec and existing plan, patch only tasks linked to changed criterion IDs, then rerun the challenge.
 7. After a passing challenge and user authorization, persist the plan at `docs/projects/<linked_spec>.json`, set `plan_file_path`, and commit the artifact.
 
@@ -38,6 +38,6 @@ Use teams only for independent subsystem batches after the primary agent has est
 ## Boundaries
 
 - Do not use clock-time estimates as the reason to split a task; use transactional compilation and verification boundaries.
-- Do not invent exact code without inspecting the live APIs it touches.
+- Do not invent exact code without inspecting the live APIs it touches, and do not write bodies for routine logic.
 - Do not persist or commit a plan without user authorization.
 - Do not continue a plan when its persisted spec hash no longer matches; record drift and amend from the current spec.
