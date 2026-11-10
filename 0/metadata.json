@@ -1,0 +1,112 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M73XWEHHC0JTW010R9C808CC",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-10T23:50:10.979335Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 6,
+  "save_step_count": 1,
+  "files_touched": [
+    "shared/agent-best-practices.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "bc62311e950d",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 52,
+    "cache_creation_tokens": 769730,
+    "cache_read_tokens": 8975107,
+    "output_tokens": 15958,
+    "api_call_count": 26,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "redaction": {
+    "replacements": 13,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 9,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 23
+  },
+  "summary": {
+    "intent": "Evaluate how well the Wisp plugins served front-end work and design ideation across the orin-dx and techworx (pages) site projects by mining ~810 sessions, then act on the findings (exploration mode, gate hygiene, planner, routing, path fixes) and trim expensive model tiers.",
+    "outcome": "Four parallel tracks (gate hygiene ADR 013, outcome-level plans ADR 014, skill routing, measurement) plus a CLAUDE_PLUGIN_ROOT path rewrite and version bumps (ecosystem 4.5.0) were merged and pushed as draft PR #21 (Entire trail #290), and the fable and astra tiers were then replaced with opus and gpt-6.1-sol; Antigravity behavior and post-release testing are left to the user.",
+    "learnings": {
+      "repo": [
+        "The corpus was smaller than first counted: the orin-dx project dir has only 2 real sessions and pages ~7 top-level sessions; the rest of the ~810 files are subagent transcripts.",
+        "Plugin agents were used in only a few sessions (orin-dx b8d16e96 and pages 24655582, plus one vanguard run); all design ideation ran through Artifacts, forks, general-purpose agents and local dev server screenshots.",
+        "Plugin pipeline is spec-driven with default-fail gates and has no sketch/spike/explore mode, no visual/browser capability, and spec@1 has no fields for tokens, layout or appearance.",
+        "muse docs reference a ranger accessibility taxonomy that does not exist, so implemented a11y was never checked.",
+        "Gates caught real behavioral defects (contrast ratios, cross-spec contradictions, stale breakpoints) but missed visual defects; later wording-only blockers caused churn, e.g. SPEC-001 needed 13 verdicts and eight specs took 51 gate calls.",
+        "The orchestrator ignored the gate's 3-retry cap and escalation (SPEC-005 retry 4, SPEC-008 retry 7) and carried on without asking the user.",
+        "Relative shared/... paths in skills and agents fail on first read because shared is a symlink; ${CLAUDE_PLUGIN_ROOT}/shared/... is substituted in skills and agents and reads first time (single-run evidence, Claude Code only). 163 references in 66 files were rewritten; Codex sources unchanged.",
+        "plan@1 never required code in tasks, so no schema change was needed for outcome-level plans; the 'exact code' text is only in two stale description strings.",
+        "The constitution block is copied byte-for-byte into every agent (ADR 006), so gate rules were placed in each gate's <output> instead.",
+        "Fable (claude-fable-5-1) was used only by scribe:arch-auditor and scribe:architect and astra only by the Codex judge role; both cost about 2x the next tier down and were chosen by position, not measurement.",
+        "Merge conflicts across parallel worktree tracks were confined to docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md and docs/adr/README.md and were resolved by keeping both sides."
+      ],
+      "code": [
+        {
+          "path": "shared/constitution.md",
+          "line": 47,
+          "end_line": 50,
+          "finding": "Defines the cognitive tier model with no divergent/exploratory mode; the fable row was removed in the final tier change."
+        },
+        {
+          "path": "plugins/smith/README.md",
+          "line": 14,
+          "end_line": 14,
+          "finding": "Smith accepts a spec@1 with no plan, but still runs recon, mutator, reviewer and a binding exit-gate; there is no spike mode."
+        }
+      ],
+      "workflow": [
+        "Delegating investigation to parallel background agents (plugin inventory, two session analyses, outcome audit) worked well, but their counts needed correction against the actual corpus; treat subagent reports as unverified until checked.",
+        "Visual option boards and rendered prototypes were what let the user decide; text-first descriptions repeatedly forced 'show me' requests.",
+        "Probe plugins with single-variable controls were an effective way to test host behavior such as path substitution.",
+        "Checking changelog claims against the actual diff before applying version bumps caught inaccurate statements.",
+        "Pushing and opening a PR required explicit user approval; the user's 'recommendations look good' was treated as that go-ahead.",
+        "Entire auto-linked a trail (#290) to the PR branch, so no manual trail creation was needed."
+      ]
+    },
+    "friction": [
+      "Initial session count (~810 sessions) was misleading because most files were subagent transcripts.",
+      "Agents stalled on 60-130 KB spec and plan files; 17 failed agent tasks and 32 stalled mentions were observed in the sessions.",
+      "Gate loops churned on wording-only blockers, and some blockers were caused by the previous round's prescribed fix.",
+      "The user could not judge specs in prose and had to repeatedly ask for visual examples; width and other decisions were lost across sessions.",
+      "Specs lagged behind prototypes and were retrofitted; SPEC-013 superseded 26 SPEC-001 criteria and 35 of 36 SPEC-003c criteria.",
+      "Repo-wide pre-commit gate caused waits during parallel smith runs.",
+      "A GPG-signed merge commit needed the sandbox disabled in a worktree.",
+      "Ranger's first live exit-gate run was denied once by the hook and the denial reason was not recorded.",
+      "Relative shared/ paths failed on first read in live probes, and the first planner runs invented schema-forbidden task keys because the temp project lacked shared/schemas."
+    ],
+    "open_items": [
+      "Antigravity: verify whether it substitutes ${CLAUDE_PLUGIN_ROOT} in skill and agent text and how it follows the shared symlink (user will check later).",
+      "Review and accept ADRs 011-014; ADR 014 (partially supersedes ADR 009) rests on one fixture and one run each.",
+      "PR #21 / trail #290 still need human approval; no trail description has been set.",
+      "Gate retry path past round one and outcome-level plans with real implementers have not been run live; savings in gate rounds, turns and tokens are unmeasured (docs/evaluation-runbook.md).",
+      "Retry rule is softer: defects missed in round one can pass on a retry as non-blocking gaps.",
+      "Sentinel and ranger got patch bumps although gates can now deny previously passing reports; the user may prefer minor.",
+      "Impact of dropping fable and astra on boundary-conflict and binding-verdict catches is unmeasured; record in assumptions register as 'Open: measure' and restore tiers if misses appear.",
+      "Ranger exit-gate may need the context.md load_first line, and hook denial reasons should be added to the trace.",
+      "Remaining courier gap: Callisto's flat .changeset/ markdown format (D6), and the Callisto repo AGENTS.md/PR template should point to courier skills.",
+      "Missing capabilities identified: sketch/explore mode, visual render and screenshot gating, spec-from-prototype path, cross-session decision memory, a11y taxonomy in ranger."
+    ]
+  }
+}
