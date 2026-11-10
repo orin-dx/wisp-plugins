@@ -109,3 +109,20 @@ ADR 012 records the decision. Not done: Codex and Antigravity enforcement, and l
 | Skills had no rule for command output, inline scripts or whole-page reads | Added `shared/references/tooling/context.md` and routed it from `smith/implement`, `smith/spike`, `smith/implementer` and the Codex counterparts | `just check`; effect on context is unmeasured |
 
 Not done: the same rule for `ranger`, `sentinel`, `muse` and `scribe` skills (smith first, to measure before spreading); porting the description cuts from the review-slop branch; moving the exploration record shapes out of the skill bodies (needs a re-pilot).
+
+## Courier changeset guidance (Callisto request)
+
+| Finding | Action | Evidence |
+| :--- | :--- | :--- |
+| `changeset@2` capped the summary at 200 characters and the agent, skill and schema repeated one-clause and one-sentence limits, so a limit users will hit went into the unforwarded `reasoning` | New `changeset@3` (no cap, Markdown, `disposition` of new, update-existing or none) and `release-artifact@3`; `changeset@2` and `release-artifact@2` are untouched per ADR 004 | `tests/test_changeset_schema.py` |
+| The agent worked per diff topic, with no way to update an entry or say none is needed | Outcome-level granularity and `disposition` in the agent, skills and Codex counterparts | Live run below |
+| The Semver table had no rows for a CLI's flags, output, exit codes or serialized files | Rows added to `shared/references/delivery/changesets.md`, with an entry-shape section and a bad-versus-good pair (117 lines of the 120 cap) | `just check` |
+| Claude sessions wrote changesets, commits and PR text freehand | The `changeset`, `commit` and `pr` skill descriptions now say to use the skill instead, and the courier README says when to use each; no hook | Tests on the descriptions |
+| Courier moved to 3.1.0 with changelog | `plugin.json`, README, CHANGELOG, marketplace and Codex manifest agree | `just versions` |
+
+Live run: `courier:changeset-analyzer` on `gh pr diff 483 --repo orin-dx/callisto` (24.9 kB), one run on Sonnet 5.5. It returned one `new` entry for one outcome: a lead line on the link, then what you see and where, the limit that a changeset pushed straight to the branch gets no link, the optional `pr` field for scripts, and that upgrading needs no action. It classified the change as a minor new capability. It did not write the "why it helps" as a separate bullet but put it in the lead line.
+
+**Finding: `shared/...` reference paths depend on the working directory.** In that run the agent reported it could not find `shared/references/delivery/changesets.md` and fell back to the schema-implied rules. The agent was started from a directory outside the plugin, and its `load_first` paths are relative to the plugin root, not to where the agent runs. This is separate from, and in addition to, the dangling-symlink install defect fixed in the marketplace sources (VERIFY-3 section 7): even a correct install leaves a relative `shared/...` path unresolvable from a user's project. It likely explains the pilots where schema files were not readable at run time. Not fixed here. Options: pass the plugin root into the skill and agent instructions if the host substitutes it, name the references in the skill body so they load with it, or inline the few rules an agent cannot work without. Needs a host check first.
+
+Not done: the same change for `pr-narrator` and `commit-analyzer`; changes in the Callisto repo (its AGENTS.md or PR template), which are recommendations only: say in its AGENTS.md to invoke `courier/changeset` for changesets and `courier/pr` for PR text, and add a changeset prompt to its PR template.
+

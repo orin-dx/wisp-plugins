@@ -75,7 +75,7 @@
     {
       "id": "courier",
       "name": "courier",
-      "version": "3.0.3",
+      "version": "3.1.0",
       "path": "./plugins/courier",
       "description": "Shipping plugin. Shepherds completed code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release."
     }

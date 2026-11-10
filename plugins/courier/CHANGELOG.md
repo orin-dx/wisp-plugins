@@ -2,6 +2,16 @@
 
 — courier
 
+## [3.1.0] - 2026-11-09
+
+### Added
+- `changeset@3` and `release-artifact@3`: the summary has no length cap and may be layered Markdown, and `disposition` lets `changeset-analyzer` update an existing entry or recommend none. `changeset@2` and `release-artifact@2` are unchanged.
+- Semver rows for a CLI's flags, output and exit codes, and serialized files, with a worked layered entry and a bad-versus-good pair, in `shared/references/delivery/changesets.md`.
+
+### Changed
+- `changeset-analyzer` works at the level of user-visible outcomes, states limits in the entry instead of `reasoning`, and drops the one-clause and one-sentence limits. `release-summarizer` carries layered summaries through and skips `disposition: none` entries.
+- The `changeset`, `commit` and `pr` skill descriptions now say to use the skill instead of writing the text by hand, and the README says when to use each.
+
 ## [3.0.3] - 2026-09-10
 
 ### Changed

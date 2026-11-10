@@ -15,8 +15,8 @@
     {
       "id": "courier",
       "runtime_files": [
-        "shared/schemas/changeset@2.json",
-        "shared/schemas/release-artifact@2.json",
+        "shared/schemas/changeset@3.json",
+        "shared/schemas/release-artifact@3.json",
         "shared/schemas/requirement@1.json",
         "shared/schemas/spec@1.json",
         "shared/references/delivery/changesets.md",

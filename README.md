@@ -272,7 +272,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
 | `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |
 | `implementation-review@2` | smith | smith exit-gate, scribe architect |
-| `changeset@2` | courier | courier release, sentinel |
+| `changeset@3` | courier | courier release, sentinel |
 | `verdict@3` | muse, scribe, smith, ranger, sentinel | gate consumers and humans |
 | `option-set@1` | muse sketch | muse promote, humans |
 | `spike-report@1` | smith spike | muse promote, humans |
