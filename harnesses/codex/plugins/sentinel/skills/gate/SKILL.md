@@ -1,6 +1,6 @@
 ---
 name: gate
-description: Independently verify an artifact against its criteria before it crosses a lifecycle boundary. Use for requirements, specs, plans, implementations, PRs, and explicit readiness checks.
+description: Independently verify an artifact against its criteria before it crosses a lifecycle boundary. Use this, not freehand checking, for “is this done?”, “verify this”, and readiness checks on requirements, specs, plans, implementations, and PRs.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -26,6 +26,7 @@ On a retry, inspect only the revised artifact and the previous blockers. Do not 
 - Do not treat a passing test alone as proof of a criterion it does not exercise.
 - Mark evidence unverifiable when the relevant source, environment, or criterion is absent; do not convert uncertainty into a pass.
 - Treat a required check that has not finished as pending and fail the gate.
+- Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
 - Do not edit the artifact, create a PR, or publish a verdict externally unless the user asks for a separate action.
 
 ## Team use

@@ -14,6 +14,7 @@ Sentinel is standalone. Its `plugin.json` declares `consumes: []`, and nothing i
 - You want an independent second opinion on whether an implementation meets its spec
 - You need a formal pass/fail verdict with specific blockers before shipping
 - You want to check a finding report for completeness before handing it off
+- You are about to say an artifact is done or ready: invoke `sentinel/gate` first
 
 **Invoke with:** `"Gate this spec"`, `"Verify this implementation against the spec"`, `"Run the verification gate"`, `"Check whether this changeset meets all acceptance criteria"`, `"Is this finding report complete?"`
 

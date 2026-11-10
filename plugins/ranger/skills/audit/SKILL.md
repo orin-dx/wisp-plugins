@@ -1,7 +1,7 @@
 ---
 name: audit
 description: >-
-  Trigger on requests to hunt bugs, audit for vulnerabilities, scan a hazard category, verify a suspected bug, or check whether fixes resolved earlier findings, in Rust, TypeScript, JavaScript, Python, or Go. Refutes candidates, groups defect families, and returns finding-report@2 and verdict@3.
+  Use this, not a freehand code review, whenever code is hunted for bugs or vulnerabilities, a suspected bug needs proof, or a fix needs checking: "find bugs in this", "audit this for security issues", "is this really a bug", "did that fix resolve the finding". Rust, TypeScript, JavaScript, Python, Go. Refutes candidates, groups defect families, returns finding-report@2 and verdict@3.
 version: 2.4.0
 ---
 
@@ -35,7 +35,7 @@ When a family suggests a missing concept, state, operation, boundary, abstractio
 
 ## Verification depth
 
-Choose evidence by risk, not language ritual. Use the project-native test, mutation, property, fuzz, race, integration, or boundary tools that can discriminate the suspected defect. A property or fuzz check needs a meaningful generator and oracle. Record unsupported or impractical checks as coverage gaps; do not imply coverage.
+Choose evidence by risk, not language ritual. Use the project-native test, mutation, property, fuzz, race, integration, or boundary tools that can discriminate the suspected defect. A property or fuzz check needs a meaningful generator and oracle. Record unsupported or impractical checks as coverage gaps; do not imply coverage. Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
 
 ## Dispatch
 

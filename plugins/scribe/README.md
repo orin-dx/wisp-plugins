@@ -26,6 +26,7 @@ Eight independently-triggered skills, not a linear pipeline — pick the one tha
 - Ranger returned `finding-report@2`, or Smith returned `implementation-review@2` or an architecture-escalating `implementation-result@1`
 - You want to check whether the live codebase still matches a spec gated weeks or months ago
 - implementer reported that a criterion contradicts observed system behavior and the spec itself needs correcting
+- You are about to write, review or judge a spec by hand: invoke `scribe/draft-spec`, `scribe/audit-spec` or `scribe/gate-spec` instead
 
 **Invoke with:** `"Write a spec for this requirement"`, `"Draft a spec based on this research"`, `"Verify this spec against the requirement"`, `"Audit this spec"`, `"Check this spec against our architecture"`, `"Gate this spec"`, `"Design the structural fix for this defect class"`, `"Check this spec for drift"`, `"Correct this spec — the criterion doesn't match reality"`
 

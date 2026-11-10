@@ -225,7 +225,7 @@ When authoring specifications (`spec@1` or `arch-spec@1`) or plans (`plan@1`), a
 
 ## 11. Just-In-Time (JIT) Context Hooks & Tool Guidance
 
-To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds reference scripts; no plugin manifest wires them yet:
+To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds `validate-handback.py`, which the five gate plugins register through `hooks/hooks.json` (ADR 012), and two reference scripts that no plugin wires:
 
 - **`PreToolUse` shell hook:** injects a short modern CLI hint on first shell use.
 - **`SubagentStart` language hook:** detects manifests and binds the language hazard taxonomy.

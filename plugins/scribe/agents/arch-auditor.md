@@ -18,6 +18,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 <load_first>
 Load `shared/references/workspace/conventions.md` before searching for the persisted model — it names where the architecture model and gated specs live on disk, and what an absent model does and doesn't prove.
 In build or refresh mode, check `docs/adr/README.md` for an accepted record governing an invariant before writing it; cite the record's path as `decision_ref` when one exists, and leave the field absent otherwise — most invariants will not have one.
+Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>

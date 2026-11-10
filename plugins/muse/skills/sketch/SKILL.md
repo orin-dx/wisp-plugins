@@ -1,14 +1,14 @@
 ---
 name: sketch
 description: >-
-  Trigger when the user wants to explore options or see designs before deciding what to build: "show me some options", "try a few directions", "sketch this", "what could this look like", "explore ways to lay out this screen", "I want to see it before we spec it". Produces an option-set@1: three structurally different options per round, rendered locally and shown before they are described, with a decision log. Non-binding by design — no gate, no spec, no tests, open questions allowed. Stops before implementing; use promote to carry a chosen option into real work.
+  Use this, rather than describing options in prose, whenever the user wants to see options before deciding: "show me some options", "try a few directions", "sketch this", "what could this look like", "I want to see it before we spec it". Builds and renders three structurally different options as an option-set@1 with a decision log. Non-binding: no gate, spec or tests. Stops before implementing; use promote to build.
 version: 1.0.0
 ---
 
 # Muse — Sketch Skill
 
 <overview>
-Lets the user see options before anything is decided. The output is a sketch: a small set of structurally different options, each built as a quick static page, rendered, shown, and recorded with a status and a reason. Nothing here is binding. There is no gate, no spec and no test requirement, unfinished ideas and open questions are welcome, and the skill stops before implementing. Open the reply with "Mode: sketch. Nothing here is binding."
+Lets the user see options before anything is decided. The output is a sketch: a small set of structurally different options, each built as a quick static page, rendered, shown, and recorded with a status and a reason. Nothing here is binding: no gate, spec or tests, and the skill stops before implementing. Open the reply with "Mode: sketch. Nothing here is binding."
 </overview>
 
 <dispatch>
@@ -21,6 +21,8 @@ The explorer is internal to this skill. Do not call it on its own, and never ask
 
 <references>
 `shared/references/architecture/modes.md`, `shared/schemas/option-set@1.json`
+
+When running render or build commands, keep command output and scripts out of the thread as `shared/references/tooling/context.md` says. Look at one render at a time.
 </references>
 
 <io>

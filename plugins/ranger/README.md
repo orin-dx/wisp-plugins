@@ -18,6 +18,7 @@ Adversarial bug hunting on live Rust, TypeScript, JavaScript, Python, and Go cod
 - You suspect a specific hazard category (e.g. unsafe memory, unhandled promises) and want a targeted scan
 - You have a candidate bug report and want adversarial verification before acting on it
 - You want to confirm all findings are resolved after remediation
+- You are about to review code for bugs or vulnerabilities by hand: invoke `ranger/audit` first
 
 **Invoke with:** `"Hunt for bugs"`, `"Security audit"`, `"Find vulnerabilities"`, `"Scan for unhandled promises"`, `"Audit this for memory safety issues"`, `"Verify this bug report"`, `"Check what's still broken after my fixes"`
 

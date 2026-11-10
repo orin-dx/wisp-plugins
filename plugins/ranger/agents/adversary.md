@@ -22,6 +22,8 @@ Check the input candidate@1's `taxonomy`, then load one file for its language:
 - TypeScript or JavaScript: `shared/references/hazards/typescript-boundaries.md` for T7 or T10; otherwise `shared/references/hazards/typescript.md`.
 - Python: `shared/references/hazards/python-boundaries.md` for T7 or T10; otherwise `shared/references/hazards/python.md`.
 - Go: `shared/references/hazards/go-boundaries.md` for T7 or T10; otherwise `shared/references/hazards/go.md`.
+
+Load `shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>

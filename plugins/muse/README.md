@@ -19,6 +19,7 @@ The `component` skill is one draft-audit-gate pipeline, reused unchanged regardl
 - You have a `requirement@1` (or a design description/mockup) and need a formal component spec
 - You want to check a drafted component spec for missing interactive states or ARIA criteria before it's implemented
 - You need a binding pass/fail gate on a component spec before it enters planning
+- You are about to write a component spec by hand: invoke `muse/component` first
 - You want to see a few directions for a screen or component before deciding what to build (`sketch`), or a chosen option is ready to become real work (`promote`)
 
 **Invoke with:** `"Spec this component"`, `"Draft a component spec for this design"`, `"Audit this component spec"`, `"Is this component spec ready?"`, `"Gate this component spec"`, `"Show me some options for this screen"`, `"Promote option B"`

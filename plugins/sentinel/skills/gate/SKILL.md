@@ -1,7 +1,7 @@
 ---
 name: gate
 description: >-
-  Trigger on "verify this", "check this spec/plan/requirement/PR", "is this done?", "review for completeness", "does this meet the criteria?", "gate this", "quality check", and before stage transitions (spec to implementation, implementation to ship, branch to PR). Not for general Q&A, code explanation, or exploratory work. Clears the artifact or returns blockers as `verdict@3`.
+  Use this, not freehand checking, whenever an artifact must be verified before the next stage: "verify this", "is this done?", "check this spec/plan/requirement/PR", "does this meet the criteria?", "gate this", and before starting implementation, shipping or opening a PR. Not for Q&A, code explanation or exploration. Returns verdict@3: cleared, or blockers.
 version: 1.3.0
 ---
 
@@ -37,4 +37,5 @@ The protocol output is `verdict@3`: a scoped pass or fail with blockers, coverag
 
 <framework_references>
 - [Verdict Schema](../../../../shared/schemas/verdict@3.json)
+- [Context hygiene](../../../../shared/references/tooling/context.md) — keep command output and scripts out of the thread when running checks.
 </framework_references>

@@ -1,7 +1,7 @@
 ---
 name: component
 description: >-
-  Trigger when the user asks to spec a UI component: "spec this component", "draft a component spec", "write a spec for this design", "audit this component spec", "is this component spec ready?", "gate this component spec". Given a requirement@1 or free-text design intent, produces a gated spec@1 covering props, variants, per-state behavior, and accessibility criteria.
+  Use this, not a freehand spec, whenever a UI component's behavior is specified, audited or checked for readiness: "spec this component", "write a spec for this design", "is this component spec ready?", "gate this component spec". Drafts, audits and gates a spec@1 covering props, variants, per-state behavior and accessibility.
 version: 1.0.0
 ---
 
