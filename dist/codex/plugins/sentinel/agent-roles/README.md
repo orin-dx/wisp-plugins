@@ -6,14 +6,16 @@ The primary agent owns task decomposition, shared interfaces, final artifact ass
 
 | Role | Use for | Recommended tier |
 | :--- | :--- | :--- |
-| `recon` | File, API, and evidence inventory | `gpt-5.6-luna` / low |
-| `tracer` | Control-flow, data-flow, and boundary tracing | `gpt-5.6-terra` / medium |
-| `research` | Bounded internal or external evidence collection | `gpt-5.6-terra` / medium |
-| `author` | A defined draft with fixed inputs and output schema | `gpt-5.6-terra` / high |
-| `implementer` | An isolated implementation batch with fixed interfaces | `gpt-5.6-terra` / high |
-| `adversary` | Independent refutation or counterexample search | `gpt-5.6-terra` / high |
-| `reviewer` | Evidence-led code or artifact review | `gpt-5.6-terra` / high |
-| `judge` | Binding synthesis or exit decision | `gpt-5.6-sol` / high |
+| `recon` | File, API, and evidence inventory | `gpt-6-luna` / low |
+| `tracer` | Control-flow, data-flow, and boundary tracing | `gpt-6.1-sol` / medium |
+| `research` | Bounded internal or external evidence collection | `gpt-6.1-sol` / medium |
+| `author` | A defined draft with fixed inputs and output schema | `gpt-6.1-sol` / high |
+| `implementer` | An isolated implementation batch with fixed interfaces | `gpt-6.1-sol` / high |
+| `adversary` | Independent refutation or counterexample search | `gpt-6.1-sol` / high |
+| `reviewer` | Evidence-led code or artifact review | `gpt-6.1-sol` / high |
+| `judge` | Binding synthesis or exit decision | `gpt-6-astra` / high |
+
+Model ids and effort names change between releases. The ids above were checked against the Codex models page on 2026-10-20: `gpt-6-luna`, `gpt-6.1-sol` and `gpt-6-astra` are the selectable models, and `gpt-5.5` and older are retired or retiring. The effort labels are relative: map `low`, `medium` and `high` to the host's lightest, middle and heavier settings. The tiers are recommendations that have not been evaluated on this repository's workflows.
 
 Use the recommended tier only when the host lets the primary agent choose it. If it does not, preserve the role boundary and run with the host default. If multi-agent work is unavailable, perform the same bounded passes sequentially in the primary agent.
 

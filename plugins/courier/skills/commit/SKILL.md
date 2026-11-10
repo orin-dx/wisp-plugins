@@ -1,14 +1,14 @@
 ---
 name: commit
 description: >-
-  Trigger when the user asks to commit code or write a commit message: "commit this", "write a commit message", "commit the staged changes". Reads the staged diff and returns a conventional commit message.
-version: 2.0.0
+  Use this, not a hand-written message, whenever a commit is about to be made or a commit message written: "commit this", "write a commit message", "commit the staged changes". Reads the staged diff and returns a conventional commit message that explains why.
+version: 2.0.1
 ---
 
 # Courier — Commit
 
 <overview>
-Reads the staged git diff and produces a conventional commit message. Delegates entirely to `commit-analyzer`.
+Reads the staged git diff and the repository's recent commit history, and produces a conventional commit message in that repository's style. Delegates entirely to `commit-analyzer`.
 </overview>
 
 <dispatch>

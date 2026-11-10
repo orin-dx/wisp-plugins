@@ -1,7 +1,7 @@
 {
   "name": "muse",
   "version": "1.0.1",
-  "description": "Turn UI intent into testable component specifications with behavior and accessibility criteria.",
+  "description": "Turn UI intent into testable component specifications with behavior and accessibility criteria. Also sketch options before anything is specified and promote a chosen option.",
   "author": {
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
@@ -19,6 +19,6 @@
     "category": "Developer Tools",
     "capabilities": ["Interactive", "Read", "Write"],
     "websiteURL": "https://github.com/orin-dx/wisp-plugins",
-    "defaultPrompt": ["Write a component spec from this design", "Audit this component spec", "Make this UI intent implementation-ready"]
+    "defaultPrompt": ["Write a component spec from this design", "Sketch three options for this screen", "Promote the chosen option into a requirement"]
   }
 }

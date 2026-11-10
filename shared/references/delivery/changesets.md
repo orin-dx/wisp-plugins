@@ -2,7 +2,7 @@
 
 ## Outcome
 
-Record one coherent consumer-facing change in `changeset@2` so release tooling can preserve its meaning and calculate semver without reinterpreting prose. See `shared/schemas/changeset@2.json`.
+Record one user-visible outcome in `changeset@3` so release tooling can preserve its meaning and calculate semver without reinterpreting prose. See `shared/schemas/changeset@3.json`.
 
 ## Consumer impact
 
@@ -16,7 +16,7 @@ Record one coherent consumer-facing change in `changeset@2` so release tooling c
 
 ## Topic boundary
 
-Use one changeset per independently releasable topic. Use these signals in priority order:
+Use one changeset per user-visible outcome, not per pull request or commit. Use these signals in priority order:
 
 1. A shared linked requirement, spec, or plan defines one scope.
 2. The author explicitly identifies a coordinated delivery scope.
@@ -24,7 +24,15 @@ Use one changeset per independently releasable topic. Use these signals in prior
 
 Do not split one outcome by package or file count. Do not bundle changes that could ship independently merely because they share a branch. When the boundary remains uncertain, state the ambiguity in `reasoning` and prefer the split that preserves accurate impact classification.
 
-Verify `consumer_impact`, `semver_impact`, changed files, tests, and criteria evidence against that topic's own diff slice.
+Verify `consumer_impact`, `semver_impact`, changed files, tests, and criteria evidence against that outcome's own diff slice.
+
+## Disposition
+
+| `disposition` | Use when |
+| :--- | :--- |
+| `new` | A consumer-visible outcome has no unreleased entry yet |
+| `update-existing` | The change extends an outcome an unreleased entry already describes; name it in `updates` and write the full updated entry |
+| `none` | No consumer sees it, or it fixes something not yet released; `summary` says why |
 
 ## Semver
 
@@ -36,6 +44,11 @@ Verify `consumer_impact`, `semver_impact`, changed files, tests, and criteria ev
 | New optional schema field | `minor` |
 | New schema or skill | `minor` |
 | New plugin | `minor` |
+| New CLI flag, command, or option with a default that keeps current behavior | `minor` |
+| Changed CLI output, exit code, or default that scripts or readers already depend on | `major` |
+| New optional field in a serialized file or machine-readable output | `minor` |
+| Removed, renamed, or newly required field in a serialized file or output | `major` |
+| New serialized file or output format | `minor` |
 | Removed or renamed schema field | `major`; create a new schema version |
 | Renamed plugin ID or incompatible consumer behavior | `major` |
 
@@ -51,9 +64,32 @@ Each breaking entry states:
 
 Do not call an internal implementation change breaking unless it changes a supported consumer contract.
 
+## Entry shape
+
+The summary is Markdown with no length target. Lead with the value, then add depth only when the reader needs it.
+
+- Lead line: what the reader can now do or what changed for them.
+- Bullets: what they see and where, why it helps, and what to do.
+- Audience sections (what you see, scripting, upgrading) when readers differ.
+- Limits the reader will hit, stated in the entry, not in `reasoning`.
+
+A one-line entry is correct when that is all there is. Name the visible thing (a link, a label, a flag, a field); vague verbs like "identifies" or "supports" fail.
+
+Bad: `Adds an optional pr field to the preview file and links changes to PRs.` It names no visible thing, no reason, and no limit.
+
+Good:
+
+```markdown
+Links each change in the release PR to the pull request that added it.
+
+- Shown as `#123` next to the change, so you can open the review and discussion behind it.
+- A changeset added without a pull request (a direct push) gets no link.
+- For scripts: the `--emit-preview` file has an optional `pr` for each change.
+```
+
 ## Voice
 
-Lead with observable consumer impact. Include a reason only when it changes understanding or action. Omit internal agent, file, and implementation detail unless the consumer must know it. State limitations and migration work directly. Full standard: `shared/references/authoring/voice.md`.
+Lead with observable consumer impact. Include a reason when it changes understanding or action. Omit internal agent, file, and implementation detail unless the consumer must know it. State limitations and migration work directly. Full standard: `shared/references/authoring/voice.md`.
 
 ## Changeset, commit, and release note
 

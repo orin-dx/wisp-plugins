@@ -15,8 +15,8 @@
     {
       "id": "courier",
       "runtime_files": [
-        "shared/schemas/changeset@2.json",
-        "shared/schemas/release-artifact@2.json",
+        "shared/schemas/changeset@3.json",
+        "shared/schemas/release-artifact@3.json",
         "shared/schemas/requirement@1.json",
         "shared/schemas/spec@1.json",
         "shared/references/delivery/changesets.md",
@@ -30,7 +30,7 @@
     },
     {
       "id": "muse",
-      "runtime_files": ["shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json"]
+      "runtime_files": ["shared/schemas/option-set@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/spike-report@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/modes.md"]
     },
     {
       "id": "navigator",
@@ -66,7 +66,7 @@
     },
     {
       "id": "smith",
-      "runtime_files": ["shared/schemas/implementation-context@1.json", "shared/schemas/implementation-result@1.json", "shared/schemas/implementation-review@2.json", "shared/schemas/mutation-report@2.json", "shared/schemas/plan@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json", "shared/schemas/workspace-manifest@1.json", "shared/references/authoring/comments.md", "shared/references/hazards/go.md", "shared/references/hazards/go-boundaries.md", "shared/references/architecture/go.md", "shared/references/verification/go.md", "shared/references/verification/implementation-review.md", "shared/references/hazards/python.md", "shared/references/hazards/python-boundaries.md", "shared/references/architecture/python.md", "shared/references/verification/python.md", "shared/references/hazards/rust.md", "shared/references/hazards/rust-boundaries.md", "shared/references/architecture/rust.md", "shared/references/verification/rust.md", "shared/references/hazards/typescript.md", "shared/references/hazards/typescript-boundaries.md", "shared/references/architecture/typescript.md", "shared/references/verification/typescript.md", "shared/references/verification/evidence.md", "shared/references/workspace/conventions.md", "shared/references/hazards/scripts-and-workflows.md"]
+      "runtime_files": ["shared/schemas/spike-report@1.json", "shared/references/architecture/modes.md", "shared/schemas/implementation-context@1.json", "shared/schemas/implementation-result@1.json", "shared/schemas/implementation-review@2.json", "shared/schemas/mutation-report@2.json", "shared/schemas/plan@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json", "shared/schemas/workspace-manifest@1.json", "shared/references/authoring/comments.md", "shared/references/hazards/go.md", "shared/references/hazards/go-boundaries.md", "shared/references/architecture/go.md", "shared/references/verification/go.md", "shared/references/verification/implementation-review.md", "shared/references/hazards/python.md", "shared/references/hazards/python-boundaries.md", "shared/references/architecture/python.md", "shared/references/verification/python.md", "shared/references/hazards/rust.md", "shared/references/hazards/rust-boundaries.md", "shared/references/architecture/rust.md", "shared/references/verification/rust.md", "shared/references/hazards/typescript.md", "shared/references/hazards/typescript-boundaries.md", "shared/references/architecture/typescript.md", "shared/references/verification/typescript.md", "shared/references/verification/evidence.md", "shared/references/tooling/context.md", "shared/references/hazards/scripts-and-workflows.md", "shared/references/workspace/conventions.md"]
     },
     {
       "id": "vanguard",

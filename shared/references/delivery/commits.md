@@ -12,6 +12,8 @@ Breaking change: append `!` after type/scope, or add `BREAKING CHANGE:` footer.
 - Body (optional): explain the *why*, not the what. Do not artificially wrap lines — one paragraph per line, let the terminal/renderer soft-wrap.
 - Footer: `BREAKING CHANGE: <description>`, `Fixes #123`, `Refs #456`
 - Scope is optional; when used, it names the module or component
+- Match the repository you are in: use the scopes and subject style in its recent history or commit configuration. The scope table below applies only to this repository.
+- Put a limit, constraint, or tradeoff a future reader of the log needs in the body, not in a scratchpad.
 
 ## Examples
 
