@@ -128,3 +128,15 @@ Live run: `courier:changeset-analyzer` on `gh pr diff 483 --repo orin-dx/callist
 
 Not done: changes in the Callisto repo (its AGENTS.md or PR template), which are recommendations only: say in its AGENTS.md to invoke `courier/changeset` for changesets and `courier/pr` for PR text, and add a changeset prompt to its PR template.
 
+
+## Outcome-level plans (track E, assumption 10, review-slop C4)
+
+| Finding | Action | Evidence |
+| :--- | :--- | :--- |
+| `planner` wrote exact code for every task that `implementer` may discard and `challenger` policed; `plan@1` does not require code (only `id`, `title`, `files`, `steps`, `commit_message`) | No schema change. `planner` now states outcome, files, signatures, proving tests with assertions, verification command, commit message and `covers_criteria`, with code only for non-obvious or costly-to-reshape logic; `challenger` flags full bodies for routine logic and no longer treats absent code as a defect; Claude and Codex skills and the README updated. ADR 014 supersedes ADR 009's every-task code requirement only | `tests/test_navigator_plan.py`; `just check` |
+
+Measured once each (Sonnet 5.5, a two-task, six-criterion Python fixture with the schema path given in the prompt): the old planner wrote 9,777 characters (8 steps, 18 function definitions); the new one wrote 5,578 (18 steps, 1 definition). Both validated against `plan@1` and covered all six criteria. One run each is weak evidence on one small fixture. Not tested: whether implementers do better or worse from the smaller plans, and the challenger on either shape.
+
+**Finding: without the schema in reach, the planner invents fields.** A first pair of runs started from a directory with no `shared/schemas` and both wrote task keys the schema forbids (`outcome`, `approach`, `tests`, `verify_command`), the same working-directory problem as the courier finding above. The planner now says to add no keys outside the schema and to carry the content in `steps`; the final runs also named the schema path in the prompt.
+
+Not done: the `plan@1` field descriptions still say "exact code" (a published schema is not edited, ADR 004); a `plan@2` with explicit outcome, signature and test fields is deferred.

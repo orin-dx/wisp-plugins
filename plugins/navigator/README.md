@@ -97,14 +97,15 @@ Every task in `plan@1` must include all of the following. Tasks missing any fiel
 
 - **Exact file paths** to create or modify (no "create a file for X")
 - **A brief implementation approach**, decided before the test steps are written
-- **The exact implementation code** — a concrete baseline proving the task is achievable within its file targets and scope, not a shape smith's implementer must copy verbatim
-- **The exact tests** proving each of the task's `covers_criteria` criteria, with the command confirming the full suite passes
+- **The outcome** the task leaves true, and the **signatures or interfaces** it adds or changes, with error behavior
+- **Implementation code only where the logic is non-obvious or a wrong shape would be costly** (concurrency or ordering, numeric or parsing edge cases, security checks, wire or on-disk formats, signatures other tasks depend on); routine code gets the outcome and signature. Any code is a baseline smith's implementer may adapt
+- **The exact tests** proving each of the task's `covers_criteria` criteria (inputs and asserted results), with the verification command confirming the full suite passes
 - **A conventional commit message** for the task
 - **`covers_criteria`** — the acceptance criterion IDs from the spec this task addresses
 
-Tests are not required to precede the implementation steps within a task. See [ADR-008](../../docs/adr/008-drop-test-first-ordering.md) and smith's [Implementation Cycle](../smith/README.md#implementation-cycle-per-task) for that rationale, and [ADR-009](../../docs/adr/009-implementer-shape-latitude.md) for why the implementation code is a baseline smith's implementer may adapt rather than a mandate.
+Tests are not required to precede the implementation steps within a task. See [ADR-008](../../docs/adr/008-drop-test-first-ordering.md) and smith's [Implementation Cycle](../smith/README.md#implementation-cycle-per-task) for that rationale, and [ADR-009](../../docs/adr/009-implementer-shape-latitude.md) and [ADR-014](../../docs/adr/014-outcome-level-plans.md) for why plan code is a baseline, and only where it earns its cost.
 
-No TBDs. No "the implementer will decide." Every acceptance criterion must appear in at least one task's `covers_criteria` — `challenger` flags any criterion that appears in none as `orphaned-criteria`.
+No TBDs. No "the implementer will decide" about scope, files, interfaces, or proof. Every acceptance criterion must appear in at least one task's `covers_criteria` — `challenger` flags any criterion that appears in none as `orphaned-criteria`.
 
 ---
 
