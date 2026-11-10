@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_016NFkRFh767scUPuefCT9fc",
+  "agent_id": "ad36fd9761717cd2e",
+  "subagent_type": "general-purpose",
+  "task_description": "Gate hygiene track",
+  "token_usage": {
+    "input_tokens": 84,
+    "cache_creation_tokens": 126926,
+    "cache_read_tokens": 4591175,
+    "output_tokens": 30060,
+    "api_call_count": 42
+  },
+  "started_at": "2026-11-10T09:47:22.836327-08:00",
+  "completed_at": "2026-11-10T10:01:15.074913-08:00"
+}
