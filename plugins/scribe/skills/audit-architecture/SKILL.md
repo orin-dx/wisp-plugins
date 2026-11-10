@@ -14,7 +14,7 @@ Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consist
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **arch-auditor** | claude-fable-5-1 / high | A spec@1 (post `scribe/audit-spec`) needs checking against the workspace's persisted architecture model before `scribe/gate-spec`. Also invoked directly in build mode to construct or refresh the model on demand. |
+| **arch-auditor** | opus / high | A spec@1 (post `scribe/audit-spec`) needs checking against the workspace's persisted architecture model before `scribe/gate-spec`. Also invoked directly in build mode to construct or refresh the model on demand. |
 </dispatch>
 
 <references>

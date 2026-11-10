@@ -183,3 +183,9 @@ Not done: a measured comparison of round counts before and after (needs a paired
 
 Limits: the path finding rests on single probe runs; Antigravity's handling of `${CLAUDE_PLUGIN_ROOT}` in skill and agent text was not tested, and its format shares the authored tree, so confirm it before releasing. The hook-only plugins (sentinel, ranger) are patch bumps although a gate can now deny a report that used to pass; scribe is a minor because its drafter and skills also changed behavior.
 
+## Top-tier models removed
+
+| Finding | Action | Evidence |
+| :--- | :--- | :--- |
+| Two agents (`scribe:arch-auditor`, `scribe:architect`) ran on `claude-fable-5-1`, about twice Opus, and `arch-auditor` runs on every spec; the Codex `judge` role ran on `gpt-6-astra`. The constitution said fable was never for gates or per-finding loops, and no measurement shows either tier catches more | Both scribe agents move to `opus / high`, the constitution drops the fable tier, the Codex `judge` moves to `gpt-6.1-sol / high`; tier tests updated | `just check`. Quality effect unmeasured: run the spec-gating paired comparison in `docs/evaluation-runbook.md` and restore a tier if boundary conflicts or binding verdicts are missed |
+

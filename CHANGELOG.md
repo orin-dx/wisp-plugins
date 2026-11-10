@@ -11,6 +11,7 @@ Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 - Courier writes layered changesets without a length cap: `changeset@3` and `release-artifact@3`; `commit-analyzer` and `pr-narrator` follow the repository's own conventions.
 - The `muse` gate returns `verdict@3`; a light `smith` entry handles review findings; a hazard reference covers scripts, CI workflows and templates.
 - Agent and skill descriptions are about half the size, skills lead with the request they serve, and shared references load from the plugin root so agents find them on the first read.
+- The two `claude-fable-5-1` agents (`scribe:arch-auditor`, `scribe:architect`) and the Codex `judge` role (`gpt-6-astra`) move one tier down (`opus / high`, `gpt-6.1-sol / high`) for cost; no heavier tier is defined.
 - Marketplace sources are relative paths, so installed plugins include their shared schemas and references.
 
 ## [4.4.5] - 2026-09-27 — Architecture model decision links

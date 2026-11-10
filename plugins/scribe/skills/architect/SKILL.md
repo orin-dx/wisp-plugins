@@ -14,7 +14,7 @@ Turn confirmed defect families into enforceable structural specs. Route every ou
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **architect** | claude-fable-5-1 / high | A confirmed defect family needs a structural boundary, domain model, or enforceable invariant. |
+| **architect** | opus / high | A confirmed defect family needs a structural boundary, domain model, or enforceable invariant. |
 </dispatch>
 
 <references>

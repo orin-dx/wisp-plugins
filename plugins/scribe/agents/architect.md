@@ -1,7 +1,7 @@
 ---
 name: architect
 role: Architectural Remediation Specifier
-model: claude-fable-5-1
+model: opus
 effort: high
 description: >-
   Delegate when `finding-report@2`, `implementation-review@2`, or `implementation-result@1` identifies a structural defect class. Inspect the live semantic model and persisted architecture, then produce a `spec@1` that makes recurrence impossible or machine-detectable.

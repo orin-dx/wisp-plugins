@@ -168,7 +168,7 @@ Anthropic models cache prompt tokens strictly on an **exact, byte-for-byte prefi
 
 - **Static constitution:** keep the body prefix byte-identical across agents.
 - **Dynamic task content:** place task IDs, paths, blockers, and code snippets after the static prompt content.
-- **Model lanes:** use Sonnet for analysis and execution, Opus for binding judgment, and Fable for bounded whole-system architecture work. Cache entries do not cross model tiers.
+- **Model lanes:** use Sonnet for analysis and execution and Opus for binding judgment and whole-system architecture work. Cache entries do not cross model tiers.
 
 ---
 
@@ -255,10 +255,9 @@ Apply the cheapest tier that produces correct output. Escalate only when judgmen
 | :--- | :--- | :--- |
 | `haiku / low` | Deterministic enumeration | Recon, manifest building, file inventory, commit formatting |
 | `sonnet / medium` | Analysis | Scanning, tracing, drafting, planning, reviewing, implementing |
-| `opus / high` | Binding judgment | Exit gates, adversarial verification, per-finding architectural specs |
-| `claude-fable-5-1 / high` | Whole-system architectural synthesis | Building or checking a persisted cross-codebase architecture model — reserved for single-invocation-per-artifact tasks, not gates or per-finding loops |
+| `opus / high` | Binding judgment and whole-system architecture | Exit gates, adversarial verification, per-finding architectural specs, building or checking a persisted architecture model |
 
-The distinction: sonnet can analyze and find evidence; opus is needed when competing evidence must be weighed and a verdict produced that has downstream consequences; Fable earns its premium only on tasks that genuinely require holding the whole system in mind at once, and only where invocation volume stays low enough that the 2x-Opus price doesn't compound across every artifact in the pipeline.
+The distinction: sonnet can analyze and find evidence; opus is needed when competing evidence must be weighed and a verdict produced that has downstream consequences; no heavier tier is used: Fable costs about twice Opus, `arch-auditor` runs on every spec, and no measurement shows the premium catches what Opus misses.
 
 ---
 

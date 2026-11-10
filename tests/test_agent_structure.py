@@ -14,7 +14,7 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 AGENTS = sorted(REPOSITORY_ROOT.glob("plugins/*/agents/*.md"))
 PARTS = ["constitution", "backstory", "goal", "judgment", "output"]
-TIERS = {("haiku", "low"), ("sonnet", "medium"), ("opus", "high"), ("claude-fable-5-1", "high")}
+TIERS = {("haiku", "low"), ("sonnet", "medium"), ("opus", "high")}
 
 
 def split(path: Path) -> tuple[dict[str, str], str]:
