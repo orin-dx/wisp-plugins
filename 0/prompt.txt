@@ -1,0 +1,128 @@
+Where are we in our improvements??
+
+---
+
+What is your recommendations on what's waiting for me?
+
+---
+
+Sounds good to me, deliver based on recommendations
+
+---
+
+FYI context for further changes that we should roll into our work promptly:
+
+
+
+<pasted_content id="b820">
+The courier agent is better than I was on one point, and its own rules got in its way on the rest. Its output for #483:
+
+▎ The release PR now shows #N beside each change, linking the pull request that added its changeset; the --emit-preview file gains an optional pr field.
+
+Where it did well
+- It named the link and where it appears, which my versions never did.
+- It found a limit users will hit: changesets pushed directly with no pull request get no link.
+- It classed the change as a minor new capability, which is right.
+
+Where its instructions hurt it
+- Length cap: "one sentence for minor" plus the 200-character limit forced it to squeeze a user-facing change and a scripting detail into one line. It then left the direct-push limitation in a scratchpad that is never forwarded.
+- Missing why: it never says why the link helps.
+- Missing reference: the shared reference it is told to load first didn't resolve, so it had to search for it.
+- Wrong semver table: the table is built for agents and schemas, with no rows for a CLI's flags, output or serialized files, so it had to map by analogy.
+
+That matches my read: the plugin needs changes. It was written for per-diff, one-line summaries, not the layered, audience-aware entries you described.
+
+A draft for #483's changeset, not written to a file:
+
+Links each change in the release PR to the pull request that added it.
+
+- Shown as `#123` next to the change, so you can open the review and discussion behind it
+- A changeset added without a pull request (a direct push) gets no link
+- For scripts: the `--emit-preview` file has an optional `pr` for each change
+
+Next steps, if you agree
+1. Change the plugin: drop the caps, allow a lead plus bullets and sections, add "why it matters" and "who must act", add CLI rows to the semver table, and fix the reference path. This is outside this repo, so it's your call.
+2. Write the changeset set (#483 and #486) using the agent with the new rules, so the text comes from the agent rather than me.
+
+needs input: should I propose the plugin edits as a diff for you to review, and does the draft above read right for #483?
+
+⏺ Agent "Changeset for PR 483 diff" finished · 1m 31s
+
+※ recap: We're making Callisto's 0.19.0 release PR and changelog genuinely useful to users, and I'm rewriting its changesets with the courier agent after finding its rules conflict with your direction. Next, I propose the plugin edits as a diff for your review.
+
+❯ Yes, lets update the plugins (we have a current checkout in ~/projects/wisp-plugins) and do what we need to do to reinforce the use of the plugin
+
+Approved. I'm starting with a read-only look at the plugins checkout: where the changeset agent and its reference live, the schema, and the repo's rules for editing agents.
+
+  Read 1 file, ran 4 shell commands
+
+The installed 3.0.3 copy of the plugin is missing its shared/ folder, so its references may never load, even though the source repo has them. The 200-character summary cap is enforced in the schema, the agent and the skill, so I'm checking how the plugins are packaged next. · summary
+
+  Ran 1 shell command
+
+The shared symlink looks like a packaging bug that I'll report separately, since Codex dereferences those links but the Claude install doesn't. I'm opening a worktree in the plugins repo so your uncommitted changes on main stay untouched. · summary
+
+  Ran 1 shell command
+
+⏺ Entering worktree(/Users/gabe/projects/wisp-plugins/.claude/worktrees/layered-changesets)
+Interrupted · What should Claude do instead?
+
+✻ Cogitated for 22m 31s · done 3:55 PM
+
+❯ Give me a prompt to give another agent, be descriptive enough and give goals and outcome so it can do this properly
+
+Here is a prompt you can paste to the other agent. I created one worktree for it at ~/projects/wisp-plugins/.claude/worktrees/layered-changesets on branch feat/layered-changesets, and I have made no edits there. Reuse it or delete it.
+
+# Task: make courier's changeset guidance produce layered, user-valuable entries
+
+Repo: `~/projects/wisp-plugins` (orin-dx/wisp-plugins). Work in a git worktree off `origin/main`, not in the main checkout, which has the owner's uncommitted changes. Commits must be signed (never override signing). Read `AGENTS.md`, `shared/constitution.md` and `docs/adr/README.md` first. Edit authored sources only (generated Codex output is built with `just marketplace-sync`). Finish with `just check` passing and judge it by exit code.
+
+## Why this exists
+
+A Callisto maintainer (Callisto is a release tool) kept writing poor changesets. We tried `courier:changeset-analyzer` on a real diff (a feature that links each change in a release PR to the pull request that added it) and the agent's own rules got in its way:
+
+- **Hard length caps.** The `changeset@2` schema has `summary.maxLength: 200` with "one clause for patch, one sentence for minor". The agent and `courier/changeset` skill repeat it. The agent had to choose between the visible change and a scripting detail, and left a real user-facing limitation (changesets pushed directly get no link) in `reasoning`, which is never forwarded.
+- **Flat output.** `summary` is one string, so it cannot carry a lead line plus sections, bullets and sub-bullets.
+- **Per-diff granularity.** The agent splits a diff into topics. Real features span several PRs, and some PRs need no changeset at all. Nothing lets it say "update the existing entry" or "no changeset needed".
+- **No "why it matters".** The agent's own backstory complains about notes that say what changed but not why, but the output contract doesn't require it.
+- **Semver table gaps.** `shared/references/delivery/changesets.md` has rows for agents, skills and schemas only. It has none for a CLI's flags, output formats or serialized files, so the agent mapped by analogy.
+- **Reference not loading.** `load_first` names `shared/references/delivery/changesets.md`. In source this resolves through a `plugins/courier/shared -> ../../shared` symlink. The installed Claude copy (`~/.claude/plugins/cache/orin-dx-agent-plugins/courier/3.0.3/`) has no `shared/` at all, so the reference may never load.
+
+## What the maintainer wants (use these as the design goals)
+
+Changelog entries communicate value clearly to users who are upgrading, scripting or setting up. They are easy to scan and still give depth for readers who want it.
+
+- **No hard length targets.** Prescriptive limits don't produce value with LLMs. Replace them with judgment: detail proportional to what the reader needs.
+- **Layered structure when there is enough to say:** a lead line stating the value, then bullets, with sub-bullets for depth, grouped under audience sections where useful (for example what you see, scripting, upgrading). A one-line entry is fine when that is all there is.
+- **Say what it is, why it helps, and what to do.** Name the visible thing (a "link", a "label", a "flag"), where it appears, and the action if any. Vague verbs like "identifies" or "says" fail this test.
+- **State limits that users will hit.** They belong in the entry, not in a scratchpad.
+- **One entry per user-visible outcome, not per PR.** A feature across several PRs updates one entry. A change that is not user-visible, or fixes something not yet released, gets no changeset. The agent should be able to recommend this.
+- **Consistent voice** across entries, following `shared/references/authoring/voice.md`.
+
+## Outcomes (definition of done)
+
+1. `changeset@2` (or a new `changeset@3` if the change is breaking for consumers; follow the repo's schema-versioning rules) allows a layered summary without a length cap, and its description matches the new behavior. Decide with the ADR/constitution rules whether this is a new schema version, and justify it.
+2. `agents/changeset-analyzer.md` and `skills/changeset/SKILL.md`: remove the "one clause / one sentence / 200 chars" rules. Add the audience, why-it-matters and action requirements, the outcome-level granularity (update an entry, or recommend none), and "limits belong in the entry". Keep the 5-part agent structure and byte-identical constitution block. Follow instruction economy: one actionable rule per item, no repeated rationale.
+3. `shared/references/delivery/changesets.md`: add semver rows for CLI surface (new flag or command, changed output or exit code, new or changed serialized file) and a short worked example of a layered entry plus a bad-versus-good pair. Keep it under the reference size cap (`just reference-size`).
+4. Downstream consumers (`release-summarizer`, `pr-narrator`, sentinel, anything that reads `changeset@2`) still work with the new summary shape; update them and their tests.
+5. Add or update tests in `tests/` so the new schema and contract are covered.
+6. Bump versions and CHANGELOG for the affected plugins per repo rules (`just versions`).
+
+## Separate investigation, report only, do not fix in this change
+
+Confirm whether Claude installs lose the `shared/` symlink: compare the source plugin dir with `~/.claude/plugins/cache/orin-dx-agent-plugins/courier/3.0.3/`. If `shared/` is missing there, every agent's `load_first` references and schemas fail to load in installed plugins, which affects all plugins. Describe the evidence, the likely cause (ARCHITECTURE.md says Codex bundles dereference symlinks but nothing is said for Claude), and options. Return it as a finding.
+
+## Reinforcing use of the plugins (design, then implement what fits)
+
+In practice, Claude sessions wrote changesets, commit messages and PR text freehand instead of calling the courier agents. Propose and implement, within this repo, the lightest way to make the right agent the default: sharper trigger wording in the `changeset`, `commit` and `pr` skill descriptions, and a short note in the courier README on when to use each. Do not add Claude hooks (the owner finds them too heavy). Anything that needs changes in the Callisto repo, such as its AGENTS.md or PR template, goes in your report as a recommendation, not a change.
+
+## How to work
+
+- Use mason's agents (`mason:scaffolder` and `mason:auditor`) or the repo's own checks to validate structure; do not invent your own format.
+- Test the result: run `courier:changeset-analyzer` on this diff, a real Callisto PR diff (`gh pr diff 483 --repo orin-dx/callisto`) and confirm the entry names the link, where it appears, why it helps, and the direct-push limit.
+- Report what you changed, evidence for each outcome (commands and exit codes), what you did not do, and any decision you made that the owner should review.
+</pasted_content id="b820">
+
+---
+
+Make changes to PR narrator and commit analyzer please

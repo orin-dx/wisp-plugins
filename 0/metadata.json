@@ -1,0 +1,88 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M721ME30NY3J9X1TZAJVW4WN",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-10T06:17:10.00812Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "2fa093cbb793",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 32,
+    "cache_creation_tokens": 259366,
+    "cache_read_tokens": 3761764,
+    "output_tokens": 10658,
+    "api_call_count": 16,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "redaction": {
+    "replacements": 11,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 7,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 8
+  },
+  "summary": {
+    "intent": "Evaluate how well the wisp-plugins set works for front-end work and design ideation by auditing past orin-dx/techworx site sessions, then act on the findings: add exploration modes, gate hooks, context-hygiene rules, merge the review-slop branch, and improve the courier plugin (changesets, commit-analyzer, pr-narrator).",
+    "outcome": "Four parallel audits showed the plugins are too rigid for exploratory design work and lack visual/render coverage. The follow-up work delivered a context-measurement tool, a context-hygiene reference for smith, a merge of the review-slop branch, and courier 3.1.0 (changeset@3, release-artifact@3, updated commit-analyzer and pr-narrator), all committed locally and not pushed.",
+    "learnings": {
+      "repo": [
+        "Plugin set is a spec-driven lifecycle (weaver, vanguard, scribe/muse, navigator, smith, courier) with typed JSON handoffs in shared/schemas and default-fail gates; no plugin has a browser, screenshot or visual mode.",
+        "Published schemas are immutable under ADR 004, so removing the changeset summary length cap required new changeset@3 and release-artifact@3 rather than editing @2.",
+        "muse docs reference a ranger accessibility hazard taxonomy that does not exist; spec@1 has no fields for tokens, layout, breakpoints or visual intent.",
+        "Agent descriptions have a 450-character routing limit checked by scripts/check-platform-limits.py.",
+        "Codex counterparts under harnesses/codex are generated via `just marketplace-sync`; catalog.json and plugin.json versions must be kept in sync, and `just check` and `just claude-validate` are the verification commands.",
+        "The review-slop branch cuts dropped the closing </backstory> tag in scribe/drift-checker; both branches independently added tools/transcript-metrics.py and moved the muse exit-gate to verdict@3.",
+        "In the audited pages sessions, ~810 files were mostly subagent transcripts; only about 2 top-level sessions in orin-dx and 1-2 in pages used plugin agents; ideation ran via Artifacts, forks and general-purpose agents.",
+        "Context measurement: Bash is ~60% of all characters (output plus inline script text), whole-page Artifact reads are the largest single results, and delegation prompts are only 3%.",
+        "Plugin `shared/...` reference paths resolve relative to the plugin, not the agent's working directory, so agents can fail to find references like changesets.md even on correct installs."
+      ],
+      "code": [],
+      "workflow": [
+        "Sandbox blocks GPG signing, writes under ~/.claude/jobs/, and GitHub API calls; user approved running git commits outside the sandbox, scripts go in $TMPDIR (/tmp/claude-501).",
+        "Subagent reports are unverified model output; user hypotheses were passed to running agents via SendMessage to test them against evidence.",
+        "The `claude -p` guard refuses `$(...)` substitution; pass prompts inline or have the model read a prompt file.",
+        "Git add -A sometimes needed to be issued as a separate command from the commit.",
+        "Merging two overlapping branches once was chosen over rebasing to resolve conflicts a single time."
+      ]
+    },
+    "friction": [
+      "Initial session count was wrong (~810 sessions) because most were subagent transcripts.",
+      "Plugin specs and gates churned on wording-only blockers (SPEC-001 needed 13 verdicts) and did not catch visual defects; orchestrator ignored the 3-retry escalation cap.",
+      "Sandbox blocked GPG signing, the job directory and the gh API, requiring workarounds.",
+      "Merging review-slop conflicted in 10 files, including duplicated transcript-metrics and muse gate changes.",
+      "Some git add/commit chains were refused and had to be split.",
+      "The courier analyzer in the live run could not find its changesets.md reference due to path resolution."
+    ],
+    "open_items": [
+      "Push the branch and open a draft PR (awaiting user go-ahead).",
+      "Review and approve ADR 011 (exploration modes) and ADR 012 (handback gate hook); run the other four gates (scribe, smith, sentinel, ranger) live.",
+      "Investigate how the host resolves plugin shared/... paths and fix.",
+      "Wave 2 gate hygiene (evidence-citing blockers, wording-only blockers as notes), then Waves 3-5 (spec@2, render evidence, critic agents, prompt ablations, AGENTS.md).",
+      "Extend the context-hygiene rule to ranger, sentinel, muse, scribe and measure its effect; outcome-level plans in navigator/planner; move exploration record shapes out of skill bodies and re-pilot.",
+      "Callisto repo recommendations (AGENTS.md invoking courier skills, PR template changeset prompt) not applied; user's installed courier 3.0.3 stays broken until release and reinstall.",
+      "`just fmt-check` not run; paired comparison of exploration modes on a real design task still needed."
+    ]
+  }
+}
