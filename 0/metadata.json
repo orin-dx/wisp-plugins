@@ -1,0 +1,130 @@
+{
+  "cli_version": "0.12.3-nightly.202611020622.d7012996f",
+  "checkpoint_id": "01M73YC5S8J08WJDM063DQXW17",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-10T23:58:50.570358Z",
+  "branch": "worktree-frontend-design-evaluation",
+  "checkpoints_count": 3,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "daf237e9573e",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 48,
+    "cache_creation_tokens": 24765,
+    "cache_read_tokens": 9637421,
+    "output_tokens": 15738,
+    "api_call_count": 24,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "redaction": {
+    "replacements": 13,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 9,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 26
+  },
+  "summary": {
+    "intent": "Evaluate how well the Wisp plugins in this repo served front-end work and design ideation (using ~810 sessions from the orin-dx-site and pages projects), then act on the findings: reduce gate/plan rigidity and cost, fix path resolution, and ship the changes as a draft PR.",
+    "outcome": "Four investigations found the plugins are spec-driven and converge-only, with no visual or exploratory mode; four parallel tracks (gate hygiene ADR 013, outcome-level plans ADR 014, measurement, skill routing) were merged with a plugin-root path fix and version bumps (ecosystem 4.5.0). Draft PR #21 and Entire trail #290 are open, and the Fable/Astra tiers were dropped, Terra was applied to the Codex author role, and release-summarizer and drift-checker were downsized, with checks passing and nothing merged or released.",
+    "learnings": {
+      "repo": [
+        "Plugins form a spec-driven lifecycle (weaver, vanguard, scribe/muse, navigator, smith, courier) with typed JSON handoffs in shared/schemas and default-fail gates; no plugin has a visual, browser, or generative mode.",
+        "The spec@1 schema has no fields for tokens, layout, breakpoints, or copy, so a spec can pass muse's binding gate while saying nothing about appearance.",
+        "Muse docs reference a ranger accessibility taxonomy that was never implemented, so implemented a11y is never checked.",
+        "Only ~2 real top-level sessions exist per project dir; the other hundreds of files are subagent transcripts. Plugin agents were used in only two sessions (orin-dx b8d16e96, pages 24655582) plus one vanguard run.",
+        "Ideation in the real sessions happened via Claude Artifacts, forks, general-purpose agents, local dev server and Playwright screenshots, not plugins; the user explicitly asked for exploratory mode on 14 Oct, with specs and tests after narrowing.",
+        "Gate loops were fix-and-resubmit churn (e.g. SPEC-001 had 13 verdicts, 10 fails; 51 muse gate calls for 8 specs); the orchestrator ignored the 3-retry escalation rule. Real catches were cross-spec contradictions and contrast calculations.",
+        "Relative `shared/...` paths in agent/skill text resolved poorly from user projects; 163 references in 66 files were rewritten to `${CLAUDE_PLUGIN_ROOT}/shared/...` (Claude only; Codex output untouched).",
+        "The marketplace source change from git-subdir (ref: main) to relative ./plugins/<id> was the real fix for installed plugins having a dangling `shared` symlink; verified via real GitHub install in an isolated CLAUDE_CONFIG_DIR.",
+        "The constitution block is copied byte-for-byte into every agent (ADR 006), so gate rules were placed in each gate's <output> rather than the constitution.",
+        "plan@1 never required code in tasks (only id, title, files, steps, commit_message), so outcome-level plans needed no schema change; ADR 014 partially supersedes ADR 009.",
+        "Model tiers were author choices rather than measured; fable (scribe arch-auditor/architect) moved to opus/high, Codex judge astra moved to gpt-6.1-sol/high, Codex author moved to gpt-6.1-terra/medium, release-summarizer to haiku/low, drift-checker to sonnet/medium.",
+        "Merge conflicts across parallel worktree tracks were limited to IMPLEMENTATION-LOG.md and docs/adr/README.md and resolved by keeping both sections."
+      ],
+      "code": [
+        {
+          "path": "plugins/muse/agents/drafter.md",
+          "finding": "Requires props, variants, all states and a11y criteria as testable propositions but rejects 'looks disabled' criteria as leakage; the only design-system hook is verifying prop names against live source."
+        },
+        {
+          "path": "shared/constitution.md",
+          "line": 47,
+          "end_line": 50,
+          "finding": "Tier model has no divergent/exploratory cognitive mode; fable tier definition was removed in this session."
+        },
+        {
+          "path": "shared/constitution.md",
+          "line": 104,
+          "end_line": 112,
+          "finding": "Blockers-only resubmission and spec-persisted-on-pass language contributes to rigidity for early work."
+        },
+        {
+          "path": "shared/hooks/validate-handback.py",
+          "finding": "Now also denies blockers or coverage gaps whose criterion, kind, finding or location is whitespace-only; deliberately does not require location since escalation_required blockers legitimately lack one."
+        },
+        {
+          "path": "shared/references/verification/gate-readiness.md",
+          "finding": "New ~45-line drafter self-check reference (blocker shape, round rules, 10-check spec checklist) loaded by muse and scribe drafters with an inline fallback."
+        },
+        {
+          "path": "plugins/smith/README.md",
+          "line": 14,
+          "end_line": 14,
+          "finding": "Smith accepts a spec@1 with no plan, but still runs recon, mutator, reviewer and binding exit-gate; no spike mode exists."
+        }
+      ],
+      "workflow": [
+        "Mechanical scans of ~/.claude/projects jsonl (Skill/Agent tool_use counts) quickly sized real plugin usage before delegating deeper analysis to parallel subagents.",
+        "Subagent hand-backs are not user authority; their claims were reported as unverified and spot-checked (e.g. changelog claims against git diff) before being applied.",
+        "Parallel worktree tracks merged one at a time with `just check` and `just marketplace-sync` after each merge kept the branch green.",
+        "Verify installation changes end to end from the real GitHub source in an isolated CLAUDE_CONFIG_DIR rather than a local-path marketplace.",
+        "Gate savings and model-tier changes are hypotheses until measured via docs/evaluation-runbook.md paired comparisons; changes were recorded in the assumptions register as open to measure.",
+        "Entire trails auto-link to PR branches; findings should be recorded on the trail rather than as comments, and publishing a description is an outward-facing action needing user go-ahead."
+      ]
+    },
+    "friction": [
+      "User frustration at decisions being lost across sessions ('did you lose that decision') and specs that couldn't be judged without pictures; text-first option descriptions forced repeated 'show me' requests.",
+      "Agents stalled on 60-130 KB spec/plan files; 17 failed agent tasks and 32 'stalled' mentions in the orin-dx session.",
+      "Visual defects (translucency, toggle size, NavSheet not full screen, iOS safe area) were caught only by the user's eye, not by gated specs; wrong values were pinned in both code and tests so tests agreed with bugs.",
+      "The user questioned the marketplace source format change, which had only been verified with a local-path marketplace before.",
+      "The first git push of the Fable/Astra commit was rejected without a stated reason and succeeded on retry.",
+      "Ranger's exit-gate was denied once by the hook in a live run and the denial reason was not recorded.",
+      "A shared /tmp directory held another session's changed file (cmp.py), adding noise.",
+      "Tier and model facts (Terra pricing and capability) came mostly from third-party sources; the official page gave positioning only."
+    ],
+    "open_items": [
+      "Antigravity: verify whether it substitutes ${CLAUDE_PLUGIN_ROOT} in skill/agent text and how it installs plugins and follows the shared symlink (user will check); Codex install also untested.",
+      "Review and accept ADRs 011-014, especially 014, which rests on a single fixture and one run each.",
+      "Gate retry path past round one was never run live; the retry rule softens blockers into non-blocking gaps (ADR 013 cost).",
+      "Measure whether gate rounds, turns and tokens fall, and whether Terra/Opus/haiku tier changes hurt quality, using docs/evaluation-runbook.md; consider a Sonnet-vs-Opus gate comparison and Terra for the Codex research role.",
+      "Decide whether sentinel and ranger should be minor rather than patch version bumps.",
+      "Release PR #21 and test post-release; existing courier 3.0.3 installs stay broken until users update or reinstall.",
+      "Add a short description to Entire trail #290 (needs user go-ahead); approvals gate is still failing pending human review.",
+      "Design gaps not yet addressed: no sketch/spike mode, no visual exploration or render-based gating, no promote-prototype-to-spec path, no cross-session decision memory, no visual-intent fields in spec@1.",
+      "Fix documentation defect: muse references a nonexistent ranger accessibility taxonomy.",
+      "Callisto repo AGENTS.md and PR template should point to courier skills (recommendation only); flat .changeset/ format (D6) remains a courier gap.",
+      "Four Dependabot vulnerabilities (1 critical, 1 high) on the default branch, unrelated to this PR.",
+      "Add denial reasons to the handback hook trace; remaining stale 'exact code' description strings in plan@1 left per ADR 004."
+    ]
+  }
+}
