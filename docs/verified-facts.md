@@ -34,7 +34,7 @@ Sources are files under `docs/evaluations/frontend-design/verification/` unless 
 
 | Fact | Source | Checked | Tag | Re-check when |
 | :-- | :-- | :-- | :-- | :-- |
-| The selectable Codex models are `gpt-6.1-sol`, `gpt-6-luna` and `gpt-6-astra`; `gpt-5.5` retires from ChatGPT sign-in Codex on 2026-10-14; `gpt-5.4` and `gpt-5.3-codex-spark` are retired | Codex models page, via `IMPLEMENTATION-LOG.md` | 2026-10-20 | P* | New Codex model release |
+| The selectable Codex models are `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-luna` and `gpt-6-astra` (Terra is positioned for clear writing, visual understanding and computer use, needs Codex CLI 0.159.0 or later, and the page lists no effort levels for it; its API price of $1/$5 against Sol's $2/$10 per million tokens comes from third-party reports of OpenAI's table, not the models page); `gpt-5.5` retires from ChatGPT sign-in Codex on 2026-10-14; `gpt-5.4` and `gpt-5.3-codex-spark` are retired | Codex models page, via `IMPLEMENTATION-LOG.md` | 2026-10-20 | P* | New Codex model release |
 | Codex's AGENTS.md combined size cap is 32 KiB by default and configurable | VERIFY-2 | 2026-10-17 | P | Codex configuration reference changes |
 | Codex has 12 hook events; a Stop `decision: "block"` injects a continuation prompt; `stop_hook_active` is the loop guard and `continue: false` wins; a PreToolUse failure fails open; hooks need user trust review; plugin hooks are not supported under cloud orchestration | Y3 | 2026-10-17 | P | Hooks documentation changes |
 | Codex custom agents are natively TOML files in `.codex/agents/`; subagents inherit the parent's sandbox and approvals and cannot override them | Y3, VERIFY-2 | 2026-10-17 | P | Codex agents documentation changes |

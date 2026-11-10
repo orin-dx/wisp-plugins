@@ -189,3 +189,5 @@ Limits: the path finding rests on single probe runs; Antigravity's handling of `
 | :--- | :--- | :--- |
 | Two agents (`scribe:arch-auditor`, `scribe:architect`) ran on `claude-fable-5-1`, about twice Opus, and `arch-auditor` runs on every spec; the Codex `judge` role ran on `gpt-6-astra`. The constitution said fable was never for gates or per-finding loops, and no measurement shows either tier catches more | Both scribe agents move to `opus / high`, the constitution drops the fable tier, the Codex `judge` moves to `gpt-6.1-sol / high`; tier tests updated | `just check`. Quality effect unmeasured: run the spec-gating paired comparison in `docs/evaluation-runbook.md` and restore a tier if boundary conflicts or binding verdicts are missed |
 
+Codex `author` role: moved from `gpt-6.1-sol` / high to `gpt-6.1-terra` / medium (Terra is about half of Sol's price per token and is positioned for clear writing; the page lists no effort levels for it, so the effort label stays relative). Other roles unchanged. Unmeasured: whether Terra drafts specs, PR text and changesets as well as Sol; run the spec-drafting and courier comparisons in `docs/evaluation-runbook.md`.
+
