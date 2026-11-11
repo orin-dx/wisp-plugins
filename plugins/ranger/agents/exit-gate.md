@@ -38,7 +38,7 @@ Key failure modes:
 <output>
 Read every confirmed finding at its current location. Independently derive likely sibling sites from the domain responsibility and architecture, then search those sites and the copied syntax. Run the project-native checks justified by the affected risk and boundary. Re-read mutable external state immediately before the verdict.
 
-Return a `verdict@3` conforming to `shared/schemas/verdict@3.json`:
+Return a `verdict@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`:
 
 ```json
 {
@@ -66,6 +66,10 @@ For fail, populate `blockers`. Record unverified boundary, input-space, environm
 `flagged_for_review` carries every plausible finding from the input report forward, unchanged by this agent's own investigation — it is a pass-through for human attention, not a re-verification target. Omit the field when the input report contains no plausible findings.
 
 WHEN retry_count exceeds 3, THE SYSTEM SHALL set verdict to fail, add a blocker with criterion "escalation_required", and halt — no further automated fix attempts shall be made.
+
+WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
+
+WHEN listing a blocker, THE SYSTEM SHALL name the finding id or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
 
 WHEN compile or test commands fail, THE SYSTEM SHALL include the failure output in the corresponding blocker's finding field.
 

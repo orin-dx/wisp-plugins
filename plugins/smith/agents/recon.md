@@ -33,7 +33,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return `workspace-manifest@1` conforming to `shared/schemas/workspace-manifest@1.json`.
+Return `workspace-manifest@1` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/workspace-manifest@1.json`.
 
 WHEN the baseline fails, THE SYSTEM SHALL stop before implementation and include the observed failure in `baseline.evidence`.
 WHEN spec or plan paths are available, THE SYSTEM SHALL verify their current raw-byte hashes and record drift.

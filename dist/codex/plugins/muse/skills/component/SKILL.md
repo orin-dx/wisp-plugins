@@ -1,6 +1,6 @@
 ---
 name: component
-description: Turn UI intent into an implementation-ready component specification. Use when the user asks to specify, audit, or gate a component design before planning or implementation.
+description: Turn UI intent into an implementation-ready component specification. Use this, not a freehand spec, when the user asks to specify, audit, or gate a component design before planning or implementation.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -21,7 +21,7 @@ Convert the supplied design intent into a component contract that an implementer
 2. Draft a `spec@1` conforming to `shared/schemas/spec@1.json` with props, variants, state transitions, observable outcomes, error cases, and accessibility criteria.
 3. Make every acceptance criterion falsifiable from outside the implementation. Mark invalid combinations or error paths with `is_error_case: true`.
 4. Audit the draft for missing states, contradictory criteria, ambiguous language, and accessibility gaps.
-5. Emit a `verdict@3` conforming to `shared/schemas/verdict@3.json`. On failure, return only actionable blockers to the draft. On pass, persist the spec at `docs/specs/<id>.json` with `spec_file_path` set, then hand off the persisted artifact.
+5. Emit a `verdict@3` conforming to `shared/schemas/verdict@3.json`, with `artifact_type` `spec@1` and `verified_scope`, `coverage_gaps`, and `pending_checks` filled in. On failure, return only actionable blockers to the draft. On pass, persist the spec at `docs/specs/<id>.json` with `spec_file_path` set, then hand off the persisted artifact. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 
 ## Decisions and stopping
 

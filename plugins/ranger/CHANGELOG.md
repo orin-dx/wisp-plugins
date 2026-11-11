@@ -2,6 +2,12 @@
 
 — ranger
 
+## [3.2.4] - 2026-11-10
+
+### Changed
+- The exit gate lists the complete blocker set in round one and is checked by a hook (ADRs 012, 013).
+- The adversary reads project invariants through the shared workspace conventions instead of a once-per-session sweep, and carries fewer repeated rules. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [3.2.3] - 2026-09-27
 
 ### Changed

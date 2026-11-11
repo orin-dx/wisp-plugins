@@ -1,6 +1,6 @@
 ---
 name: gate
-description: Independently verify an artifact against its criteria before it crosses a lifecycle boundary. Use for requirements, specs, plans, implementations, PRs, and explicit readiness checks.
+description: Independently verify an artifact against its criteria before it crosses a lifecycle boundary. Use this, not freehand checking, for “is this done?”, “verify this”, and readiness checks on requirements, specs, plans, implementations, and PRs.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -14,7 +14,7 @@ Sentinel judges an existing artifact; it does not author a replacement. Begin by
 1. Identify `artifact_type`, `artifact_path`, the authoritative criteria, linked artifacts, and source files that can prove or disprove each criterion.
 2. Read persisted files when a path is present rather than relying on conversation summaries.
 3. Build an evidence table that classifies each criterion as verified, failed, or unverifiable, with exact paths and test or inspection evidence.
-4. Produce `verdict@3` conforming to `shared/schemas/verdict@3.json`. Name the verified scope, blockers, coverage gaps, and pending checks.
+4. Produce `verdict@3` conforming to `shared/schemas/verdict@3.json`. Name the verified scope, blockers, coverage gaps, and pending checks. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 5. Pass only when every applicable criterion is verified. On failure, return specific blockers that the producing workflow can act on.
 
 ## Retry protocol
@@ -26,6 +26,7 @@ On a retry, inspect only the revised artifact and the previous blockers. Do not 
 - Do not treat a passing test alone as proof of a criterion it does not exercise.
 - Mark evidence unverifiable when the relevant source, environment, or criterion is absent; do not convert uncertainty into a pass.
 - Treat a required check that has not finished as pending and fail the gate.
+- Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
 - Do not edit the artifact, create a PR, or publish a verdict externally unless the user asks for a separate action.
 
 ## Team use

@@ -2,6 +2,20 @@
 
 — muse
 
+## [1.1.0] - 2026-11-10
+
+### Added
+- `sketch` and `promote` skills and the `explorer` agent: non-binding exploration with three structurally different options per round, a decision log, and `promote` as the only route into the gated pipeline (ADR 011). New schema `option-set@1`.
+
+### Changed
+- The exit gate returns `verdict@3`; it was told to emit a verdict value no schema allows.
+- The exit gate lists the complete blocker set in round one and, on a retry, only unresolved or newly introduced blockers; `drafter` self-checks against the same list (ADR 013).
+- Output is checked by a hook before it reaches the caller (ADR 012).
+- Skill descriptions lead with the request they serve. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
+### Fixed
+- Removed a reference to a `ranger` accessibility skill that does not exist.
+
 ## [1.0.1] - 2026-09-09
 
 ### Changed

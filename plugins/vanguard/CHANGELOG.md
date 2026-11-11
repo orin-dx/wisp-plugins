@@ -2,6 +2,11 @@
 
 — vanguard
 
+## [2.0.3] - 2026-11-10
+
+### Changed
+- Shorter agent and skill descriptions; README no longer says the synthesizer resolves contradictions. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [2.0.2] - 2026-09-10
 
 ### Changed

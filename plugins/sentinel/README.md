@@ -1,6 +1,6 @@
 # sentinel — Verification Gate
 
-**Stage:** Gate · **Output:** `verdict@3` · **Version:** 2.1.2
+**Stage:** Gate · **Output:** `verdict@3` · **Version:** 2.1.3
 
 One skill, one artifact-agnostic pipeline. Sentinel returns a scoped `verdict@3`: pass or fail, with blockers, coverage gaps, and pending checks. Unverifiable required criteria fail unless explicitly waived.
 
@@ -14,6 +14,7 @@ Sentinel is standalone. Its `plugin.json` declares `consumes: []`, and nothing i
 - You want an independent second opinion on whether an implementation meets its spec
 - You need a formal pass/fail verdict with specific blockers before shipping
 - You want to check a finding report for completeness before handing it off
+- You are about to say an artifact is done or ready: invoke `sentinel/gate` first
 
 **Invoke with:** `"Gate this spec"`, `"Verify this implementation against the spec"`, `"Run the verification gate"`, `"Check whether this changeset meets all acceptance criteria"`, `"Is this finding report complete?"`
 

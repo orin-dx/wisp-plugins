@@ -34,4 +34,5 @@ For a wide spec, team members may inspect independent criterion groups with fixe
 ## Boundaries
 
 - Do not modify implementation, tests, or the persisted spec during diagnosis.
+- Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
 - Do not treat documentation claims as proof that a criterion is implemented.

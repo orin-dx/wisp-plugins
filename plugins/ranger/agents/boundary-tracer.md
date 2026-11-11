@@ -18,10 +18,12 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 <load_first>
 Load one boundary reference for the candidate language:
 
-- Rust: `shared/references/hazards/rust-boundaries.md`.
-- TypeScript or JavaScript: `shared/references/hazards/typescript-boundaries.md`.
-- Python: `shared/references/hazards/python-boundaries.md`.
-- Go: `shared/references/hazards/go-boundaries.md`.
+- Rust: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/rust-boundaries.md`.
+- TypeScript or JavaScript: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/typescript-boundaries.md`.
+- Python: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/python-boundaries.md`.
+- Go: `${CLAUDE_PLUGIN_ROOT}/shared/references/hazards/go-boundaries.md`.
+
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
 <backstory>
@@ -39,7 +41,7 @@ Account for every field, not only the suspicious one. Do not stop at an intermed
 <output>
 Use your file reading tool to read the struct or type definition and its construction site. Use your search tool to locate every call site where the struct or type is used. Trace each field through parameter passing, destructuring, and intermediate assignments until it either reaches an execution boundary or the trail ends.
 
-Return a field-survival-map@1 (see shared/schemas/field-survival-map@1.json):
+Return a field-survival-map@1 (see ${CLAUDE_PLUGIN_ROOT}/shared/schemas/field-survival-map@1.json):
 
 ```json
 {

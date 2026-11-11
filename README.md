@@ -15,7 +15,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
-  <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v4.4.5-success.svg" alt="Marketplace v4.4.5" /></a>
+  <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v4.5.0-success.svg" alt="Marketplace v4.5.0" /></a>
   <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/Docs-Architecture-informational.svg" alt="Architecture" /></a>
 </p>
 
@@ -88,9 +88,9 @@ Grouped by what each persona actually does — five bands across the lifecycle, 
 | **Define** | [`weaver`](./plugins/weaver/) | Captures and structures scattered need into requirements | `requirement@1` |
 | **Define** | [`vanguard`](./plugins/vanguard/) | Goes first — researches prior art, risk, and patterns before anyone commits to a direction | `research-report@1` |
 | **Design** | [`scribe`](./plugins/scribe/) | Drafts and gates the unambiguous, binding spec | `spec@1` |
-| **Design** | [`muse`](./plugins/muse/) | Drafts and gates component specs — props, variants, per-state behavior, accessibility | `spec@1` |
+| **Design** | [`muse`](./plugins/muse/) | Drafts and gates component specs — props, variants, per-state behavior, accessibility — and sketches options first, with a non-binding light path | `spec@1`, `option-set@1` |
 | **Build** | [`navigator`](./plugins/navigator/) | Decomposes the spec into an executable plan | `plan@1` |
-| **Build** | [`smith`](./plugins/smith/) | Implements, selects risk-matched tests, reviews defect families, and verifies criteria | `implementation-review@2`, `verdict@3` |
+| **Build** | [`smith`](./plugins/smith/) | Implements, selects risk-matched tests, reviews defect families, and verifies criteria; spikes a tool or approach on request | `implementation-review@2`, `verdict@3`, `spike-report@1` |
 | **Verify** | [`sentinel`](./plugins/sentinel/) | Cross-cutting gate — confirms any artifact meets its criteria before the next stage begins | `verdict@3` |
 | **Verify** | [`ranger`](./plugins/ranger/) | Hunts reachable defects and semantic siblings in Rust, TypeScript, JavaScript, Python, and Go | `finding-report@2` |
 | **Ship** | [`courier`](./plugins/courier/) | Commits, opens PRs, responds to review, writes changelogs and release notes | `release-artifact@2` |
@@ -272,8 +272,10 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
 | `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |
 | `implementation-review@2` | smith | smith exit-gate, scribe architect |
-| `changeset@2` | courier | courier release, sentinel |
-| `verdict@3` | scribe, smith, ranger, sentinel | gate consumers and humans |
+| `changeset@3` | courier | courier release, sentinel |
+| `verdict@3` | muse, scribe, smith, ranger, sentinel | gate consumers and humans |
+| `option-set@1` | muse sketch | muse promote, humans |
+| `spike-report@1` | smith spike | muse promote, humans |
 | `candidate-assessment@1` | ranger adversary | ranger report aggregation |
 | `finding-report@2` | ranger | scribe architect, humans |
 | `field-survival-map@1` | boundary-tracer | adversary |
@@ -284,7 +286,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `arch-model@2` | scribe | scribe architecture checks and remediation |
 | `release-artifact@2` | courier | humans |
 
-Every current gate uses `verdict@3`; earlier versions are immutable and no longer referenced.
+Every current gate, including Muse's component-spec gate, produces `verdict@3`. `verdict@1` is retained unchanged for artifacts that already use it; immutable schema versions are not rewritten in place.
 
 ---
 
@@ -327,7 +329,7 @@ wisp-plugins/
     ├── weaver/                    ← Requirement capture
     ├── vanguard/                  ← Research synthesis
     ├── scribe/                    ← Specification drafting and gating
-    ├── muse/                      ← Component spec drafting and gating
+    ├── muse/                      ← Component specs, sketching and promotion
     ├── navigator/                 ← Implementation planning
     ├── smith/                     ← Implementation and risk-matched verification
     ├── sentinel/                  ← Verification gate

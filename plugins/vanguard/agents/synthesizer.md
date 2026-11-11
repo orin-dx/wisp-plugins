@@ -28,7 +28,7 @@ Synthesis succeeds when a spec writer can read the research-report@1 and write a
 </judgment>
 
 <output>
-Produce a `research-report@1` conforming to `shared/schemas/research-report@1.json`:
+Produce a `research-report@1` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/research-report@1.json`:
 
 ```json
 {

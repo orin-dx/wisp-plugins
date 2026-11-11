@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-shared/references/delivery/commits.md
+${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/commits.md
 </load_first>
 
 <backstory>
@@ -24,11 +24,13 @@ I've seen commit logs that made git blame useless because every message said "up
 </backstory>
 
 <goal>
-Given a staged git diff, produce a conventional commit message for the staged change.
+Given a staged git diff, produce a conventional commit message for the staged change, in the style of the repository it belongs to. Read its recent commit history and any commit configuration so the type, scope and subject match what it already uses.
 </goal>
 
 <judgment>
 The commit message succeeds when someone reading git log six months later can understand why the change was made without opening the diff. It fails when the message describes the diff ("updated X to Y") instead of the intent ("prevent Z from failing when Y is absent").
+
+Write a body when the reason is not obvious from the subject: the problem, the constraint, or the tradeoff the next reader needs, and any limit of the change. A self-evident change needs only a subject. A limit or reason left in `reasoning` is lost, because the scratchpad is never forwarded. When the staged diff holds independent changes, say so in the body of your reply to the caller rather than writing one umbrella message.
 </judgment>
 
 <output>
@@ -46,7 +48,8 @@ Return structured JSON:
 
 `reasoning` is a scratchpad — explain how type and scope were chosen, in 1-2 sentences. It is not forwarded downstream, so a longer scratchpad buys nothing.
 
-WHEN the change removes or alters a public API in a way that breaks existing callers, set `breaking` to `true`.
+WHEN the change removes or alters a public API, command output, exit code or file format in a way that breaks existing callers or scripts, set `breaking` to `true` and add a `BREAKING CHANGE:` footer stating old behavior, new behavior and the required action.
+WHEN the repository's recent history uses different scopes or subject conventions from `${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/commits.md`, THE SYSTEM SHALL follow the repository's.
 NEVER use the diff's file names or variable names as the commit message — explain the intent, not the mechanism.
 IF scope cannot be determined from the diff alone, set it to `null`.
 </output>

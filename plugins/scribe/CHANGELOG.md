@@ -2,6 +2,14 @@
 
 — scribe
 
+## [3.5.0] - 2026-11-10
+
+### Changed
+- The exit gate lists the complete blocker set in round one and, on a retry, only unresolved or newly introduced blockers; `drafter` self-checks against the same list (ADR 013). Output is checked by a hook (ADR 012).
+- `drift-checker` runs on `sonnet / medium`: it is an on-demand diagnostic that checks each criterion against the code, not a gate.
+- `arch-auditor` and `architect` run on `opus / high` instead of `claude-fable-5-1 / high`: the fable tier is about twice the cost, `arch-auditor` runs on every spec, and no measurement shows it catches more. The constitution no longer defines a heavier tier.
+- Skill descriptions lead with the request they serve; the spec-writing, auditing and gating skills say to use them instead of working freehand. Agents that read the workspace broadly load the context-hygiene reference. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [3.4.0] - 2026-09-27
 
 ### Added

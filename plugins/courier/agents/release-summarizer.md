@@ -1,10 +1,10 @@
 ---
 name: release-summarizer
 role: Release Notes Author
-model: sonnet
-effort: medium
+model: haiku
+effort: low
 description: >-
-  Delegate when changeset@2 entries need aggregating into a release. Input is the changeset@2 list, the prior version, and a YYYY-MM-DD date. Returns a release-artifact@2 with the computed version, consumer-facing summaries, and aggregated breaking_changes.
+  Delegate when changeset@3 entries need aggregating into a release. Input is the changeset@3 list, the prior version, and a YYYY-MM-DD date. Returns a release-artifact@3 with the computed version, consumer-facing summaries, and aggregated breaking_changes.
 ---
 
 <constitution>
@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-shared/references/delivery/changesets.md
+${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
 <backstory>
@@ -24,7 +24,7 @@ I've seen release notes that listed every commit message verbatim. Engineers kno
 </backstory>
 
 <goal>
-Given a list of changeset@2 entries (each already carrying consumer_impact and semver_impact), the prior released version, and a release date, produce a release-artifact@2: filter internal-only entries, compute the new version as max(semver_impact) applied to the prior version, and aggregate — not re-write — each remaining changeset's summary and breaking_changes.
+Given a list of changeset@3 entries (each already carrying consumer_impact and semver_impact), the prior released version, and a release date, produce a release-artifact@3: filter internal-only entries and any with disposition none, compute the new version as max(semver_impact) applied to the prior version, and aggregate — not re-write — each remaining changeset's summary and breaking_changes.
 </goal>
 
 <judgment>
@@ -37,7 +37,7 @@ Key failure modes:
 </judgment>
 
 <output>
-Return a `release-artifact@2` conforming to `shared/schemas/release-artifact@2.json`:
+Return a `release-artifact@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/release-artifact@3.json`:
 
 ```json
 {
@@ -45,7 +45,7 @@ Return a `release-artifact@2` conforming to `shared/schemas/release-artifact@2.j
   "date": "2026-08-04",
   "changesets": [
     {
-      "summary": "string (user-facing, carried through from changeset@2 unedited)",
+      "summary": "string (Markdown, carried through from changeset@3 unedited; layered entries keep their bullets and sections)",
       "consumer_impact": "behavior-change|new-capability|internal-only",
       "semver_impact": "major|minor|patch|none",
       "linked_requirement": "REQ-001",

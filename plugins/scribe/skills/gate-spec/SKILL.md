@@ -1,14 +1,14 @@
 ---
 name: gate-spec
 description: >-
-  Trigger when a spec@1 needs a binding pass/fail judgment before planning: "gate this spec", "is this spec ready?", "check this spec before we plan it". Default disposition is fail. Checks the spec on its own terms and returns a verdict with blockers specific enough for scribe/draft-spec to act on.
+  Use this, not a freehand verdict, whenever a spec must be judged ready before planning: "gate this spec", "is this spec ready?", "check this spec before we plan it". Default disposition is fail. Checks the spec on its own terms and returns a verdict@3 with blockers specific enough for scribe/draft-spec to act on.
 version: 2.1.0
 ---
 
 # Scribe — Gate Spec
 
 <overview>
-The binding exit gate for a spec entering planning. Delegates to `exit-gate`. On pass, this skill — not the agent — performs the disk-write orchestration below; that step is load-bearing, not decoration.
+The binding exit gate for a spec entering planning. Delegates to `exit-gate`. On pass, this skill — not the agent — performs the disk-write orchestration below; that step is load-bearing, not decoration. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 </overview>
 
 <dispatch>
@@ -30,7 +30,7 @@ Without `spec_file_path` set, downstream agents fall back to reading the spec fr
 </orchestration>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/verdict@3.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`
 </references>
 
 <io>

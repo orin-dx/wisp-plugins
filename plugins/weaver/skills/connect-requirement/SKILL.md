@@ -18,7 +18,7 @@ The single-requirement version of `weaver/audit-backlog` — same agent, narrowe
 </dispatch>
 
 <references>
-`shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

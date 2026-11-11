@@ -1,6 +1,6 @@
 # smith — Implementation
 
-**Stage:** Code · **Output:** code, `implementation-review@2`, `verdict@3` · **Version:** 2.4.5
+**Stage:** Code · **Output:** code, `implementation-review@2`, `verdict@3` · **Version:** 2.5.0
 
 Smith executes each plan batch through implementation, mutation, defect-family review, and an independent exit gate. Review finds syntactic and semantic siblings, records their shared cause, and checks for missing domain concepts or architectural constraints. No plan yet? Give it a `spec@1` directly.
 
@@ -14,7 +14,9 @@ Smith never assembles a changeset itself. It hands `criteria_evidence` — exact
 - You have a `spec@1` but no plan, and want to implement directly
 - You need proof — not just a claim — that every acceptance criterion was actually tested, with tests validated by mutation testing rather than a write-first ritual
 
-**Invoke with:** `"Implement this"`, `"Execute the plan"`, `"Build this feature"`
+- You want to find out whether a tool, library or approach works before committing to it (`spike`): a throwaway experiment with no plan, spec, review or gate
+
+**Invoke with:** `"Implement this"`, `"Execute the plan"`, `"Build this feature"`, `"Spike whether this library works in our stack"`
 
 ---
 
@@ -29,6 +31,17 @@ Smith never assembles a changeset itself. It hands `criteria_evidence` — exact
 **AGY** — installs the full repo; see the [root README](../../README.md#install) for instructions.
 
 **Codex** — see the [root Codex setup](../../README.md#codex), then run `codex plugin add smith@wisp-plugins`.
+
+---
+
+## Skills
+
+| Skill | What it does | Subagent |
+| :--- | :--- | :--- |
+| `smith/implement` | Executes plan batches with risk-matched verification, defect-family review and an independent exit gate | `recon`, `implementer`, `mutator`, `reviewer`, `exit-gate` |
+| `smith/spike` | Runs the smallest throwaway experiment that answers one question and returns a `spike-report@1` of what was observed, verified and left unchecked. Non-binding: no plan, spec, mutation, review or exit gate | none |
+
+Agents are internal to `implement`; invoke the skill, not its agents. `spike` is the light path for early technical questions (see `shared/references/architecture/modes.md`); anything it finds is promoted through `muse/promote`, never treated as evidence for a gate.
 
 ---
 
@@ -99,6 +112,8 @@ When an explicit plan selection and the optional Wisp CLI are available, Smith c
 `implementation-result@1` — see `shared/schemas/implementation-result@1.json`. Records one batch outcome, criterion evidence, commands, changed files, gaps, and any spec or architecture escalation.
 
 `mutation-report@2` — see `shared/schemas/mutation-report@2.json`. Records the selected method, commands, cases, survivors, generated-input evidence, precision tests, gaps, and errors.
+
+`spike-report@1` — see `shared/schemas/spike-report@1.json`. Produced by `spike`: the question, the approach, what was observed, what was verified and what was not, and a conclusion (`works`, `partly`, `fails`, `inconclusive`; `works` needs at least one verified item). Marked `fidelity: spike`; non-binding.
 
 The reviewer loads `shared/references/verification/implementation-review.md`, which selects the language hazards, architecture smells, and comment standard relevant to the diff.
 

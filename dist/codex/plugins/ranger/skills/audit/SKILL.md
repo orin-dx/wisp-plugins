@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Find evidence-backed reachable defects in Rust, TypeScript, JavaScript, Python, or Go. Use for bug hunts, security audits, suspected defects, or post-remediation verification; do not use for general code explanation.
+description: Find evidence-backed reachable defects in Rust, TypeScript, JavaScript, Python, or Go. Use this, not a freehand code review, for bug hunts, security audits, suspected defects, or post-remediation verification; do not use for general code explanation.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -26,7 +26,7 @@ Ranger reports only defects that survive control-flow and reachability review. P
 6. Aggregate results and defect families using `shared/schemas/finding-report@2.json`.
 7. Group confirmed findings that share a root cause, domain responsibility, or failure state. Derive likely semantic candidate sites from types, calls, state transitions, and boundary adapters before searching them.
 8. When repeated findings suggest a missing concept, state, operation, boundary, abstraction, invariant, or enforcement mechanism, route the report to `scribe:architect` before remediation.
-9. After remediation, issue `shared/schemas/verdict@3.json`. Independently verify each finding, sibling candidates, and the affected boundary against current state. Wait for every started check to finish.
+9. After remediation, issue `shared/schemas/verdict@3.json`. Independently verify each finding, sibling candidates, and the affected boundary against current state. Wait for every started check to finish. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 
 ## Safety and evidence
 
@@ -35,6 +35,7 @@ Ranger reports only defects that survive control-flow and reachability review. P
 - Do not report a security claim without a concrete reachable path and impact.
 - Before saying a remediation is resolved, inspect the edited code and run the repository-native verification relevant to the change.
 - Choose mutation, property, fuzz, race, integration, or boundary checks when they fit the risk and the project supports them. A generated-input check must state its generator and oracle. Record uncovered risk as a coverage gap.
+- Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
 
 ## Team use
 

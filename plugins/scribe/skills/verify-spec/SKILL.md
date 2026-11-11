@@ -1,7 +1,7 @@
 ---
 name: verify-spec
 description: >-
-  Trigger when the user asks whether a spec matches its source: "is this grounded?", "does this spec match the requirement?", "check this spec against the requirement". Given a draft spec@1, the requirement@1, and optional research-report@1, classifies criteria as supported, unsupported, or overfitted. Evidence only, no verdict; use before implementation.
+  Use when asked whether a spec matches its source: "is this grounded?", "does this spec match the requirement?", "check this spec against the requirement". Classifies each criterion of a draft spec@1 as supported, unsupported or overfitted against the requirement@1 and optional research-report@1. Evidence only, no verdict; run before implementation.
 version: 2.0.0
 ---
 
@@ -18,7 +18,7 @@ Confirms a spec draft actually traces back to what the requirement (and research
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/requirement@1.json`, `shared/schemas/research-report@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/research-report@1.json`
 </references>
 
 <io>

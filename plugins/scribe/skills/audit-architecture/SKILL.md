@@ -1,7 +1,7 @@
 ---
 name: audit-architecture
 description: >-
-  Trigger when a draft spec@1 needs checking against whole-system architecture, before scribe/gate-spec: "check this spec against our architecture", "does this fit the system", "audit this against the arch model". Checks a spec@1 against the persisted arch-model@2 (building or refreshing it if absent or stale) and returns specific rewritten fixes on fail.
+  Use when a draft spec@1 should be checked against whole-system architecture before scribe/gate-spec: "check this spec against our architecture", "does this fit the system", "audit this against the arch model". Checks it against the persisted arch-model@2 (building or refreshing it if absent or stale) and returns specific rewritten fixes on fail.
 version: 1.0.0
 ---
 
@@ -14,11 +14,13 @@ Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consist
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **arch-auditor** | claude-fable-5-1 / high | A spec@1 (post `scribe/audit-spec`) needs checking against the workspace's persisted architecture model before `scribe/gate-spec`. Also invoked directly in build mode to construct or refresh the model on demand. |
+| **arch-auditor** | opus / high | A spec@1 (post `scribe/audit-spec`) needs checking against the workspace's persisted architecture model before `scribe/gate-spec`. Also invoked directly in build mode to construct or refresh the model on demand. |
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/arch-model@2.json`, `shared/schemas/arch-audit@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/arch-model@2.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/arch-audit@1.json`
+
+Keep command output and scripts out of the thread as `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` says.
 </references>
 
 <orchestration>

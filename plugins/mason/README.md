@@ -1,6 +1,6 @@
 # mason — Plugin Authoring
 
-**Stage:** Meta · **Output:** plugin artifacts and evaluations · **Version:** 3.2.2
+**Stage:** Meta · **Output:** plugin artifacts and evaluations · **Version:** 3.2.3
 
 Mason scaffolds plugins, audits conformance, designs inter-agent schemas, and evaluates workflow behavior with fixed hidden-oracle fixtures.
 

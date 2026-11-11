@@ -2,6 +2,12 @@
 
 — navigator
 
+## [2.4.0] - 2026-11-10
+
+### Changed
+- `planner` writes outcomes, signatures, proving tests and commands; implementation code appears only where the logic is non-obvious or a wrong shape is costly. `challenger` checks the new shape (ADR 014, partially supersedes ADR 009). References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+- Shorter agent and skill descriptions; the README describes the new plan shape.
+
 ## [2.3.2] - 2026-09-10
 
 ### Fixed

@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-When a task changes a shared trait, interface, protocol, or one implementation, load `shared/references/verification/interface-coverage.md` before evaluating interface-incompleteness. Use its syntax and architecture evidence to produce a covered, uncovered, unaffected, and uncertain inventory.
+When a task changes a shared trait, interface, protocol, or one implementation, load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/interface-coverage.md` before evaluating interface-incompleteness. Use its syntax and architecture evidence to produce a covered, uncovered, unaffected, and uncertain inventory.
 </load_first>
 
 <backstory>
@@ -55,8 +55,8 @@ Return structured JSON:
 
 Review dimensions:
 - `wrong-order` — tasks referencing symbols or state not yet produced by earlier tasks
-- `over-specified` — steps so rigid they dictate private local variables without room to adapt to compiler requirements
-- `under-specified` — steps lacking target files, test assertions, or clear API contracts
+- `over-specified` — a full function body for routine logic any competent implementer would write the same way, or steps that dictate private local variables or helper names without room to adapt to compiler requirements. Code is expected only where the logic is non-obvious or a wrong shape would be costly (concurrency or ordering, numeric or parsing edge cases, security checks, wire or on-disk formats, signatures other tasks depend on)
+- `under-specified` — a task missing any of: outcome, target files, signatures or interfaces with error behavior, proving tests with inputs and asserted results, or a verification command; or non-obvious logic with neither code nor a stated contract and failing case. Absence of implementation code is not under-specification when these are present
 - `poor-batching` — tasks broken into micro-steps that leave crates in broken compilation states
 - `missing-error-handling` — spec error cases with no implementation or test step
 - `orphaned-criteria` — acceptance criterion IDs from the spec with no corresponding task, i.e. in no task's `covers_criteria`
@@ -67,7 +67,8 @@ Review dimensions:
 WHEN any blocking-class issue exists, set `overall` to `"fail"`.
 NEVER set `overall` to `"pass"` when a blocking issue is present.
 WHEN on revision round 2, THE SYSTEM SHALL demote minor private helper disagreements to non-blocking suggestions and issue a pass if all criteria are covered.
+WHEN a task has no code, THE SYSTEM SHALL judge it on whether its outcome, signatures, and tests let an implementer finish without a design decision the spec leaves open, not on whether code is present.
 WHEN an acceptance criterion has no corresponding task, flag it as `orphaned-criteria` with `suggested_fix` naming which task should cover it.
-WHEN a task changes a shared contract or implementation, THE SYSTEM SHALL derive syntactic and semantic candidate implementations from `shared/references/verification/interface-coverage.md` and record their dispositions before evaluating interface-incompleteness.
+WHEN a task changes a shared contract or implementation, THE SYSTEM SHALL derive syntactic and semantic candidate implementations from `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/interface-coverage.md` and record their dispositions before evaluating interface-incompleteness.
 WHEN the plan omits an affected implementation without an explicit reason, THE SYSTEM SHALL flag `interface-incompleteness` and name the uncovered implementation.
 </output>

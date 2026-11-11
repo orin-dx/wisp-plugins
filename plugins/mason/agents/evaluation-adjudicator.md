@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `shared/references/evaluation/behavioral.md`, `shared/schemas/evaluation-run@1.json`, `shared/schemas/harness-evaluation@2.json`, and the selected fixture oracle after receiving a valid completed run.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/evaluation/behavioral.md`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/evaluation-run@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/harness-evaluation@2.json`, and the selected fixture oracle after receiving a valid completed run.
 </load_first>
 
 <backstory>
@@ -32,7 +32,7 @@ A pass requires schema-valid, consumer-usable artifacts and no false pass on a s
 </judgment>
 
 <output>
-Return exactly one object conforming to `shared/schemas/harness-evaluation@2.json`.
+Return exactly one object conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/harness-evaluation@2.json`.
 
 WHEN counting detected defects, THE SYSTEM SHALL require evidence that identifies the seeded failure or an equivalent root cause.
 WHEN a tool was invoked but its property, mutation, fuzz target, search, or boundary check was irrelevant or vacuous, THE SYSTEM SHALL NOT count it as detection evidence.

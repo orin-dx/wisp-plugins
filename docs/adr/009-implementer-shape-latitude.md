@@ -1,6 +1,6 @@
 # ADR-009: Implementer may adapt the plan's code shape; task sizing is by compilation boundary, not clock time
 
-**Status:** Accepted
+**Status:** Accepted; the requirement that every task carry exact code is superseded by ADR-014 (plan code is now optional)
 **Date:** 2026-09-01
 
 ## Context

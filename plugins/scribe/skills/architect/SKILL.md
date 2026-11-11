@@ -1,7 +1,7 @@
 ---
 name: architect
 description: >-
-  Trigger when `finding-report@2`, `implementation-review@2`, or `implementation-result@1` identifies a structural defect class. Produce the smallest `spec@1` that makes recurrence impossible or machine-detectable through a type, API, boundary, invariant, lint, test, or CI rule.
+  Use when a finding-report@2, implementation-review@2 or implementation-result@1 identifies a structural defect class, or the same kind of defect keeps recurring: "make this class of bug impossible". Produces the smallest spec@1 that makes recurrence impossible or machine-detectable through a type, API, boundary, invariant, lint, test or CI rule.
 version: 2.2.0
 ---
 
@@ -14,11 +14,11 @@ Turn confirmed defect families into enforceable structural specs. Route every ou
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **architect** | claude-fable-5-1 / high | A confirmed defect family needs a structural boundary, domain model, or enforceable invariant. |
+| **architect** | opus / high | A confirmed defect family needs a structural boundary, domain model, or enforceable invariant. |
 </dispatch>
 
 <references>
-`shared/schemas/finding-report@2.json`, `shared/schemas/implementation-review@2.json`, `shared/schemas/implementation-result@1.json`, `shared/schemas/spec@1.json`, and `shared/references/architecture/remediation.md`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/finding-report@2.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/implementation-review@2.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/implementation-result@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, and `${CLAUDE_PLUGIN_ROOT}/shared/references/architecture/remediation.md`
 </references>
 
 <io>

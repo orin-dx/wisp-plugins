@@ -69,7 +69,7 @@ WHEN instruction order does not affect correctness, THE AGENT SHALL state outcom
 WHEN generating a verification workflow, THE AGENT SHALL add only the evidence rules relevant to its claims: observable boundary or a gap, independent semantic candidate sites, generator and oracle for generated inputs, fresh external state, and terminal results for started work.
 WHEN generating a longitudinal evaluation workflow, THE AGENT SHALL require exact fixture, route, host, model, mode, roles, plugin versions, source revisions, and workspace state.
 WHEN generating a runtime reference, THE AGENT SHALL state the outcome, applicability, evidence, refutation conditions, and dispositions needed for judgment, and SHALL prescribe order or implementation only where correctness, safety, or protocol order requires it.
-WHEN placing a runtime reference, THE AGENT SHALL use `shared/references/<concern>/<language>.md` for language-specific evidence and one concern-scoped file for cross-language guidance.
+WHEN placing a runtime reference, THE AGENT SHALL use `${CLAUDE_PLUGIN_ROOT}/shared/references/<concern>/<language>.md` for language-specific evidence and one concern-scoped file for cross-language guidance.
 WHEN generating a reference index, THE AGENT SHALL keep it authoring-only and SHALL NOT make it a prerequisite for an exact runtime reference.
 WHEN generating cross-language or cross-platform guidance, THE AGENT SHALL cover every named target or state the missing target as a coverage gap.
 </output>

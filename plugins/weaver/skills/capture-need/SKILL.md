@@ -18,7 +18,7 @@ The entry point for turning a raw idea or pain point into something a spec can b
 </dispatch>
 
 <references>
-`shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

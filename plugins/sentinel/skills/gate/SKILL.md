@@ -1,7 +1,7 @@
 ---
 name: gate
 description: >-
-  Trigger on "verify this", "check this spec/plan/requirement/PR", "is this done?", "review for completeness", "does this meet the criteria?", "gate this", "quality check", and before stage transitions (spec to implementation, implementation to ship, branch to PR). Not for general Q&A, code explanation, or exploratory work. Clears the artifact or returns blockers as `verdict@3`.
+  Use this, not freehand checking, whenever an artifact must be verified before the next stage: "verify this", "is this done?", "check this spec/plan/requirement/PR", "does this meet the criteria?", "gate this", and before starting implementation, shipping or opening a PR. Not for Q&A, code explanation or exploration. Returns verdict@3: cleared, or blockers.
 version: 1.3.0
 ---
 
@@ -19,7 +19,7 @@ Sentinel is a cross-cutting verification gate. It runs whenever a stage artifact
 | :--- | :--- | :--- | :--- | :--- |
 | 1 — Recon | `recon` | haiku | low | Inventory the artifact: type, location, criteria list, source files to read. No judgment. |
 | 2 — Verify | `verifier` | sonnet | medium | Cross-reference each criterion against the source files. Classify as verified, failed, or unverifiable. Neutral — reports evidence only. |
-| 3 — Exit Gate | `exit-gate` | opus | high | Produce the final verdict. Pass only if all criteria are verified with no unresolved failures. On fail, return specific actionable blockers. |
+| 3 — Exit Gate | `exit-gate` | opus | high | Produce the final verdict. Pass only if all criteria are verified with no unresolved failures. On fail, return specific actionable blockers. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules. |
 
 </three_stage_flow>
 
@@ -37,4 +37,5 @@ The protocol output is `verdict@3`: a scoped pass or fail with blockers, coverag
 
 <framework_references>
 - [Verdict Schema](../../../../shared/schemas/verdict@3.json)
+- [Context hygiene](../../../../shared/references/tooling/context.md) — keep command output and scripts out of the thread when running checks.
 </framework_references>

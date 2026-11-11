@@ -1,6 +1,6 @@
 ---
 name: changeset
-description: Classify verified changes and produce one changeset per independent consumer-facing topic. Use when the user asks to add a changeset, document a change, or determine release impact.
+description: Classify verified changes and write one layered changeset per user-visible outcome, update an existing entry, or recommend none. Use whenever a changeset, changelog entry or release note is written or edited, instead of freehand text.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -11,10 +11,10 @@ Read the actual diff and any available implementation evidence before writing a 
 
 ## Workflow
 
-1. Inspect the diff and group files by independent product or API topic.
+1. Inspect the diff and group files by user-visible outcome, not by pull request or commit.
 2. Read `shared/references/delivery/changesets.md` before choosing `consumer_impact` or `semver_impact`.
 3. For each topic, connect changed behavior to the linked requirement, spec, plan, or exact criteria evidence when available.
-4. Produce one object per topic conforming to `shared/schemas/changeset@2.json`.
+4. Produce one object per outcome conforming to `shared/schemas/changeset@3.json`. Write `summary` as Markdown with no length target: a lead line stating the value, then bullets or audience sections when the reader needs more (what changed for them, why it helps, what to do). State limits the reader will hit in the summary. Set `disposition` to `update-existing` (and name `updates`) when an unreleased entry already covers the outcome, or to `none` when no consumer sees the change.
 5. Validate required fields, especially `files_changed` and `acceptance_criteria_met`, against observed evidence.
 
 ## Classification rules
@@ -31,4 +31,4 @@ When independent diff topics exist and agent teams are available, delegate topic
 
 ## Output
 
-Return the structured `changeset@2` object or objects and a short human-readable summary. Do not write, commit, or publish files unless the user asks for that action.
+Return the structured `changeset@3` object or objects and a short human-readable summary. Do not write, commit, or publish files unless the user asks for that action.

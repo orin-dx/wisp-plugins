@@ -1,7 +1,7 @@
 ---
 name: draft-spec
 description: >-
-  Trigger when the user asks to write or draft a spec: "spec this out", "draft a spec", "write a spec for this requirement". Given a requirement@1 and optionally a research-report@1, produces a spec@1 draft with purpose, scope, non_goals, api_surface (if applicable), and acceptance criteria. Every criterion is a testable proposition; error cases carry is_error_case: true. No TBDs anywhere in the document — genuinely unknown items go in non_goals or the reasoning scratchpad instead.
+  Use this, not a freehand spec, whenever a spec is written or drafted: "spec this out", "draft a spec", "write a spec for this requirement", "write the acceptance criteria". Turns a requirement@1 and optional research-report@1 into a spec@1 with scope, non_goals, api_surface and testable criteria; error cases carry is_error_case: true. No TBDs.
 version: 2.0.0
 ---
 
@@ -18,7 +18,7 @@ Turns a requirement (and optional research report) into a spec a developer could
 </dispatch>
 
 <references>
-`shared/schemas/spec@1.json`, `shared/schemas/requirement@1.json`
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/spec@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/requirement@1.json`
 </references>
 
 <io>

@@ -2,6 +2,16 @@
 
 — smith
 
+## [2.5.0] - 2026-11-10
+
+### Added
+- `spike` skill and `spike-report@1`: a throwaway experiment that says what was verified and what was not (ADR 011).
+- A light entry for review findings or a diff-sized change with no spec or plan, and a project-invariants convention.
+- A hazard reference for scripts, CI workflows and generated templates, and a context-hygiene reference for command output.
+
+### Changed
+- The exit gate lists the complete blocker set in round one, cites a proving command for each claim, and is checked by a hook (ADRs 012, 013). References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [2.4.5] - 2026-09-28
 
 ### Added

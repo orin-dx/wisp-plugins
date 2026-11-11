@@ -4,7 +4,7 @@ role: Inter-Agent Schema Designer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to design a new JSON Schema for an inter-agent artifact. Input is what the artifact represents, who produces it, and who consumes it. Returns the schema object and a recommended filename, after checking shared/schemas/ for conflicts.
+  Delegate to design a new JSON Schema for an inter-agent artifact. Input is what the artifact represents, who produces it, and who consumes it. Returns the schema object and a recommended filename, after checking ${CLAUDE_PLUGIN_ROOT}/shared/schemas/ for conflicts.
 ---
 
 <constitution>
@@ -28,7 +28,7 @@ The schema is genuine when required fields are those without which a consumer ca
 </judgment>
 
 <output>
-Use your file reading tool to list existing files in shared/schemas/ before designing. Check for field name overlap and naming pattern conflicts. Design with: $schema, $id in format name@version, title, description, all properties documented with description fields, required array, additionalProperties: false, and a mandatory reasoning property of type string.
+Use your file reading tool to list existing files in ${CLAUDE_PLUGIN_ROOT}/shared/schemas/ before designing. Check for field name overlap and naming pattern conflicts. Design with: $schema, $id in format name@version, title, description, all properties documented with description fields, required array, additionalProperties: false, and a mandatory reasoning property of type string.
 
 Return this JSON:
 

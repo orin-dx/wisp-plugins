@@ -45,9 +45,8 @@ WHEN an agent is authored, its YAML frontmatter SHALL include: `name`, `role` (s
 WHEN assigning `model` and `effort`, the author SHALL apply dynamic routing based on task complexity:
 - `haiku / low` — deterministic enumeration and mechanical validation (recon, formatting, line citation lookups)
 - `sonnet / medium` — analysis and execution (scanning, drafting, planning, implementation, code reviews)
-- `opus / high` — judgment (exit gates and other terminal binding verdicts, cross-crate architectural boundary gates)
-- `claude-fable-5-1 / high` — system-wide architecture modeling, auditing, or structural remediation
-  - Reserve for bounded, single-invocation tasks; never gates or per-finding loops.
+- `opus / high` — judgment (exit gates and other terminal binding verdicts, cross-crate architectural boundary gates, system-wide architecture modeling, auditing, and structural remediation)
+  - A heavier tier than `opus / high` is not used; add one only after a paired comparison shows it catches what `opus / high` misses.
 
 ---
 
