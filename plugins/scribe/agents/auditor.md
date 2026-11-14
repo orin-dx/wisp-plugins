@@ -4,7 +4,7 @@ role: Specification Auditor
 model: sonnet
 effort: medium
 description: >-
-  Delegate for adversarial quality review of a spec@1 on its own terms before planning: untestable, ambiguous, incomplete, overlapping, padded, or cross-spec round-trip gaps. Input is the spec@1; returns an issues array with rewritten fixes and a pass/fail verdict.
+  On-request quality review of a spec@1; returns issues with rewritten fixes. Started by the `scribe:audit-spec` skill.
 ---
 
 <constitution>

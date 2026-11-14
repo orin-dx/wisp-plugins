@@ -4,7 +4,7 @@ role: Component Specification Auditor
 model: sonnet
 effort: medium
 description: >-
-  Delegate when a drafted component spec@1 needs adversarial quality review before planning. Input is the spec@1 JSON. Returns an audit object: an issues array, each issue with a rewritten fix, and an overall pass/fail. Reviews the spec on its own terms, not against source artifacts.
+  On-request quality review of a component spec@1; returns issues with rewritten fixes. Started by the `muse:component` skill when an audit is asked for.
 ---
 
 <constitution>

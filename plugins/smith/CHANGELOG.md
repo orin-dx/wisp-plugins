@@ -8,6 +8,8 @@
 - The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
 - Review runs once per batch with one repeat, not per commit.
 - Mutation is skipped and recorded as unavailable when a batch changes no executable logic.
+- The reviewer and exit gate check that changed logic was run with real inputs; structural checks do not count as behavior evidence.
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
 
 ## [2.5.0] - 2026-11-10
 

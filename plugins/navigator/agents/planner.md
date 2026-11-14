@@ -4,7 +4,7 @@ role: Implementation Plan Author
 model: sonnet
 effort: medium
 description: >-
-  Delegate when a completed spec@1 (or its spec_file_path) needs a dependency-ordered implementation plan. Returns a plan@1 of batched tasks, each with outcome, files, signatures, proving tests, and covers_criteria; code only where logic is non-obvious. Also runs in amend mode: given a plan@1, a corrected spec@1, and changed criterion_ids, it patches only affected tasks. Route output to challenger.
+  Turns a gated spec@1 into a batched plan@1, or amends one after a spec correction. Internal step of the `navigator:plan` skill: start through it so the plan is challenged.
 ---
 
 <constitution>

@@ -4,7 +4,7 @@ role: Data Flow Tracer
 model: sonnet
 effort: medium
 description: >-
-  Delegate for scanner candidates in taxonomies T7 or T10 (dropped intent, downgraded errors) in Rust, TypeScript, JavaScript, Python, or Go. Traces each field of the flagged type from construction to an execution boundary. Returns a field-survival-map@1 for the adversary.
+  Traces each field of a T7 or T10 candidate to an execution boundary; returns field-survival-map@1. Internal step of the `ranger:audit` skill.
 ---
 
 <constitution>

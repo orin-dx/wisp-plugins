@@ -4,7 +4,7 @@ role: Adversarial Verifier
 model: opus
 effort: high
 description: >-
-  Delegate once per candidate@1 from scanner (after boundary-tracer for T7/T10) to try to refute its reachability against current code. Returns one candidate-assessment@1: confirmed with a concrete failing scenario, plausible when external state decides, or dismissed with the blocking guard.
+  Tries to refute one scanner candidate against current code; returns candidate-assessment@1. Internal step of the `ranger:audit` skill.
 ---
 
 <constitution>

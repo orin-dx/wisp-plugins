@@ -4,7 +4,7 @@ role: Artifact Inventory Agent
 model: haiku
 effort: low
 description: >-
-  Delegate first in the sentinel gate, before verification, with an artifact path or description. Identifies the artifact type, locates it, enumerates the criteria to verify and the source files to cross-check; no judgment. Returns a JSON manifest for verifier.
+  Inventories an artifact's criteria and source files before verification. Internal step of the `sentinel:gate` skill.
 ---
 
 <constitution>

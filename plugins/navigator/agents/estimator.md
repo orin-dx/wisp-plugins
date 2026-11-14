@@ -4,7 +4,7 @@ role: Effort Estimator
 model: sonnet
 effort: medium
 description: >-
-  Delegate when a plan@1 needs a rough effort estimate before execution. Returns JSON with per-task minutes, parallelizable flags, blocking task IDs, total_minutes, and an assumptions array. Assumes an implementer with full codebase context but no domain knowledge.
+  Optional rough effort estimate for a plan@1. Started by the `navigator:plan` skill on request.
 ---
 
 <constitution>

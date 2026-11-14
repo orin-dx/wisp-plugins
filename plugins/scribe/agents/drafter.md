@@ -4,7 +4,7 @@ role: Specification Drafter
 model: sonnet
 effort: medium
 description: >-
-  Delegate to draft a formal spec@1 from a completed requirement@1 and optional research-report@1; returns the spec object only. Also runs in correction mode, given spec_file_path, a criterion_id, and implementer's contradiction report, returning the corrected spec@1 with revision_note.
+  Drafts a spec@1 from a requirement, or corrects one criterion from a contradiction report. Internal step of the `scribe:draft-spec` and `scribe:correct-spec` skills: start through them so the spec is gated.
 ---
 
 <constitution>

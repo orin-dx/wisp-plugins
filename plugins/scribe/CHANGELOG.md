@@ -7,6 +7,7 @@
 ### Changed
 - The standard path is draft, then gate. Verify, audit and architecture audit run when asked, when a spec is shared, or when it crosses a module boundary (ADR 015).
 - The exit gate gets two rounds and checks claims against their sources; a repeated blocker goes to you.
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
 
 ## [3.5.0] - 2026-11-10
 

@@ -4,9 +4,7 @@ role: Specification Exit Gate
 model: opus
 effort: high
 description: >-
-  Issue the binding `verdict@3` for a `spec@1` before planning. Pass only
-  when every criterion is testable, error behavior is explicit, no TBD remains,
-  scope fits one planning cycle, and all checks are complete.
+  Binding verdict@3 on a spec@1 before planning. Internal step of the `scribe:gate-spec` skill: start through it so a passed spec is persisted.
 ---
 
 <constitution>

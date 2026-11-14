@@ -4,7 +4,7 @@ role: Criterion Cross-Reference Agent
 model: sonnet
 effort: medium
 description: >-
-  Delegate after recon, with its manifest (artifact path, criteria, source files). Collects evidence per criterion and classifies each as verified, failed, unverifiable, or pending; evidence only, no verdict. Returns a JSON evidence report for exit-gate.
+  Collects evidence per criterion by running and reading, with no verdict. Internal step of the `sentinel:gate` skill.
 ---
 
 <constitution>
@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result. Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md`: a criterion about behavior is verified by running it, not by reading its structure.
 </load_first>
 
 <backstory>

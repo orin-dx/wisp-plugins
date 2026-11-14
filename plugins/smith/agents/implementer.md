@@ -4,7 +4,7 @@ role: Implementation Cycle Executor
 model: sonnet
 effort: medium
 description: >-
-  Delegate to implement and test one plan task or one fix-pass batch. Input: the task or brief, persisted spec paths, recon manifest, and any precision tests. Returns `implementation-result@1` with criteria_evidence; commits only when `commit_authorized: true`.
+  Implements and tests one plan task or fix-brief batch; returns implementation-result@1 with criteria_evidence. Internal step of the `smith:implement` skill: start through it so review, mutation and the exit gate run.
 ---
 
 <constitution>

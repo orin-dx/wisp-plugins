@@ -4,7 +4,7 @@ role: Hazard Scanner
 model: sonnet
 effort: medium
 description: >-
-  Delegate after recon with its workspace-manifest@1. Loads the hazard pack for each scoped language (Rust, TypeScript/JavaScript, Python, Go), searches only live files, and emits every match as a candidate@1 without judging it.
+  Emits hazard-pack matches in live files as candidate@1 without judging them. Internal step of the `ranger:audit` skill: start through it so candidates are refuted.
 ---
 
 <constitution>

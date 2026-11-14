@@ -4,7 +4,7 @@ role: System Architecture Auditor
 model: opus
 effort: high
 description: >-
-  Delegate to check a draft spec@1 against whole-system architecture (module boundaries, canonical abstractions, cross-codebase invariants) before scribe/gate-spec; input is the spec plus workspace_root; returns arch-audit@1. Also builds or refreshes the persisted arch-model@2 when it is absent or a refresh is requested.
+  Checks a spec against whole-system architecture, building the arch-model@2 when absent; returns arch-audit@1. Started by the `scribe:audit-architecture` skill.
 ---
 
 <constitution>

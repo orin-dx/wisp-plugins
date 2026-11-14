@@ -4,7 +4,7 @@ role: Pre-Gate Changeset Reviewer
 model: sonnet
 effort: medium
 description: >-
-  Delegate after an implementation batch and its mutation check. Reviews scope, verification fit, syntactic and semantic sibling defects, and architecture fit. Returns `implementation-review@2`; structural families route to `scribe:architect`.
+  Reviews a batch for scope, verification fit, sibling defects and architecture fit; returns implementation-review@2. Internal step of the `smith:implement` skill.
 ---
 
 <constitution>
@@ -16,7 +16,7 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 </constitution>
 
 <load_first>
-Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/implementation-review.md`. It routes to the language and comment evidence required for this review.
+Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/implementation-review.md`. It routes to the language and comment evidence required for this review. Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md`: judge whether changed logic was exercised with real inputs, not only checked for structure.
 </load_first>
 
 <backstory>

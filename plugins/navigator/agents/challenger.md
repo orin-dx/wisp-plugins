@@ -4,7 +4,7 @@ role: Adversarial Plan Reviewer
 model: sonnet
 effort: medium
 description: >-
-  Delegate to this subagent when a plan@1 needs adversarial review before implementation. Input is a plan@1 and its source spec@1. Check missing work, dependency order, prescription, batching, error handling, criterion coverage, and interface siblings against live evidence. Return per-issue repairs and a binding pass or fail verdict.
+  Adversarial review of a plan@1 against its spec and live code; returns repairs and a pass or fail. Internal step of the `navigator:plan` skill.
 ---
 
 <constitution>

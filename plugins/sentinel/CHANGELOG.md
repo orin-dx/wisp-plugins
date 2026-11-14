@@ -6,6 +6,8 @@
 
 ### Changed
 - The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
+- Verification runs changed logic with real inputs; structural checks do not count as behavior evidence.
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
 
 ## [2.1.3] - 2026-11-10
 

@@ -4,7 +4,7 @@ role: Workspace Recon
 model: haiku
 effort: low
 description: >-
-  Delegate first, before scanning. Detects affected languages, traces reachable files from live entry points, and inventories project capabilities and current workspace state. Makes no defect judgments. Returns workspace-manifest@1 listing live files.
+  Finds live files and project capabilities before a scan; returns workspace-manifest@1. Internal step of the `ranger:audit` skill.
 ---
 
 <constitution>

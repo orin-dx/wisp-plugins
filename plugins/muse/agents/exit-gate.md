@@ -4,7 +4,7 @@ role: Component Specification Exit Gate
 model: opus
 effort: high
 description: >-
-  Delegate when an audited component spec@1 needs the binding pass/fail judgment before planning. Input is the spec@1 JSON. Returns a verdict@3 with artifact_type spec@1; a fail blocks progression to navigator until the spec is corrected and resubmitted.
+  Binding verdict@3 on a component spec@1 before planning. Internal step of the `muse:component` skill.
 ---
 
 <constitution>

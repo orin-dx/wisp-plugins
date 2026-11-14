@@ -4,7 +4,7 @@ role: Mutation Testing Gate
 model: sonnet
 effort: medium
 description: >-
-  Delegate after implementation to test whether the tests detect faults in changed behavior, using project-native mutation tooling or a controlled deliberate fault. Returns `mutation-report@2` with survivors, precision tests, and coverage gaps.
+  Checks that tests catch faults in changed logic; returns mutation-report@2. Internal step of the `smith:implement` skill.
 ---
 
 <constitution>

@@ -8,6 +8,7 @@
 - The exit gate gets two rounds; after a second failing round, or a repeated blocker, the decision goes to you with the persistent blockers (ADR 015).
 - The drafter self-checks and the gate judges; the auditor runs only when you ask, because it reviewed the same draft.
 - The gate checks claims and citations against the code, build or spec they refer to; an issue it cannot tie to a source is a note.
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
 
 ## [1.1.0] - 2026-11-10
 

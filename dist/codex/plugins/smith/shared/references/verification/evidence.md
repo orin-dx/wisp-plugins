@@ -28,4 +28,6 @@ Record the claim, actual command or inspection, observed result, and remaining g
 
 A test discriminates behavior when a controlled mutation, deliberate fault, isolated prior revision, or equivalent evidence makes it fail for the relevant wrong behavior and pass for the corrected behavior. Do not modify shared worktrees or user state merely to manufacture a red run.
 
+Structure is not behavior. A type, export, file-layout or schema-shape check does not show that changed logic works: run the changed code on representative and edge inputs taken from the criterion or the reported defect, and compare what it returns with what the criterion says. For a visual or interactive change, inspect the built page where a browser is available (computed styles, accessibility tree, contrast, target size); passing markup tests do not show the page renders correctly.
+
 Before completion, every started verification task has a terminal result that was read, or is explicitly excluded from the verified scope.

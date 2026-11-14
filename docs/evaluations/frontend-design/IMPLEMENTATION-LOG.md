@@ -203,3 +203,5 @@ Changed (ADR 015): two rounds for every exit gate and the challenger, escalation
 
 Next: behavior checks for the logic-bug gap; skills as the entry point (routing); collapsing build-side chains; main-loop cost (forks); measure with paired fix-task sequences.
 
+Behavior checks and routing (same branch): `shared/references/verification/evidence.md` now says structure is not behavior (run changed logic on representative and edge inputs from the criterion or defect; inspect the built page for visual changes), and the smith reviewer and exit gate, ranger exit gate and sentinel verifier load it. 26 pipeline agents' descriptions now name the skill that starts them; resident agent description text fell from about 3,079 to 2,239 tokens. One live run (Sonnet 5.5, smith plugin, a two-line bug "add(2, 3) returns 6") used no skill or agent: the model fixed it directly and added a test that fails on the original bug. That run does not test routing, because direct work is proportionate for a bug that size; routing needs a multi-file task, measured with the runbook.
+

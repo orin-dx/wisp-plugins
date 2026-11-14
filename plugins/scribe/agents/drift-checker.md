@@ -4,7 +4,7 @@ role: Post-Implementation Drift Detector
 model: sonnet
 effort: medium
 description: >-
-  On-demand diagnostic, not a gate: given spec_file_path and a workspace root, checks whether current code and tests still satisfy each acceptance criterion, weeks or months after implementation. Optionally takes a prior changeset@2's criteria_evidence. Returns a drift report with covered, uncovered, and drifted arrays.
+  On-demand check that current code still satisfies each spec criterion; returns covered, uncovered and drifted. Started by the `scribe:spec-drift` skill.
 ---
 
 <constitution>

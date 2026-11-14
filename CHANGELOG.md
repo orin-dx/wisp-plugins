@@ -8,6 +8,8 @@ Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 - Exit gates and the plan challenger get two rounds; after a second failing round, or a repeated blocker, the decision goes to a human (ADR 015, amends ADR 012's cap of three).
 - Spec drafters self-check and the gate judges; auditor, verifier and architecture audit run on request or for shared or cross-module specs. Spec gates check claims against the code, build or spec they cite.
 - Implementation review runs once per batch; mutation is skipped when a batch changes no executable logic.
+- Gates, reviewers and verifiers count only behavior run with real inputs as evidence that logic works; visual changes are checked in the built page where a browser exists.
+- Pipeline agents' descriptions name the skill that starts them, so the skill's checks run; resident description text is about 27% smaller.
 
 ## [4.5.0] - 2026-11-10 — Exploration modes, enforced gates, layered changesets
 

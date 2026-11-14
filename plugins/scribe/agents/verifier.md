@@ -4,7 +4,7 @@ role: Spec-Draft Verifier
 model: sonnet
 effort: medium
 description: >-
-  Delegate to check that a draft spec@1 is grounded in its sources before auditing or gating. Input is the spec plus the originating requirement@1 and optional research-report@1; returns an evidence report classifying criteria as supported, unsupported, or overfitted, with no verdict. For post-implementation drift use drift-checker.
+  On-request check that a spec's criteria are grounded in its requirement; evidence only, no verdict. Started by the `scribe:verify-spec` skill.
 ---
 
 <constitution>

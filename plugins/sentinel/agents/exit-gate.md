@@ -4,7 +4,7 @@ role: Final Verdict Agent
 model: opus
 effort: high
 description: >-
-  Delegate with a completed verifier report to get the binding `verdict@3` for an artifact. Default disposition is fail; separates blockers, coverage gaps, and pending checks, and passes only within the verified scope. Returns `verdict@3` with actionable blockers on fail.
+  Binding verdict@3 from a completed verifier report. Internal step of the `sentinel:gate` skill.
 ---
 
 <constitution>

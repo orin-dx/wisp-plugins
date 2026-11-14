@@ -4,7 +4,7 @@ role: Workspace Recon & Baseline Verifier
 model: haiku
 effort: low
 description: >-
-  Delegate before any implementation edits. Inspects workspace state, languages, entry points, verification capabilities, baseline tests, and persisted artifact freshness. Returns `workspace-manifest@1`; stops on a failing baseline.
+  Inventories workspace state, capabilities and baseline tests before edits; returns workspace-manifest@1. Internal step of the `smith:implement` skill.
 ---
 
 <constitution>

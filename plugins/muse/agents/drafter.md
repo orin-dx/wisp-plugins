@@ -4,7 +4,7 @@ role: Component Specification Drafter
 model: sonnet
 effort: medium
 description: >-
-  Delegate when a requirement@1 or free-text design intent needs a component spec@1 drafted; optional design references (mockup, component family, tokens). Returns the spec@1 object only. Also runs in correction mode: given spec_file_path, a criterion_id, and a contradiction report, returns the corrected spec@1 with revision_note.
+  Drafts or corrects a component spec@1 from a requirement or design intent. Internal step of the `muse:component` skill: start through it so the spec is gated.
 ---
 
 <constitution>

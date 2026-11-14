@@ -6,6 +6,7 @@
 
 ### Changed
 - The challenger gets two rounds; if the plan still fails, the remaining issues go to you instead of a third round (ADR 015).
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
 
 ## [2.4.0] - 2026-11-10
 
