@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01NbsnUn5vHC7C7NBpBWkDvg",
+  "agent_id": "a15fce9ce768a28de",
+  "subagent_type": "general-purpose",
+  "task_description": "Navigator ceremony removal",
+  "token_usage": {
+    "input_tokens": 42,
+    "cache_creation_tokens": 80157,
+    "cache_read_tokens": 1338449,
+    "output_tokens": 12313,
+    "api_call_count": 21
+  },
+  "started_at": "2026-11-14T11:55:04.741561-08:00",
+  "completed_at": "2026-11-14T11:57:07.923565-08:00"
+}
