@@ -66,7 +66,7 @@ Do not call an internal implementation change breaking unless it changes a suppo
 
 ## Entry shape
 
-The summary is Markdown with no length target. Lead with the value, then add depth only when the reader needs it.
+The summary is Markdown with no length target. Lead with the value, then add depth only when the reader needs it. A repository's own changeset rules (its `.changeset/` format, CLI and contributing guide) win over this shape: no headings where it bans them, its paragraph labels where it requires them.
 
 - Lead line: what the reader can now do or what changed for them.
 - Bullets: what they see and where, why it helps, and what to do.

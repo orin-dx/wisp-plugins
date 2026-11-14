@@ -15,7 +15,8 @@ Read the actual diff and any available implementation evidence before writing a 
 2. Read `shared/references/delivery/changesets.md` before choosing `consumer_impact` or `semver_impact`.
 3. For each topic, connect changed behavior to the linked requirement, spec, plan, or exact criteria evidence when available.
 4. Produce one object per outcome conforming to `shared/schemas/changeset@3.json`. Write `summary` as Markdown with no length target: a lead line stating the value, then bullets or audience sections when the reader needs more (what changed for them, why it helps, what to do). State limits the reader will hit in the summary. Set `disposition` to `update-existing` (and name `updates`) when an unreleased entry already covers the outcome, or to `none` when no consumer sees the change.
-5. Validate required fields, especially `files_changed` and `acceptance_criteria_met`, against observed evidence.
+5. When the repository has its own changeset rules or files (`.changeset/*.md`, a changeset CLI, a contributing section), write to those rules and save each entry in that format with the package and the bump from `semver_impact`.
+6. Validate required fields, especially `files_changed` and `acceptance_criteria_met`, against observed evidence.
 
 ## Classification rules
 

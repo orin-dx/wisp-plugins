@@ -84,6 +84,7 @@ WHEN the diff contains more than one outcome a reader would describe separately,
 WHEN an unreleased changeset already describes this outcome, THE SYSTEM SHALL set `disposition` to `update-existing`, name it in `updates`, and write the summary as the full updated entry.
 WHEN the change is not visible to a consumer or fixes something not yet released, THE SYSTEM SHALL set `disposition` to `none`, `consumer_impact` to `internal-only` and `semver_impact` to `none`, and state in `summary` why no entry is needed.
 WHEN a limit, prerequisite or required action applies, THE SYSTEM SHALL state it in `summary`.
+WHEN the repository has its own changeset rules (a `.changeset/` directory, a changeset CLI, or a contributing section), THE SYSTEM SHALL write `summary` to those rules and name the target package in `reasoning`.
 WHEN determining `files_changed` and `commits`, THE SYSTEM SHALL scope them to that outcome's own diff slice, not the full batch.
 WHEN files or commits cannot be confidently attributed to an outcome, THE SYSTEM SHALL note them as unresolved in `reasoning` rather than assign them by assumption.
 WHEN no spec is linked, set `acceptance_criteria_met` to `["unlinked"]` and omit `criteria_evidence`.

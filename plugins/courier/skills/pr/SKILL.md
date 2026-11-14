@@ -23,5 +23,5 @@ Produces a PR title and body from a diff plus optional linked spec/requirement, 
 
 <io>
 **Consumes**: git diff, optionally linked `spec@1` or `requirement@1`
-**Produces**: opened PR (title, body, labels). Confirm the drafted title/body with the user before running `gh pr create` — this is a shared-visibility action, not a local one.
+**Produces**: opened PR (title, body, labels). Confirm the drafted title/body with the user before running `gh pr create` — this is a shared-visibility action, not a local one. When the repository's instructions say another system opens pull requests (for example Entire from the branch's trail), return the title and body and do not open the PR.
 </io>

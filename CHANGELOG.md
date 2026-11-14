@@ -6,6 +6,7 @@ Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 ## [4.6.0] - 2026-11-14 — Start by intent, two rounds, one reality check
 
 - New `guide` plugin: `/guide:explore`, `spike`, `fix`, `build`, `check` and `ship` start work by intent and hand off to the skill that does it, with a snippet for a project's `AGENTS.md`.
+- Courier writes changesets in the repository's own format and rules, and leaves PR opening to Entire where the repository says so.
 - The six pipeline plugins redirect a direct call to one of their agents, once per session, to the skill that starts it, so its checks run.
 - Exit gates and the plan challenger get two rounds; after a second failing round, or a repeated blocker, the decision goes to a human (ADR 015, amends ADR 012's cap of three).
 - Spec drafters self-check and the gate judges; auditor, verifier and architecture audit run on request or for shared or cross-module specs. Spec gates check claims against the code, build or spec they cite.
