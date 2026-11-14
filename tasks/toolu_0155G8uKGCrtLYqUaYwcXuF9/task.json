@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_0155G8uKGCrtLYqUaYwcXuF9",
+  "agent_id": "a625b01150541b2cc",
+  "subagent_type": "general-purpose",
+  "task_description": "Relax readiness gate",
+  "token_usage": {
+    "input_tokens": 76,
+    "cache_creation_tokens": 138209,
+    "cache_read_tokens": 4388088,
+    "output_tokens": 33570,
+    "api_call_count": 38
+  },
+  "started_at": "2026-11-14T11:55:05.702064-08:00",
+  "completed_at": "2026-11-14T12:01:06.965959-08:00"
+}

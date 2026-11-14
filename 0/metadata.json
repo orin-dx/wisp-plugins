@@ -1,0 +1,89 @@
+{
+  "cli_version": "0.13.4-nightly.202611121940.ce16562b9",
+  "checkpoint_id": "01M7DV06N29F1Q998KGCMB4KTH",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-14T20:12:03.961126Z",
+  "branch": "feat/gate-round-limits",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "dist/codex/plugins/guide/skills/ship/SKILL.md",
+    "harnesses/codex/plugins/guide/skills/ship/SKILL.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "f4b39fd407ef",
+  "checkpoint_transcript_start": 11849,
+  "transcript_lines_at_start": 11849,
+  "compact_transcript_start": 1043,
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 29871,
+    "cache_read_tokens": 6532529,
+    "output_tokens": 9498,
+    "api_call_count": 9,
+    "subagent_tokens": {
+      "input_tokens": 35,
+      "cache_creation_tokens": 84683,
+      "cache_read_tokens": 1264278,
+      "output_tokens": 11239,
+      "api_call_count": 19
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 57
+  },
+  "summary": {
+    "intent": "Apply the owner's decisions across the repos: merge three parallel agent worktree branches, then change the courier plugin so changesets follow the owner's changelog convention and Entire opens pull requests instead of courier.",
+    "outcome": "Merged the three worktree branches cleanly, updated the changesets reference, courier docs, Codex ship skill and courier CHANGELOG, and got `just check` to exit 0. Committed and pushed the change as feat(courier).",
+    "learnings": {
+      "repo": [
+        "Generated and synced artifacts are kept in step with sources via `just claude-manifests-sync` and `just marketplace-sync`; run both before `just check`.",
+        "`just check` is the validation gate; it can emit a word-count review warning on shared/references/delivery/changesets.md that does not fail validation.",
+        "Codex ship skill lives at harnesses/codex/plugins/guide/skills/ship/SKILL.md and is mirrored into dist/codex/plugins/guide/skills/ship/SKILL.md, so edits to one change both.",
+        "Courier plugin changes are recorded in plugins/courier/CHANGELOG.md under a dated version heading (e.g. `## [3.2.0] - 2026-11-14`, `### Changed`).",
+        "Commits carry a `Claude-Session:` trailer URL."
+      ],
+      "code": [
+        {
+          "path": "shared/references/delivery/changesets.md",
+          "line": 64,
+          "end_line": 92,
+          "finding": "This section holds the changeset format guidance that was rewritten to the owner's changelog convention: a bold lead-in, then short bullets with bold labels and a **Breaking** label when needed."
+        },
+        {
+          "path": "harnesses/codex/plugins/guide/skills/ship/SKILL.md",
+          "finding": "The text was reworded by an earlier harness fix, so a scripted anchor replace failed. It was patched afterward to say `courier:pr` lets Entire open the PR from the branch's trail."
+        }
+      ],
+      "workflow": [
+        "Merging parallel agent worktree branches with `git merge --no-edit` and filtering the output for CONFLICT lines gives a quick check for clean merges.",
+        "Scripted text edits that assert `t.count(old)==1` fail loudly when an anchor has drifted. That makes it safe to apply batch edits and then patch the few that missed.",
+        "Re-running sync and check after merging, and before making further changes, gives a known-good baseline."
+      ]
+    },
+    "friction": [
+      "The scripted edit's anchor for the Codex ship skill did not match because a prior harness fix had reworded it, so the edit needed a manual follow-up.",
+      "`just check` was run several times, and its output was filtered through grep and discarded, to extract both the failure details and the exit code."
+    ],
+    "open_items": [
+      "The changesets reference triggers an existing word-count review warning that could be trimmed.",
+      "Courier opens a PR itself only where a repository says agents do; that opt-in behaviour is not verified in this session."
+    ]
+  }
+}
