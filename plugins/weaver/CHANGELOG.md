@@ -2,6 +2,11 @@
 
 — weaver
 
+## [3.0.5] - 2026-11-14
+
+### Changed
+- Agent prompts drop the `<backstory>` section (ADR 017). `intake` now reads for the underlying need when it infers `why`.
+
 ## [3.0.4] - 2026-11-10
 
 ### Changed

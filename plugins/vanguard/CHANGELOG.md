@@ -2,6 +2,11 @@
 
 — vanguard
 
+## [2.0.4] - 2026-11-14
+
+### Changed
+- Agent prompts drop the `<backstory>` section (ADR 017).
+
 ## [2.0.3] - 2026-11-10
 
 ### Changed

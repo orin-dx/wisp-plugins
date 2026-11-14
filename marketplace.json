@@ -6,7 +6,7 @@
     {
       "id": "mason",
       "name": "mason",
-      "version": "3.2.3",
+      "version": "3.2.4",
       "path": "./plugins/mason",
       "description": "Build, audit, and behaviorally evaluate plugins; design shared schemas and scaffold conformant agents. Skills: scaffold-plugin, audit-plugin, design-schema, scaffold-subagent, evaluate.",
       "supersedes": "agent-plugin-builder"
@@ -33,14 +33,14 @@
     {
       "id": "weaver",
       "name": "weaver",
-      "version": "3.0.4",
+      "version": "3.0.5",
       "path": "./plugins/weaver",
       "description": "Need definition plugin. Captures and structures requirements before implementation begins. Integrates with GitHub Issues by default; extensible to any issue tracker that produces the requirement@1 schema. Skills: capture-need, clarify-requirement, prioritize-backlog, connect-requirement, audit-backlog."
     },
     {
       "id": "vanguard",
       "name": "vanguard",
-      "version": "2.0.3",
+      "version": "2.0.4",
       "path": "./plugins/vanguard",
       "description": "Research plugin. Investigates questions and requirements to build a documented evidence base before committing to a solution direction. Distinguishes confirmed findings from assumptions. Produces research-report@1 for consumption by scribe (spec)."
     },
