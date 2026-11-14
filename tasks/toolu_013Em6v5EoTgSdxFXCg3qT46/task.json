@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_013Em6v5EoTgSdxFXCg3qT46",
+  "agent_id": "a2947bf625e2eeb3a",
+  "subagent_type": "general-purpose",
+  "task_description": "Remove persona backstories",
+  "token_usage": {
+    "input_tokens": 74,
+    "cache_creation_tokens": 133037,
+    "cache_read_tokens": 3603493,
+    "output_tokens": 23816,
+    "api_call_count": 37
+  },
+  "started_at": "2026-11-14T13:37:10.301124-08:00",
+  "completed_at": "2026-11-14T13:40:55.946138-08:00"
+}

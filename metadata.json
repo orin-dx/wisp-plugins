@@ -1,0 +1,47 @@
+{
+  "cli_version": "0.13.4-nightly.202611121940.ce16562b9",
+  "checkpoint_id": "01M7E05TMAN2JG8X0J4GGFA1VY",
+  "strategy": "manual-commit",
+  "branch": "feat/gate-round-limits",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "marketplace.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 10,
+    "cache_creation_tokens": 10850,
+    "cache_read_tokens": 2979770,
+    "output_tokens": 2765,
+    "api_call_count": 4,
+    "subagent_tokens": {
+      "input_tokens": 68,
+      "cache_creation_tokens": 78979,
+      "cache_read_tokens": 3512096,
+      "output_tokens": 23099,
+      "api_call_count": 34
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
