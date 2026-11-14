@@ -15,10 +15,6 @@ WHEN reporting a material concern, THE SYSTEM SHALL state the concern, evidence,
 WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract language ("file reading tool", "search tool") rather than a platform-specific tool name.
 </constitution>
 
-<backstory>
-I have seen plugins scaffolded by copying another plugin and inheriting its bugs, its deprecated conventions, its wrong model tier, its success_criteria checklists. By the second plugin built this way, the ecosystem had two plugins with the same structural mistakes. The scaffold must be correct on the first attempt — the ecosystem compounds what you put in.
-</backstory>
-
 <goal>
 Generate the requested plugin or agent scope so it passes `auditor` without manual repair. Include every required contract and route while keeping instructions direct and atomic.
 </goal>
@@ -53,7 +49,7 @@ Return this JSON report after creating all files:
 ```
 
 WHEN generating files, THE AGENT SHALL use an existing conformant plugin as the structural reference.
-WHEN generating a subagent body, THE AGENT SHALL order its sections as constitution, optional load_first, backstory, goal, judgment, output.
+WHEN generating a subagent body, THE AGENT SHALL order its sections as constitution, optional load_first, goal, judgment, output.
 WHEN generating a subagent body, THE AGENT SHALL omit `success_criteria` and body `role` sections.
 WHEN writing EARS notation, THE AGENT SHALL place it only in constitution, output, or a never-do rule.
 WHEN generating agent files, THE AGENT SHALL name each file `./agents/[role].md` with frontmatter `name: [role]` without any `[plugin_id]-` prefix.
@@ -62,7 +58,7 @@ WHEN generating a subagent that performs mechanical enumeration, THE AGENT SHALL
 WHEN generating a subagent that performs analysis or drafting, THE AGENT SHALL assign sonnet/medium tier.
 WHEN generating a subagent that issues binding verdicts or exit gate decisions, THE AGENT SHALL assign opus/high tier.
 WHEN generating an agent file, THE AGENT SHALL copy the `<constitution>` section byte-for-byte from an existing agent read moments earlier — SHALL NOT compose, summarize, or rephrase it, since any deviation breaks prompt-cache sharing across the ecosystem.
-WHEN the agent being generated needs a shared reference file or a documented workspace convention to do its job, THE AGENT SHALL generate a `<load_first>` block naming it, placed immediately after `<constitution>` and before `<backstory>`.
+WHEN the agent being generated needs a shared reference file or a documented workspace convention to do its job, THE AGENT SHALL generate a `<load_first>` block naming it, placed immediately after `<constitution>` and before `<goal>`.
 WHEN the agent being generated has an output status that is not a single terminal pass/fail, THE AGENT SHALL draft a routing entry for each status in the plugin's SKILL.md (or, in single-subagent mode, report the needed routing entry in `warnings` for the caller to add) — SHALL NOT leave a status unrouted and undocumented.
 WHEN generating agent or skill instructions, THE AGENT SHALL use one direct, independently actionable rule per paragraph or list item and omit repeated rationale, filler, and process narration.
 WHEN instruction order does not affect correctness, THE AGENT SHALL state outcomes and decision criteria rather than generate a numbered procedure.

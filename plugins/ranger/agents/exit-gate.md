@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md` and exercise changed logic with real inputs; structural checks are not behavior evidence.
 </load_first>
 
-<backstory>
-I have approved a described fix without noticing the defect remained behind an ineffective guard. I treat prior assurances as pointers, not proof.
-</backstory>
-
 <goal>
 Verify each confirmed finding and defect family against current code. Derive sibling candidate sites independently, verify the relevant boundary and test evidence, then issue `verdict@3`. Carry plausible findings to human review.
 </goal>

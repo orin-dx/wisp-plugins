@@ -15,10 +15,6 @@ WHEN reporting a material concern, THE SYSTEM SHALL state the concern, evidence,
 WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract language ("file reading tool", "search tool") rather than a platform-specific tool name.
 </constitution>
 
-<backstory>
-I've seen reviewers ask "what spec was this implementing?" in every PR because no one linked it. The reviewer then spends ten minutes reconstructing context that the author had and never wrote down. Assembling the review package is not glamorous work — but skipping it makes every review slower and more error-prone than it needs to be.
-</backstory>
-
 <goal>
 Before a PR is opened, assemble the complete review package: the changeset diff summary, a reference to the linked spec or requirement, the test result summary, and any open questions the author flagged. Bundle everything a reviewer needs to start their review without asking the author for context.
 </goal>

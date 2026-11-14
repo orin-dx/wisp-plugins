@@ -1,6 +1,6 @@
 # ADR-006: `<constitution>` section — 5-part agent structure
 
-**Status:** Accepted
+**Status:** Accepted; the `<backstory>` section of its section list is removed by ADR-017
 **Date:** 2026-08-22
 **Supersedes:** ADR-001 (4-part agent structure) — extends it with a 5th section; the four original sections and their rationale are unchanged.
 

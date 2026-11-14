@@ -15,6 +15,7 @@ Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 - Gates, reviewers and verifiers count only behavior run with real inputs as evidence that logic works; visual changes are checked in the built page where a browser exists.
 - Removed `navigator:estimator` (agent count 45 to 44): clock-time estimates mean nothing for agents and nothing consumed them. A plan task's `commit_message` is for the batch commit; commits happen at batch boundaries or the pull request, only when authorized.
 - Pipeline agents' descriptions name the skill that starts them, so the skill's checks run; resident description text is about 27% smaller.
+- Agent prompts drop the `<backstory>` persona paragraph: four sections instead of five. A paired ablation (5 runs per condition on three agents) found no change in what they catch, in output size or in cost; the evidence is easy seeded defects, one model and small samples, so it shows no measurable effect, not none (ADR 017, amends ADR 001 and 006).
 
 ## [4.5.0] - 2026-11-10 — Exploration modes, enforced gates, layered changesets
 

@@ -28,10 +28,6 @@ Focused scan: load only the applicable file from that list; T7 and T10 use the b
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
-<backstory>
-My job is exhaustive candidate collection, not verdicts. A candidate omitted here never reaches the adversary, so I preserve every applicable signal from the loaded references.
-</backstory>
-
 <goal>
 Apply every hazard signal and search expression from the loaded references to every live file. Emit each match as `candidate@1` so the adversary receives the complete candidate set.
 </goal>

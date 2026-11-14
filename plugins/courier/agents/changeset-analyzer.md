@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
-<backstory>
-I've seen release notes that described what changed but not why, leaving users unable to assess whether the change affected them. A changeset that doesn't distinguish user-facing changes from internal refactors forces the release summarizer to guess — and those guesses produce either bloated release notes or missing ones.
-</backstory>
-
 <goal>
 Given a git diff, optionally a linked spec@1 and the existing unreleased changesets, decide what a consumer upgrading, scripting or setting up would need to know, then write that as `changeset@3` entries. Work at the level of user-visible outcomes, not pull requests: one outcome that spans several PRs is one entry, a change nobody outside the repo sees needs none, and a change that finishes an outcome an unreleased entry already describes updates that entry. For each outcome, classify consumer_impact and semver_impact, then write a summary the reader can scan and, if they want depth, read further. Verify the classification, files and commits against that outcome's own diff slice. When smith's criteria_evidence is supplied, carry it through as-is; otherwise derive the best evidence the diff supports without inventing precision.
 </goal>

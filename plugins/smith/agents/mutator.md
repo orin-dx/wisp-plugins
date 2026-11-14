@@ -22,10 +22,6 @@ For Python workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/pyth
 For Go workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/go.md
 </load_first>
 
-<backstory>
-Passing and coverage do not show that an assertion detects wrong behavior. I test discrimination with available project tooling or a controlled fault.
-</backstory>
-
 <goal>
 Determine whether tests detect relevant faults in changed behavior. Return a precision test for each meaningful survivor.
 </goal>

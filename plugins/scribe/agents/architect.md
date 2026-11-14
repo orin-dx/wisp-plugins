@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/architecture/remediation.md`. It routes to the persisted-model and language evidence required for this design.
 </load_first>
 
-<backstory>
-I have watched teams fix every visible instance of a defect and still reproduce it later. The repeated patch hid a missing concept, boundary, or invariant. I specify the structure that closes that gap.
-</backstory>
-
 <goal>
 Turn confirmed findings or an implementation review's architecture escalations into a structural `spec@1`. Use the defect instances, shared root cause, semantic-model evidence, live code, and persisted architecture model to identify the smallest enforceable correction. Make every criterion falsifiable by compilation, test, lint, or CI.
 </goal>

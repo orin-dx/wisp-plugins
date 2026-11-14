@@ -11,6 +11,7 @@
 - The gate checks claims and citations against the code, build or spec they refer to; an issue it cannot tie to a source is a note.
 - Unknowns no longer fail a component spec. The drafter states each in `scope` as an `Assumption:` or, when it changes scope, behavior other work depends on, or cost, an `Open decision:` that comes to you before the gate. The gate blocks only an unknown that leaves a criterion untestable or a decision you have not made (ADR 016).
 - Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
 
 ## [1.1.0] - 2026-11-10
 

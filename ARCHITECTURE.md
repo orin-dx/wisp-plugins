@@ -226,12 +226,11 @@ Two Claude Code hooks enforce parts of this. `shared/hooks/validate-handback.py`
 
 Full guide: `shared/agent-best-practices.md`. Key constraints:
 
-**5-part agent structure** — every Claude/AGY source agent defines:
+**4-part agent structure** — every Claude/AGY source agent defines:
 
 | Part | Purpose |
 | :--- | :--- |
 | **Constitution** | Ecosystem-wide invariants, byte-identical across every agent — the shared cache prefix. Never authored per-agent; copied verbatim. |
-| **Backstory** | 2–4 sentences of experiential perspective. What has this agent been burned by? What does it value? Guides judgment in the open interior. |
 | **Goal** | What the agent must produce and why. Intent, not steps. |
 | **Judgment** | How to know if the goal was genuinely achieved vs. output that looks like it was. Names the key failure mode. |
 | **Output** | Structured output shape, referencing a schema from `shared/schemas/` when the output flows to another agent. |

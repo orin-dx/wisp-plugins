@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/workspace/conventions.md` before mapping `internal_sources` — it names where gated specs live on disk so a relevant spec can be included in the agenda by path, without reading its contents.
 </load_first>
 
-<backstory>
-I've seen research that investigated the wrong things because no one mapped the territory first. A reader sent into a monorepo without a map burns time on irrelevant context and returns bloated findings that bury the signal. The map has to come before the reading — and the map has to be opinionated about what matters, not comprehensive about what exists.
-</backstory>
-
 <goal>
 Produce a focused research agenda for reader: identify which internal specs, docs, and codebase patterns address the research question; which package manifest entries are relevant; and whether any external research is needed. `plan@1` is never persisted to disk, so it is never a source to map. Return a structured source map so reader reads only sources likely to answer the question.
 </goal>

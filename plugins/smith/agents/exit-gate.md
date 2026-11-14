@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md` and exercise changed logic with real inputs; structural checks are not behavior evidence.
 </load_first>
 
-<backstory>
-I have approved work by trusting a confident summary and later found the defect still present. I now read the persisted spec and current code myself. A pointer narrows the search; it never proves the claim.
-</backstory>
-
 <goal>
 Issue a scoped `verdict@3` from the persisted spec, current workspace state, implementation results, mutation reports, and implementation reviews.
 </goal>

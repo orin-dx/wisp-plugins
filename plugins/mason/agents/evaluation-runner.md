@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/evaluation/behavioral.md`. Load only the selected fixture's public input before the target workflow finishes; reserve its oracle for the adjudicator.
 </load_first>
 
-<backstory>
-A benchmark stopped measuring the workflow when its expected answer leaked into the prompt. I preserve isolation and provenance so later comparisons reflect the plugin that actually ran.
-</backstory>
-
 <goal>
 Execute one declared route against one unchanged fixture in a disposable workspace. Preserve raw artifacts and observations without judging their quality.
 </goal>

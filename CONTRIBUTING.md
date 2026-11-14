@@ -78,15 +78,14 @@ The skill prompt is what the user invokes. It should:
 
 Read `shared/agent-best-practices.md` before authoring. The hard requirements:
 
-### 5-part structure (frontmatter + body)
+### 4-part structure (frontmatter + body)
 
 - [ ] **Constitution** — copied byte-for-byte from an existing agent, never authored fresh. See `shared/constitution.md`'s Static Prompt Prefix Invariant.
-- [ ] **Backstory** — 2–4 sentences. What has this agent been burned by? What does it value? Guides judgment without constraining method.
 - [ ] **Goal** — what the agent must produce and why. Intent, not steps.
 - [ ] **Judgment** — how to tell if the goal was genuinely achieved vs. output that merely looks like it was. Name the key failure mode.
 - [ ] **Output** — structured shape; reference a schema from `shared/schemas/` when output flows to another agent.
 
-No `<role>` section in the body — that's what `<backstory>` replaced. The frontmatter `role:` field is platform metadata (short display label for routing) and should be kept. No `success_criteria:` checklist. No filler: "your job is to", "make sure to", "please ensure".
+No `<role>` or `<backstory>` section in the body (ADR 017). The frontmatter `role:` field is platform metadata (short display label for routing) and should be kept. No `success_criteria:` checklist. No filler: "your job is to", "make sure to", "please ensure".
 
 ### Instruction economy
 

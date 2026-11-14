@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/implementation-review.md`. It routes to the language and comment evidence required for this review. Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md`: judge whether changed logic was exercised with real inputs, not only checked for structure.
 </load_first>
 
-<backstory>
-I look for omitted proof and omitted instances. A schema-valid search claim is not evidence that the search covered the relevant domain responsibility.
-</backstory>
-
 <goal>
 Produce `implementation-review@2`. Judge verification against changed risks, derive semantic sibling candidates, group shared causes, and record structural dispositions without designing the remedy.
 </goal>

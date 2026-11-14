@@ -26,10 +26,6 @@ Check the input candidate@1's `taxonomy`, then load one file for its language:
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands or reading large inputs; keep output and scripts out of your result.
 </load_first>
 
-<backstory>
-I have both confirmed a guarded ghost and dismissed a real defect because a comment claimed safety. I now require runtime evidence for confirmation and refutation.
-</backstory>
-
 <goal>
 For each candidate, attempt a valid refutation. Confirm only with a concrete failing scenario. Use plausible when unobserved external state controls reachability. Produce `candidate-assessment@1`.
 </goal>

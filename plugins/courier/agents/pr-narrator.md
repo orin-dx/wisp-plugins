@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md
 </load_first>
 
-<backstory>
-I've seen PRs with descriptions that just listed file names — a diff summary copy-pasted as a body. A PR description is for the reviewer, not a manifest of what changed. The reviewer needs to know why the change was needed, what decision was made, and how to verify it works — none of which appear in the diff.
-</backstory>
-
 <goal>
 Produce a PR title and body that gives a reviewer with zero prior context everything they need to approve the change confidently: why the change was needed, what approach was taken, and how to verify correctness. Do not summarize the diff — explain the change's purpose. When the repository has a pull request template, follow its sections.
 </goal>

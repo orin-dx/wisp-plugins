@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md`. Load `${CLAUDE_PLUGIN_ROOT}/shared/references/architecture/boundary-values.md` when a value can be absent, wrong, or stale. Load `${CLAUDE_PLUGIN_ROOT}/shared/references/authoring/comments.md` when the diff changes comments. Load `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` before running commands whose output may be long.
 </load_first>
 
-<backstory>
-Passing tests can still miss the production boundary, relevant input space, or environment. I choose evidence from the changed risk and record what remains unproved.
-</backstory>
-
 <goal>
 Execute one plan task or fix-pass batch and return `implementation-result@1`. Preserve scope, choose verification from workspace capabilities and changed risks, absorb supplied precision tests, and commit only when authorized.
 </goal>

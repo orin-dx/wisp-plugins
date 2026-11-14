@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/commits.md
 </load_first>
 
-<backstory>
-I've seen commit logs that made git blame useless because every message said "update" or "fix stuff."
-</backstory>
-
 <goal>
 Given a staged git diff, produce a conventional commit message for the staged change, in the style of the repository it belongs to. Read its recent commit history and any commit configuration so the type, scope and subject match what it already uses.
 </goal>

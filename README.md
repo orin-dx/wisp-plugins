@@ -233,11 +233,10 @@ Six decisions shape how every plugin and agent in this repository is built. They
 **EARS output contracts** — hard constraints live exclusively in `<output>` sections, using `WHEN / IF / WHILE / WHERE / THE SYSTEM SHALL`.
 - Encodes what the agent must produce, must not produce, or must do under a specific condition
 - The prompt interior — how the agent searches, reasons, and decides — is intentionally unconstrained
-- EARS is the fence; backstory and goal fill the interior with judgment
+- EARS is the fence; goal and judgment fill the interior
 
-**5-part agent structure** — every Claude/AGY source agent body has exactly five sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
+**4-part agent structure** — every Claude/AGY source agent body has exactly four sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
 - `<constitution>` — ecosystem-wide invariants, byte-identical across every agent (copied verbatim, never authored per-agent)
-- `<backstory>` — experiential perspective that shapes judgment in open situations (not a role label)
 - `<goal>` — intent, not steps
 - `<judgment>` — the specific failure mode that looks like success
 - `<output>` — schema reference and EARS contracts
