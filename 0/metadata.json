@@ -1,0 +1,66 @@
+{
+  "cli_version": "0.13.4-nightly.202611121940.ce16562b9",
+  "checkpoint_id": "01M7DTBXYCVARPC3YTY084TQS7",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-14T20:00:51.193797Z",
+  "branch": "worktree-agent-a625b01150541b2cc",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "dist/codex/plugins/mason/shared/constitution.md",
+    "dist/codex/plugins/muse/shared/references/verification/gate-readiness.md",
+    "dist/codex/plugins/muse/skills/component/SKILL.md",
+    "dist/codex/plugins/scribe/shared/references/verification/gate-readiness.md",
+    "dist/codex/plugins/scribe/skills/draft-spec/SKILL.md",
+    "dist/codex/plugins/scribe/skills/gate-spec/SKILL.md",
+    "harnesses/codex/plugins/muse/skills/component/SKILL.md",
+    "harnesses/codex/plugins/scribe/skills/draft-spec/SKILL.md",
+    "harnesses/codex/plugins/scribe/skills/gate-spec/SKILL.md",
+    "plugins/muse/README.md",
+    "plugins/muse/agents/exit-gate.md",
+    "plugins/scribe/README.md",
+    "plugins/scribe/agents/exit-gate.md",
+    "plugins/scribe/skills/audit-architecture/SKILL.md",
+    "plugins/scribe/skills/draft-spec/SKILL.md",
+    "plugins/scribe/skills/gate-spec/SKILL.md",
+    "shared/constitution.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "722b7ce54de0",
+  "checkpoint_transcript_start": 11847,
+  "transcript_lines_at_start": 11847,
+  "compact_transcript_start": 1043,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0,
+    "subagent_tokens": {
+      "input_tokens": 44,
+      "cache_creation_tokens": 48206,
+      "cache_read_tokens": 3058953,
+      "output_tokens": 24740,
+      "api_call_count": 22
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 57
+  }
+}
