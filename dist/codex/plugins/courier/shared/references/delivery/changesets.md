@@ -71,7 +71,7 @@ Changesets become the project's changelog, so write for the people who use it, n
 - Open with a **bold lead-in** naming the change as the user sees it, then one line on its value: what they can now do or what changed for them.
 - Then short bullets in this order: why it matters, how to adopt it (commands, configuration, migration), limits they will hit. Sub-bullets carry detail.
 - Group a longer entry under bold labels such as **Upgrading** or **Scripting**. No `#` headings; the changelog supplies those.
-- Mark a breaking change with a **Breaking** label: old behavior, new behavior, what to do.
+- Put a breaking change in its own paragraph starting `**Breaking:**` (old behavior, new behavior, what to do), and a step users must take in one starting `**Action:**`. Not inside a bullet: release tools such as Callisto list these only when they start a paragraph.
 - One idea per bullet. A one-line entry is correct when that is all there is. Name the visible thing (a link, a flag, a field); "identifies" or "supports" says nothing.
 
 Bad: `Adds an optional pr field to the preview file and links changes to PRs.` No visible thing, no value, no limit.
