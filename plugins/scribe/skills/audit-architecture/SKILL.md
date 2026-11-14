@@ -8,7 +8,7 @@ version: 1.0.0
 # Scribe — Audit Architecture
 
 <overview>
-Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consistent — testable criteria, no TBDs, no vague language — and still be wrong for the system it's joining. Delegates to `arch-auditor`. An optional check before `scribe/gate-spec`: run it when asked, when the spec is shared by other work, or when it crosses a module boundary, so such a spec does not reach the binding gate without a system-scope check.
+Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consistent — testable criteria, no hidden unknowns, no vague language — and still be wrong for the system it's joining. Delegates to `arch-auditor`. An optional check before `scribe/gate-spec`: run it when asked, when the spec is shared by other work, or when it crosses a module boundary, so such a spec does not reach the binding gate without a system-scope check.
 </overview>
 
 <dispatch>

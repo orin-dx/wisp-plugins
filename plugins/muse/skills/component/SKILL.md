@@ -30,4 +30,6 @@ Turns UI or design intent into a component spec a developer could implement — 
 
 <circuit_breaker>
 The drafter self-checks, then the exit gate judges; the auditor does not run in between unless asked, because it reviews the same draft the gate does. The gate gets two rounds. If the second round still fails, or a blocker repeats, stop and give the user a decision: the persistent blockers and the options. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
+
+Unknowns are expected. The drafter states each in `scope` as an `Assumption:` line or, when the answer changes scope, behavior other work depends on, or cost, an `Open decision:` line. Put every open decision to the user before gating and redraft with the answers; an `owner_decision` blocker from the gate goes to the user too. A stated assumption is not a blocker.
 </circuit_breaker>

@@ -50,7 +50,7 @@ Eight independently-triggered skills, not a linear pipeline — pick the one tha
 
 | Skill | What it does | Subagent |
 | :--- | :--- | :--- |
-| `scribe/draft-spec` | Drafts a `spec@1` from a `requirement@1` and optional `research-report@1` — no TBDs permitted | `drafter` |
+| `scribe/draft-spec` | Drafts a `spec@1` from a `requirement@1` and optional `research-report@1` — unknowns stated as assumptions or owner decisions | `drafter` |
 | `scribe/verify-spec` | Checks that each acceptance criterion is grounded in the source requirement or research report | `verifier` |
 | `scribe/spec-drift` | Checks whether the live codebase still implements every criterion in a gated spec — covered, uncovered, or drifted | `drift-checker` |
 | `scribe/audit-spec` | Adversarially reviews a spec for vague criteria, missing error cases, and unverifiable claims | `auditor` |
@@ -67,7 +67,7 @@ Eight independently-triggered skills, not a linear pipeline — pick the one tha
 
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
-| `drafter` | Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` and optional `research-report@1`, or revises a gated spec in correction mode. No TBDs permitted. |
+| `drafter` | Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` and optional `research-report@1`, or revises a gated spec in correction mode. States unknowns in `scope` as assumptions or open owner decisions. |
 | `verifier` | Draft Verifier | sonnet / medium | Checks that acceptance criteria are grounded in the source artifacts (pre-implementation only). Neutral — collects evidence only. |
 | `drift-checker` | Drift Detector | sonnet / medium | On-demand, post-implementation: reads the spec from disk and the code from the workspace, classifies each criterion as covered, uncovered, or drifted. When a prior changeset's `criteria_evidence` is available, uses its pointers as a starting point but always independently re-verifies each one. |
 | `auditor` | Auditor | sonnet / medium | Adversarially reviews the spec for vague criteria, missing error cases, ambiguous language, incomplete sections, unnecessary prose, and fields that cross into another spec (persisted, serialized, or transmitted) without a round-trip guarantee on the far side. |
@@ -159,11 +159,11 @@ The standard path is draft, then gate. `scribe/verify-spec` (source grounding), 
 `scribe/gate-spec` enforces four conditions on the spec itself — whole-system architectural fit is `scribe/audit-architecture`'s job, checked upstream when it runs, not re-litigated here. All four must pass:
 
 1. Every acceptance criterion is a testable proposition (binary true/false from outside the system)
-2. No TBDs remain
+2. Every unknown is resolved or stated as an assumption, and no owner decision is open (ADR 016)
 3. Error cases are marked `is_error_case: true`
 4. Scope fits a single planning cycle
 
-On fail, specific blockers are returned to `scribe/draft-spec` or `scribe/architect` for targeted retry. Two rounds; if the second still fails, or a blocker repeats, the decision goes to a human.
+On fail, specific blockers are returned to `scribe/draft-spec` or `scribe/architect` for targeted retry, and an `owner_decision` blocker to you. Two rounds; if the second still fails, or a blocker repeats, the decision goes to a human.
 
 ---
 

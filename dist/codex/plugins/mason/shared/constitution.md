@@ -108,6 +108,14 @@ IF a verdict fails on the second round (`retry_count` 1, set by the caller as th
 
 ---
 
+## Spec Unknowns
+
+WHEN a spec@1 leaves something unknown, its drafter SHALL state it in `scope` as an `Assumption:` line, or as an `Open decision:` line for the owner when the answer changes scope, behavior other work depends on, or cost, as `shared/references/verification/gate-readiness.md` describes.
+
+WHEN a spec gate judges unknowns, it SHALL fail an unknown that leaves a criterion untestable or an open decision the owner has not answered, and SHALL NOT fail a stated assumption on its own.
+
+---
+
 ## Spec Persistence
 
 WHEN exit-gate issues a pass verdict, the scribe skill orchestrator SHALL write the spec to `<workspace_root>/docs/specs/<id>.json`, commit the file to version control, set `spec_file_path` to the workspace-relative path in the spec@1, and pass the updated spec to planner.

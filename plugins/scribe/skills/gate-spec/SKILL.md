@@ -8,7 +8,7 @@ version: 2.1.0
 # Scribe — Gate Spec
 
 <overview>
-The binding exit gate for a spec entering planning. Delegates to `exit-gate`. On pass, this skill — not the agent — performs the disk-write orchestration below; that step is load-bearing, not decoration. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
+The binding exit gate for a spec entering planning. Delegates to `exit-gate`. On pass, this skill — not the agent — performs the disk-write orchestration below; that step is load-bearing, not decoration. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules. An `owner_decision` blocker, raised for an `Open decision:` line in `scope`, goes to the user, not to `scribe/draft-spec`: it is a choice only the owner can make. A stated `Assumption:` line is not a blocker.
 </overview>
 
 <dispatch>
@@ -35,5 +35,5 @@ Without `spec_file_path` set, downstream agents fall back to reading the spec fr
 
 <io>
 **Consumes**: `spec@1` (optionally after verify-spec, audit-spec, audit-architecture)
-**Produces**: `verdict@3`. On pass, a persisted `spec@1` with `spec_file_path` set, routed to `navigator`. On fail, blockers routed back to `scribe/draft-spec`.
+**Produces**: `verdict@3`. On pass, a persisted `spec@1` with `spec_file_path` set, routed to `navigator`. On fail, blockers routed back to `scribe/draft-spec`, and `owner_decision` blockers to the user.
 </io>
