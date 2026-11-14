@@ -385,10 +385,10 @@ Validation is layered so each check owns a distinct failure class.
 | JSON shape | `jq` in CI | Invalid marketplace, manifest, schema, or Codex catalog JSON |
 | Source wiring | `shared/scripts/validate-wiring.sh` | Missing schema files or producer/consumer declarations with no source |
 | Source documentation | `scripts/check-skills-doc.sh` | Documented skills without a matching source directory |
-| Version consistency | `scripts/check-versions.sh` | Plugin version disagreement across manifest, README, changelog, and marketplace |
+| Version consistency | `tools/sync-claude-manifests.py --check` (`just versions` runs it via `scripts/check-versions.sh`) | A README, marketplace entry, badge, or Claude or Codex manifest version that differs from its source (`plugin.json`; `marketplace.json` for the ecosystem), or a CHANGELOG top entry that disagrees |
 | Reference size | `scripts/check-reference-size.sh` | Mixed-concern runtime guidance that exceeds the context cap |
 | Platform limits | `scripts/check-platform-limits.py` | Broken cross-references, invalid skill metadata, and agent or skill descriptions over the budgets hosts enforce |
-| Claude manifests | `tools/sync-claude-manifests.py --check` | A plugin's `.claude-plugin/plugin.json` that differs from its `plugin.json` |
+| Claude manifests | `tools/sync-claude-manifests.py --check` | A plugin's `.claude-plugin/plugin.json` or marketplace description that differs from its `plugin.json` |
 | Hook behavior | `tests/test_handback_validator.py`, `tests/test_route_guard.py` | A gate handback or routing decision that no longer follows the documented rules |
 | Reference integrity | `tests/test_reference_integrity.py` | Non-concern paths, broken exact paths, or runtime references with no caller |
 | Native build behavior | `tests/test_build_codex_marketplace.py` | Native manifest/skill rewriting, source/native skill drift, version drift, stale output retention, unsafe runtime collisions, and symlink output |

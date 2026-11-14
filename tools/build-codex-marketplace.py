@@ -254,7 +254,7 @@ def materialize_plugin(
     source_manifest, source_skills = source_plugin(repo_root, plugin_id)
     native_root, native_manifest, native_skills = native_plugin(repo_root, plugin_id)
     if native_manifest["version"] != source_manifest["version"]:
-        fail(f"native Codex plugin {plugin_id} version must match plugins/{plugin_id}/plugin.json")
+        fail(f"native Codex plugin {plugin_id} version must match plugins/{plugin_id}/plugin.json (run `just claude-manifests-sync`)")
     if native_manifest["author"] != source_manifest["author"]:
         fail(f"native Codex plugin {plugin_id} author must match plugins/{plugin_id}/plugin.json")
     if native_skills != source_skills:
