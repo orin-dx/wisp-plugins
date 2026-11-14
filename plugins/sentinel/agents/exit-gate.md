@@ -49,7 +49,7 @@ For fail, populate `blockers`. Record known review limits in `coverage_gaps` and
 
 Treat unverifiable criteria as failures unless the caller has explicitly waived them. Increment retry_count by one if provided in input. reasoning is scratchpad — never include it in blockers or verdict_summary.
 
-WHEN retry_count exceeds 3, THE SYSTEM SHALL return fail with an `escalation_required` blocker and halt automated retries.
+WHEN retry_count exceeds 1, or a blocker repeats unchanged from the previous round, THE SYSTEM SHALL return fail with an `escalation_required` blocker that lists the persistent blockers, and halt automated retries.
 WHEN a required check has not reached a terminal result, THE SYSTEM SHALL list it in `pending_checks` and return fail.
 WHEN a completion claim has no command and observed result that prove it, THE SYSTEM SHALL list it in `pending_checks`; another agent's summary is a lead, not evidence.
 WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.

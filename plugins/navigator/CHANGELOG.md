@@ -2,6 +2,11 @@
 
 — navigator
 
+## [2.5.0] - 2026-11-14
+
+### Changed
+- The challenger gets two rounds; if the plan still fails, the remaining issues go to you instead of a third round (ADR 015).
+
 ## [2.4.0] - 2026-11-10
 
 ### Changed

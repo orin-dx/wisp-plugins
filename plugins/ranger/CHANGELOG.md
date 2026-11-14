@@ -2,6 +2,11 @@
 
 — ranger
 
+## [3.2.5] - 2026-11-14
+
+### Changed
+- The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
+
 ## [3.2.4] - 2026-11-10
 
 ### Changed

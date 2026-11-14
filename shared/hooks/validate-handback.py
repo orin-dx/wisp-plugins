@@ -22,10 +22,10 @@ Behavior
     blockers; a `fail` names at least one).
   - On a violation it denies the handback with the first few errors. After MAX_DENIALS denials
     for one `agent_id` it lets the handback through, so the invalid artifact reaches the
-    orchestrator, which owns human escalation. This is the retry cap of 3, enforced here and
+    orchestrator, which owns human escalation. Schema denials are capped separately from gate rounds, enforced here and
     not in a prompt.
   - Enforces the retry cap in the report itself: a `retry_count` above RETRY_CAP is accepted only
-    as a `fail` carrying an `escalation_required` blocker, so a gate cannot pass a fourth retry.
+    as a `fail` carrying an `escalation_required` blocker, so a gate cannot pass a third round (ADR 015).
   - Rejects a blocker or coverage gap whose text field is only whitespace (ADR 013). Evidence
     citing and complete first rounds are prompt rules; they are not deterministic, so not checked.
   - Set WISP_HANDBACK_TRACE to a file path to append one JSON line per inspected event.
@@ -50,7 +50,7 @@ from typing import Any
 SCHEMA_DIRECTORY = Path(__file__).resolve().parent.parent / "schemas"
 MAX_DENIALS = 3
 MAX_REPORTED_ERRORS = 5
-RETRY_CAP = 3
+RETRY_CAP = 1
 ESCALATION_CRITERION = "escalation_required"
 
 # A handback passes when it conforms to any listed schema. Every gate produces verdict@3; the

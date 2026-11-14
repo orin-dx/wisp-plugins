@@ -2,6 +2,13 @@
 
 — smith
 
+## [2.6.0] - 2026-11-14
+
+### Changed
+- The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
+- Review runs once per batch with one repeat, not per commit.
+- Mutation is skipped and recorded as unavailable when a batch changes no executable logic.
+
 ## [2.5.0] - 2026-11-10
 
 ### Added

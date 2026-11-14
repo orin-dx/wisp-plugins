@@ -1,6 +1,6 @@
 {
   "name": "wisp-plugins",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "description": "Wisp Plugins marketplace for AGY and Claude Code, published by Orin DX",
   "plugins": [
     {
@@ -14,7 +14,7 @@
     {
       "id": "ranger",
       "name": "ranger",
-      "version": "3.2.4",
+      "version": "3.2.5",
       "path": "./plugins/ranger",
       "description": "Bug hunting for Rust, TypeScript, JavaScript, Python, and Go. Confirms reachable defects, searches semantic siblings, and routes structural families for architectural correction.",
       "supersedes": [
@@ -25,7 +25,7 @@
     {
       "id": "sentinel",
       "name": "sentinel",
-      "version": "2.1.3",
+      "version": "2.1.4",
       "path": "./plugins/sentinel",
       "description": "Cross-cutting verification gate. Confirms that any stage artifact meets its criteria before the next stage begins. One skill, one recon-verify-judge pipeline, reused unchanged against any artifact type.",
       "supersedes": "verify-first"
@@ -47,28 +47,28 @@
     {
       "id": "scribe",
       "name": "scribe",
-      "version": "3.5.0",
+      "version": "3.6.0",
       "path": "./plugins/scribe",
       "description": "Specification plugin. Turns requirements and research reports into unambiguous, testable specs. Checks specs against a persisted whole-system architecture model. Detects spec drift against actual code. Skills: draft-spec, verify-spec, spec-drift, audit-spec, audit-architecture, gate-spec, correct-spec, architect."
     },
     {
       "id": "muse",
       "name": "muse",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "path": "./plugins/muse",
       "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs \u2014 props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by ranger. Also sketches options before anything is specified (sketch) and carries a chosen option into a requirement (promote)."
     },
     {
       "id": "navigator",
       "name": "navigator",
-      "version": "2.4.0",
+      "version": "2.5.0",
       "path": "./plugins/navigator",
       "description": "Planning plugin. Decomposes specs into sequenced, bite-sized implementation plans with an implementation approach, exact code as a baseline, and the tests proving each criterion \u2014 no write-test-first mandate. Tasks are sized to compilation boundaries, not a clock-time estimate. No TBDs. A developer with zero domain context can execute the plan mechanically."
     },
     {
       "id": "smith",
       "name": "smith",
-      "version": "2.5.0",
+      "version": "2.6.0",
       "path": "./plugins/smith",
       "description": "Implementation plugin. Executes tested plan batches, verifies risk at real boundaries, searches semantic defect siblings, and escalates shared model or architecture gaps. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike)."
     },

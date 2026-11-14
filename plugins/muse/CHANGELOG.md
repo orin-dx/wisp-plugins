@@ -2,6 +2,13 @@
 
 — muse
 
+## [1.2.0] - 2026-11-14
+
+### Changed
+- The exit gate gets two rounds; after a second failing round, or a repeated blocker, the decision goes to you with the persistent blockers (ADR 015).
+- The drafter self-checks and the gate judges; the auditor runs only when you ask, because it reviewed the same draft.
+- The gate checks claims and citations against the code, build or spec they refer to; an issue it cannot tie to a source is a note.
+
 ## [1.1.0] - 2026-11-10
 
 ### Added

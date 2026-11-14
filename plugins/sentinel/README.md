@@ -1,6 +1,6 @@
 # sentinel — Verification Gate
 
-**Stage:** Gate · **Output:** `verdict@3` · **Version:** 2.1.3
+**Stage:** Gate · **Output:** `verdict@3` · **Version:** 2.1.4
 
 One skill, one artifact-agnostic pipeline. Sentinel returns a scoped `verdict@3`: pass or fail, with blockers, coverage gaps, and pending checks. Unverifiable required criteria fail unless explicitly waived.
 
@@ -96,7 +96,7 @@ Recon and verifier are deliberately separate: recon makes no judgments, verifier
 
 ## Retry Protocol
 
-On `fail`, the orchestrator returns the `blockers` array directly to the producing agent for a **targeted patch** — not a full regeneration. After 3 retries, escalate to the human.
+On `fail`, the orchestrator returns the `blockers` array directly to the producing agent for a **targeted patch** — not a full regeneration. After the second round fails, or a blocker repeats, escalate to the human.
 
 `retry_count` is tracked in `verdict@3` and incremented by the exit gate on each attempt.
 

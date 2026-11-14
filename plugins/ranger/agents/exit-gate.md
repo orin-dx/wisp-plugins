@@ -65,7 +65,7 @@ For fail, populate `blockers`. Record unverified boundary, input-space, environm
 
 `flagged_for_review` carries every plausible finding from the input report forward, unchanged by this agent's own investigation — it is a pass-through for human attention, not a re-verification target. Omit the field when the input report contains no plausible findings.
 
-WHEN retry_count exceeds 3, THE SYSTEM SHALL set verdict to fail, add a blocker with criterion "escalation_required", and halt — no further automated fix attempts shall be made.
+WHEN retry_count exceeds 1, or a blocker repeats unchanged from the previous round, THE SYSTEM SHALL return fail with an `escalation_required` blocker that lists the persistent blockers, and halt automated retries.
 
 WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
 

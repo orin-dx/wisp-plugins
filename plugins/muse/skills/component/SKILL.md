@@ -8,15 +8,15 @@ version: 1.0.0
 # Muse — Component Spec Skill
 
 <overview>
-Turns UI or design intent into a component spec a developer could implement — including its accessibility behavior — without asking a single clarifying question. One skill, one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. Muse audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by `ranger`.
+Turns UI or design intent into a component spec a developer could implement — including its accessibility behavior — without asking a single clarifying question. One skill, one draft-then-gate pipeline, reused unchanged regardless of which component is being specified. Muse audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by `ranger`.
 </overview>
 
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
 | **drafter** | sonnet / medium | A requirement@1 (or design intent) needs a first spec@1 draft covering props, variants, states, and accessibility criteria. |
-| **auditor** | sonnet / medium | A drafted spec@1 needs adversarial review for missing states, missing accessibility criteria, or unmarked invalid prop combinations. |
-| **exit-gate** | opus / high | An audited spec@1 needs a terminal binding pass/fail verdict before it proceeds to `navigator` for planning. |
+| **auditor** | sonnet / medium | Only when the user asks for an audit: adversarial review for missing states, missing accessibility criteria, or unmarked invalid prop combinations. |
+| **exit-gate** | opus / high | A drafted, self-checked spec@1 needs a terminal binding pass/fail verdict before it proceeds to `navigator` for planning. |
 </dispatch>
 
 <references>
@@ -29,5 +29,5 @@ Turns UI or design intent into a component spec a developer could implement — 
 </io>
 
 <circuit_breaker>
-Drafter → auditor loops: max 2 iterations before the exit gate; on round 2, unresolved naming or phrasing debates become non-blocking notes. The exit gate allows up to 3 retries before escalating to a human reviewer. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
+The drafter self-checks, then the exit gate judges; the auditor does not run in between unless asked, because it reviews the same draft the gate does. The gate gets two rounds. If the second round still fails, or a blocker repeats, stop and give the user a decision: the persistent blockers and the options. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
 </circuit_breaker>

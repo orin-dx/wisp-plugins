@@ -104,7 +104,7 @@ WHEN re-submitting an artifact to exit-gate after a fail verdict, the caller SHA
 
 IF exit-gate emits a blockers array in a fail verdict, the producing agent SHALL address only those blockers in its targeted patch.
 
-IF a blocker's `retry_count` exceeds 3, exit-gate SHALL return fail with an `escalation_required` blocker and the caller SHALL halt automated retries.
+IF a blocker's `retry_count` exceeds 1, or a blocker repeats unchanged from the previous round, exit-gate SHALL return fail with an `escalation_required` blocker and the caller SHALL halt automated retries.
 
 ---
 

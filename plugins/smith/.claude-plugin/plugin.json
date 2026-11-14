@@ -1,6 +1,6 @@
 {
   "name": "smith",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Implementation plugin. Executes tested plan batches, verifies risk at real boundaries, searches semantic defect siblings, and escalates shared model or architecture gaps. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike).",
   "author": {
     "name": "Gabriel Castro",

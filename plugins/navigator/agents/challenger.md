@@ -67,6 +67,7 @@ Review dimensions:
 WHEN any blocking-class issue exists, set `overall` to `"fail"`.
 NEVER set `overall` to `"pass"` when a blocking issue is present.
 WHEN on revision round 2, THE SYSTEM SHALL demote minor private helper disagreements to non-blocking suggestions and issue a pass if all criteria are covered.
+IF blocking issues remain after round 2, THE SYSTEM SHALL return fail with the persistent issues listed for a human decision instead of inviting a third round.
 WHEN a task has no code, THE SYSTEM SHALL judge it on whether its outcome, signatures, and tests let an implementer finish without a design decision the spec leaves open, not on whether code is present.
 WHEN an acceptance criterion has no corresponding task, flag it as `orphaned-criteria` with `suggested_fix` naming which task should cover it.
 WHEN a task changes a shared contract or implementation, THE SYSTEM SHALL derive syntactic and semantic candidate implementations from `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/interface-coverage.md` and record their dispositions before evaluating interface-incompleteness.

@@ -30,7 +30,7 @@ For a list of review findings, a defect, or a diff-sized change with no spec or 
 </fix_pass>
 
 <mutation_gate>
-Use project-native mutation tooling when available and relevant. A safe deliberate fault may provide equivalent discrimination evidence. Return meaningful survivors as precision tests; record unavailable evidence as a gap in `mutation-report@2`.
+Use project-native mutation tooling when available and relevant. When the batch changes no executable logic (types, declarations, configuration, documentation), skip mutation and record `method: unavailable` with the reason "no executable logic changed". A safe deliberate fault may provide equivalent discrimination evidence. Return meaningful survivors as precision tests; record unavailable evidence as a gap in `mutation-report@2`.
 </mutation_gate>
 
 <review_gate>
@@ -49,7 +49,7 @@ Review each changed defect as a possible family. The review must cover:
 Route the result:
 
 - `approved` → continue.
-- `changes_requested` → return must-fix issues and unresolved families to `implementer`, then repeat mutation and review.
+- `changes_requested` → return must-fix issues and unresolved families to `implementer`, then repeat mutation and review once. Review runs once per batch, not per commit or task. If the second review still requests changes, stop and put the open issues to the user.
 - `needs_architecture` → halt the batch and route the review to `scribe:architect`. Gate the resulting spec, amend and challenge the plan, then resume Smith.
 </review_gate>
 

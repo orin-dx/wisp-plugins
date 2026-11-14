@@ -1,6 +1,6 @@
 # scribe — Specification
 
-**Stage:** Spec · **Output:** `spec@1` · **Version:** 3.5.0
+**Stage:** Spec · **Output:** `spec@1` · **Version:** 3.6.0
 
 Turns requirements into unambiguous, testable specs a developer can implement without a single clarifying question — and keeps them that way after implementation starts.
 
@@ -89,15 +89,14 @@ flowchart LR
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
     Req["<b>Requirement</b><br/><code>requirement@1</code> + optional research"] --> Draft["<b>Draft</b><br/>scribe/draft-spec"]
-    Draft --> Verify["<b>Verify</b><br/>requirement grounding"]
-    Verify --> Audit["<b>Audit</b><br/>spec quality"]
-    Audit --> ArchAudit["<b>Architecture audit</b><br/>system fit"]
-    ArchAudit --> Gate{{"<b>Spec gate</b><br/>binding verdict"}}
+    Draft --> Gate{{"<b>Spec gate</b><br/>binding verdict"}}
+    Draft -.->|"on request, shared or cross-module"| Checks["<b>Optional checks</b><br/>verify · audit · architecture"]
+    Checks -.-> Gate
     Gate -->|"pass"| Spec[("<b>spec@1</b><br/>written + committed")]
     Gate -.->|"targeted blockers"| Draft
 
     class Req source
-    class Draft,Verify,Audit,ArchAudit engine
+    class Draft,Checks engine
     class Gate router
     class Spec output
 ```
@@ -113,7 +112,7 @@ spec_file_path + workspace root
 ```
 spec_file_path + criterion_id + contradiction report
   → scribe/correct-spec (drafter, correction mode)
-  → scribe/verify-spec → scribe/audit-spec → scribe/audit-architecture → scribe/gate-spec
+  → scribe/gate-spec
   → [skill overwrites the same file, sets revision_note, commits]
   → corrected spec@1 → planner (amend mode) → smith resumes
 ```
@@ -122,13 +121,13 @@ spec_file_path + criterion_id + contradiction report
 ```
 finding-report@2, implementation-review@2, or architecture-escalating implementation-result@1
   → scribe/architect (architect)
-  → scribe/verify-spec → scribe/audit-spec → scribe/audit-architecture → scribe/gate-spec
+  → scribe/audit-architecture → scribe/gate-spec
   → spec@1 (architectural)
   → navigator → smith
   → scribe/audit-architecture (refresh model)
 ```
 
-`scribe/verify-spec` checks source grounding; `audit-spec` checks internal quality; `audit-architecture` checks system fit. `scribe/architect` loads `shared/references/architecture/remediation.md` for the persisted-model location and language evidence. After Smith verifies the structural change, `audit-architecture` refreshes the model with the new boundary and invariant.
+The standard path is draft, then gate. `scribe/verify-spec` (source grounding), `audit-spec` (internal quality) and `audit-architecture` (system fit) run when asked, when a spec is shared by other work, or when it crosses a module boundary (ADR 015); otherwise the gate's own check against the code and sources covers them. `scribe/architect` loads `shared/references/architecture/remediation.md` for the persisted-model location and language evidence. After Smith verifies the structural change, `audit-architecture` refreshes the model with the new boundary and invariant.
 
 ---
 
@@ -164,7 +163,7 @@ finding-report@2, implementation-review@2, or architecture-escalating implementa
 3. Error cases are marked `is_error_case: true`
 4. Scope fits a single planning cycle
 
-On fail, specific blockers are returned to `scribe/draft-spec` or `scribe/architect` for targeted retry. Maximum 3 retries before escalation to a human.
+On fail, specific blockers are returned to `scribe/draft-spec` or `scribe/architect` for targeted retry. Two rounds; if the second still fails, or a blocker repeats, the decision goes to a human.
 
 ---
 

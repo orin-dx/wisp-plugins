@@ -109,7 +109,7 @@ EARS notation (WHEN / IF / WHILE / WHERE / THE SYSTEM SHALL) encodes hard constr
 
 **Correct use — output contract:**
 ```
-WHEN retry_count exceeds 3, THE SYSTEM SHALL escalate to human rather than
+WHEN retry_count exceeds 1, THE SYSTEM SHALL escalate to human rather than
 attempting another fix.
 ```
 

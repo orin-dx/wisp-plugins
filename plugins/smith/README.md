@@ -1,6 +1,6 @@
 # smith — Implementation
 
-**Stage:** Code · **Output:** code, `implementation-review@2`, `verdict@3` · **Version:** 2.5.0
+**Stage:** Code · **Output:** code, `implementation-review@2`, `verdict@3` · **Version:** 2.6.0
 
 Smith executes each plan batch through implementation, mutation, defect-family review, and an independent exit gate. Review finds syntactic and semantic siblings, records their shared cause, and checks for missing domain concepts or architectural constraints. No plan yet? Give it a `spec@1` directly.
 
@@ -150,7 +150,7 @@ Reviewer searches for the same syntax or algorithm and for different code expres
 
 `exit-gate` runs after all batches have approved reviews. It reads current code independently, validates `implementation-review@2`, derives its own sibling candidates, and verifies each structural disposition and relevant boundary before returning `verdict@3`.
 
-On fail, blockers go back to `implementer` for a targeted fix — three retries, then escalate to a human.
+On fail, blockers go back to `implementer` for a targeted fix — one retry, then escalate to a human if the second round fails or a blocker repeats.
 
 ---
 

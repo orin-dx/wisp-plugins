@@ -214,7 +214,7 @@ flowchart LR
     style check fill:#fafafa,stroke:#cbd5e1,stroke-width:1.5px,stroke-dasharray: 4 4,rx:10px,ry:10px
 ```
 
-On `fail`, the orchestrator passes **only the blockers array** back to the producing agent — not the full artifact context — so it can make a targeted fix. On retry 2, the effort level escalates. After 3 retries, the circuit breaks and control passes to the human.
+On `fail`, the orchestrator passes **only the blockers array** back to the producing agent — not the full artifact context — so it can make a targeted fix. A gate gets two rounds: after the second fails, or when a blocker repeats, the circuit breaks and control passes to the human (ADR 015).
 
 `retry_count` is tracked inside `verdict@3` and incremented by the exit gate on each attempt.
 

@@ -1,6 +1,6 @@
 # navigator — Implementation Planning
 
-**Stage:** Plan · **Output:** `plan@1` · **Version:** 2.4.0
+**Stage:** Plan · **Output:** `plan@1` · **Version:** 2.5.0
 
 Decomposes a `spec@1` into a sequenced, testable implementation plan. Every task in `plan@1` is self-contained (see [Task Requirements](#task-requirements)), so an implementer with no domain knowledge can execute it — [smith](../smith/) may still adapt the baseline's shape, provided the same files, criteria, and tests are satisfied. When the spec is corrected after implementation reveals it was wrong, planner runs in amend mode — patching only the affected tasks rather than re-decomposing the whole plan.
 

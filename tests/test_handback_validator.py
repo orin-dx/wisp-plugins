@@ -110,12 +110,12 @@ class HandbackValidatorTests(unittest.TestCase):
         self.assertEqual(validate_handback.validate({"value": 3}, schema), ["$.value: expected string or null"])
 
     def test_a_retry_past_the_cap_must_escalate_instead_of_passing(self) -> None:
-        late_pass = {**VALID_PASS_V3, "retry_count": 4}
+        late_pass = {**VALID_PASS_V3, "retry_count": 2}
         denied = self.decide(event(json.dumps(late_pass), agent_id="late"))
         self.assertIn("escalation_required", denied["hookSpecificOutput"]["permissionDecisionReason"])
-        escalated = {**VALID_FAIL_V3, "retry_count": 4, "blockers": [{"criterion": "escalation_required", "finding": "Cap reached."}]}
+        escalated = {**VALID_FAIL_V3, "retry_count": 2, "blockers": [{"criterion": "escalation_required", "finding": "Cap reached."}]}
         self.assertIsNone(self.decide(event(json.dumps(escalated), agent_id="late2")))
-        self.assertIsNone(self.decide(event(json.dumps({**VALID_PASS_V3, "retry_count": 3}), agent_id="late3")))
+        self.assertIsNone(self.decide(event(json.dumps({**VALID_PASS_V3, "retry_count": 1}), agent_id="late3")))
 
     def test_blank_blocker_text_is_denied_but_terse_real_text_is_not(self) -> None:
         blank = {**VALID_FAIL_V3, "blockers": [{"criterion": "AC-3", "finding": "   ", "location": "AC-3"}]}

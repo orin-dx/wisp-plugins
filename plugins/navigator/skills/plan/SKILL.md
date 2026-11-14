@@ -35,7 +35,7 @@ navigator is one skill, `plan`. Behavior adapts to what's asked, dispatching to 
 | :--- | :--- | :--- | :--- |
 | **planner** | Plan author | sonnet / medium | Decompose a spec into ordered, subsystem-batched implementation tasks. |
 | **estimator** | Effort estimator | sonnet / medium | Assign time estimates, identify parallelizable tasks, and surface blocking dependencies. |
-| **challenger** | Adversarial reviewer | sonnet / medium | Stress-test a draft plan@1 (max 2 review rounds) before any implementation begins. |
+| **challenger** | Adversarial reviewer | sonnet / medium | Stress-test a draft plan@1 before any implementation begins. Two rounds at most; if it still fails, stop and put the remaining issues to the user. |
 
 </subagent_dispatch_matrix>
 

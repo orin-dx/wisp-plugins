@@ -1,6 +1,6 @@
 {
   "name": "sentinel",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Independently gate lifecycle artifacts against explicit criteria before they cross a workflow boundary.",
   "author": {
     "name": "Gabriel Castro",

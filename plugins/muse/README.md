@@ -1,6 +1,6 @@
 # muse — Component Specification
 
-**Stage:** Design · **Output:** `spec@1` · **Version:** 1.1.0
+**Stage:** Design · **Output:** `spec@1` · **Version:** 1.2.0
 
 Turns UI or design intent into a component spec a developer can implement — including its accessibility behavior — without a single clarifying question. Muse audits the spec, not the implementation. It also has a light, non-binding path for early work: see options first, decide, then carry the choice forward.
 
@@ -60,7 +60,7 @@ Muse specs the component, not the code that implements it. Code-level accessibil
 | :--- | :--- | :--- | :--- |
 | `drafter` | Component Specification Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` or design intent: props, variants, per-state observable behavior, and accessibility criteria. No TBDs permitted. Also runs in correction mode. |
 | `auditor` | Component Specification Auditor | sonnet / medium | Adversarially reviews the draft for missing interactive states, missing accessibility criteria, and invalid prop combinations not marked as error cases. |
-| `exit-gate` | Component Specification Exit Gate | opus / high | Binding pass/fail verdict before the spec enters planning. Default disposition: fail. Maximum 3 retries before escalation to a human. |
+| `exit-gate` | Component Specification Exit Gate | opus / high | Binding pass/fail verdict before the spec enters planning. Default disposition: fail. Two rounds, then escalation to a human. |
 | `explorer` | Divergent Option Explorer | sonnet / medium | Builds and renders one structurally different option for a sketch and returns an `option-set@1` holding only that option. Writes only to a scratch directory, never ranks options. Internal to `sketch`. |
 
 ---
@@ -87,7 +87,7 @@ flowchart LR
     class Spec output
 ```
 
-Drafter/auditor review loops are capped at 2 iterations before reaching the exit gate. On fail, specific blockers are returned to `drafter` for a targeted retry. Maximum 3 retries before escalation to a human.
+The drafter self-checks and the exit gate judges; the auditor runs only when asked. On fail, specific blockers go back to `drafter` for one targeted retry. If the second round still fails, or a blocker repeats, the decision goes to a human.
 
 ---
 

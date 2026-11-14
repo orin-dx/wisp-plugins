@@ -1,6 +1,6 @@
 {
   "name": "muse",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Turn UI intent into testable component specifications with behavior and accessibility criteria. Also sketch options before anything is specified and promote a chosen option.",
   "author": {
     "name": "Gabriel Castro",

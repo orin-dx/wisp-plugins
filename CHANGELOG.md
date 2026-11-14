@@ -3,6 +3,12 @@
 All notable changes to the Wisp Plugins ecosystem are documented here.
 Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 
+## [4.6.0] - 2026-11-14 — Two rounds and one reality check
+
+- Exit gates and the plan challenger get two rounds; after a second failing round, or a repeated blocker, the decision goes to a human (ADR 015, amends ADR 012's cap of three).
+- Spec drafters self-check and the gate judges; auditor, verifier and architecture audit run on request or for shared or cross-module specs. Spec gates check claims against the code, build or spec they cite.
+- Implementation review runs once per batch; mutation is skipped when a batch changes no executable logic.
+
 ## [4.5.0] - 2026-11-10 — Exploration modes, enforced gates, layered changesets
 
 - Added exploration modes: `muse/sketch`, `muse/promote`, `smith/spike` and the `explorer` agent, with `option-set@1` and `spike-report@1` (ADR 011). Exploration never gates and enters the pipeline only through `promote`.

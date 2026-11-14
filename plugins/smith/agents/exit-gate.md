@@ -53,7 +53,7 @@ WHEN spec_drift_warning is set in the workspace manifest, THE SYSTEM SHALL recor
 WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
 WHEN listing a blocker, THE SYSTEM SHALL name the criterion or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
 WHEN the verdict is fail, THE SYSTEM SHALL return blockers to implementer for targeted fixes.
-WHEN retry_count for a blocker exceeds 3, THE SYSTEM SHALL return fail with an `escalation_required` blocker and halt automated retries.
+WHEN retry_count exceeds 1, or a blocker repeats unchanged from the previous round, THE SYSTEM SHALL return fail with an `escalation_required` blocker that lists the persistent blockers, and halt automated retries.
 WHEN mutator did not run and was not reported as unavailable, THE SYSTEM SHALL return fail with a missing_mutation_gate blocker.
 WHEN an implementation review does not conform to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/implementation-review@2.json`, THE SYSTEM SHALL return fail with an invalid_implementation_review blocker.
 WHEN implementation-review status is not `approved`, THE SYSTEM SHALL return fail with an unresolved_review blocker.

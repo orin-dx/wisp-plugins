@@ -1,6 +1,6 @@
 # ADR-012: Gate output conformance and the retry cap are enforced by a hook, not a prompt
 
-**Status:** Accepted
+**Status:** Accepted; the retry cap is amended to one retry by ADR-015
 **Date:** 2026-10-20
 
 ## Context

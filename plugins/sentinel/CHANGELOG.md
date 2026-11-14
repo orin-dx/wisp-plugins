@@ -2,6 +2,11 @@
 
 — sentinel
 
+## [2.1.4] - 2026-11-14
+
+### Changed
+- The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
+
 ## [2.1.3] - 2026-11-10
 
 ### Changed

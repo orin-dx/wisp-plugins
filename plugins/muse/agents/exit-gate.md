@@ -38,7 +38,8 @@ Return `verdict@3` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3
 
 WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
 WHEN listing a blocker, THE SYSTEM SHALL name the criterion_id, state, or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
-WHEN retry_count exceeds 3, THE SYSTEM SHALL return fail with an `escalation_required` blocker and halt automated retries.
+WHEN retry_count exceeds 1, or a blocker repeats unchanged from the previous round, THE SYSTEM SHALL return fail with an `escalation_required` blocker that lists the persistent blockers, and halt automated retries.
+WHEN a criterion, claim or citation refers to existing code, configuration, a built artifact or another spec, THE SYSTEM SHALL check it against that source before blocking or passing; an issue that cannot be tied to a source or to a testability defect is a note, not a blocker.
 WHEN any required check is unfinished, THE SYSTEM SHALL name it in `pending_checks` and return fail.
 IF the spec describes a component whose interactive states or accessibility surface are not yet fully enumerated, THE SYSTEM SHALL fail with a blocker naming each missing state or accessibility criterion specifically, rather than a general completeness note.
 </output>
