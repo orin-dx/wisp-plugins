@@ -7,4 +7,4 @@ version: 1.0.0
 
 # Guide — Ship
 
-Say "Mode: ship." Use only the steps the user asked for, in this order: `courier:commit` for the commit message, `courier:changeset` when the repository uses changesets and the change is user-visible, `courier:pr` for the pull request title and body (Entire opens the PR from the branch's trail), `courier:release` for release notes. Confirm before anything is pushed, posted or published.
+Say "Mode: ship." Use only the steps the user asked for, in this order: `courier:changeset` first when the repository uses changesets and the change is user-visible (so the file is part of the commit), then `courier:commit` for the commit message, then `courier:pr` for the pull request title and body (Entire opens the PR from the branch's trail), `courier:release` for release notes. Confirm before anything is pushed, posted or published.

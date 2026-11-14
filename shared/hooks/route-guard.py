@@ -11,7 +11,8 @@ enforce: a skill started with a slash command arrives as a UserPromptSubmit prom
 call arrives as a PreToolUse Agent call with `subagent_type`, all with the same `session_id`.
 
 Behavior
-  - Records, per session, that a skill of this plugin started.
+  - Records, per session, that a skill of this plugin started. Each fact is its own file created
+    atomically, so parallel hook calls cannot lose each other's state.
   - Denies a direct call to one of this plugin's agents when none of its skills has started in the
     session, once per agent type; the reason names the skill to use. A second call goes through,
     so a deliberate direct use still works and the guard cannot deadlock a session.
@@ -40,37 +41,37 @@ SUGGEST = {
 COMMAND = re.compile(r"^\s*/([a-z0-9-]+):[a-z0-9-]+")
 
 
-def state_path(state_directory: Path, session: str) -> Path:
-    safe = re.sub(r"[^A-Za-z0-9_-]", "_", session) or "unknown"
-    return state_directory / f"{safe}.json"
+def record_path(state_directory: Path, session: str, kind: str, name: str) -> Path:
+    """One empty file per fact, so concurrent hook calls never read-modify-write shared state."""
+    safe = lambda value: re.sub(r"[^A-Za-z0-9_-]", "_", value) or "unknown"
+    return state_directory / safe(session) / f"{kind}-{safe(name)}"
 
 
-def load(path: Path) -> dict[str, list[str]]:
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        return {"skills": list(data.get("skills", [])), "denied": list(data.get("denied", []))}
-    except (OSError, ValueError):
-        return {"skills": [], "denied": []}
+def has(path: Path) -> bool:
+    return path.exists()
 
 
-def save(path: Path, data: dict[str, list[str]]) -> None:
+def mark(path: Path) -> bool:
+    """Create the record; True only for the caller that created it."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data), encoding="utf-8")
+    try:
+        path.touch(exist_ok=False)
+    except FileExistsError:
+        return False
+    return True
 
 
 def decide(event: dict[str, Any], plugin: str, state_directory: Path) -> dict[str, Any] | None:
     """Return a deny decision, or None to let the event through."""
     if os.environ.get("WISP_ROUTE_GUARD", "").lower() == "off":
         return None
-    path = state_path(state_directory, str(event.get("session_id", "unknown")))
+    session = str(event.get("session_id", "unknown"))
+    started = record_path(state_directory, session, "skill", plugin)
     name = event.get("hook_event_name")
     if name == "UserPromptSubmit":
         match = COMMAND.match(str(event.get("prompt", "")))
         if match and match.group(1) == plugin:
-            data = load(path)
-            if plugin not in data["skills"]:
-                data["skills"].append(plugin)
-                save(path, data)
+            mark(started)
         return None
     if name != "PreToolUse":
         return None
@@ -78,21 +79,15 @@ def decide(event: dict[str, Any], plugin: str, state_directory: Path) -> dict[st
     tool = event.get("tool_name")
     if tool == "Skill":
         if str(tool_input.get("skill", "")).startswith(f"{plugin}:"):
-            data = load(path)
-            if plugin not in data["skills"]:
-                data["skills"].append(plugin)
-                save(path, data)
+            mark(started)
         return None
     if tool not in ("Agent", "Task") or event.get("agent_id"):
         return None
     agent_type = str(tool_input.get("subagent_type", ""))
     if not agent_type.startswith(f"{plugin}:"):
         return None
-    data = load(path)
-    if plugin in data["skills"] or agent_type in data["denied"]:
+    if has(started) or not mark(record_path(state_directory, session, "denied", agent_type)):
         return None
-    data["denied"].append(agent_type)
-    save(path, data)
     return {
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",

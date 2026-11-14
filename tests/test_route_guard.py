@@ -68,6 +68,23 @@ class RouteGuardTests(unittest.TestCase):
         self.addCleanup(os.environ.pop, "WISP_ROUTE_GUARD", None)
         self.assertIsNone(self.decide(agent("smith:reviewer")))
 
+    def test_parallel_calls_keep_every_record(self) -> None:
+        from concurrent.futures import ThreadPoolExecutor
+
+        environment = {**os.environ, "WISP_ROUTE_STATE_DIR": str(self.state)}
+
+        def call(payload: dict, plugin: str) -> str:
+            done = subprocess.run([sys.executable, str(TOOL), plugin], input=json.dumps(payload), capture_output=True, text=True, env=environment, check=False)
+            return done.stdout
+
+        starts = [(skill("smith:implement", session="par"), "smith"), (skill("ranger:audit", session="par"), "ranger")] * 4
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            list(pool.map(lambda args: call(*args), starts))
+        for plugin, agent_type in (("smith", "smith:reviewer"), ("ranger", "ranger:adversary")):
+            self.assertEqual(call(agent(agent_type, session="par"), plugin), "", f"{agent_type} was denied although its skill had started")
+        denials = list(ThreadPoolExecutor(max_workers=8).map(lambda _: call(agent("scribe:auditor", session="par2"), "scribe"), range(8)))
+        self.assertEqual(sum(1 for out in denials if out), 1, "exactly one parallel direct call is redirected")
+
     def test_command_contract_and_fail_open(self) -> None:
         environment = {**os.environ, "WISP_ROUTE_STATE_DIR": str(self.state)}
         denied = subprocess.run([sys.executable, str(TOOL), "ranger"], input=json.dumps(agent("ranger:adversary", session="cli")), capture_output=True, text=True, env=environment, check=False)

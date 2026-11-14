@@ -127,6 +127,15 @@ def sync(root: Path, check: bool) -> tuple[list[str], int]:
 
     for relative, key, ascii_only in MARKETPLACES:
         path = root / relative
+        listed = {entry.get(key): entry for entry in json.loads(path.read_text(encoding="utf-8"))["plugins"]}
+        for plugin_id in plugins:
+            if plugin_id not in listed:
+                problems.append(f"{relative}: no entry for plugin `{plugin_id}`; discovery would miss it")
+            elif key == "id" and "version" not in listed[plugin_id]:
+                problems.append(f"{relative}: entry for `{plugin_id}` has no version")
+        for listed_id in listed:
+            if listed_id not in plugins:
+                problems.append(f"{relative}: entry `{listed_id}` has no plugins/{listed_id}/plugin.json")
         emit(path, render_marketplace(path, key, ascii_only, plugins), "unreadable", "plugin descriptions or versions are stale")
 
     for source in sources:

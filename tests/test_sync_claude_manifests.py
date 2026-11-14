@@ -92,6 +92,32 @@ class SyncClaudeManifestsTests(unittest.TestCase):
         result = self.check()
         self.assertEqual(result.returncode, 0, result.stdout)
 
+    def test_a_plugin_missing_from_a_marketplace_or_without_a_root_version_fails(self) -> None:
+        for relative, key in (('marketplace.json', 'id'), ('.claude-plugin/marketplace.json', 'name')):
+            with self.subTest(file=relative):
+                original = self.read(relative)
+                data = json.loads(original)
+                data['plugins'] = [entry for entry in data['plugins'] if entry[key] != 'alpha']
+                self.write_json(relative, data)
+                result = self.check()
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('no entry for plugin `alpha`', result.stdout)
+                self.write(relative, original)
+        root = json.loads(self.read('marketplace.json'))
+        del root['plugins'][0]['version']
+        self.write_json('marketplace.json', root)
+        result = self.check()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('has no version', result.stdout)
+
+    def test_a_marketplace_entry_without_a_plugin_fails(self) -> None:
+        data = json.loads(self.read('marketplace.json'))
+        data['plugins'].append({'id': 'ghost', 'version': '1.0.0', 'path': './plugins/ghost', 'description': 'x'})
+        self.write_json('marketplace.json', data)
+        result = self.check()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('entry `ghost` has no plugins/ghost/plugin.json', result.stdout)
+
     def test_a_plugin_bump_reaches_every_copy_and_leaves_other_text_alone(self) -> None:
         self.set_plugin_version("1.3.0")
         self.assertNotEqual(self.check().returncode, 0)
