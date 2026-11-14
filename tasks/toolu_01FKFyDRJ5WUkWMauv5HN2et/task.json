@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01FKFyDRJ5WUkWMauv5HN2et",
+  "agent_id": "aevidence-docs-c5566a056772e56e",
+  "subagent_type": "general-purpose",
+  "task_description": "Evidence docs: is the pipeline worth it",
+  "files": [
+    "tools/paired-eval.py",
+    "tools/validate-handback.py"
+  ],
+  "token_usage": {
+    "input_tokens": 27,
+    "cache_creation_tokens": 159162,
+    "cache_read_tokens": 1370326,
+    "output_tokens": 11352,
+    "api_call_count": 13
+  },
+  "started_at": "2026-11-13T21:13:24.651937-08:00",
+  "completed_at": "2026-11-13T21:13:24.652329-08:00"
+}

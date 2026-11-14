@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01FZABzk2ZHbCbx4Jm9Lek5v",
+  "agent_id": "acatch-rate-8c2783161a4f160d",
+  "subagent_type": "general-purpose",
+  "task_description": "Catch rate: what watchers caught",
+  "files": [
+    "tools/paired-eval.py",
+    "tools/validate-handback.py"
+  ],
+  "token_usage": {
+    "input_tokens": 26,
+    "cache_creation_tokens": 70072,
+    "cache_read_tokens": 780042,
+    "output_tokens": 7623,
+    "api_call_count": 15
+  },
+  "started_at": "2026-11-13T21:13:24.688245-08:00",
+  "completed_at": "2026-11-13T21:13:24.688577-08:00"
+}

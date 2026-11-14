@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01GtdWr1JDX5594nssY4epJt",
+  "agent_id": "asession-data-34a34a8b4ddb3ea2",
+  "subagent_type": "general-purpose",
+  "task_description": "Session data: build vs watch cost",
+  "files": [
+    "tools/paired-eval.py",
+    "tools/validate-handback.py"
+  ],
+  "token_usage": {
+    "input_tokens": 37,
+    "cache_creation_tokens": 86831,
+    "cache_read_tokens": 1256566,
+    "output_tokens": 14100,
+    "api_call_count": 19
+  },
+  "started_at": "2026-11-13T21:13:24.673849-08:00",
+  "completed_at": "2026-11-13T21:13:24.674014-08:00"
+}
