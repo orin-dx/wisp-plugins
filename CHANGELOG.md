@@ -10,6 +10,7 @@ Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 - The six pipeline plugins redirect a direct call to one of their agents, once per session, to the skill that starts it, so its checks run.
 - Exit gates and the plan challenger get two rounds; after a second failing round, or a repeated blocker, the decision goes to a human (ADR 015, amends ADR 012's cap of three).
 - Spec drafters self-check and the gate judges; auditor, verifier and architecture audit run on request or for shared or cross-module specs. Spec gates check claims against the code, build or spec they cite.
+- Specs state unknowns instead of banning them: each is an `Assumption:` the work proceeds on or an `Open decision:` for the owner, in `scope`. Spec gates no longer fail a stated assumption, only an unknown that leaves a criterion untestable or an owner decision not yet made (ADR 016, `spec@1` unchanged).
 - Implementation review runs once per batch; mutation is skipped when a batch changes no executable logic.
 - Gates, reviewers and verifiers count only behavior run with real inputs as evidence that logic works; visual changes are checked in the built page where a browser exists.
 - Pipeline agents' descriptions name the skill that starts them, so the skill's checks run; resident description text is about 27% smaller.

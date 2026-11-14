@@ -58,7 +58,7 @@ Muse specs the component, not the code that implements it. Code-level accessibil
 
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
-| `drafter` | Component Specification Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` or design intent: props, variants, per-state observable behavior, and accessibility criteria. No TBDs permitted. Also runs in correction mode. |
+| `drafter` | Component Specification Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` or design intent: props, variants, per-state observable behavior, and accessibility criteria. States unknowns in `scope` as assumptions or open owner decisions. Also runs in correction mode. |
 | `auditor` | Component Specification Auditor | sonnet / medium | On request, adversarially reviews the draft for missing interactive states, missing accessibility criteria, and invalid prop combinations not marked as error cases. |
 | `exit-gate` | Component Specification Exit Gate | opus / high | Binding pass/fail verdict before the spec enters planning. Default disposition: fail. Two rounds, then escalation to a human. |
 | `explorer` | Divergent Option Explorer | sonnet / medium | Builds and renders one structurally different option for a sketch and returns an `option-set@1` holding only that option. Writes only to a scratch directory, never ranks options. Internal to `sketch`. |

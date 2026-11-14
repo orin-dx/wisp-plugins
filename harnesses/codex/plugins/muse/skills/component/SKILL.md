@@ -25,7 +25,7 @@ Convert the supplied design intent into a component contract that an implementer
 
 ## Decisions and stopping
 
-Do not leave TBD markers in the spec. Put deliberately deferred topics in `non_goals`; put unavoidable uncertainty in `reasoning` and name its implementation impact. The gate gets two rounds; unresolved naming or phrasing disputes become non-blocking notes. If the second round still fails, or a blocker repeats, give the user the persistent blockers and the options.
+Unknowns are expected. State each in `scope`: an `Assumption:` line the work proceeds on, or an `Open decision:` line when the answer changes scope, behavior other work depends on, or cost. Put open decisions to the user before gating and redraft with the answers. No criterion rests on a TBD; `non_goals` holds deliberate exclusions and `reasoning` is not forwarded. The gate blocks an unknown that leaves a criterion untestable, an unanswered open decision (`owner_decision`, for the user), or an assumption that changes scope, dependent behavior or cost, never a stated assumption on its own. The gate gets two rounds; unresolved naming or phrasing disputes become non-blocking notes. If the second round still fails, or a blocker repeats, give the user the persistent blockers and the options.
 
 ## Team use
 
