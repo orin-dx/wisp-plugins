@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01GgYqJGJdaXd75XNBvN4RVz",
+  "agent_id": "aaudit-docs-27e5ad36a0b4b0ed",
+  "subagent_type": "general-purpose",
+  "task_description": "Docs vs implementation audit",
+  "files": [
+    "tools/paired-eval.py",
+    "tools/validate-handback.py"
+  ],
+  "token_usage": {
+    "input_tokens": 170,
+    "cache_creation_tokens": 501797,
+    "cache_read_tokens": 17701945,
+    "output_tokens": 63750,
+    "api_call_count": 90
+  },
+  "started_at": "2026-11-14T11:25:26.894968-08:00",
+  "completed_at": "2026-11-14T11:25:26.895258-08:00"
+}

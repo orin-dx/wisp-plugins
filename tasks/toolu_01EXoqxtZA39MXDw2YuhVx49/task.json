@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01EXoqxtZA39MXDw2YuhVx49",
+  "agent_id": "aaudit-harness-1ceefca2bfe947bb",
+  "subagent_type": "general-purpose",
+  "task_description": "Harness parity audit",
+  "files": [
+    "tools/paired-eval.py",
+    "tools/validate-handback.py"
+  ],
+  "token_usage": {
+    "input_tokens": 201,
+    "cache_creation_tokens": 414771,
+    "cache_read_tokens": 15853485,
+    "output_tokens": 65736,
+    "api_call_count": 106
+  },
+  "started_at": "2026-11-14T11:25:26.912295-08:00",
+  "completed_at": "2026-11-14T11:25:26.912425-08:00"
+}
