@@ -66,25 +66,24 @@ Do not call an internal implementation change breaking unless it changes a suppo
 
 ## Entry shape
 
-The summary is Markdown with no length target. Lead with the value, then add depth only when the reader needs it. A repository's own changeset rules (its `.changeset/` format, CLI and contributing guide) win over this shape: no headings where it bans them, its paragraph labels where it requires them.
+Changesets become the project's changelog, so write for the people who use it, not the implementer. A repository's own mechanics (its `.changeset/` format, CLI, package naming) win; this shape is the default style.
 
-- Lead line: what the reader can now do or what changed for them.
-- Bullets: what they see and where, why it helps, and what to do.
-- Audience sections (what you see, scripting, upgrading) when readers differ.
-- Limits the reader will hit, stated in the entry, not in `reasoning`.
+- Open with a **bold lead-in** naming the change as the user sees it, then one line on its value: what they can now do or what changed for them.
+- Then short bullets in this order: why it matters, how to adopt it (commands, configuration, migration), limits they will hit. Sub-bullets carry detail.
+- Group a longer entry under bold labels such as **Upgrading** or **Scripting**. No `#` headings; the changelog supplies those.
+- Mark a breaking change with a **Breaking** label: old behavior, new behavior, what to do.
+- One idea per bullet. A one-line entry is correct when that is all there is. Name the visible thing (a link, a flag, a field); "identifies" or "supports" says nothing.
 
-A one-line entry is correct when that is all there is. Name the visible thing (a link, a label, a flag, a field); vague verbs like "identifies" or "supports" fail.
-
-Bad: `Adds an optional pr field to the preview file and links changes to PRs.` It names no visible thing, no reason, and no limit.
+Bad: `Adds an optional pr field to the preview file and links changes to PRs.` No visible thing, no value, no limit.
 
 Good:
 
 ```markdown
-Links each change in the release PR to the pull request that added it.
+**Release PRs link each change to its pull request.** Open the review and discussion behind any line without searching.
 
-- Shown as `#123` next to the change, so you can open the review and discussion behind it.
-- A changeset added without a pull request (a direct push) gets no link.
-- For scripts: the `--emit-preview` file has an optional `pr` for each change.
+- Shown as `#123` next to the change.
+- A changeset pushed without a pull request gets no link.
+- **Scripting:** the `--emit-preview` file has an optional `pr` for each change.
 ```
 
 ## Voice

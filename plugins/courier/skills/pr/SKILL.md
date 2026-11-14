@@ -1,7 +1,7 @@
 ---
 name: pr
 description: >-
-  Use this, not freehand text, whenever a pull request is opened or its title or description written or updated: "open a PR", "create a pull request", "write the PR description". Produces a PR title and body from the diff and any linked spec or requirement, then opens the PR after user confirmation.
+  Use this, not freehand text, whenever a pull request is opened or its title or description written or updated: "open a PR", "create a pull request", "write the PR description". Produces a PR title and body from the diff and any linked spec or requirement, then hands them to the branch's Entire trail, which opens the PR.
 version: 2.0.2
 ---
 
@@ -23,5 +23,5 @@ Produces a PR title and body from a diff plus optional linked spec/requirement, 
 
 <io>
 **Consumes**: git diff, optionally linked `spec@1` or `requirement@1`
-**Produces**: opened PR (title, body, labels). Confirm the drafted title/body with the user before running `gh pr create` — this is a shared-visibility action, not a local one. When the repository's instructions say another system opens pull requests (for example Entire from the branch's trail), return the title and body and do not open the PR.
+**Produces**: opened PR (title, body, labels). By default, push the branch and create or link its Entire trail (`entire trail create`); Entire opens the pull request from the trail, so return the title and body for it. Open a PR with `gh pr create` only when the repository's instructions say agents open them, and only after the user confirms the title and body.
 </io>

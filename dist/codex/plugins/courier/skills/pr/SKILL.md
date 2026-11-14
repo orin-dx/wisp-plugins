@@ -30,7 +30,7 @@ Write a concise title and body with:
 
 Use enough summary bullets to explain one coherent change. If the summary reveals independent topics, recommend separate PRs or state the dependency that requires one delivery.
 
-Show the exact title, body, labels, base branch, and repository target before creating anything remotely. Create the PR only after explicit user confirmation. When the repository's instructions say another system opens pull requests, return the title and body and do not open one.
+Show the exact title, body, labels, base branch, and repository target before creating anything remotely. By default, push the branch and create or link its Entire trail (`entire trail create`); Entire opens the pull request, so return the title and body. Create a PR yourself only when the repository's instructions say agents open them, and only after explicit user confirmation.
 
 ## Team use
 
