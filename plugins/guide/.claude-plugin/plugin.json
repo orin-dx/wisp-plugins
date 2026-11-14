@@ -1,0 +1,9 @@
+{
+  "name": "guide",
+  "version": "1.0.0",
+  "description": "Start here. Six commands named by intent (explore, spike, fix, build, check, ship) that pick the path by risk and hand off to the skill that does the work, so its checks run.",
+  "author": {
+    "name": "Gabriel Castro",
+    "email": "gabe@techworx.dev"
+  }
+}

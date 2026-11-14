@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <i>Ten cooperating plugins covering the full development lifecycle, connected by shared JSON schemas and a common verification gate.</i>
+  <i>Eleven cooperating plugins covering the full development lifecycle, connected by shared JSON schemas and a common verification gate.</i>
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 ## Wisp Plugins — the Lifecycle Ecosystem
 
-Ten plugins, each a specialist persona covering one stage of the development lifecycle — together they're **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. Lifecycle handoffs use typed artifacts where applicable. The plugins are composable: install only the personas your workflow needs.
+Eleven plugins, each a specialist persona covering one stage of the development lifecycle — together they're **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. Lifecycle handoffs use typed artifacts where applicable. The plugins are composable: install only the personas your workflow needs.
 
 **The primary flow** — one direction, no side-taps:
 
@@ -85,6 +85,7 @@ Grouped by what each persona actually does — five bands across the lifecycle, 
 
 | Category | Persona | Job | Output |
 | :--- | :--- | :--- | :--- |
+| **Start** | [`guide`](./plugins/guide/) | Starts work by intent: `/guide:explore`, `spike`, `fix`, `build`, `check`, `ship` hand off to the skill that does it, so its checks run | the target skill's artifact |
 | **Define** | [`weaver`](./plugins/weaver/) | Captures and structures scattered need into requirements | `requirement@1` |
 | **Define** | [`vanguard`](./plugins/vanguard/) | Goes first — researches prior art, risk, and patterns before anyone commits to a direction | `research-report@1` |
 | **Design** | [`scribe`](./plugins/scribe/) | Drafts and gates the unambiguous, binding spec | `spec@1` |
@@ -121,6 +122,7 @@ Add the repository marketplace from inside Claude Code, then install the plugins
 
 ```
 /plugin marketplace add orin-dx/wisp-plugins
+/plugin install guide
 /plugin install weaver
 /plugin install vanguard
 /plugin install scribe
@@ -151,6 +153,7 @@ Codex discovers the generated root manifest at `.agents/plugins/marketplace.json
 
 ```bash
 codex plugin marketplace add orin-dx/wisp-plugins
+codex plugin add guide@wisp-plugins
 codex plugin add weaver@wisp-plugins
 codex plugin add vanguard@wisp-plugins
 codex plugin add scribe@wisp-plugins
@@ -204,6 +207,7 @@ Or use [`agy-plugins-cli`](https://github.com/ZaunEkko/agy-plugins-cli) for an i
 npm install -g agy-plugins-cli
 agy-plugin marketplace add orin-dx/wisp-plugins
 agy-plugin add weaver@wisp-plugins
+agy-plugin add guide@wisp-plugins
 agy-plugin add vanguard@wisp-plugins
 agy-plugin add scribe@wisp-plugins
 agy-plugin add muse@wisp-plugins

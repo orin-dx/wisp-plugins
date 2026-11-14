@@ -25,6 +25,10 @@
       ]
     },
     {
+      "id": "guide",
+      "runtime_files": []
+    },
+    {
       "id": "mason",
       "runtime_files": ["shared/schemas", "shared/harness-authoring.md", "shared/references/evaluation/behavioral.md"]
     },

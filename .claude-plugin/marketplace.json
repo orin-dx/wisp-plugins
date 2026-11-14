@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "wisp-plugins",
-  "description": "Wisp Plugins: ten cooperating plugins covering the full development lifecycle \u2014 from requirement capture through spec, plan, implementation, verification, and shipping.",
+  "description": "Wisp Plugins: eleven cooperating plugins covering the full development lifecycle — from requirement capture through spec, plan, implementation, verification, and shipping.",
   "owner": {
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
@@ -39,23 +39,28 @@
     },
     {
       "name": "muse",
-      "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs \u2014 props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Also sketches options before anything is specified (sketch) and carries a chosen option into a requirement (promote).",
+      "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs — props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Also sketches options before anything is specified (sketch) and carries a chosen option into a requirement (promote).",
       "source": "./plugins/muse"
     },
     {
       "name": "navigator",
-      "description": "Planning plugin. Decomposes specs into sequenced, bite-sized implementation plans with an implementation approach, exact code as a baseline, and the tests proving each criterion \u2014 no write-test-first mandate. Tasks are sized to compilation boundaries, not a clock-time estimate. No TBDs. A developer with zero domain context can execute the plan mechanically.",
+      "description": "Planning plugin. Decomposes specs into sequenced, bite-sized implementation plans with an implementation approach, exact code as a baseline, and the tests proving each criterion — no write-test-first mandate. Tasks are sized to compilation boundaries, not a clock-time estimate. No TBDs. A developer with zero domain context can execute the plan mechanically.",
       "source": "./plugins/navigator"
     },
     {
       "name": "smith",
-      "description": "Implementation plugin. Executes plans by designing the approach, implementing, and writing comprehensive tests proving each acceptance criterion \u2014 verified by mutation testing, not a write-test-first mandate. The plan's code is a baseline implementer may improve on in shape, not scope. Produces committed, tested code verified by the sentinel exit gate. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike).",
+      "description": "Implementation plugin. Executes plans by designing the approach, implementing, and writing comprehensive tests proving each acceptance criterion — verified by mutation testing, not a write-test-first mandate. The plan's code is a baseline implementer may improve on in shape, not scope. Produces committed, tested code verified by the sentinel exit gate. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike).",
       "source": "./plugins/smith"
     },
     {
       "name": "courier",
       "description": "Shipping plugin. Shepherds completed code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release.",
       "source": "./plugins/courier"
+    },
+    {
+      "name": "guide",
+      "description": "Start here. Six commands named by intent (explore, spike, fix, build, check, ship) that pick the path by risk and hand off to the skill that does the work, so its checks run.",
+      "source": "./plugins/guide"
     }
   ]
 }

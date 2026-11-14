@@ -50,7 +50,7 @@ A plugin defaults to one skill directory named after the plugin id. IF the plugi
 
 ## 3. The Lifecycle Pipeline
 
-Ten plugins form a directed pipeline. Structured handoffs use typed artifacts; implementation and shipping also exchange verified workspace state.
+Ten plugins form a directed pipeline, and `guide` starts work in it by intent (explore, spike, fix, build, check, ship). Structured handoffs use typed artifacts; implementation and shipping also exchange verified workspace state.
 
 **The primary flow** — one direction, no side-taps:
 

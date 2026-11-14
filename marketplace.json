@@ -78,6 +78,13 @@
       "version": "3.1.0",
       "path": "./plugins/courier",
       "description": "Shipping plugin. Shepherds completed code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release."
+    },
+    {
+      "id": "guide",
+      "name": "guide",
+      "version": "1.0.0",
+      "path": "./plugins/guide",
+      "description": "Start here. Six commands named by intent (explore, spike, fix, build, check, ship) that pick the path by risk and hand off to the skill that does the work, so its checks run."
     }
   ]
 }

@@ -5,6 +5,7 @@
 ## [2.5.0] - 2026-11-14
 
 ### Changed
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
 - The challenger gets two rounds; if the plan still fails, the remaining issues go to you instead of a third round (ADR 015).
 - Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
 

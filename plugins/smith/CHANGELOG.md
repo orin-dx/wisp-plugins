@@ -5,6 +5,7 @@
 ## [2.6.0] - 2026-11-14
 
 ### Changed
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
 - The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
 - Review runs once per batch with one repeat, not per commit.
 - Mutation is skipped and recorded as unavailable when a batch changes no executable logic.

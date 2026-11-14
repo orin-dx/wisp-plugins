@@ -5,6 +5,7 @@
 ## [3.6.0] - 2026-11-14
 
 ### Changed
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
 - The standard path is draft, then gate. Verify, audit and architecture audit run when asked, when a spec is shared, or when it crosses a module boundary (ADR 015).
 - The exit gate gets two rounds and checks claims against their sources; a repeated blocker goes to you.
 - Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
