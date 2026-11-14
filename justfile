@@ -23,7 +23,7 @@ manifests:
 test:
     python3 -m unittest discover -s tests
 
-# Check plugin.json/README/CHANGELOG/marketplace.json versions agree
+# Check every copy of a version matches its source and each CHANGELOG top entry agrees (the same check as claude-manifests)
 versions:
     ./scripts/check-versions.sh
 
@@ -39,11 +39,11 @@ reference-size:
 platform-limits:
     python3 scripts/check-platform-limits.py
 
-# Confirm each plugin's .claude-plugin/plugin.json matches its plugin.json
+# Confirm every generated manifest, README version, marketplace entry and badge matches its source, and CHANGELOG top entries agree
 claude-manifests:
     python3 tools/sync-claude-manifests.py --check
 
-# Regenerate each plugin's .claude-plugin/plugin.json from its plugin.json
+# Regenerate every version copy and manifest from plugins/<id>/plugin.json (ecosystem: marketplace.json); run marketplace-sync after
 claude-manifests-sync:
     python3 tools/sync-claude-manifests.py
 

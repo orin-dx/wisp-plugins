@@ -197,8 +197,7 @@ When you add or change what an existing agent can do — a new dimension, a new 
   - SKILL.md overview, dispatch, and I/O sections
   - Narrowed or corrected capabilities, not only additions
 - [ ] Plugin `CHANGELOG.md` gets a new dated entry
-- [ ] `plugin.json` version bumped (see `shared/references/delivery/changesets.md`)
-- [ ] Root `marketplace.json`'s matching plugin entry version bumped to the same value
+- [ ] Version bumped in `plugin.json` only (see `shared/references/delivery/changesets.md`), then `just claude-manifests-sync && just marketplace-sync` write the README, marketplace, Claude and Codex copies; a bump needs no other hand edit
 - [ ] `mason:scaffolder` and `mason:auditor` reflect any new structural convention; capability-only changes need no Mason update
 
 This isn't automated. `mason:audit-plugin` checks structural conformance; it does not (yet) check that every downstream doc/version file was updated to match a capability change. Until it does, this checklist is the thing standing between "the agent works" and "the ecosystem knows the agent works."
