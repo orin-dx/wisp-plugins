@@ -42,7 +42,7 @@ plugins/<id>/
 
 Organize agents by **cognitive mode**, not pipeline position. A scan agent and an analysis agent require different mental modes — split them even if they run sequentially. Agent files are never prefixed with the plugin id (`worker.md`, not `my-plugin-worker.md`) — Claude Code already namespaces agents as `<plugin_id>:<agent_name>`, so a prefix produces redundant `my-plugin:my-plugin-worker` stuttering. See `shared/agent-best-practices.md`'s Namespacing Rule.
 
-A plugin defaults to this single-skill layout. IF its scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead (see `courier`, `scribe`, `weaver`, `mason`). A new skill name defaults to a single lifecycle-stage word; go to a specific compound name (`audit-spec`, not `scribe-audit`) only when the bare word is ambiguous or collides with another plugin's existing skill name — never resolve a collision by prefixing the plugin id, since `plugin:skill` invocation already disambiguates that. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
+A plugin defaults to this single-skill layout. IF its scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead (see `courier`, `scribe`, `weaver`, `mason`, `muse`, `smith`, `guide`). A new skill name defaults to a single lifecycle-stage word; go to a specific compound name (`audit-spec`, not `scribe-audit`) only when the bare word is ambiguous or collides with another plugin's existing skill name — never resolve a collision by prefixing the plugin id, since `plugin:skill` invocation already disambiguates that. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
 
 ### `plugin.json`
 
@@ -115,7 +115,15 @@ No `<role>` section in the body — that's what `<backstory>` replaced. The fron
 
 - [ ] `haiku` / `low` — deterministic enumeration only (manifest building, file inventory)
 - [ ] `sonnet` / `medium` — analysis (scanning, drafting, planning, tracing)
-- [ ] `opus` / `high` — judgment (adversarial reasoning, exit gates, final verdicts)
+- [ ] `opus` / `high` — judgment (exit gates, final verdicts, refutation that decides a finding, as in ranger's `adversary`)
+- [ ] Reviewers and auditors whose output a gate or a human judges again stay `sonnet` / `medium`
+
+### Routing and hooks
+
+- [ ] A pipeline agent's `description` names the skill that starts it, so a direct call is redirected to the skill and its checks run
+- [ ] A new pipeline plugin gets a `hooks/hooks.json` entry for `shared/hooks/route-guard.py` and a `SUGGEST` entry in that script so the redirect names the skill
+- [ ] A new gate agent (`verdict@3`) gets a `ROUTES` entry in `shared/hooks/validate-handback.py` and the plugin registers `validate-handback.py` in `hooks/hooks.json` (ADR 012)
+- [ ] These hooks run only in Claude Code; the skill text must still state the rule for Codex and Antigravity
 
 ### Tool language
 
@@ -152,7 +160,7 @@ Shared schemas in `shared/schemas/` are the inter-plugin API. To add one:
 
 1. Create `shared/schemas/<name>@<version>.json` using JSON Schema draft-2020-12
 2. Set `additionalProperties: false`
-3. Include a `reasoning: string` field
+3. Include a `reasoning: string` field (`candidate@1` and `implementation-context@1` predate this rule)
 4. Document which plugin produces it and which consume it
 5. **Never modify an existing versioned schema** — create `<name>@<version+1>.json` instead
 

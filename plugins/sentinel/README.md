@@ -46,7 +46,7 @@ Sentinel is standalone. Its `plugin.json` declares `consumes: []`, and nothing i
 
 ## How It Works
 
-Sentinel is a single skill (`sentinel:sentinel` — the frontmatter `name: gate` is a cosmetic label, not the routing key; skills route by directory name) — not a set of per-artifact-type sub-skills. The same three-agent chain runs unchanged no matter what you hand it; `recon` is what determines the artifact type and derives its criteria, so nothing about the pipeline itself needs to vary by type.
+Sentinel is a single skill (`sentinel:gate`, from the directory `skills/gate/`; skills route by directory name, not the frontmatter `name:`) — not a set of per-artifact-type sub-skills. The same three-agent chain runs unchanged no matter what you hand it; `recon` is what determines the artifact type and derives its criteria, so nothing about the pipeline itself needs to vary by type.
 
 ```mermaid
 %%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
@@ -63,8 +63,8 @@ flowchart LR
     Ver --> Gate{{"<b>Exit gate</b><br/>opus · high"}}
     Gate -->|"pass"| Done(["verdict@3 · pass"])
     Gate -.->|"blockers"| Fix["Producing agent<br/>targeted patch"]
-    Fix -.->|"retry ≤ 3"| Art
-    Fix -.->|"retry > 3"| Esc(["human escalation"])
+    Fix -.->|"round 2"| Art
+    Fix -.->|"after round 2 fails"| Esc(["human escalation"])
 
     class Art source
     class Recon store
@@ -90,15 +90,15 @@ Recon and verifier are deliberately separate: recon makes no judgments, verifier
 | `blockers` | Array of specific, actionable failures — each maps to a criterion |
 | `verdict_summary` | Human-readable summary (≤300 chars) |
 | `artifact_type` | What was gated (spec, plan, changeset, finding-report, ...) |
-| `retry_count` | Number of times this artifact has been through the gate |
+| `retry_count` | Number of earlier rounds for this artifact, set by the caller (0 in round one) |
 
 ---
 
 ## Retry Protocol
 
-On `fail`, the orchestrator returns the `blockers` array directly to the producing agent for a **targeted patch** — not a full regeneration. After the second round fails, or a blocker repeats, escalate to the human.
+On `fail`, the orchestrator returns the `blockers` array directly to the producing agent for a **targeted patch** — not a full regeneration. A fail on the second round (`retry_count` 1) or later, or a blocker that repeats unchanged, adds an `escalation_required` blocker and goes to the human.
 
-`retry_count` is tracked in `verdict@3` and incremented by the exit gate on each attempt.
+`retry_count` is tracked in `verdict@3`; the caller sets it to the number of earlier rounds and passes the prior blockers on a retry.
 
 ---
 

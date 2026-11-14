@@ -104,7 +104,7 @@ WHEN re-submitting an artifact to exit-gate after a fail verdict, the caller SHA
 
 IF exit-gate emits a blockers array in a fail verdict, the producing agent SHALL address only those blockers in its targeted patch.
 
-IF a blocker's `retry_count` exceeds 1, or a blocker repeats unchanged from the previous round, exit-gate SHALL return fail with an `escalation_required` blocker and the caller SHALL halt automated retries.
+IF a verdict fails on the second round (`retry_count` 1, set by the caller as the number of earlier rounds) or later, or a blocker repeats unchanged from the previous round, exit-gate SHALL add an `escalation_required` blocker and the caller SHALL halt automated retries.
 
 ---
 
@@ -280,7 +280,7 @@ WHEN a reference claims cross-language or cross-platform coverage, it SHALL cove
 
 ## Documentation
 
-WHEN a plugin is published, it SHALL include a `README.md` with: purpose, when-to-use trigger phrases, agent table with modes and tiers, pipeline diagram, output schema reference, and install instructions.
+WHEN a plugin is published, it SHALL include a `README.md` with: purpose, when-to-use trigger phrases, agent table with modes and tiers, pipeline diagram, output schema reference, and install instructions. A plugin with no agents (such as `guide`) replaces the agent table, diagram and schema reference with a table of where each skill hands off.
 
 WHEN editing Markdown, THE SYSTEM SHALL keep each prose paragraph on one physical source line — Markdown prose SHALL NEVER be manually wrapped.
 

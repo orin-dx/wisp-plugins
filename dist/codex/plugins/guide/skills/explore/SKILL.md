@@ -5,4 +5,4 @@ description: Show structurally different options before deciding. Use when the u
 
 # Guide: explore
 
-Say "Mode: explore." Use the `sketch` skill with the request and any brief or constraints. When an option is chosen, offer the `promote` skill.
+Say "Mode: explore." Use `muse:sketch` with the request and any brand, brief or constraints. When an option is chosen, offer `muse:promote` to turn it into real work.

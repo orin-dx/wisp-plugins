@@ -110,24 +110,19 @@ class HandbackValidatorTests(unittest.TestCase):
         self.assertEqual(validate_handback.validate({"value": 3}, schema), ["$.value: expected string or null"])
 
     def test_a_retry_past_the_cap_must_escalate_instead_of_passing(self) -> None:
+        escalation = [{"criterion": "escalation_required", "finding": "Persistent blockers: AC-3."}]
         late_pass = {**VALID_PASS_V3, "retry_count": 2}
         denied = self.decide(event(json.dumps(late_pass), agent_id="late"))
         self.assertIn("escalation_required", denied["hookSpecificOutput"]["permissionDecisionReason"])
-        escalated = {**VALID_FAIL_V3, "retry_count": 2, "blockers": [{"criterion": "escalation_required", "finding": "Cap reached."}]}
-        self.assertIsNone(self.decide(event(json.dumps(escalated), agent_id="late2")))
-        self.assertIsNone(self.decide(event(json.dumps({**VALID_PASS_V3, "retry_count": 1}), agent_id="late3")))
+        self.assertIsNone(self.decide(event(json.dumps({**VALID_FAIL_V3, "retry_count": 2, "blockers": escalation}), agent_id="late2")))
 
-    def test_blank_blocker_text_is_denied_but_terse_real_text_is_not(self) -> None:
-        blank = {**VALID_FAIL_V3, "blockers": [{"criterion": "AC-3", "finding": "   ", "location": "AC-3"}]}
-        denied = self.decide(event(json.dumps(blank), agent_id="blank"))
-        self.assertIn("$.blockers[0].finding", denied["hookSpecificOutput"]["permissionDecisionReason"])
-        blank_gap = {**VALID_FAIL_V3, "coverage_gaps": [{"kind": "x", "finding": "\n", "blocking": False}]}
-        denied = self.decide(event(json.dumps(blank_gap), agent_id="blank2"))
-        self.assertIn("$.coverage_gaps[0].finding", denied["hookSpecificOutput"]["permissionDecisionReason"])
-        terse = {**VALID_FAIL_V3, "blockers": [{"criterion": "escalation_required", "finding": "Cap reached."}]}
-        self.assertIsNone(self.decide(event(json.dumps(terse), agent_id="terse")))
-        located = {**VALID_FAIL_V3, "blockers": [{"criterion": "AC-3", "finding": "Quote: 'handles errors'. Replace with the observable result.", "location": "AC-3"}]}
-        self.assertIsNone(self.decide(event(json.dumps(located), agent_id="located")))
+    def test_a_second_round_fail_escalates_but_a_second_round_pass_does_not_need_to(self) -> None:
+        unescalated = self.decide(event(json.dumps({**VALID_FAIL_V3, "retry_count": 1}), agent_id="round2"))
+        self.assertIn("second round", unescalated["hookSpecificOutput"]["permissionDecisionReason"])
+        escalated = {**VALID_FAIL_V3, "retry_count": 1, "blockers": VALID_FAIL_V3["blockers"] + [{"criterion": "escalation_required", "finding": "AC-3 persists."}]}
+        self.assertIsNone(self.decide(event(json.dumps(escalated), agent_id="round2b")))
+        self.assertIsNone(self.decide(event(json.dumps({**VALID_PASS_V3, "retry_count": 1}), agent_id="round2c")))
+        self.assertIsNone(self.decide(event(json.dumps({**VALID_FAIL_V3, "retry_count": 0}), agent_id="round1")))
 
     def test_trace_records_each_inspected_event(self) -> None:
         trace_file = self.state / "trace.jsonl"

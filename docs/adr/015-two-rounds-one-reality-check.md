@@ -11,7 +11,7 @@ The details are in `docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md` (evi
 
 ## Decision
 
-- **Two rounds.** Every exit gate and the plan challenger get one retry. After the second failing round, or when a blocker repeats unchanged, the gate returns fail with an `escalation_required` blocker and the decision goes to a human with the persistent blockers. The hook enforces `retry_count` above 1 (it enforced 3, per ADR 012).
+- **Two rounds.** Every exit gate and the plan challenger get one retry. After the second failing round, or when a blocker repeats unchanged, the gate returns fail with an `escalation_required` blocker and the decision goes to a human with the persistent blockers. For exit gates the hook enforces it: a fail at `retry_count` 1 (the second round) must carry `escalation_required`, and any later report must be an escalated fail (it allowed three retries, per ADR 012). The challenger's output is not `verdict@3`, so its limit is in its prompt only.
 - **One check per draft, against reality.** Spec drafters self-check and the exit gate judges. The auditor, verifier and architecture audit run when asked, when a spec is shared by other work, or when it crosses a module boundary. Spec gates check every claim, criterion or citation against the code, configuration, build or spec it refers to; an issue that cannot be tied to a source or to a testability defect is a note, not a blocker.
 - **Scoped watchers.** The implementation reviewer runs once per batch and gets one repeat. Mutation is skipped, and recorded as `unavailable` with a reason, when a batch changes no executable logic.
 

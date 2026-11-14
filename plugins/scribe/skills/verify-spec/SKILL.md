@@ -8,7 +8,7 @@ version: 2.0.0
 # Scribe — Verify Spec
 
 <overview>
-Confirms a spec draft actually traces back to what the requirement (and research, if any) asked for — not whether the spec reads well, that's `scribe/audit-spec`'s job. Delegates to `verifier`, a neutral evidence collector with no pass/fail authority.
+Confirms a spec draft actually traces back to what the requirement (and research, if any) asked for — not whether the spec reads well, that's `scribe/audit-spec`'s job. Delegates to `verifier`, a neutral evidence collector with no pass/fail authority. An optional check: run it when asked, when the spec is shared by other work, or when it crosses a module boundary; the gate otherwise checks claims against their sources itself.
 </overview>
 
 <dispatch>
@@ -23,5 +23,5 @@ Confirms a spec draft actually traces back to what the requirement (and research
 
 <io>
 **Consumes**: draft `spec@1`, originating `requirement@1`, optionally `research-report@1`
-**Produces**: evidence report — supported / unsupported / overfitted per criterion. Route to `scribe/audit-spec`.
+**Produces**: evidence report — supported / unsupported / overfitted per criterion. Route to `scribe/gate-spec`.
 </io>

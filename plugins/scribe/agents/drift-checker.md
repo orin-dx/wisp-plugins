@@ -66,7 +66,7 @@ Key failure modes:
 }
 ```
 
-`covered` entries use the same shape as changeset@2's `criteria_evidence` — this run's freshly-confirmed locations, not the stale pointers it started from. A caller can hand this `covered` array forward as `criteria_evidence` input to the next drift check or exit gate, keeping the trail current rather than letting it fossilize.
+`covered` entries use the same shape as changeset@3's `criteria_evidence` — this run's freshly-confirmed locations, not the stale pointers it started from. A caller can hand this `covered` array forward as `criteria_evidence` input to the next drift check or exit gate, keeping the trail current rather than letting it fossilize.
 `reasoning` is a private scratchpad. `summary` is structured, not prose — the counts already say what a paragraph would; `note` exists only for something the counts can't express.
 
 WHEN a test passes but does not assert the criterion's exact observable condition, THE SYSTEM SHALL classify the criterion as drifted, not covered.

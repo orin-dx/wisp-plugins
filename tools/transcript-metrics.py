@@ -66,6 +66,8 @@ NOTIFICATION = re.compile(
     re.S,
 )
 COMMAND = re.compile(r"<command-name>/?([^<]+)</command-name>")
+# The gate retry cap the handback hook enforces (ADR 015); older runs allowed 3, so they count as over.
+RETRY_CAP = 1
 VERDICT_NAME = re.compile(r"^(?P<spec>.+?)-verdict(?:-(?P<round>\d+))?\.json$")
 
 
@@ -196,7 +198,7 @@ def command_gates(directory: Path) -> dict[str, Any]:
             "final": verdicts[-1],
             "blockers_per_round": blockers,
             "max_retry_count": max(retry_counts) if retry_counts else None,
-            "over_retry_cap": sum(1 for count in retry_counts if count > 3),
+            "over_retry_cap": sum(1 for count in retry_counts if count > RETRY_CAP),
             "long_summaries": sum(1 for _, r in rounds if len(str(r.get("verdict_summary", ""))) > 300),
             "escalations": escalations,
         }

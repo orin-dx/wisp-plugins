@@ -17,7 +17,7 @@ Validate the input against `shared/schemas/finding-report@2.json`, `shared/schem
 
 Choose the smallest canonical type, domain operation, interface boundary, ownership rule, dependency direction, or invariant that prevents recurrence. Produce one `spec@1` per structural boundary using `shared/schemas/spec@1.json`. Each criterion must be enforceable by compilation, test, lint, or CI and cover required migration or error behavior.
 
-Route completed specs through `scribe:verify-spec`, `scribe:audit-spec`, `scribe:audit-architecture`, and `scribe:gate-spec` in that order. After Navigator and Smith complete the structural change, run `scribe:audit-architecture` in refresh mode.
+Route completed specs to `scribe:gate-spec`; `scribe:verify-spec`, `scribe:audit-spec` and `scribe:audit-architecture` run first when asked, when other work shares the spec, or when it crosses a module boundary. After Navigator and Smith complete the structural change, run `scribe:audit-architecture` in refresh mode.
 
 ## Contract
 

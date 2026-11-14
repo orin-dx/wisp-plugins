@@ -14,16 +14,16 @@ Sentinel judges an existing artifact; it does not author a replacement. Begin by
 1. Identify `artifact_type`, `artifact_path`, the authoritative criteria, linked artifacts, and source files that can prove or disprove each criterion.
 2. Read persisted files when a path is present rather than relying on conversation summaries.
 3. Build an evidence table that classifies each criterion as verified, failed, or unverifiable, with exact paths and test or inspection evidence.
-4. Produce `verdict@3` conforming to `shared/schemas/verdict@3.json`. Name the verified scope, blockers, coverage gaps, and pending checks. On a retry, pass the gate `retry_count` and the previous round's blockers so it applies the round rules.
+4. Produce `verdict@3` conforming to `shared/schemas/verdict@3.json`. Name the verified scope, blockers, coverage gaps, and pending checks.
 5. Pass only when every applicable criterion is verified. On failure, return specific blockers that the producing workflow can act on.
 
 ## Retry protocol
 
-On a retry, inspect only the revised artifact and the previous blockers. Do not reopen unrelated review scope. Set `retry_count` accurately and escalate to the caller after the third failed retry rather than looping indefinitely.
+Round one lists the complete blocker set. On a retry (`retry_count` 1 or more, with the previous blockers supplied), inspect only the revised artifact and cite only unresolved prior blockers or regressions the fix introduced; record other new issues as non-blocking coverage gaps. A fail on the retry, or a blocker repeating unchanged, returns an `escalation_required` blocker for a human instead of another round. Check each claim against the code, build or spec it cites.
 
 ## Evidence and safety
 
-- Do not treat a passing test alone as proof of a criterion it does not exercise.
+- Do not treat a passing test alone as proof of a criterion it does not exercise. A criterion about behavior is verified by running changed logic on real inputs (`shared/references/verification/evidence.md`); structural checks are not behavior evidence.
 - Mark evidence unverifiable when the relevant source, environment, or criterion is absent; do not convert uncertainty into a pass.
 - Treat a required check that has not finished as pending and fail the gate.
 - Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.

@@ -6,7 +6,8 @@ authoritative per-plugin manifest is `plugins/<id>/plugin.json`, which also carr
 repository-level fields (`id`, `consumes`, `produces`, `skills`, `agents`) that Claude Code
 ignores and `claude plugin validate` reports as unknown. Validating a plugin directory
 without a `.claude-plugin/plugin.json` checks nothing, so this tool writes one containing only
-the fields Claude Code defines: name, version, description and author.
+the fields Claude Code defines: name, version, description and author. It also sets each plugin's
+description in `marketplace.json` and `.claude-plugin/marketplace.json` from its plugin manifest.
 
 Usage:
   python3 tools/sync-claude-manifests.py          write the generated manifests
@@ -24,6 +25,11 @@ from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 CLAUDE_FIELDS = ("name", "version", "description", "author")
+# (file, entry key naming the plugin, whether the file escapes non-ASCII as it is committed)
+MARKETPLACES = (
+    ("marketplace.json", "id", True),
+    (".claude-plugin/marketplace.json", "name", False),
+)
 
 
 def expected_manifest(shared_manifest: dict) -> dict:
@@ -37,6 +43,15 @@ def render(manifest: dict) -> str:
     return json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
 
 
+def render_marketplace(path: Path, key: str, ascii_only: bool, descriptions: dict[str, str]) -> str:
+    """The marketplace file with each plugin entry's description taken from its plugin manifest."""
+    marketplace = json.loads(path.read_text(encoding="utf-8"))
+    for entry in marketplace["plugins"]:
+        if entry[key] in descriptions:
+            entry["description"] = descriptions[entry[key]]
+    return json.dumps(marketplace, indent=2, ensure_ascii=ascii_only) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--check", action="store_true", help="fail on missing or stale output instead of writing")
@@ -46,6 +61,17 @@ def main() -> int:
     sources = sorted(REPOSITORY_ROOT.glob("plugins/*/plugin.json"))
     if not sources:
         raise SystemExit("no plugins/*/plugin.json found")
+    descriptions = {
+        source.parent.name: json.loads(source.read_text(encoding="utf-8"))["description"] for source in sources
+    }
+    for relative, key, ascii_only in MARKETPLACES:
+        path = REPOSITORY_ROOT / relative
+        wanted = render_marketplace(path, key, ascii_only, descriptions)
+        if args.check:
+            if path.read_text(encoding="utf-8") != wanted:
+                problems.append(f"{relative}: plugin descriptions are stale")
+        else:
+            path.write_text(wanted, encoding="utf-8")
     for source in sources:
         target = source.parent / ".claude-plugin" / "plugin.json"
         wanted = render(expected_manifest(json.loads(source.read_text(encoding="utf-8"))))

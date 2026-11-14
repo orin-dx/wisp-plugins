@@ -8,13 +8,13 @@ version: 2.0.0
 # Scribe — Audit Spec
 
 <overview>
-Checks whether a spec, taken on its own terms, is complete, unambiguous, and implementable without a single clarifying question — a different question from `scribe/verify-spec`'s "does it trace back to the requirement?". Delegates to `auditor`.
+Checks whether a spec, taken on its own terms, is complete, unambiguous, and implementable without a single clarifying question — a different question from `scribe/verify-spec`'s "does it trace back to the requirement?". Delegates to `auditor`. An optional check: run it when asked, when the spec is shared by other work, or when it crosses a module boundary; it is not a default step between the drafter and the gate.
 </overview>
 
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **auditor** | sonnet / medium | A spec@1 needs adversarial quality review before it enters `scribe/gate-spec`. |
+| **auditor** | sonnet / medium | A spec@1 needs adversarial quality review on request, or because it is shared or crosses a module boundary. |
 </dispatch>
 
 <references>

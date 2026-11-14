@@ -91,12 +91,14 @@ Agents are dispatched by the cognitive mode they require, not by pipeline positi
 
 | Mode | What it requires | Agents |
 | :--- | :--- | :--- |
-| Enumeration | Mechanical completeness, no judgment | recon, scanner |
+| Enumeration | Mechanical completeness, no judgment | recon |
+| Pattern matching | Exhaustive matching, no filtering | scanner |
 | Tracing | Systematic data flow following | boundary-tracer |
 | Adversarial | Default-to-skepticism, requires concrete failing scenario | adversary |
 | Systemic | Cross-finding pattern recognition | architect |
 | Behavioral testing | Tool execution and gap identification | mutator |
-| Judgment | Weighing competing evidence for a binding decision | exit-gate, verifier |
+| Evidence collection | Neutral classification per criterion, no verdict | verifier |
+| Judgment | Weighing competing evidence for a binding decision | exit-gate |
 | Repair | Minimum change, verified by tests | implementer |
 
 Do not combine modes in a single agent. A scanner that also verdicts its findings is worse at both jobs.
@@ -109,8 +111,9 @@ EARS notation (WHEN / IF / WHILE / WHERE / THE SYSTEM SHALL) encodes hard constr
 
 **Correct use — output contract:**
 ```
-WHEN retry_count exceeds 1, THE SYSTEM SHALL escalate to human rather than
-attempting another fix.
+WHEN a fail verdict has retry_count of 1 or more, or a blocker repeats unchanged
+from the previous round, THE SYSTEM SHALL add an escalation_required blocker and
+hand the decision to a human rather than attempting another fix.
 ```
 
 **Correct use — never-do rule:**
@@ -225,7 +228,7 @@ When authoring specifications (`spec@1` or `arch-spec@1`) or plans (`plan@1`), a
 
 ## 11. Just-In-Time (JIT) Context Hooks & Tool Guidance
 
-To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds `validate-handback.py`, which the five gate plugins register through `hooks/hooks.json` (ADR 012), and two reference scripts that no plugin wires:
+To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds `validate-handback.py`, which the five gate plugins register through `hooks/hooks.json` (ADR 012), `route-guard.py`, which the six pipeline plugins (`muse`, `navigator`, `ranger`, `scribe`, `sentinel`, `smith`) register to redirect a direct agent call to the skill that starts it, and two reference scripts that no plugin wires:
 
 - **`PreToolUse` shell hook:** injects a short modern CLI hint on first shell use.
 - **`SubagentStart` language hook:** detects manifests and binds the language hazard taxonomy.

@@ -103,7 +103,7 @@ flowchart TD
 ## Output Schemas
 
 - `changeset@3` — see `shared/schemas/changeset@3.json` (supersedes `changeset@2`: the summary has no length cap and may be layered, and `disposition` lets the analyzer update an existing entry or recommend none)
-- `release-artifact@3` — see `shared/schemas/release-artifact@3.json` (supersedes `release-artifact@1`)
+- `release-artifact@3` — see `shared/schemas/release-artifact@3.json` (supersedes `release-artifact@2`)
 
 ---
 

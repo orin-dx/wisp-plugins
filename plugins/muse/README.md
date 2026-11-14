@@ -5,12 +5,12 @@
 Turns UI or design intent into a component spec a developer can implement — including its accessibility behavior — without a single clarifying question. Muse audits the spec, not the implementation. It also has a light, non-binding path for early work: see options first, decide, then carry the choice forward.
 
 - **Drafts** a component spec from a requirement or free-text design intent: props, variants, every interactive state, and accessibility criteria as testable propositions
-- **Audits** the draft for missing states, missing accessibility criteria, and unmarked invalid prop combinations
+- **Audits** the draft, on request, for missing states, missing accessibility criteria, and unmarked invalid prop combinations
 - **Gates** the spec with a binding, default-fail exit gate before it proceeds to planning
 - **Sketches** structurally different options, rendered and shown before they are described, with a decision log — no gate, no spec, no tests
 - **Promotes** a chosen option into a `requirement@1`, the only route from a sketch into the gated stages
 
-The `component` skill is one draft-audit-gate pipeline, reused unchanged regardless of which component is being specified. `sketch` and `promote` are the exploration path and never gate anything (see `shared/references/architecture/modes.md`).
+The `component` skill is one draft-then-gate pipeline with an optional audit, reused unchanged regardless of which component is being specified. `sketch` and `promote` are the exploration path and never gate anything (see `shared/references/architecture/modes.md`).
 
 ---
 
@@ -59,7 +59,7 @@ Muse specs the component, not the code that implements it. Code-level accessibil
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
 | `drafter` | Component Specification Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` or design intent: props, variants, per-state observable behavior, and accessibility criteria. No TBDs permitted. Also runs in correction mode. |
-| `auditor` | Component Specification Auditor | sonnet / medium | Adversarially reviews the draft for missing interactive states, missing accessibility criteria, and invalid prop combinations not marked as error cases. |
+| `auditor` | Component Specification Auditor | sonnet / medium | On request, adversarially reviews the draft for missing interactive states, missing accessibility criteria, and invalid prop combinations not marked as error cases. |
 | `exit-gate` | Component Specification Exit Gate | opus / high | Binding pass/fail verdict before the spec enters planning. Default disposition: fail. Two rounds, then escalation to a human. |
 | `explorer` | Divergent Option Explorer | sonnet / medium | Builds and renders one structurally different option for a sketch and returns an `option-set@1` holding only that option. Writes only to a scratch directory, never ranks options. Internal to `sketch`. |
 
@@ -76,8 +76,9 @@ flowchart LR
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
     Req["<b>Design intent</b><br/><code>requirement@1</code> or free text"] --> Draft["<b>Drafter</b><br/>component spec"]
-    Draft --> Audit["<b>Auditor</b><br/>design review"]
-    Audit --> Gate{{"<b>Exit gate</b><br/>binding verdict"}}
+    Draft --> Gate{{"<b>Exit gate</b><br/>binding verdict"}}
+    Draft -.->|"on request"| Audit["<b>Auditor</b><br/>design review"]
+    Audit -.-> Gate
     Gate -->|"pass"| Spec(["spec@1"])
     Gate -.->|"targeted blockers"| Draft
 

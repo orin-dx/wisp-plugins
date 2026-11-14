@@ -5,7 +5,7 @@
 Turns requirements into unambiguous, testable specs a developer can implement without a single clarifying question — and keeps them that way after implementation starts.
 
 - **Drafts, audits, and gates** specs against that standard; an adversarial exit gate enforces it, default disposition fail
-- **Checks whole-system architectural fit** against a persisted architecture model before a spec reaches the gate — not just internal consistency
+- **Checks whole-system architectural fit** against a persisted architecture model, for shared or cross-module specs, before they reach the gate — not just internal consistency
 - **Designs structural remediation specs** from Ranger findings or Smith implementation reviews
 - **Detects drift** between a gated spec and the live codebase
 - **Revises a gated spec** when implementation reveals it was wrong
@@ -156,7 +156,7 @@ The standard path is draft, then gate. `scribe/verify-spec` (source grounding), 
 
 ## Exit Gate Conditions
 
-`scribe/gate-spec` enforces four conditions on the spec itself — whole-system architectural fit is `scribe/audit-architecture`'s job, checked upstream, not re-litigated here. All four must pass:
+`scribe/gate-spec` enforces four conditions on the spec itself — whole-system architectural fit is `scribe/audit-architecture`'s job, checked upstream when it runs, not re-litigated here. All four must pass:
 
 1. Every acceptance criterion is a testable proposition (binary true/false from outside the system)
 2. No TBDs remain

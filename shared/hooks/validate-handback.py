@@ -25,7 +25,7 @@ Behavior
     orchestrator, which owns human escalation. Schema denials are capped separately from gate rounds, enforced here and
     not in a prompt.
   - Enforces the retry cap in the report itself: a `retry_count` above RETRY_CAP is accepted only
-    as a `fail` carrying an `escalation_required` blocker, so a gate cannot pass a third round (ADR 015).
+    as a `fail` carrying an `escalation_required` blocker, so a second-round fail goes to a human and a gate cannot pass a third round (ADR 015).
   - Rejects a blocker or coverage gap whose text field is only whitespace (ADR 013). Evidence
     citing and complete first rounds are prompt rules; they are not deterministic, so not checked.
   - Set WISP_HANDBACK_TRACE to a file path to append one JSON line per inspected event.
@@ -168,16 +168,19 @@ def record_denial(state_directory: Path, agent_id: str) -> None:
 
 
 def retry_cap_errors(report: dict[str, Any]) -> list[str]:
-    """A report past the retry cap must hand the decision to a human, not pass."""
+    """A fail on the second round, and any report after it, hands the decision to a human."""
     count = report.get("retry_count")
-    if not isinstance(count, int) or isinstance(count, bool) or count <= RETRY_CAP:
+    if not isinstance(count, int) or isinstance(count, bool) or count < RETRY_CAP:
         return []
     blockers = report.get("blockers")
     escalated = isinstance(blockers, list) and any(isinstance(b, dict) and b.get("criterion") == ESCALATION_CRITERION for b in blockers)
-    if report.get("verdict") == "fail" and escalated:
+    if count == RETRY_CAP and (report.get("verdict") != "fail" or escalated):
         return []
-    return [f"$.retry_count: {count} exceeds the cap of {RETRY_CAP}; return verdict 'fail' with a blocker whose criterion is '{ESCALATION_CRITERION}'"]
-
+    if count > RETRY_CAP and report.get("verdict") == "fail" and escalated:
+        return []
+    if count == RETRY_CAP:
+        return [f"$.retry_count: a fail on the second round must add a blocker whose criterion is '{ESCALATION_CRITERION}' listing the persistent blockers"]
+    return [f"$.retry_count: {count} is past the second round; return verdict 'fail' with a blocker whose criterion is '{ESCALATION_CRITERION}'"]
 
 def blank_text_errors(report: dict[str, Any]) -> list[str]:
     """Blockers and coverage gaps must say something; whitespace passes the schema's minLength.

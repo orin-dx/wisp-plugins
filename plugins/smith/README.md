@@ -4,7 +4,7 @@
 
 Smith executes each plan batch through implementation, mutation, defect-family review, and an independent exit gate. Review finds syntactic and semantic siblings, records their shared cause, and checks for missing domain concepts or architectural constraints. No plan yet? Give it a `spec@1` directly.
 
-Smith never assembles a changeset itself. It hands `criteria_evidence` — exact test and implementation locations for every criterion it proved — to **[courier](../courier/)**, which produces `changeset@2` from it.
+Smith never assembles a changeset itself. It hands `criteria_evidence` — exact test and implementation locations for every criterion it proved — to **[courier](../courier/)**, which produces `changeset@3` from it.
 
 ---
 
@@ -93,7 +93,7 @@ flowchart LR
     style loop fill:#fafafa,stroke:#cbd5e1,stroke-width:1.5px,stroke-dasharray: 4 4,rx:10px,ry:10px
 ```
 
-Each batch runs in a fresh `implementer` context. Mutation survivors return as precision tests. Reviewer findings return for scoped repair or route to `scribe:architect`; only approved reviews reach exit-gate.
+Each batch runs in a fresh `implementer` context. Mutation survivors return as precision tests. Reviewer findings return for scoped repair or route to `scribe:architect`; review runs once per batch with one repeat, and if the second review still requests changes the open issues go to the user. Only approved reviews reach exit-gate.
 
 **Fix pass.** For a list of review findings, a defect, or a diff-sized change with no spec or plan, Smith runs the same cycle on one batch built from a brief: the claims to fix, the invariants that must hold, and the sites to search. Each fix carries a regression test that fails on the pre-fix source, and each claim in the report names the command that proves it.
 
@@ -117,7 +117,7 @@ When an explicit plan selection and the optional Wisp CLI are available, Smith c
 
 The reviewer loads `shared/references/verification/implementation-review.md`, which selects the language hazards, architecture smells, and comment standard relevant to the diff.
 
-Each `implementer` batch also returns `criteria_evidence` — one `{criterion_id, test_file, test_line, implementation_file, implementation_line}` entry per criterion the batch proves. The caller accumulates these across the run and hands them to `changeset-analyzer` when shipping, which uses them to populate `changeset@2.criteria_evidence` — see `shared/schemas/changeset@2.json`.
+Each `implementer` batch also returns `criteria_evidence` — one `{criterion_id, test_file, test_line, implementation_file, implementation_line}` entry per criterion the batch proves. The caller accumulates these across the run and hands them to `changeset-analyzer` when shipping, which uses them to populate `changeset@3.criteria_evidence` — see `shared/schemas/changeset@3.json`.
 
 ---
 
@@ -131,7 +131,7 @@ Smith departs from strict TDD deliberately — see [ADR-008](../../docs/adr/008-
 
 After implementation, `mutator` uses the project-native mutation tool when available. Otherwise it performs a safe deliberate-fault check or records the missing capability. Property, fuzz, race, integration, and boundary checks are selected when they fit the changed risk; generative checks must name their generator and oracle.
 
-For every surviving mutant, it designs a precision test that would kill it and returns those to `implementer` to write and make pass. Only when zero mutants survive — or the tool is unavailable, recorded as a gap rather than a block — does the batch move to `reviewer`.
+For every surviving mutant, it designs a precision test that would kill it and returns those to `implementer` to write and make pass. Only when zero mutants survive — or the tool is unavailable, recorded as a gap rather than a block — does the batch move to `reviewer`. When a batch changes no executable logic (types, declarations, configuration, documentation), mutation is skipped and recorded as `method: unavailable` with the reason "no executable logic changed".
 
 ---
 

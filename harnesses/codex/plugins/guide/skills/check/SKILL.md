@@ -5,4 +5,4 @@ description: Verify work against its criteria or hunt for defects. Use for "chec
 
 # Guide: check
 
-Say "Mode: check." Use the `gate` skill to verify against criteria, or the `audit` skill to hunt for defects in code.
+Say "Mode: check." To confirm something meets its criteria (a spec, plan, implementation or PR), use `sentinel:gate`. To find bugs or vulnerabilities in code, use `ranger:audit`. If unsure, ask which the user wants.
