@@ -131,9 +131,6 @@ class ConsumerAndCounterpartTest(unittest.TestCase):
     def test_implementer_may_still_reshape_plan_code(self) -> None:
         self.assertIn("Copying the plan's code when a better shape meets the same files, criteria, and tests", read("plugins/smith/agents/implementer.md"))
 
-    def test_estimator_does_not_depend_on_plan_code(self) -> None:
-        self.assertNotRegex(read("plugins/navigator/agents/estimator.md").lower(), r"exact (implementation )?code")
-
     def test_codex_skill_matches_the_rule(self) -> None:
         codex = read("harnesses/codex/plugins/navigator/skills/plan/SKILL.md")
         self.assertIn("non-obvious or a wrong shape would be costly", codex)

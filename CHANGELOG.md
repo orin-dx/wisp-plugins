@@ -12,6 +12,7 @@ Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 - Spec drafters self-check and the gate judges; auditor, verifier and architecture audit run on request or for shared or cross-module specs. Spec gates check claims against the code, build or spec they cite.
 - Implementation review runs once per batch; mutation is skipped when a batch changes no executable logic.
 - Gates, reviewers and verifiers count only behavior run with real inputs as evidence that logic works; visual changes are checked in the built page where a browser exists.
+- Removed `navigator:estimator` (agent count 45 to 44): clock-time estimates mean nothing for agents and nothing consumed them. A plan task's `commit_message` is for the batch commit; commits happen at batch boundaries or the pull request, only when authorized.
 - Pipeline agents' descriptions name the skill that starts them, so the skill's checks run; resident description text is about 27% smaller.
 
 ## [4.5.0] - 2026-11-10 — Exploration modes, enforced gates, layered changesets

@@ -50,7 +50,7 @@ Notice `ac-1` directly addresses the T7 risk `vanguard` found: the spec requires
 
 ## Stage 4 — navigator: Plan
 
-`planner` (sonnet/medium) decomposes the spec into sequenced tasks, each with its outcome, files, signatures, and the tests proving its criteria; code appears only where the logic is non-obvious. `estimator` (sonnet/medium) adds sizing on request. `challenger` (sonnet/medium) pressure-tests the sequence for hidden dependencies, with two rounds at most.
+`planner` (sonnet/medium) decomposes the spec into sequenced tasks, each with its outcome, files, signatures, and the tests proving its criteria; code appears only where the logic is non-obvious. `challenger` (sonnet/medium) pressure-tests the sequence for hidden dependencies, with two rounds at most.
 
 **Output: `plan@1`** (abridged)
 

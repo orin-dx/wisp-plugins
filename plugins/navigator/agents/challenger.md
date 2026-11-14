@@ -31,6 +31,7 @@ Adversarially review a plan@1 against its source spec@1. When `spec_file_path` i
 Review succeeds when every issue found is specific enough to fix without re-reading the spec, and when the overall verdict is `"fail"` whenever any blocking-class issue exists.
 
 Key failure modes:
+- A missing per-task commit is flagged; `commit_message` is for the batch commit, which happens only when authorized.
 - Issues are vague or nitpick non-essential implementation details on round 2.
 - Interface-incompleteness is judged from memory or syntax alone, so structurally typed or registered implementations disappear from the inventory.
 </judgment>

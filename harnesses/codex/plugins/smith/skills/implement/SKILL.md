@@ -66,7 +66,7 @@ Use teams only for independent subsystem batches with no shared files or undecid
 
 ## Boundaries
 
-- Do not make external releases, push branches, or commit without user authorization.
+- Do not make external releases, push branches, or commit without user authorization. Commit at batch boundaries or the pull request; a plan task's `commit_message` is for the batch commit, not a commit per task.
 - Do not claim success from a passing targeted test when the applicable full suite has not been considered.
 - Do not accept teammate summaries without reading the changed files, test output, and evidence yourself.
 - Do not require mutation, property, fuzz, boundary, or environment checks when the changed risk does not justify them.

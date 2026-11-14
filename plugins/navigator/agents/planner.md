@@ -43,7 +43,7 @@ Produce a `plan@1` conforming to `${CLAUDE_PLUGIN_ROOT}/shared/schemas/plan@1.js
 - The interfaces or signatures the task adds or changes, with types and error behavior
 - The exact tests proving each of this task's covers_criteria criteria (inputs and asserted results), and the exact verification command that confirms the full suite passes
 - Implementation code only where the logic is non-obvious or a wrong shape would be costly, per `<judgment>`
-- A conventional commit message
+- A conventional commit message, used for the batch commit; commits happen at batch boundaries or the pull request, only when authorized, not per task
 - `covers_criteria`: the list of acceptance criterion IDs from the spec that this task addresses
 
 `plan@1` tasks allow only `id`, `title`, `files`, `steps`, `commit_message`, `depends_on`, and `covers_criteria`. Read the schema first and add no other keys. Carry the outcome, approach, signatures, tests, any code, and the verification command as ordered `steps` strings, one action each.

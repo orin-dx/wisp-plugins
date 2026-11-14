@@ -1,7 +1,7 @@
 ---
 name: plan
 description: >-
-  Trigger when the user asks to plan, break down, or sequence the implementation of a spec ("write a plan for X", "break this down into tasks", "plan this out"), or when a spec@1 exists and implementation is next. Also covers estimating or challenging an existing plan. Produces a plan@1 of executable tasks linked to acceptance criteria.
+  Trigger when the user asks to plan, break down, or sequence the implementation of a spec ("write a plan for X", "break this down into tasks", "plan this out"), or when a spec@1 exists and implementation is next. Also covers challenging an existing plan. Produces a plan@1 of executable tasks linked to acceptance criteria.
 version: 1.5.0
 ---
 
@@ -15,13 +15,11 @@ Navigator decomposes a spec@1 into a sequenced, bite-sized plan@1 that a develop
 
 <behavior>
 
-navigator is one skill, `plan`. Behavior adapts to what's asked, dispatching to whichever agent below fits the request — there is no separate `navigator/estimate` or `navigator/challenge` skill to invoke; estimating and challenging both happen inside this one skill.
+navigator is one skill, `plan`. Behavior adapts to what's asked, dispatching to whichever agent below fits the request — there is no separate `navigator/challenge` skill to invoke; challenging happens inside this one skill.
 
 - **Decompose a spec** — `planner` creates ordered, subsystem-batched tasks.
   - Read and propagate persisted spec metadata.
   - In amend mode, change only tasks tied to corrected criteria.
-
-- **Estimate an existing plan** — `estimator` assigns effort estimates (in minutes) to each task in a plan@1, identifies parallelizable tasks, and surfaces blocking dependencies.
 
 - **Challenge a draft plan** — `challenger` checks coverage, order, specificity (outcome, signatures, tests, command; no full bodies for routine code), batch size, error handling, and shared-interface siblings. It loads `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/interface-coverage.md` when a contract or implementation changes. Amended plans receive the same review.
 
@@ -34,7 +32,6 @@ navigator is one skill, `plan`. Behavior adapts to what's asked, dispatching to 
 | Agent | Role | Model / Effort | Delegate When |
 | :--- | :--- | :--- | :--- |
 | **planner** | Plan author | sonnet / medium | Decompose a spec into ordered, subsystem-batched implementation tasks. |
-| **estimator** | Effort estimator | sonnet / medium | Assign time estimates, identify parallelizable tasks, and surface blocking dependencies. |
 | **challenger** | Adversarial reviewer | sonnet / medium | Stress-test a draft plan@1 before any implementation begins. Two rounds at most; if it still fails, stop and put the remaining issues to the user. |
 
 </subagent_dispatch_matrix>
@@ -44,7 +41,7 @@ navigator is one skill, `plan`. Behavior adapts to what's asked, dispatching to 
 <artifact_contracts>
 
 **Consumes**: `spec@1` (or its `spec_file_path`, read from disk when set)
-**Produces**: `plan@1` — carries `spec_file_path`, `spec_hash`, and `linked_requirement` propagated from the source spec
+**Produces**: `plan@1` — carries `spec_file_path`, `spec_hash`, and `linked_requirement` propagated from the source spec. A task's `commit_message` is for the batch commit; commits happen at batch boundaries or the pull request, only when authorized.
 
 </artifact_contracts>
 
