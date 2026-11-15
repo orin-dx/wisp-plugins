@@ -214,3 +214,61 @@ Behavior checks and routing (same branch): `shared/references/verification/evide
 
 Limit, observed live: with `guide` and `smith` loaded, a generic "review my fix before I merge" was handled by the model itself (read, run tests) with no skill or agent, so the guard never fired. The guard stops agents being used without their checks; it does not make the model choose a skill. For that, the levers are the project's `AGENTS.md` (snippet in `plugins/guide/README.md`), typing the `/guide:` commands, and, if measurement shows substantive work still skipping checks, an outcome guard on code changes (not built).
 
+
+## ADR evidence
+
+Measurements, counts and limits that were cut from ADRs 011 to 017 when the records were condensed to decision, reasons, rejected alternatives and consequences. Figures already recorded elsewhere in this log are cross-referenced, not repeated.
+
+### ADR 011: exploration modes
+
+- **Projects and period.** Two real projects, the Orin DX and Techworx sites, September and October 2026.
+- **Gate cost on component specs.** Eight component specs took 51 gate calls in under an hour. Every one failed its first gate, and the retry cap of 3 was not enforced (see ADR 012 below). The specs described behavior well and appearance not at all, so the owner asked for drawings and rewrote the gated specs the next day.
+- **Two-phase request.** On 14 October the owner asked to explore quickly first and add specs and tests once ideas narrow. The audit machinery was stopped by hand, and the landing, Tools and Principles pages then took about 30 minutes.
+- **Where ideation ran.** Almost entirely outside the plugins, in forks and general-purpose agents: about 24.8 million subagent tokens (forks alone), more than all the gates together (muse gates about 8.15 million over 79 calls; `verification/VERIFY-3.md` section 3). Decisions were lost between sessions.
+- **Skill invocation.** 7 Skill calls in 812 transcripts, so agents reachable only through skills never ran (`investigations/unused-agents.md`; Track D above).
+- **Gated path on a stable contract.** The SiteNav work passed 478 end-to-end tests, which is why the gates were not loosened for everyone.
+- **Outside practice.** Vercel's product-design skill routes between a read-only shaping mode and a hardening mode; Anthropic's guidance says exploratory work may skip planning.
+- **Pilots and limits.** Each mode was piloted once (`investigations/exploration-pilots.md`; Wave 1 above). Whether the light path is chosen when it should be, and whether it speeds exploration without raising later defects, is not measured (`docs/evaluation-methodology.md`). No plugin version or changelog changed when the modes were added.
+
+### ADR 012: hook enforcement
+
+- **Conformance.** In the two audited projects, 12 of 45 recorded verdicts broke the schema, all 12 by a `verdict_summary` over 300 characters (see "What the work found" above). Eight specs passed their gate with `retry_count` between 4 and 9 (see "Hook enforcement" above). The `muse` gate was told to emit a verdict value that no schema allows (`escalate`).
+- **Platform.** Claude Code 2.1.271 and later deliver a subagent's report in auto mode through `SubagentHandback`; the report is `tool_input.message`. Recorded in `docs/verified-facts.md`. `onFailure: "block"` needs 2.1.295; the CLI used for the checks was 2.1.292.
+- **Live run.** On 2026-10-20, `muse:exit-gate` through `claude -p --permission-mode auto`: the hook denied twice and accepted the corrected third report. One run, one gate, one model. The four other gate agents ran in the Gate rounds live runs above.
+- **Not done.** Codex and Antigravity enforcement; the workflow-script alternative is deferred to WP-603.
+
+### ADR 013: round discipline
+
+- **Blocker counts.** SPEC-001 went 18, 5, 6, 0, 0, 2, 0, 6, 2, 3, 2, 8, 3 across 13 rounds (see "Gate rounds" above). Eight specs passed only at `retry_count` 4 to 9. A zero followed by a nonzero count means a later round found issues an earlier round could have found, or a fix broke something.
+- **Cost.** The muse gates cost about 8.15 million tokens over 79 calls (`verification/VERIFY-3.md` section 5; `CATALOG.md`, WP-50 and WP-212).
+- **Scope of the rule change.** The constitution is copied into all 40 agents then in the tree (45 now), which is why the rule is not placed there.
+- **Limits.** The live runs confirm the hook fires and the gates produce evidence-citing blockers (round one only); they do not show that rounds fall. Nothing measures the retry rule. The hook cannot distinguish a fix-induced blocker from a late-found one because a retry is a new subagent with no stored prior verdict (the `verdict@4` question, WP-212).
+
+### ADR 014: outcome-level plans
+
+- **Plan size.** Plans of 60 to 130 KB stalled agents in the audited projects (`ARCHITECTURE-REVIEW.md`, assumption 10). The planner prompt was the second-largest agent file.
+- **Fixture.** Old planner 9,777 characters, new 5,578 (43% smaller), both valid against `plan@1` with all six criteria covered (see "Outcome-level plans" above). One run each on one small fixture.
+- **Not tested.** Whether implementers do better or worse from outcome-level plans, and the challenger on either shape.
+- **Schema.** Required task fields are `id`, `title`, `files`, `steps` and `commit_message`; "exact code" appears only in a field description, and `additionalProperties` is false. The stale descriptions are left because a published schema is immutable.
+
+### ADR 015: two rounds and one check against reality
+
+- **Sources.** Documented evaluations; session token data over 1,555 subagent calls and 253 million reported tokens in five projects; reviewer catch rate over about 400 runs (summary under "Evidence review and ADR 015" above). The second half of the catch-rate report was reconstructed from the agent's notes, so its exact counts are approximate; the direction is supported independently by the gate-round records and the session data.
+- **First-round catches.** A spec criterion pointing attestation at the wrong commit; an `init` that writes a config the loader rejects; a plan diagnostic that could never fire; padding that computed to zero in the built page.
+- **Long loops.** One implementation gate ran 14 rounds after calling the code correct in round 3; one plan ran 29 challenge rounds; one spec ran 13 gate rounds with blockers returning after clean rounds. Reviewers ran per commit with no logic bug caught, and mutation ran on modules with no executable logic.
+- **Hook cap.** Before this record the hook allowed three retries; it now denies a fail at `retry_count` 1 without `escalation_required`.
+- **Not measured.** The effect of the change; use the paired fix-task sequences in `docs/evaluation-runbook.md`. Logic bugs (28% of human-found findings) need behavior checks (`shared/references/verification/evidence.md`).
+
+### ADR 016: spec unknowns
+
+- **Before.** The drafters and gates (`scribe`, `muse`) failed a spec for any TBD "regardless of how minor", and the gate-readiness checklist sent every unknown to `non_goals` or `reasoning`.
+- **Reach of a `spec@2`.** `spec@1` is named in more than 70 authored files across seven plugins, the Codex skills and the pipeline fixtures.
+- **Not measured.** Whether gate rounds and rewrites fall; compare gate rounds per spec before and after with `docs/evaluation-runbook.md`.
+
+### ADR 017: dropping `<backstory>`
+
+- **Population.** 44 agents carried a backstory; 43 only restated the goal or judgment, and one (`weaver:intake`) needed a sentence moved into `<judgment>`.
+- **Ablation design.** Paired, 5 runs per condition on seeded defects, with and without the backstory, on `scribe:exit-gate`, `navigator:challenger` and `courier:changeset-analyzer` (Sonnet 5.5), scored on each agent's own output.
+- **Catch rate.** Every seeded defect was found in 5 of 5 runs in both conditions. Gate: an untestable criterion, a criterion contradicting the code, a missing out-of-range case, a fail verdict. Challenger: an uncovered criterion, a wrong task order. Analyzer: a link, a direct-push limit, a bold lead-in, a disposition, a semver impact, a scripting field.
+- **Size and cost (median per run, with backstory then without).** Gate 10,346 characters and $0.32, then 10,499 and $0.31. Challenger 6,039 and $0.19, then 6,023 and $0.18. Analyzer 6,621 and $0.23, then 6,359 and $0.23.
+- **Limits.** The seeded defects were easy, so every run hit the ceiling and the test could not show a backstory helping; three agents of 44, one model, 5 runs each. It shows no measurable effect, not that there is none. Per-run outputs were not kept.
