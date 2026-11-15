@@ -2,6 +2,15 @@
 
 — courier
 
+## [3.2.0] - 2026-11-14
+
+### Changed
+- Changesets follow the owner's changelog convention: a bold lead-in naming the change as the user sees it, its value, then short bullets for why, how to adopt and limits, with bold labels instead of headings; breaking changes and required steps go in their own `**Breaking:**` and `**Action:**` paragraphs so release tools list them.
+- `courier:pr` hands the title and body to the branch's Entire trail by default; Entire opens the PR. It opens one itself only where a repository says agents do.
+- Changesets follow the repository's own rules and file format (`.changeset/*.md`, its CLI and contributing guide) and are saved there with the package and bump, instead of only returned as JSON.
+- `courier:pr` does not open a pull request when the repository says another system (for example Entire) opens them.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
+
 ## [3.1.0] - 2026-11-09
 
 ### Added

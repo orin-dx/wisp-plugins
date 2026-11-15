@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <i>Ten cooperating plugins covering the full development lifecycle, connected by shared JSON schemas and a common verification gate.</i>
+  <i>Eleven cooperating plugins covering the full development lifecycle, connected by shared JSON schemas and a common verification gate.</i>
 </p>
 
 <p align="center">
@@ -15,7 +15,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
-  <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v4.5.0-success.svg" alt="Marketplace v4.5.0" /></a>
+  <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v4.6.0-success.svg" alt="Marketplace v4.6.0" /></a>
   <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/Docs-Architecture-informational.svg" alt="Architecture" /></a>
 </p>
 
@@ -23,7 +23,7 @@
 
 ## Wisp Plugins — the Lifecycle Ecosystem
 
-Ten plugins, each a specialist persona covering one stage of the development lifecycle — together they're **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. Lifecycle handoffs use typed artifacts where applicable. The plugins are composable: install only the personas your workflow needs.
+Eleven plugins, each a specialist persona covering one stage of the development lifecycle — together they're **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. Lifecycle handoffs use typed artifacts where applicable. The plugins are composable: install only the personas your workflow needs.
 
 **The primary flow** — one direction, no side-taps:
 
@@ -75,16 +75,17 @@ flowchart LR
     class se,ra router
 ```
 
-![Define](https://img.shields.io/badge/-Define-6366f1) ![Design](https://img.shields.io/badge/-Design-8b5cf6) ![Build](https://img.shields.io/badge/-Build-3b82f6) ![Verify](https://img.shields.io/badge/-Verify-f59e0b) ![Ship](https://img.shields.io/badge/-Ship-10b981) ![Meta](https://img.shields.io/badge/-Meta-64748b)
+![Start](https://img.shields.io/badge/-Start-0ea5e9) ![Define](https://img.shields.io/badge/-Define-6366f1) ![Design](https://img.shields.io/badge/-Design-8b5cf6) ![Build](https://img.shields.io/badge/-Build-3b82f6) ![Verify](https://img.shields.io/badge/-Verify-f59e0b) ![Ship](https://img.shields.io/badge/-Ship-10b981) ![Meta](https://img.shields.io/badge/-Meta-64748b)
 
 *Pill-shaped nodes are cross-cutting checkpoints, not sequence stops. Solid arrows are direct handoffs; dashed arrows are verification side-channels. Ranger's input is the live codebase Smith just wrote, not a schema handoff — the one solid arrow in the second diagram.*
 
 Smith repairs scoped defect families before its exit gate. Structural families route through `scribe:architect`, the normal spec gates, Navigator plan amendment, and Smith implementation; after verification, Scribe refreshes the persisted architecture model.
 
-Grouped by what each persona actually does — five bands across the lifecycle, plus one that stands outside it and maintains the rest:
+Grouped by what each persona actually does — six bands across the lifecycle (Start, Define, Design, Build, Verify, Ship), plus one that stands outside it and maintains the rest (Meta):
 
 | Category | Persona | Job | Output |
 | :--- | :--- | :--- | :--- |
+| **Start** | [`guide`](./plugins/guide/) | Starts work by intent: `/guide:explore`, `spike`, `fix`, `build`, `check`, `ship` hand off to the skill that does it, so its checks run | the target skill's artifact |
 | **Define** | [`weaver`](./plugins/weaver/) | Captures and structures scattered need into requirements | `requirement@1` |
 | **Define** | [`vanguard`](./plugins/vanguard/) | Goes first — researches prior art, risk, and patterns before anyone commits to a direction | `research-report@1` |
 | **Design** | [`scribe`](./plugins/scribe/) | Drafts and gates the unambiguous, binding spec | `spec@1` |
@@ -93,7 +94,7 @@ Grouped by what each persona actually does — five bands across the lifecycle, 
 | **Build** | [`smith`](./plugins/smith/) | Implements, selects risk-matched tests, reviews defect families, and verifies criteria; spikes a tool or approach on request | `implementation-review@2`, `verdict@3`, `spike-report@1` |
 | **Verify** | [`sentinel`](./plugins/sentinel/) | Cross-cutting gate — confirms any artifact meets its criteria before the next stage begins | `verdict@3` |
 | **Verify** | [`ranger`](./plugins/ranger/) | Hunts reachable defects and semantic siblings in Rust, TypeScript, JavaScript, Python, and Go | `finding-report@2` |
-| **Ship** | [`courier`](./plugins/courier/) | Commits, opens PRs, responds to review, writes changelogs and release notes | `release-artifact@2` |
+| **Ship** | [`courier`](./plugins/courier/) | Commits, opens PRs, responds to review, writes changelogs and release notes | `release-artifact@3` |
 | **Meta** | [`mason`](./plugins/mason/) | Scaffolds and audits plugins, designs schemas, and evaluates workflow behavior | `harness-evaluation@2` |
 
 ---
@@ -121,6 +122,7 @@ Add the repository marketplace from inside Claude Code, then install the plugins
 
 ```
 /plugin marketplace add orin-dx/wisp-plugins
+/plugin install guide
 /plugin install weaver
 /plugin install vanguard
 /plugin install scribe
@@ -151,6 +153,7 @@ Codex discovers the generated root manifest at `.agents/plugins/marketplace.json
 
 ```bash
 codex plugin marketplace add orin-dx/wisp-plugins
+codex plugin add guide@wisp-plugins
 codex plugin add weaver@wisp-plugins
 codex plugin add vanguard@wisp-plugins
 codex plugin add scribe@wisp-plugins
@@ -204,6 +207,7 @@ Or use [`agy-plugins-cli`](https://github.com/ZaunEkko/agy-plugins-cli) for an i
 npm install -g agy-plugins-cli
 agy-plugin marketplace add orin-dx/wisp-plugins
 agy-plugin add weaver@wisp-plugins
+agy-plugin add guide@wisp-plugins
 agy-plugin add vanguard@wisp-plugins
 agy-plugin add scribe@wisp-plugins
 agy-plugin add muse@wisp-plugins
@@ -222,18 +226,17 @@ agy-plugin add mason@wisp-plugins
 Six decisions shape how every plugin and agent in this repository is built. They are enforced by `shared/constitution.md` and explained in `shared/agent-best-practices.md`.
 
 **Schema-Driven Development** — every handoff between agents is a typed JSON document.
-- JSON Schema draft-2020-12 with `additionalProperties: false` — a schema-invalid output halts the pipeline before any downstream agent acts on bad data
+- JSON Schema draft-2020-12 with `additionalProperties: false`; agents are told to conform to the cited schema, and a Claude Code hook rejects a non-conforming exit-gate `verdict@3` (other handoffs are not validated at runtime)
 - Schema versions are immutable — a breaking change creates `<name>@2.json`, never mutates the existing file
-- Every schema includes a private `reasoning` scratchpad field that is never forwarded downstream
+- Every new schema includes a private `reasoning` scratchpad field that is never forwarded downstream
 
 **EARS output contracts** — hard constraints live exclusively in `<output>` sections, using `WHEN / IF / WHILE / WHERE / THE SYSTEM SHALL`.
 - Encodes what the agent must produce, must not produce, or must do under a specific condition
 - The prompt interior — how the agent searches, reasons, and decides — is intentionally unconstrained
-- EARS is the fence; backstory and goal fill the interior with judgment
+- EARS is the fence; goal and judgment fill the interior
 
-**5-part agent structure** — every Claude/AGY source agent body has exactly five sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
+**4-part agent structure** — every Claude/AGY source agent body has exactly four sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
 - `<constitution>` — ecosystem-wide invariants, byte-identical across every agent (copied verbatim, never authored per-agent)
-- `<backstory>` — experiential perspective that shapes judgment in open situations (not a role label)
 - `<goal>` — intent, not steps
 - `<judgment>` — the specific failure mode that looks like success
 - `<output>` — schema reference and EARS contracts
@@ -260,14 +263,13 @@ See [`ARCHITECTURE.md §7`](./ARCHITECTURE.md#7-agent-authoring-principles) for 
 
 ## Shared Schema Contract
 
-Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` and use JSON Schema draft-2020-12 with `additionalProperties: false`. Schema versions are immutable — a breaking change requires a new file (e.g. `requirement@2.json`). Every schema includes a `reasoning` scratchpad field that is never forwarded downstream.
+Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` and use JSON Schema draft-2020-12 with `additionalProperties: false`. Schema versions are immutable — a breaking change requires a new file (e.g. `requirement@2.json`). Every new schema includes a `reasoning` scratchpad field that is never forwarded downstream (`candidate@1` and `implementation-context@1` predate the rule).
 
 | Schema | Produced by | Consumed by |
 | :--- | :--- | :--- |
 | `requirement@1` | weaver | vanguard, scribe |
 | `research-report@1` | vanguard | scribe |
 | `spec@1` | scribe, muse | navigator, sentinel |
-| `verdict@3` | muse, sentinel, smith, scribe, ranger | gate consumers |
 | `plan@1` | navigator | smith |
 | `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
 | `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |
@@ -284,7 +286,7 @@ Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` an
 | `harness-evaluation@2` | mason | release reviewers and longitudinal analysis |
 | `arch-audit@1` | scribe | architecture-gate callers and humans |
 | `arch-model@2` | scribe | scribe architecture checks and remediation |
-| `release-artifact@2` | courier | humans |
+| `release-artifact@3` | courier | humans |
 
 Every current gate, including Muse's component-spec gate, produces `verdict@3`. `verdict@1` is retained unchanged for artifacts that already use it; immutable schema versions are not rewritten in place.
 
@@ -324,8 +326,10 @@ wisp-plugins/
 ├── shared/
 │   ├── schemas/                  ← Versioned inter-agent JSON schemas
 │   ├── references/               ← Runtime and authoring guides, split by concern
+│   ├── hooks/                    ← Claude Code hooks: gate handback validator, routing guard
 │   └── agent-best-practices.md  ← Authoring-time principles
 ├── plugins/
+    ├── guide/                     ← Start work by intent
     ├── weaver/                    ← Requirement capture
     ├── vanguard/                  ← Research synthesis
     ├── scribe/                    ← Specification drafting and gating

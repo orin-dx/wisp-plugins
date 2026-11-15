@@ -1,6 +1,6 @@
 {
   "name": "smith",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Execute approved plans with risk-matched tests, defect-family review, and independent boundary verification. Also spike a tool or approach before committing to it.",
   "author": {
     "name": "Gabriel Castro",

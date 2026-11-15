@@ -25,12 +25,16 @@
       ]
     },
     {
+      "id": "guide",
+      "runtime_files": []
+    },
+    {
       "id": "mason",
-      "runtime_files": ["shared/schemas", "shared/harness-authoring.md", "shared/references/evaluation/behavioral.md"]
+      "runtime_files": ["shared/schemas", "shared/constitution.md", "shared/harness-authoring.md", "shared/references/evaluation/behavioral.md"]
     },
     {
       "id": "muse",
-      "runtime_files": ["shared/schemas/option-set@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/spike-report@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/modes.md", "shared/references/tooling/context.md"]
+      "runtime_files": ["shared/schemas/option-set@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/spike-report@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/modes.md", "shared/references/tooling/context.md", "shared/references/verification/gate-readiness.md"]
     },
     {
       "id": "navigator",
@@ -54,16 +58,17 @@
         "shared/references/hazards/typescript.md",
         "shared/references/hazards/typescript-boundaries.md",
         "shared/references/workspace/conventions.md",
-        "shared/references/tooling/context.md"
+        "shared/references/tooling/context.md",
+        "shared/references/verification/evidence.md"
       ]
     },
     {
       "id": "scribe",
-      "runtime_files": ["shared/schemas/arch-audit@1.json", "shared/schemas/arch-model@2.json", "shared/schemas/finding-report@2.json", "shared/schemas/implementation-result@1.json", "shared/schemas/implementation-review@2.json", "shared/schemas/plan@1.json", "shared/schemas/requirement@1.json", "shared/schemas/research-report@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/remediation.md", "shared/references/architecture/decision-records.md", "shared/references/architecture/go.md", "shared/references/architecture/python.md", "shared/references/architecture/rust.md", "shared/references/architecture/typescript.md", "shared/references/workspace/conventions.md", "shared/references/tooling/context.md"]
+      "runtime_files": ["shared/schemas/arch-audit@1.json", "shared/schemas/arch-model@2.json", "shared/schemas/finding-report@2.json", "shared/schemas/implementation-result@1.json", "shared/schemas/implementation-review@2.json", "shared/schemas/plan@1.json", "shared/schemas/requirement@1.json", "shared/schemas/research-report@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/remediation.md", "shared/references/architecture/decision-records.md", "shared/references/architecture/go.md", "shared/references/architecture/python.md", "shared/references/architecture/rust.md", "shared/references/architecture/typescript.md", "shared/references/workspace/conventions.md", "shared/references/tooling/context.md", "shared/references/verification/gate-readiness.md"]
     },
     {
       "id": "sentinel",
-      "runtime_files": ["shared/schemas/verdict@3.json", "shared/references/tooling/context.md"]
+      "runtime_files": ["shared/schemas/verdict@3.json", "shared/references/tooling/context.md", "shared/references/verification/evidence.md"]
     },
     {
       "id": "smith",

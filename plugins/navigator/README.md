@@ -1,6 +1,6 @@
 # navigator — Implementation Planning
 
-**Stage:** Plan · **Output:** `plan@1` · **Version:** 2.4.0
+**Stage:** Plan · **Output:** `plan@1` · **Version:** 2.5.0
 
 Decomposes a `spec@1` into a sequenced, testable implementation plan. Every task in `plan@1` is self-contained (see [Task Requirements](#task-requirements)), so an implementer with no domain knowledge can execute it — [smith](../smith/) may still adapt the baseline's shape, provided the same files, criteria, and tests are satisfied. When the spec is corrected after implementation reveals it was wrong, planner runs in amend mode — patching only the affected tasks rather than re-decomposing the whole plan.
 
@@ -13,11 +13,10 @@ One skill, not several — see [Behavior](#behavior) below for how it adapts to 
 ## When to Use
 
 - You have a `spec@1` and need a concrete, ordered task list before implementation begins
-- You want to identify which tasks can be parallelized and which have blocking dependencies
-- You need time estimates for scheduling
+- You want to see which tasks have blocking dependencies
 - You want an adversarial review of a draft plan before handing it to an implementer
 
-**Invoke with:** `"Plan the implementation for this spec"`, `"Break this spec into tasks"`, `"What's the implementation order for this?"`, `"Estimate the work in this plan"`, `"Challenge this implementation plan"`
+**Invoke with:** `"Plan the implementation for this spec"`, `"Break this spec into tasks"`, `"What's the implementation order for this?"`, `"Challenge this implementation plan"`
 
 ---
 
@@ -37,10 +36,9 @@ One skill, not several — see [Behavior](#behavior) below for how it adapts to 
 
 ## Behavior
 
-`navigator` is one skill (directory `skills/plan/`), not several — there is no separate `navigator/estimate` or `navigator/challenge` skill to invoke; estimating and challenging both happen inside this one `plan` skill. Behavior adapts to what's asked, dispatching to whichever agent below fits the request:
+`navigator` is one skill (directory `skills/plan/`), not several — there is no separate `navigator/challenge` skill to invoke; challenging happens inside this one `plan` skill. Behavior adapts to what's asked, dispatching to whichever agent below fits the request:
 
 - **Decompose a spec into a plan** → `planner`
-- **Estimate an existing plan** → `estimator`
 - **Challenge a draft plan** → `challenger`
 
 ---
@@ -50,7 +48,6 @@ One skill, not several — see [Behavior](#behavior) below for how it adapts to 
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
 | `planner` | Planner | sonnet / medium | Decomposes the spec into ordered tasks, grouped into Subsystem Batches by compilation boundary. Also runs in amend mode after a spec correction. |
-| `estimator` | Estimator | sonnet / medium | Produces per-task time estimates, identifies parallelizable tasks, and lists blocking dependencies. |
 | `challenger` | Challenger | sonnet / medium | Reviews missing work, ordering, prescription, batching, error handling, criterion coverage, and shared-interface siblings. Interface coverage uses live syntax and architecture evidence, not memory alone. Capped at 2 review rounds. |
 
 ---
@@ -70,16 +67,14 @@ flowchart LR
     Planner --> Challenger{{"<b>Challenger</b><br/>adversarial review"}}
     Challenger -.->|"targeted findings"| Planner
     Challenger -->|"pass"| Plan[("<b>plan@1</b><br/>written + committed")]
-    Plan -.->|"optional"| Estimator["<b>Estimator</b><br/>effort range"]
 
     class Spec source
     class Planner engine
     class Challenger router
     class Plan output
-    class Estimator store
 ```
 
-`estimator` is optional — run it when scheduling matters. `challenger` always runs; its findings are fed back to `planner` for targeted fixes, capped at 2 rounds before minor disagreements are demoted to non-blocking.
+`challenger` always runs; its findings are fed back to `planner` for targeted fixes, capped at 2 rounds before minor disagreements are demoted to non-blocking.
 
 ---
 
@@ -87,7 +82,7 @@ flowchart LR
 
 `plan@1` — see `shared/schemas/plan@1.json`
 
-The plan is an ordered array of tasks. Each task has: `id`, `title`, `files`, `steps`, `commit_message`, `depends_on`, `covers_criteria`. The plan itself carries `spec_file_path` (propagated from the spec), `spec_hash` (a content hash of the spec file at plan time, used by `recon` to detect if the spec changed after planning), `linked_requirement` (propagated from the spec's `linked_requirement`, so the requirement-to-code chain stays traceable without re-reading the spec), and `plan_file_path` (set by this skill after `challenger` passes, pointing at `docs/projects/<linked_spec>.json`).
+The plan is an ordered array of tasks. Each task has: `id`, `title`, `files`, `steps`, `commit_message` (for the batch commit, not a commit per task), `depends_on`, `covers_criteria`. The plan itself carries `spec_file_path` (propagated from the spec), `spec_hash` (a content hash of the spec file at plan time, used by `recon` to detect if the spec changed after planning), `linked_requirement` (propagated from the spec's `linked_requirement`, so the requirement-to-code chain stays traceable without re-reading the spec), and `plan_file_path` (set by this skill after `challenger` passes, pointing at `docs/projects/<linked_spec>.json`).
 
 ---
 

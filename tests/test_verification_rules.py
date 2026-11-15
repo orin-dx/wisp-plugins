@@ -15,6 +15,7 @@ OWNERS = {
         "is a lead, not evidence",
     ],
     "verification/implementation-review.md": ["lists the sites searched"],
+    "verification/gate-readiness.md": ["A stated assumption is never a blocker on its own"],
 }
 
 

@@ -16,7 +16,7 @@ Revise only the affected criteria and dependent plan implications while preservi
 1. Read the spec from its `spec_file_path`; validate it using `shared/schemas/spec@1.json`.
 2. Inspect the contradiction report and live workspace behavior. Confirm that the conflict is real rather than a missing implementation step or a misunderstood test.
 3. Identify the affected criterion and dependent criteria. Amend only the necessary text, set `revision_note`, and retain the same spec ID and file path.
-4. Run the corrected draft through `scribe:verify-spec`, `scribe:audit-spec`, `scribe:audit-architecture`, and `scribe:gate-spec`.
+4. Run the corrected draft through `scribe:gate-spec`; `scribe:verify-spec`, `scribe:audit-spec` and `scribe:audit-architecture` run first when asked, when other work shares the spec, or when it crosses a module boundary.
 5. After a passing gate and user authorization, overwrite the existing `docs/specs/<id>.json` artifact, commit it, and send its changed criterion IDs to `navigator:plan` in amend mode.
 
 ## Contract

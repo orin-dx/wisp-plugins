@@ -8,13 +8,13 @@ version: 1.0.0
 # Scribe — Audit Architecture
 
 <overview>
-Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consistent — testable criteria, no TBDs, no vague language — and still be wrong for the system it's joining. Delegates to `arch-auditor`. Runs after `scribe/audit-spec` and before `scribe/gate-spec`, so a spec doesn't reach the binding gate without a system-scope check, not just a spec-scope one.
+Closes the gap `scribe/audit-spec` leaves open: a spec can be internally consistent — testable criteria, no hidden unknowns, no vague language — and still be wrong for the system it's joining. Delegates to `arch-auditor`. An optional check before `scribe/gate-spec`: run it when asked, when the spec is shared by other work, or when it crosses a module boundary, so such a spec does not reach the binding gate without a system-scope check.
 </overview>
 
 <dispatch>
 | Agent | Model / Effort | Delegate When |
 | :--- | :--- | :--- |
-| **arch-auditor** | opus / high | A spec@1 (post `scribe/audit-spec`) needs checking against the workspace's persisted architecture model before `scribe/gate-spec`. Also invoked directly in build mode to construct or refresh the model on demand. |
+| **arch-auditor** | opus / high | A spec@1 needs checking against the workspace's persisted architecture model before `scribe/gate-spec`. Also invoked directly in build mode to construct or refresh the model on demand. |
 </dispatch>
 
 <references>
@@ -30,6 +30,6 @@ Check mode produces no disk write of its own — it only reads the existing mode
 </orchestration>
 
 <io>
-**Consumes**: `spec@1` (post-audit-spec), the persisted `arch-model@2` at `docs/architecture/model.json` if present
-**Produces**: `arch-audit@1` in check mode (route to `scribe/gate-spec` on pass, back to `scribe/draft-spec` on fail — same 2-round circuit breaker as `scribe/audit-spec`); `arch-model@2` in build mode, persisted per the orchestration above
+**Consumes**: `spec@1`, the persisted `arch-model@2` at `docs/architecture/model.json` if present
+**Produces**: `arch-audit@1` in check mode (route to `scribe/gate-spec` on pass, back to `scribe/draft-spec` on fail — two rounds at most); `arch-model@2` in build mode, persisted per the orchestration above
 </io>

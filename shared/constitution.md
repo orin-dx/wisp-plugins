@@ -28,13 +28,13 @@ IF a plugin is superseded by another, it SHALL be deleted from the repository ra
 
 ## Agent Structure
 
-WHEN an agent prompt is authored, it SHALL define five named sections in the body, in this order: `<constitution>`, `<backstory>`, `<goal>`, `<judgment>`, and `<output>`.
+WHEN an agent prompt is authored, it SHALL define four named sections in the body, in this order: `<constitution>`, `<goal>`, `<judgment>`, and `<output>`.
 
 WHEN an agent body's `<constitution>` section is authored or amended, it SHALL be byte-for-byte identical across every agent file in the ecosystem — this is the shared static prefix the Static Prompt Prefix Invariant depends on; any per-character difference breaks prompt-cache matching for every agent, not just the one edited.
 
 WHEN an agent uses a shared reference file during execution, it SHALL declare a `<load_first>` block naming that file, placed immediately after `<constitution>` and before all other sections.
 
-IF an agent body contains a `<role>` section, it SHALL be replaced with `<backstory>`.
+IF an agent body contains a `<role>` or `<backstory>` section, it SHALL be removed; a fact the agent needs belongs in `<goal>` or `<judgment>` as a plain statement, not as persona narrative (ADR 017).
 
 IF an agent body contains a `success_criteria` checklist, it SHALL be replaced with a `<judgment>` block that names the key failure mode.
 
@@ -82,7 +82,7 @@ WHILE an agent is in pattern-matching mode (scanner), it SHALL NOT filter, analy
 
 WHEN EARS notation is used in an agent prompt, it SHALL appear only in `<constitution>` (shared, ecosystem-wide invariants) or `<output>` (this agent's own output contracts and never-do rules).
 
-EARS notation SHALL NOT appear in `<backstory>`, `<goal>`, `<judgment>`, or any implementation guidance — those sections are the interior where agent judgment applies.
+EARS notation SHALL NOT appear in `<goal>`, `<judgment>`, or any implementation guidance — those sections are the interior where agent judgment applies.
 
 IF a rule applies to only some agents rather than the whole ecosystem, it SHALL be placed in that agent's own `<output>` section, not in `<constitution>` — `<constitution>` content must stay identical everywhere, so a conditional or agent-specific rule does not belong there even if phrased as EARS.
 
@@ -104,7 +104,15 @@ WHEN re-submitting an artifact to exit-gate after a fail verdict, the caller SHA
 
 IF exit-gate emits a blockers array in a fail verdict, the producing agent SHALL address only those blockers in its targeted patch.
 
-IF a blocker's `retry_count` exceeds 3, exit-gate SHALL return fail with an `escalation_required` blocker and the caller SHALL halt automated retries.
+IF a verdict fails on the second round (`retry_count` 1, set by the caller as the number of earlier rounds) or later, or a blocker repeats unchanged from the previous round, exit-gate SHALL add an `escalation_required` blocker and the caller SHALL halt automated retries.
+
+---
+
+## Spec Unknowns
+
+WHEN a spec@1 leaves something unknown, its drafter SHALL state it in `scope` as an `Assumption:` line, or as an `Open decision:` line for the owner when the answer changes scope, behavior other work depends on, or cost, as `shared/references/verification/gate-readiness.md` describes.
+
+WHEN a spec gate judges unknowns, it SHALL fail an unknown that leaves a criterion untestable or an open decision the owner has not answered, and SHALL NOT fail a stated assumption on its own.
 
 ---
 
@@ -280,7 +288,7 @@ WHEN a reference claims cross-language or cross-platform coverage, it SHALL cove
 
 ## Documentation
 
-WHEN a plugin is published, it SHALL include a `README.md` with: purpose, when-to-use trigger phrases, agent table with modes and tiers, pipeline diagram, output schema reference, and install instructions.
+WHEN a plugin is published, it SHALL include a `README.md` with: purpose, when-to-use trigger phrases, agent table with modes and tiers, pipeline diagram, output schema reference, and install instructions. A plugin with no agents (such as `guide`) replaces the agent table, diagram and schema reference with a table of where each skill hands off.
 
 WHEN editing Markdown, THE SYSTEM SHALL keep each prose paragraph on one physical source line — Markdown prose SHALL NEVER be manually wrapped.
 

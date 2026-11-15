@@ -3,9 +3,19 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PLUGINS = ("ranger", "sentinel", "muse", "scribe")
-SKILLS = sorted(p for plugin in PLUGINS for p in ROOT.glob(f"plugins/{plugin}/skills/*/SKILL.md"))
+SKILLS = sorted(ROOT.glob("plugins/*/skills/*/SKILL.md"))
 DESCRIPTION_CAP = 450
+# Codex gate skills carry the gate round rule themselves: no role card is read on the single-agent path.
+CODEX_GATES = (
+    "muse/skills/component",
+    "ranger/skills/audit",
+    "scribe/skills/gate-spec",
+    "sentinel/skills/gate",
+    "smith/skills/implement",
+)
+# Codex skills that verify against evidence name the behavior-evidence reference and ship it.
+CODEX_EVIDENCE = ("ranger/skills/audit", "sentinel/skills/gate", "smith/skills/implement")
+EVIDENCE = "shared/references/verification/evidence.md"
 CONTEXT = "shared/references/tooling/context.md"
 
 # Skills that run commands, builds or renders, or read the workspace broadly.
@@ -78,6 +88,24 @@ class SkillRoutingTests(unittest.TestCase):
             with self.subTest(skill=name):
                 self.assertTrue(description(path).startswith("Use this, not"))
                 self.assertIn("freehand", codex_path(path).read_text().split("\n")[2].lower())
+
+    def test_codex_gate_skills_state_the_round_rule(self):
+        for name in CODEX_GATES:
+            text = (ROOT / "harnesses/codex/plugins" / name / "SKILL.md").read_text()
+            with self.subTest(skill=name):
+                self.assertIn("escalation_required", text)
+                self.assertIn("complete blocker set", text)
+                self.assertNotIn("round rules", text)
+
+    def test_codex_verifying_skills_name_and_ship_the_behavior_evidence_reference(self):
+        catalog = (ROOT / "harnesses/codex/catalog.json").read_text()
+        for name in CODEX_EVIDENCE:
+            plugin = name.split("/")[0]
+            with self.subTest(skill=name):
+                self.assertIn(EVIDENCE, (ROOT / "harnesses/codex/plugins" / name / "SKILL.md").read_text())
+                entry = re.search(rf'"id": "{plugin}",\s*"runtime_files": \[(.*?)\]', catalog, re.S)
+                self.assertIsNotNone(entry)
+                self.assertIn(EVIDENCE, entry.group(1))
 
 
 if __name__ == "__main__":

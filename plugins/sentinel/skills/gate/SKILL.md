@@ -25,13 +25,15 @@ Sentinel is a cross-cutting verification gate. It runs whenever a stage artifact
 
 ---
 
-<axiom_protocol>
+<gate_protocol>
 
 The protocol input is: `artifact_type`, `artifact_path`, `criteria` (explicit or derived from linked spec).
 
 The protocol output is `verdict@3`: a scoped pass or fail with blockers, coverage gaps, pending checks, and a short summary.
 
-</axiom_protocol>
+An outcome criterion (`Outcome: <measure> at least <threshold> against <named baseline>, measured by <method>`) is verified only by a recorded run of the baseline and the product the same way; without one it is a pending check, and the gate does not pass beyond the verified scope.
+
+</gate_protocol>
 
 ---
 

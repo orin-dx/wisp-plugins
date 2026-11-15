@@ -1,7 +1,7 @@
 ---
 name: spike
 description: >-
-  Activate when the user wants to know whether a tool, library or approach works before committing to it: "does this work in our stack", "try it out", "spike this", "quick prototype to check", "can we use X here". Runs the smallest throwaway experiment that answers one question and returns a spike-report@1 with what was observed, what was verified and what was not. Non-binding by design — no plan, no spec, no mutation or review, no exit gate, no tests required. Do not activate for production changes; use implement for those.
+  Activate when the user wants to know whether a tool, library or approach works before committing to it: "does this work in our stack", "try it out", "spike this", "can we use X here". Runs the smallest throwaway experiment that answers one question and returns a spike-report@1 with what was observed, verified and not verified. Non-binding: no plan, spec, mutation, review, exit gate or tests. Not for production changes; use implement.
 version: 1.0.0
 ---
 

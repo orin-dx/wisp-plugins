@@ -2,7 +2,7 @@
 
 A concrete example tracing one feature request through the full lifecycle pipeline. The scenario: *"requests to our upstream API sometimes hang forever — we need configurable timeouts."*
 
-This walkthrough shows what each handoff carries, why typed contracts matter, and how the ranger audit loop feeds back into the design stage.
+This walkthrough shows what each handoff carries, why typed contracts matter, and how the ranger audit loop feeds back into the design stage. It follows the full gated path for shared work; `/guide:build` picks that path or a lighter one by risk, and `/guide:fix` and `/guide:explore` start the smaller ones.
 
 ---
 
@@ -16,7 +16,7 @@ This walkthrough shows how the pipeline catches that bug before it ships, and ho
 
 ## Stage 1 — weaver: Need
 
-The user invokes the `weaver` skill. `intake` (sonnet/medium) converts free text into a structured requirement. `clarifier` asks one targeted question if the success condition is ambiguous. `auditor` (sonnet/medium) checks for testability.
+The user invokes `weaver/capture-need`. `intake` (sonnet/medium) converts free text into a structured requirement. `weaver/clarify-requirement` runs `clarifier`, which asks one targeted question if the success condition is ambiguous. `weaver/audit-backlog` and `weaver/connect-requirement` (`auditor`, sonnet/medium) are separate: they check coverage and duplicates against existing specs, not testability.
 
 **Output: `requirement@1`**
 
@@ -38,7 +38,7 @@ The user invokes the `weaver` skill. `intake` (sonnet/medium) converts free text
 
 ## Stage 3 — scribe: Spec
 
-`drafter` (sonnet/medium) turns the requirement and research report into a testable spec. `verifier` (sonnet/medium) checks every acceptance criterion against the source artifacts — not the codebase. `auditor` (sonnet/medium) hunts vague language. `exit-gate` (opus/high) issues a binding pass or fail.
+`drafter` (sonnet/medium) turns the requirement and research report into a testable spec and checks its own draft. `exit-gate` (opus/high) checks each criterion against the code and sources it cites and issues a binding pass or fail; it gets two rounds, then the decision goes to a human. `verifier` (grounding in the source artifacts), `auditor` (vague language) and `arch-auditor` (system fit) run on request, or when the spec is shared or crosses a module boundary.
 
 **Output: `spec@1`**
 
@@ -50,7 +50,7 @@ Notice `ac-1` directly addresses the T7 risk `vanguard` found: the spec requires
 
 ## Stage 4 — navigator: Plan
 
-`planner` (sonnet/medium) decomposes the spec into sequenced tasks, each with an implementation approach, exact code, and the tests proving its criteria. `estimator` (sonnet/medium) adds sizing. `challenger` (sonnet/medium) pressure-tests the sequence for hidden dependencies.
+`planner` (sonnet/medium) decomposes the spec into sequenced tasks, each with its outcome, files, signatures, and the tests proving its criteria; code appears only where the logic is non-obvious. `challenger` (sonnet/medium) pressure-tests the sequence for hidden dependencies, with two rounds at most.
 
 **Output: `plan@1`** (abridged)
 
@@ -60,7 +60,7 @@ Notice `ac-1` directly addresses the T7 risk `vanguard` found: the spec requires
 
 ## Stage 5 — smith: Code
 
-`recon` (haiku/low) reads the manifest from `plan@1`. `implementer` (sonnet/medium) executes each task — design the approach, write the implementation, write comprehensive tests proving the task's criteria, confirm the suite passes. `mutator` (sonnet/medium) runs cargo-mutants after each task to verify the tests would actually catch a wrong implementation.
+`recon` (haiku/low) reads the manifest from `plan@1`. `implementer` (sonnet/medium) executes each subsystem batch — design the approach, write the implementation, write tests proving the batch's criteria, confirm the suite passes. `mutator` (sonnet/medium) runs cargo-mutants after each batch to verify the tests would actually catch a wrong implementation; it is skipped when a batch changes no executable logic. `reviewer` (sonnet/medium) then returns `implementation-review@2` once per batch (one repeat at most) before `exit-gate` judges the whole change.
 
 **Mutation gate: mutator catches the T7 bug**
 
@@ -122,7 +122,7 @@ This spec re-enters the pipeline at `navigator` for planning, then `smith` for i
 
 | Principle | Where it appeared |
 | :--- | :--- |
-| **Schema-driven handoffs** | Each stage received a typed document. `synthesizer` couldn't omit the risk finding without schema validation failing. |
+| **Schema-driven handoffs** | Each stage received a typed document with a named shape, so the risk finding had a field to live in and a downstream reader to check it. Only the exit-gate verdict is validated at runtime, by a Claude Code hook. |
 | **EARS output contracts** | `spec@1` ac-1 is an EARS statement — it makes the T7 risk machine-checkable, not advisory. |
 | **Cognitive mode separation** | `scanner` found T7 candidates without filtering. `boundary-tracer` traced field survival. `adversary` verdicted. Three agents, three modes, none contaminating the others. |
 | **Mutation gate** | `mutator` caught the slot-swap bug that unit tests missed. The precision test it generated became part of the permanent test suite. |

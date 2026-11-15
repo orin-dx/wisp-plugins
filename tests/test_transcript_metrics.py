@@ -93,7 +93,7 @@ class TranscriptMetricsTests(unittest.TestCase):
             (directory / name).write_text(json.dumps({"verdict": "fail", "blockers": [], **fields}), encoding="utf-8")
 
         verdict("SPEC-1-verdict.json", blockers=[{"criterion": "a", "finding": "b"}], retry_count=1)
-        verdict("SPEC-1-verdict-2.json", retry_count=4, verdict_summary="x" * 301)
+        verdict("SPEC-1-verdict-2.json", retry_count=2, verdict_summary="x" * 301)  # past the cap of 1, within the old cap of 3
         verdict("SPEC-1-verdict-10.json", verdict="pass", retry_count=5)
         verdict("SPEC-2-verdict.json", blockers=[{"criterion": "escalation_required", "finding": "cap"}])
         report = metrics.command_gates(directory)

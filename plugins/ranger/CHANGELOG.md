@@ -2,6 +2,15 @@
 
 — ranger
 
+## [3.2.5] - 2026-11-14
+
+### Changed
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
+- The exit gate gets two rounds; a repeated blocker goes to you (ADR 015).
+- Verification runs changed logic with real inputs; structural checks do not count as behavior evidence.
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
+
 ## [3.2.4] - 2026-11-10
 
 ### Changed

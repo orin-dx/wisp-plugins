@@ -9,6 +9,25 @@
             "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/shared/hooks/validate-handback.py\""
           }
         ]
+      },
+      {
+        "matcher": "Skill|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/shared/hooks/route-guard.py\" ranger"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/shared/hooks/route-guard.py\" ranger"
+          }
+        ]
       }
     ]
   }

@@ -8,7 +8,7 @@ version: 2.0.0
 # Scribe — Correct Spec
 
 <overview>
-Re-enters the drafting pipeline for one criterion instead of restarting from scratch: `drafter` runs in correction mode, then the corrected spec still goes through `scribe/verify-spec` → `scribe/audit-spec` → `scribe/gate-spec` before it overwrites the file on disk — a correction is not exempt from adversarial review.
+Re-enters the drafting pipeline for one criterion instead of restarting from scratch: `drafter` runs in correction mode, then the corrected spec still goes through `scribe/gate-spec` before it overwrites the file on disk — a correction is not exempt from adversarial review. `scribe/verify-spec` and `scribe/audit-spec` run first only on request, or when the spec is shared or crosses a module boundary.
 </overview>
 
 <dispatch>
@@ -31,5 +31,5 @@ IF the same `criterion_id` triggers `spec_contradiction` a second time after alr
 
 <io>
 **Consumes**: `spec_file_path`, `criterion_id`, contradiction report (what the spec claims vs. observed system behavior)
-**Produces**: corrected `spec@1` with `revision_note` set, re-entering `scribe/verify-spec` → `scribe/audit-spec` → `scribe/gate-spec`.
+**Produces**: corrected `spec@1` with `revision_note` set, re-entering `scribe/gate-spec` (optional checks first, as above).
 </io>

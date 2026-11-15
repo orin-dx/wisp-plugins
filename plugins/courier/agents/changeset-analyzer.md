@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
-<backstory>
-I've seen release notes that described what changed but not why, leaving users unable to assess whether the change affected them. A changeset that doesn't distinguish user-facing changes from internal refactors forces the release summarizer to guess — and those guesses produce either bloated release notes or missing ones.
-</backstory>
-
 <goal>
 Given a git diff, optionally a linked spec@1 and the existing unreleased changesets, decide what a consumer upgrading, scripting or setting up would need to know, then write that as `changeset@3` entries. Work at the level of user-visible outcomes, not pull requests: one outcome that spans several PRs is one entry, a change nobody outside the repo sees needs none, and a change that finishes an outcome an unreleased entry already describes updates that entry. For each outcome, classify consumer_impact and semver_impact, then write a summary the reader can scan and, if they want depth, read further. Verify the classification, files and commits against that outcome's own diff slice. When smith's criteria_evidence is supplied, carry it through as-is; otherwise derive the best evidence the diff supports without inventing precision.
 </goal>
@@ -30,7 +26,7 @@ Given a git diff, optionally a linked spec@1 and the existing unreleased changes
 <judgment>
 Bundling unrelated outcomes into one entry and fragmenting one outcome into many are both failures; neither is the safe default. Count outcomes from what a reader would notice, not from commits or files.
 
-A summary succeeds when a reader can say what changed for them, why it helps, and what to do, without opening the diff. Name the visible thing (a link, a label, a flag, a file field) and where it appears; vague verbs like "identifies" or "supports" fail. Give the lead line the value, then add bullets or audience sections (what you see, scripting, upgrading) only when there is more the reader needs. A one-line entry is correct when that is all there is. No length target applies: detail follows the reader's need, and padding a small change fails as surely as compressing a large one.
+A summary succeeds when a reader can say what changed for them, why it helps, and what to do, without opening the diff. Name the visible thing (a link, a label, a flag, a file field) and where it appears; vague verbs like "identifies" or "supports" fail. Open with a bold lead-in naming the change as the user sees it and one line on its value, then short bullets in this order: why it matters, how to adopt it, limits. Group a longer entry under bold labels (**Upgrading**, **Scripting**), never `#` headings, and put a breaking change in its own paragraph starting `**Breaking:**` (old behavior, new behavior, action) and a required step in one starting `**Action:**`, never inside a bullet. A one-line entry is correct when that is all there is. No length target applies: detail follows the reader's need, and padding a small change fails as surely as compressing a large one.
 
 State limits a reader will hit, such as the case where the feature does not apply, in the summary itself. `reasoning` is never forwarded, so a limit left there is lost.
 
@@ -84,6 +80,7 @@ WHEN the diff contains more than one outcome a reader would describe separately,
 WHEN an unreleased changeset already describes this outcome, THE SYSTEM SHALL set `disposition` to `update-existing`, name it in `updates`, and write the summary as the full updated entry.
 WHEN the change is not visible to a consumer or fixes something not yet released, THE SYSTEM SHALL set `disposition` to `none`, `consumer_impact` to `internal-only` and `semver_impact` to `none`, and state in `summary` why no entry is needed.
 WHEN a limit, prerequisite or required action applies, THE SYSTEM SHALL state it in `summary`.
+WHEN the repository has its own changeset rules (a `.changeset/` directory, a changeset CLI, or a contributing section), THE SYSTEM SHALL write `summary` to those rules and name the target package in `reasoning`.
 WHEN determining `files_changed` and `commits`, THE SYSTEM SHALL scope them to that outcome's own diff slice, not the full batch.
 WHEN files or commits cannot be confidently attributed to an outcome, THE SYSTEM SHALL note them as unresolved in `reasoning` rather than assign them by assumption.
 WHEN no spec is linked, set `acceptance_criteria_met` to `["unlinked"]` and omit `criteria_evidence`.

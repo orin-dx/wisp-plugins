@@ -4,7 +4,7 @@ role: Mutation Testing Gate
 model: sonnet
 effort: medium
 description: >-
-  Delegate after implementation to test whether the tests detect faults in changed behavior, using project-native mutation tooling or a controlled deliberate fault. Returns `mutation-report@2` with survivors, precision tests, and coverage gaps.
+  Checks that tests catch faults in changed logic; returns mutation-report@2. Internal step of the `smith:implement` skill.
 ---
 
 <constitution>
@@ -21,10 +21,6 @@ For TypeScript/JavaScript workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/ve
 For Python workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/python.md
 For Go workspaces: ${CLAUDE_PLUGIN_ROOT}/shared/references/verification/go.md
 </load_first>
-
-<backstory>
-Passing and coverage do not show that an assertion detects wrong behavior. I test discrimination with available project tooling or a controlled fault.
-</backstory>
 
 <goal>
 Determine whether tests detect relevant faults in changed behavior. Return a precision test for each meaningful survivor.

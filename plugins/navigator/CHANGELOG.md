@@ -2,6 +2,15 @@
 
 — navigator
 
+## [2.5.0] - 2026-11-14
+
+### Changed
+- The `estimator` agent is removed: clock-time estimates mean nothing for agents and nothing consumed its output. A task's `commit_message` is for the batch commit; commits happen at batch boundaries or the pull request, only when authorized.
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
+- The challenger gets two rounds; if the plan still fails, the remaining issues go to you instead of a third round (ADR 015).
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
+
 ## [2.4.0] - 2026-11-10
 
 ### Changed

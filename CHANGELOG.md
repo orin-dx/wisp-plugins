@@ -3,6 +3,20 @@
 All notable changes to the Wisp Plugins ecosystem are documented here.
 Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 
+## [4.6.0] - 2026-11-14 — Start by intent, two rounds, one reality check
+
+- New `guide` plugin: `/guide:explore`, `spike`, `fix`, `build`, `check` and `ship` start work by intent and hand off to the skill that does it, with a snippet for a project's `AGENTS.md`.
+- Courier writes changesets in the repository's own format and rules, and leaves PR opening to Entire where the repository says so.
+- The six pipeline plugins redirect a direct call to one of their agents, once per session, to the skill that starts it, so its checks run.
+- Exit gates and the plan challenger get two rounds; after a second failing round, or a repeated blocker, the decision goes to a human (ADR 015, amends ADR 012's cap of three).
+- Spec drafters self-check and the gate judges; auditor, verifier and architecture audit run on request or for shared or cross-module specs. Spec gates check claims against the code, build or spec they cite.
+- Specs state unknowns instead of banning them: each is an `Assumption:` the work proceeds on or an `Open decision:` for the owner, in `scope`. Spec gates no longer fail a stated assumption, only an unknown that leaves a criterion untestable or an owner decision not yet made (ADR 016, `spec@1` unchanged).
+- Implementation review runs once per batch; mutation is skipped when a batch changes no executable logic.
+- Gates, reviewers and verifiers count only behavior run with real inputs as evidence that logic works; visual changes are checked in the built page where a browser exists.
+- Removed `navigator:estimator` (agent count 45 to 44): clock-time estimates mean nothing for agents and nothing consumed them. A plan task's `commit_message` is for the batch commit; commits happen at batch boundaries or the pull request, only when authorized.
+- Pipeline agents' descriptions name the skill that starts them, so the skill's checks run; resident description text is about 27% smaller.
+- Agent prompts drop the `<backstory>` persona paragraph: four sections instead of five. A paired ablation (5 runs per condition on three agents) found no change in what they catch, in output size or in cost; the evidence is easy seeded defects, one model and small samples, so it shows no measurable effect, not none (ADR 017, amends ADR 001 and 006).
+
 ## [4.5.0] - 2026-11-10 — Exploration modes, enforced gates, layered changesets
 
 - Added exploration modes: `muse/sketch`, `muse/promote`, `smith/spike` and the `explorer` agent, with `option-set@1` and `spike-report@1` (ADR 011). Exploration never gates and enters the pipeline only through `promote`.

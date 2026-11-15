@@ -44,13 +44,13 @@ plugins/<id>/
 
 `plugin.json` fields: `id`, `version` (semver), `description`, `skills` (path to skills dir), `agents` (list of agent file paths).
 
-A plugin defaults to one skill directory named after the plugin id. IF the plugin's scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead; `courier`, `scribe`, `weaver`, and `mason` all do. The routing key is the directory name, not the frontmatter `name:` field. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
+A plugin defaults to one skill directory named after the plugin id. IF the plugin's scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead; `courier`, `scribe`, `weaver`, `mason`, `muse`, `smith`, and `guide` all do. The routing key is the directory name, not the frontmatter `name:` field. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
 
 ---
 
 ## 3. The Lifecycle Pipeline
 
-Ten plugins form a directed pipeline. Structured handoffs use typed artifacts; implementation and shipping also exchange verified workspace state.
+Ten plugins form a directed pipeline, and `guide` starts work in it by intent (explore, spike, fix, build, check, ship). Structured handoffs use typed artifacts; implementation and shipping also exchange verified workspace state.
 
 **The primary flow** — one direction, no side-taps:
 
@@ -122,9 +122,9 @@ Schemas in `shared/schemas/` are the inter-agent API surface. Rules:
 
 - **Format:** JSON Schema draft-2020-12
 - **Strict:** `additionalProperties: false` on all schemas — unknown fields are rejected at validation time
-- **Scratchpad:** every schema includes `reasoning: string`, a private reasoning field that is never forwarded downstream
+- **Scratchpad:** every new schema includes `reasoning: string`, a private reasoning field that is never forwarded downstream (`candidate@1` and `implementation-context@1` predate the rule)
 - **Immutable versions:** `requirement@1.json` never changes; breaking changes produce `requirement@2.json`
-- **Validation timing:** build checks validate wiring and that schemas parse; fixture artifacts are validated against their schemas in tests; agents are told to conform to the cited schema, and no runtime validator runs
+- **Validation timing:** build checks validate wiring and that schemas parse; fixture artifacts are validated against their schemas in tests; agents are told to conform to the cited schema. The one runtime validator is the exit-gate handback hook below, which checks `verdict@3` only
 
 `implementation-review@2` carries lineage, independent semantic candidate sites, boundary and input-space evidence, coverage gaps, related instances, structural assessments, and disposition. `verdict@3` separates verified scope, blockers, gaps, and pending checks.
 
@@ -200,8 +200,8 @@ flowchart LR
 
     Gate -->|"pass"| Done(["verdict@3 · pass"])
     Gate -->|"fail"| Fix
-    Fix -.->|"retry ≤ 3"| Art
-    Fix -.->|"retry > 3"| Esc(["human escalation"])
+    Fix -.->|"round 2"| Art
+    Fix -.->|"after round 2 fails"| Esc(["human escalation"])
 
     class Art source
     class Recon store
@@ -214,9 +214,11 @@ flowchart LR
     style check fill:#fafafa,stroke:#cbd5e1,stroke-width:1.5px,stroke-dasharray: 4 4,rx:10px,ry:10px
 ```
 
-On `fail`, the orchestrator passes **only the blockers array** back to the producing agent — not the full artifact context — so it can make a targeted fix. On retry 2, the effort level escalates. After 3 retries, the circuit breaks and control passes to the human.
+On `fail`, the orchestrator passes **only the blockers array** back to the producing agent — not the full artifact context — so it can make a targeted fix. A gate gets two rounds: after the second fails, or when a blocker repeats, the circuit breaks and control passes to the human (ADR 015).
 
-`retry_count` is tracked inside `verdict@3` and incremented by the exit gate on each attempt.
+`retry_count` is tracked inside `verdict@3`; the caller sets it to the number of earlier rounds (0 in round one) and passes the prior blockers on a retry. A fail at `retry_count` 1 or later, or a repeated blocker, adds an `escalation_required` blocker and goes to a human.
+
+Two Claude Code hooks enforce parts of this. `shared/hooks/validate-handback.py` denies an exit-gate handback that does not conform to `verdict@3` or that goes past the two-round limit without escalating (ADR 012, 015); it runs only in auto mode for local subagents and fails open. `shared/hooks/route-guard.py` redirects a direct call to a pipeline agent to the skill that starts it, once per session. Both are registered through `plugins/<id>/hooks/hooks.json`. Codex and Antigravity have no equivalent; they rely on the skill text and the same prompt rules.
 
 ---
 
@@ -224,12 +226,11 @@ On `fail`, the orchestrator passes **only the blockers array** back to the produ
 
 Full guide: `shared/agent-best-practices.md`. Key constraints:
 
-**5-part agent structure** — every Claude/AGY source agent defines:
+**4-part agent structure** — every Claude/AGY source agent defines:
 
 | Part | Purpose |
 | :--- | :--- |
 | **Constitution** | Ecosystem-wide invariants, byte-identical across every agent — the shared cache prefix. Never authored per-agent; copied verbatim. |
-| **Backstory** | 2–4 sentences of experiential perspective. What has this agent been burned by? What does it value? Guides judgment in the open interior. |
 | **Goal** | What the agent must produce and why. Intent, not steps. |
 | **Judgment** | How to know if the goal was genuinely achieved vs. output that looks like it was. Names the key failure mode. |
 | **Output** | Structured output shape, referencing a schema from `shared/schemas/` when the output flows to another agent. |
@@ -238,7 +239,7 @@ Codex skills and role cards use native structures. Cross-harness parity applies 
 
 **Cognitive mode dispatch** — agents are dispatched by the cognitive mode they require, not their pipeline position.
 - A scanner (exhaustive pattern matching, no filtering) and an adversary (default-to-skepticism, requires a concrete failing scenario) cannot share a mental mode — combining them produces an agent worse at both
-- Modes: enumeration (haiku/low), tracing/analysis/repair (sonnet/medium), adversarial judgment (opus/high)
+- Modes: enumeration such as recon (haiku/low); scanning, tracing, drafting, review and repair (sonnet/medium); binding verdicts and refutation that decides a finding, as in exit gates and ranger's adversary (opus/high). Spec and plan auditors and challengers review in sonnet/medium; their verdicts are not binding
 - A plugin with distinct scanning, tracing, adversarial, and repair phases has a dedicated agent per mode
 
 **Progressive context loading** — each agent loads only the focused references needed for its cognitive concern.
@@ -383,8 +384,11 @@ Validation is layered so each check owns a distinct failure class.
 | JSON shape | `jq` in CI | Invalid marketplace, manifest, schema, or Codex catalog JSON |
 | Source wiring | `shared/scripts/validate-wiring.sh` | Missing schema files or producer/consumer declarations with no source |
 | Source documentation | `scripts/check-skills-doc.sh` | Documented skills without a matching source directory |
-| Version consistency | `scripts/check-versions.sh` | Plugin version disagreement across manifest, README, changelog, and marketplace |
+| Version consistency | `tools/sync-claude-manifests.py --check` (`just versions` runs it via `scripts/check-versions.sh`) | A README, marketplace entry, badge, or Claude or Codex manifest version that differs from its source (`plugin.json`; `marketplace.json` for the ecosystem), or a CHANGELOG top entry that disagrees |
 | Reference size | `scripts/check-reference-size.sh` | Mixed-concern runtime guidance that exceeds the context cap |
+| Platform limits | `scripts/check-platform-limits.py` | Broken cross-references, invalid skill metadata, and agent or skill descriptions over the budgets hosts enforce |
+| Claude manifests | `tools/sync-claude-manifests.py --check` | A plugin's `.claude-plugin/plugin.json` or marketplace description that differs from its `plugin.json` |
+| Hook behavior | `tests/test_handback_validator.py`, `tests/test_route_guard.py` | A gate handback or routing decision that no longer follows the documented rules |
 | Reference integrity | `tests/test_reference_integrity.py` | Non-concern paths, broken exact paths, or runtime references with no caller |
 | Native build behavior | `tests/test_build_codex_marketplace.py` | Native manifest/skill rewriting, source/native skill drift, version drift, stale output retention, unsafe runtime collisions, and symlink output |
 | Native source contract | `tests/test_codex_native_sources.py` | Missing native sources, invalid required manifest or skill metadata, source/native skill inventory drift, or rewritten release files |
@@ -392,7 +396,7 @@ Validation is layered so each check owns a distinct failure class.
 | Release drift | `tools/build-codex-marketplace.py --check` | Generated root discovery or `dist/codex` artifacts that differ from source inputs |
 | Diagram syntax | `scripts/check-mermaid.sh` | Markdown diagrams that cannot render |
 
-CI runs the catalog JSON, native build, compatibility, drift, version, source-documentation, reference-integrity, and Mermaid checks. The release payload and its native-source, catalog, and schema change belong in the same review; a generated-only change is not a valid release.
+CI runs `just manifests`, `test`, `versions`, `skills-doc`, `reference-size`, `platform-limits`, `claude-manifests`, `marketplace-check`, `mermaid`, and `wiring`. The release payload and its native-source, catalog, and schema change belong in the same review; a generated-only change is not a valid release.
 
 ## 12. Failure Containment and Compatibility Boundaries
 

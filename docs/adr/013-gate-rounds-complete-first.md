@@ -3,28 +3,37 @@
 **Status:** Accepted
 **Date:** 2026-11-10
 
-## Context
-
-In two real projects every spec failed its first gate. Blocker counts per round did not fall: SPEC-001 went 18, 5, 6, 0, 0, 2, 0, 6, 2, 3, 2, 8, 3 across 13 rounds, and eight specs passed only at `retry_count` 4 to 9. The muse gates cost about 8.15 million tokens over 79 calls (`docs/evaluations/frontend-design/verification/VERIFY-3.md`, section 5; `CATALOG.md`, WP-50 and WP-212). A zero followed by a nonzero count means a later round found issues an earlier round could have found, or a fix broke something. Each extra round re-reads the whole artifact. ADR 012 already enforces schema conformance and the retry cap by hook, but not round discipline.
-
 ## Decision
 
-- Each exit gate (`muse`, `scribe`, `smith`, `sentinel`, `ranger`) states two rules in its `<output>` section, worded the same in all five. In round one (`retry_count` 0 or absent) it lists the complete blocker set. On a retry it cites only blockers from the prior round that remain unresolved, or regressions the fix introduced; any other newly noticed issue is a `coverage_gaps` entry with `blocking: false`.
-- A blocker names the criterion or section in `criterion`, cites evidence (quoted text or a location) in `finding`, and states the exact change required. A wording-only or style-only issue is a note, never a blocker.
-- The drafters that feed a spec gate (`muse:drafter`, `scribe:drafter`) load `shared/references/verification/gate-readiness.md` and check their draft against its spec checklist before returning. The checklist and blocker wording live in that one reference.
-- `shared/hooks/validate-handback.py` additionally denies a blocker or coverage gap whose text field is only whitespace. It checks nothing else about blocker content.
+Each exit gate (`muse`, `scribe`, `smith`, `sentinel`, `ranger`) lists every blocker in round one and cites only known blockers on a retry; gates stay default-fail and adversarial, and `verdict@3` is unchanged.
 
-Gates stay default-fail and adversarial; no pass condition is relaxed. `verdict@3` is unchanged.
+- **Round one:** `retry_count` 0 or absent lists the complete blocker set.
+- **Retry:** cites only prior blockers that remain unresolved, or regressions the fix introduced; any other new issue is a `coverage_gaps` entry with `blocking: false`.
+- **Blocker shape:** it names the criterion or section in `criterion`, cites evidence (quoted text or a location) in `finding`, and states the exact change required. Wording or style issues are notes.
+- **Drafters:** `muse:drafter` and `scribe:drafter` check their draft against the checklist in `shared/references/verification/gate-readiness.md`, the one home for checklist and blocker wording.
+- **Hook:** `shared/hooks/validate-handback.py` also denies a blocker or coverage gap whose text is only whitespace, and checks nothing else about blocker content.
 
-## Options considered
+## Why
 
-- **A `verdict@4` with a `regression` or `prior_blocker_id` field on each blocker.** Rejected for now: `verdict@3` already expresses the rule through `blockers` and `coverage_gaps`, and ADR 004 makes a new schema version costly. Revisit if WP-212 needs the hook to tell fix-induced blockers from late-found ones; today the hook cannot, because a retry is a new subagent with no stored prior verdict.
-- **Hook checks that a blocker has a `location`, a minimum length, or a quote.** Rejected: an `escalation_required` or `missing_mutation_gate` blocker has no location, and a terse correct blocker would be denied. Each denial costs a turn. Only blank text is rejected.
-- **Make the gate lenient on retries (accept anything not previously listed).** Rejected as stated; the rule does not drop findings, it records them as non-blocking gaps the orchestrator sees.
-- **Put the rule in the shared constitution.** Rejected: the constitution block is copied byte for byte into every agent (ADR 006), so any change touches all 40 agents; the rule applies only to gates.
+- **Rounds did not converge:** every audited spec failed its first gate and blocker counts did not fall between rounds.
+- **Late findings and fix breakage:** a later round found what an earlier one could have, or a fix broke something, and each round re-reads the whole artifact.
+- **A program cannot judge round discipline:** ADR 012 covers schema and cap, so this is a gate prompt rule plus a drafter self-check.
+
+## Rejected
+
+- **A `verdict@4` with a `regression` or `prior_blocker_id` field:** because `verdict@3` already expresses the rule through `blockers` and `coverage_gaps`, new schema versions are costly (ADR 004), and the hook could not use the field since a retry is a new subagent with no stored prior verdict.
+- **Hook checks for a `location`, minimum length or quote:** because `escalation_required` and `missing_mutation_gate` blockers have no location, and each wrongful denial costs a turn.
+- **A lenient gate on retries:** because the rule does not drop findings, it records them as non-blocking gaps the orchestrator sees.
+- **The rule in the shared constitution:** because the constitution is byte-identical in every agent (ADR 006) and the rule applies only to gates.
 
 ## Consequences
 
-Expected: fewer rounds and fewer tokens per gated spec, with the same defects caught. Not yet measured; a live run (`docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md`) confirms the hook fires and the gates run, not that rounds fall. Costs: a defect a gate misses in round one can now pass as a non-blocking gap on a retry, so the gap list needs a reader; and a gate can only tell a retry from round one if the orchestrator supplies `retry_count` and the prior blockers, which the skills do not yet pass. The skills track must carry the prior blockers into the retry input.
+- **Now true:** fewer rounds and tokens per gated spec, expected with the same defects caught.
+- **Risk:** a defect missed in round one can now pass as a non-blocking gap on a retry, so the gap list needs a reader.
+- **Cost:** the gate-calling skills must carry `retry_count` and the prior blockers into the retry input.
+- **Revisit when:** paired runs show round counts do not fall, or the hook must tell fix-induced blockers from late-found ones.
 
-**Enforced by:** `tests/test_handback_validator.py` (blank text), `tests/test_agent_structure.py` and `tests/test_prompt_alignment.py` (agent shape). The round rules themselves are prompt rules.
+## Evidence
+
+- **Enforced by:** `tests/test_handback_validator.py` (blank text), `tests/test_agent_structure.py` and `tests/test_prompt_alignment.py` (agent shape). The round rules are prompt rules.
+- `docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md`, "ADR evidence", ADR 013.

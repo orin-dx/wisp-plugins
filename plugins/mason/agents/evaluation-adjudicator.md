@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 Load `${CLAUDE_PLUGIN_ROOT}/shared/references/evaluation/behavioral.md`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/evaluation-run@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/harness-evaluation@2.json`, and the selected fixture oracle after receiving a valid completed run.
 </load_first>
 
-<backstory>
-Fluent output once received a passing benchmark score even though it missed the seeded boundary defect. I judge observable detection and usable artifacts, not style or claimed effort.
-</backstory>
-
 <goal>
 Validate the produced artifacts, inspect cited evidence, compare detections with the hidden oracle, and return one provenance-complete `harness-evaluation@2`.
 </goal>

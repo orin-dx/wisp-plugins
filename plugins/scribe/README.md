@@ -1,11 +1,11 @@
 # scribe — Specification
 
-**Stage:** Spec · **Output:** `spec@1` · **Version:** 3.5.0
+**Stage:** Spec · **Output:** `spec@1` · **Version:** 3.6.0
 
 Turns requirements into unambiguous, testable specs a developer can implement without a single clarifying question — and keeps them that way after implementation starts.
 
 - **Drafts, audits, and gates** specs against that standard; an adversarial exit gate enforces it, default disposition fail
-- **Checks whole-system architectural fit** against a persisted architecture model before a spec reaches the gate — not just internal consistency
+- **Checks whole-system architectural fit** against a persisted architecture model, for shared or cross-module specs, before they reach the gate — not just internal consistency
 - **Designs structural remediation specs** from Ranger findings or Smith implementation reviews
 - **Detects drift** between a gated spec and the live codebase
 - **Revises a gated spec** when implementation reveals it was wrong
@@ -50,7 +50,7 @@ Eight independently-triggered skills, not a linear pipeline — pick the one tha
 
 | Skill | What it does | Subagent |
 | :--- | :--- | :--- |
-| `scribe/draft-spec` | Drafts a `spec@1` from a `requirement@1` and optional `research-report@1` — no TBDs permitted | `drafter` |
+| `scribe/draft-spec` | Drafts a `spec@1` from a `requirement@1` and optional `research-report@1` — unknowns stated as assumptions or owner decisions | `drafter` |
 | `scribe/verify-spec` | Checks that each acceptance criterion is grounded in the source requirement or research report | `verifier` |
 | `scribe/spec-drift` | Checks whether the live codebase still implements every criterion in a gated spec — covered, uncovered, or drifted | `drift-checker` |
 | `scribe/audit-spec` | Adversarially reviews a spec for vague criteria, missing error cases, and unverifiable claims | `auditor` |
@@ -67,7 +67,7 @@ Eight independently-triggered skills, not a linear pipeline — pick the one tha
 
 | Subagent | Role | Tier | Description |
 | :--- | :--- | :--- | :--- |
-| `drafter` | Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` and optional `research-report@1`, or revises a gated spec in correction mode. No TBDs permitted. |
+| `drafter` | Drafter | sonnet / medium | Produces a `spec@1` from a `requirement@1` and optional `research-report@1`, or revises a gated spec in correction mode. States unknowns in `scope` as assumptions or open owner decisions. |
 | `verifier` | Draft Verifier | sonnet / medium | Checks that acceptance criteria are grounded in the source artifacts (pre-implementation only). Neutral — collects evidence only. |
 | `drift-checker` | Drift Detector | sonnet / medium | On-demand, post-implementation: reads the spec from disk and the code from the workspace, classifies each criterion as covered, uncovered, or drifted. When a prior changeset's `criteria_evidence` is available, uses its pointers as a starting point but always independently re-verifies each one. |
 | `auditor` | Auditor | sonnet / medium | Adversarially reviews the spec for vague criteria, missing error cases, ambiguous language, incomplete sections, unnecessary prose, and fields that cross into another spec (persisted, serialized, or transmitted) without a round-trip guarantee on the far side. |
@@ -89,15 +89,14 @@ flowchart LR
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
     Req["<b>Requirement</b><br/><code>requirement@1</code> + optional research"] --> Draft["<b>Draft</b><br/>scribe/draft-spec"]
-    Draft --> Verify["<b>Verify</b><br/>requirement grounding"]
-    Verify --> Audit["<b>Audit</b><br/>spec quality"]
-    Audit --> ArchAudit["<b>Architecture audit</b><br/>system fit"]
-    ArchAudit --> Gate{{"<b>Spec gate</b><br/>binding verdict"}}
+    Draft --> Gate{{"<b>Spec gate</b><br/>binding verdict"}}
+    Draft -.->|"on request, shared or cross-module"| Checks["<b>Optional checks</b><br/>verify · audit · architecture"]
+    Checks -.-> Gate
     Gate -->|"pass"| Spec[("<b>spec@1</b><br/>written + committed")]
     Gate -.->|"targeted blockers"| Draft
 
     class Req source
-    class Draft,Verify,Audit,ArchAudit engine
+    class Draft,Checks engine
     class Gate router
     class Spec output
 ```
@@ -113,7 +112,7 @@ spec_file_path + workspace root
 ```
 spec_file_path + criterion_id + contradiction report
   → scribe/correct-spec (drafter, correction mode)
-  → scribe/verify-spec → scribe/audit-spec → scribe/audit-architecture → scribe/gate-spec
+  → scribe/gate-spec
   → [skill overwrites the same file, sets revision_note, commits]
   → corrected spec@1 → planner (amend mode) → smith resumes
 ```
@@ -122,13 +121,13 @@ spec_file_path + criterion_id + contradiction report
 ```
 finding-report@2, implementation-review@2, or architecture-escalating implementation-result@1
   → scribe/architect (architect)
-  → scribe/verify-spec → scribe/audit-spec → scribe/audit-architecture → scribe/gate-spec
+  → scribe/audit-architecture → scribe/gate-spec
   → spec@1 (architectural)
   → navigator → smith
   → scribe/audit-architecture (refresh model)
 ```
 
-`scribe/verify-spec` checks source grounding; `audit-spec` checks internal quality; `audit-architecture` checks system fit. `scribe/architect` loads `shared/references/architecture/remediation.md` for the persisted-model location and language evidence. After Smith verifies the structural change, `audit-architecture` refreshes the model with the new boundary and invariant.
+The standard path is draft, then gate. `scribe/verify-spec` (source grounding), `audit-spec` (internal quality) and `audit-architecture` (system fit) run when asked, when a spec is shared by other work, or when it crosses a module boundary (ADR 015); otherwise the gate's own check against the code and sources covers them. `scribe/architect` loads `shared/references/architecture/remediation.md` for the persisted-model location and language evidence. After Smith verifies the structural change, `audit-architecture` refreshes the model with the new boundary and invariant.
 
 ---
 
@@ -157,14 +156,14 @@ finding-report@2, implementation-review@2, or architecture-escalating implementa
 
 ## Exit Gate Conditions
 
-`scribe/gate-spec` enforces four conditions on the spec itself — whole-system architectural fit is `scribe/audit-architecture`'s job, checked upstream, not re-litigated here. All four must pass:
+`scribe/gate-spec` enforces four conditions on the spec itself — whole-system architectural fit is `scribe/audit-architecture`'s job, checked upstream when it runs, not re-litigated here. All four must pass:
 
 1. Every acceptance criterion is a testable proposition (binary true/false from outside the system)
-2. No TBDs remain
+2. Every unknown is resolved or stated as an assumption, and no owner decision is open (ADR 016)
 3. Error cases are marked `is_error_case: true`
 4. Scope fits a single planning cycle
 
-On fail, specific blockers are returned to `scribe/draft-spec` or `scribe/architect` for targeted retry. Maximum 3 retries before escalation to a human.
+On fail, specific blockers are returned to `scribe/draft-spec` or `scribe/architect` for targeted retry, and an `owner_decision` blocker to you. Two rounds; if the second still fails, or a blocker repeats, the decision goes to a human.
 
 ---
 

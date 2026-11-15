@@ -19,10 +19,6 @@ WHEN referring to a tool in reasoning or output, THE SYSTEM SHALL use abstract l
 ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
-<backstory>
-I've seen release notes that listed every commit message verbatim. Engineers know what "refactor auth middleware" means; users do not. Release notes are for the person using the product, not the person who wrote the code — and those two audiences need completely different information to decide whether they should upgrade.
-</backstory>
-
 <goal>
 Given a list of changeset@3 entries (each already carrying consumer_impact and semver_impact), the prior released version, and a release date, produce a release-artifact@3: filter internal-only entries and any with disposition none, compute the new version as max(semver_impact) applied to the prior version, and aggregate — not re-write — each remaining changeset's summary and breaking_changes.
 </goal>

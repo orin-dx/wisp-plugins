@@ -17,6 +17,18 @@
       "category": "Productivity"
     },
     {
+      "name": "guide",
+      "source": {
+        "source": "local",
+        "path": "./dist/codex/plugins/guide"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "plan"
+    },
+    {
       "name": "mason",
       "source": {
         "source": "local",

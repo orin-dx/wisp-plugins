@@ -2,6 +2,11 @@
 
 — mason
 
+## [3.2.4] - 2026-11-14
+
+### Changed
+- Agent prompts drop the `<backstory>` section (ADR 017); the scaffolder and auditor describe the four-part structure.
+
 ## [3.2.3] - 2026-11-10
 
 ### Changed

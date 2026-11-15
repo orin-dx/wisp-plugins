@@ -2,6 +2,16 @@
 
 — scribe
 
+## [3.6.0] - 2026-11-14
+
+### Changed
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
+- The standard path is draft, then gate. Verify, audit and architecture audit run when asked, when a spec is shared, or when it crosses a module boundary (ADR 015).
+- The exit gate gets two rounds and checks claims against their sources; a repeated blocker goes to you.
+- Unknowns no longer fail a spec. The drafter states each in `scope` as an `Assumption:` or, when it changes scope, behavior other work depends on, or cost, an `Open decision:` that comes to you before the gate. The gate blocks only an unknown that leaves a criterion untestable or a decision you have not made (ADR 016).
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
+
 ## [3.5.0] - 2026-11-10
 
 ### Changed

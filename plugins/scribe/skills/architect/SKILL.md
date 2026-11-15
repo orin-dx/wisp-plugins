@@ -8,7 +8,7 @@ version: 2.2.0
 # Scribe — Architect
 
 <overview>
-Turn confirmed defect families into enforceable structural specs. Route every output through verify-spec, audit-spec, audit-architecture, and gate-spec before planning.
+Turn confirmed defect families into enforceable structural specs. Route every output through audit-architecture (a structural spec crosses module boundaries) and gate-spec before planning; verify-spec and audit-spec run on request.
 </overview>
 
 <dispatch>
