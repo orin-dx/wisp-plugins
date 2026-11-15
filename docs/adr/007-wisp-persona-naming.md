@@ -42,7 +42,6 @@ Every plugin id is a persona, a character or craft-role archetype evocative of t
 - **Breaking:** the old ids in scripts, CI or muscle memory stop resolving, so `/plugin install <old-id>` and `<old-id>:<skill>` must change. The five single-skill plugins also renamed their skill, a second break for anyone calling `<old-id>/<old-id>` directly.
 - **Unchanged:** schemas, agent behavior and pipeline logic. ADRs 001-006 still govern structure.
 - **New scaffolds:** `mason:scaffolder` and `mason:auditor` default a single-skill plugin's skill name to the literal action, not the plugin id.
-- **Revisit when:** a plugin's persona no longer cues its function, or two plugins need the same persona, so the lookup problem returns.
 
 ## Evidence
 
