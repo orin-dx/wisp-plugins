@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01VL91oQuPNYebFhTNfdFwk2",
+  "agent_id": "a80a839ee8100b713",
+  "subagent_type": "general-purpose",
+  "task_description": "Trim ADRs 007 and 008",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 51103,
+    "cache_read_tokens": 566714,
+    "output_tokens": 11175,
+    "api_call_count": 10
+  },
+  "started_at": "2026-11-14T17:32:21.521121-08:00",
+  "completed_at": "2026-11-14T17:34:06.278535-08:00"
+}
