@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_012wa6FkcKgEP7guPxWPPbHg",
+  "agent_id": "aa90a8595bb2b34a4",
+  "subagent_type": "general-purpose",
+  "task_description": "Outcome versus baseline (D9)",
+  "token_usage": {
+    "input_tokens": 26,
+    "cache_creation_tokens": 58798,
+    "cache_read_tokens": 798635,
+    "output_tokens": 8998,
+    "api_call_count": 13
+  },
+  "started_at": "2026-11-14T17:32:54.158362-08:00",
+  "completed_at": "2026-11-14T17:34:27.630204-08:00"
+}
