@@ -216,6 +216,16 @@ This isn't automated. `mason:audit-plugin` checks structural conformance; it doe
 
 ---
 
+## Releasing
+
+A release has three levels, and this marketplace installs from `main`:
+
+- **Shipped:** merged to `main` with the version bumped and the changelog entry written. Claude Code updates a plugin when its version changes, so this is what users get.
+- **Pinned:** annotated git tags: `vX.Y.Z` for the ecosystem and `<plugin>--vA.B.C` for each plugin version, all on the merged commit. They give a rollback point and an exact version to install.
+- **Announced:** a GitHub release for the ecosystem tag. Write its notes in `docs/releases/vX.Y.Z.md` (short highlights, then a pointer to the changelog); without that file the release uses the top changelog entry.
+
+After the version-bump PR merges, check out `origin/main` and run `just release --dry-run`, then `just release`. It checks the tree is clean and on `origin/main`, runs `just check`, creates and pushes the missing tags (your git configuration signs them) and creates the GitHub release. You run it, not an agent: it publishes.
+
 ## Development Setup
 
 ```bash

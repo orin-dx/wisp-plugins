@@ -79,3 +79,7 @@ fmt:
 # Check declared agents, skills and schemas exist for every plugin
 wiring:
     bash shared/scripts/validate-wiring.sh
+
+# Tag and publish a release from origin/main (shows the plan and asks first; add --dry-run to only show it)
+release *args:
+    python3 scripts/release.py {{args}}
