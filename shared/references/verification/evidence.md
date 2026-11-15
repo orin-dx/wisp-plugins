@@ -11,6 +11,7 @@ Choose evidence from the changed risk and the workspace's available capabilities
 - Environment testing: exercise only environment assumptions that can change the outcome, such as runtime version, PATH, working directory, build tags, packaging, or CI configuration. Run what CI runs, from a clean state, before reporting a change verified; a narrower local check is a coverage gap. A failure seen in only one environment, or only sometimes, is a defect until a cause is shown, including on the main branch.
 - Declared requirements: compare what the change declares (peer ranges, engines, minimum versions, pins) with what the code now needs, and exercise the declared minimum.
 - Generated output: exercise generated files such as workflows, templates, and configs the way their consumer receives them; matching golden bytes does not show they work.
+- Comparative outcome: a claim to beat, match, or replace something is verified by running the baseline and the product the same way, on the same inputs, with the criterion's measure. Record both results and what was not compared; a run of the product alone, or a comparison of a different measure, leaves the claim pending.
 
 Prefer project-configured commands and installed tools. A missing optional tool is a coverage gap, not permission to install it or fabricate a result.
 

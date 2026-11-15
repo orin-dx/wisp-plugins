@@ -24,6 +24,7 @@ Round one lists the complete blocker set. On a retry (`retry_count` 1 or more, w
 ## Evidence and safety
 
 - Do not treat a passing test alone as proof of a criterion it does not exercise. A criterion about behavior is verified by running changed logic on real inputs (`shared/references/verification/evidence.md`); structural checks are not behavior evidence.
+- An outcome criterion (`Outcome: <measure> at least <threshold> against <named baseline>, measured by <method>`) is verified only by a recorded run of the baseline and the product the same way (`shared/references/verification/evidence.md`); without one it is a pending check and the gate does not pass beyond the verified scope.
 - Mark evidence unverifiable when the relevant source, environment, or criterion is absent; do not convert uncertainty into a pass.
 - Treat a required check that has not finished as pending and fail the gate.
 - Keep command output and scripts out of the thread as `shared/references/tooling/context.md` says.
