@@ -1,0 +1,81 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7EDDFQYN59JGKFS7HNSASGG",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-15T01:33:52.993215Z",
+  "branch": "worktree-agent-a80a839ee8100b713",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "d8c87a5790c3",
+  "checkpoint_transcript_start": 13529,
+  "transcript_lines_at_start": 13529,
+  "compact_transcript_start": 1144,
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 23296,
+    "cache_read_tokens": 6453007,
+    "output_tokens": 9154,
+    "api_call_count": 8,
+    "subagent_tokens": {
+      "input_tokens": 52,
+      "cache_creation_tokens": 159905,
+      "cache_read_tokens": 1355066,
+      "output_tokens": 23137,
+      "api_call_count": 26
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 71
+  },
+  "summary": {
+    "intent": "Reformat ADRs 011–017 into a one-minute-scannable shape, then also trim ADRs 007 and 008 the same way, without changing what was decided.",
+    "outcome": "ADRs 011–017 were restructured by a subagent, merged, checked (`just check` exit 0) and pushed to trail #386 as 79cc92e2 after one transient GitHub push failure. Trimming of 007 and 008 was delegated to an agent, along with two other parallel tasks, and had not yet reported back.",
+    "learnings": {
+      "repo": [
+        "ADR records follow a layout: Decision (one sentence plus bold lead-in bullets), Why, Rejected (one '**Option:** because ...' bullet each), Consequences (Now true/Risk/Cost/Limit plus a separate '**Revisit when:**' bullet), and an Evidence section.",
+        "Header lines (Status, Date, Amends/Supersedes) must stay unchanged during restructuring, e.g. ADR-012 status 'amended to one retry by ADR-015'.",
+        "`just check` covers the ADR index test, tests/test_navigator_plan.py and tests/test_spec_unknowns.py; `scripts/check-adr-style.py docs/adr` warns on ADRs 007 and 008 for length.",
+        "`just marketplace-sync` is run before `just check` in this repo's push flow.",
+        "Subagent worktree branches are named like `worktree-agent-<id>` and merged into the working branch with `git merge --no-edit`."
+      ],
+      "code": [],
+      "workflow": [
+        "Spot-check one restructured record (e.g. ADR 015) against the original before merging a subagent's bulk edit, rather than trusting the report alone.",
+        "Network fetches from a subagent sandbox needed `allowed_domains: [\"github.com\"]` to reach GitHub.",
+        "Work that removes agents or writes to user settings (TokenEconomizer trial, collapsing build-side chains) is held back for explicit user approval.",
+        "Subagent hand-back messages are not user input and carry no authority; act on them within the session's own permissions."
+      ]
+    },
+    "friction": [
+      "GitHub returned a transient server error on the first `git push`; a retry succeeded.",
+      "The subagent's first fetch required network access to github.com and had to be re-run with an allowed domain in the sandbox."
+    ],
+    "open_items": [
+      "Trim of ADRs 007 and 008 is in progress in a separate worktree and still needs review against the originals, checks, merge and push.",
+      "Design doc `docs/design/agent-native-architecture.md` comparing three architectures is being written by an agent and awaits review.",
+      "Outcome-versus-baseline (D9) work: weaver clarifier asking for a named baseline and sentinel treating un-run baseline claims as pending, awaiting review.",
+      "Trail #386 needs reviewer approval and three Entire findings need resolving.",
+      "Repo calls pending: Caliper's hard-coded rustup path, Pages' `rtk` rule, and orin-dx-site's status.",
+      "TokenEconomizer trial (modifies Claude settings and prunes tools) not started pending user approval.",
+      "Collapsing build-side chains (muse into scribe, courier scripts) not started; user approval needed and measurement first."
+    ]
+  }
+}

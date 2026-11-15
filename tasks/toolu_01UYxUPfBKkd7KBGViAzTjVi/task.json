@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01UYxUPfBKkd7KBGViAzTjVi",
+  "agent_id": "ad4c8a2642dc1499f",
+  "subagent_type": "general-purpose",
+  "task_description": "Make ADRs 011-017 scannable",
+  "token_usage": {
+    "input_tokens": 26,
+    "cache_creation_tokens": 58347,
+    "cache_read_tokens": 762619,
+    "output_tokens": 15136,
+    "api_call_count": 13
+  },
+  "started_at": "2026-11-14T16:21:04.489211-08:00",
+  "completed_at": "2026-11-14T16:23:09.046218-08:00"
+}
