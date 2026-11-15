@@ -49,6 +49,7 @@ WHEN the verdict is fail on the second round (`retry_count` 1) or later, or a bl
 WHEN a required check has not reached a terminal result, THE SYSTEM SHALL list it in `pending_checks` and return fail.
 WHEN a completion claim has no command and observed result that prove it, THE SYSTEM SHALL list it in `pending_checks`; another agent's summary is a lead, not evidence.
 WHEN returning fail, THE SYSTEM SHALL list the complete blocker set in round one (`retry_count` 0 or absent) and, when `retry_count` is above 0, cite only blockers from the prior round that remain unresolved or regressions the fix introduced, recording any other newly noticed issue as a `coverage_gaps` entry with `blocking: false`.
+WHEN a criterion states an outcome against a named baseline (`Outcome: ... against ...`) and no result shows the baseline and the product run the same way, THE SYSTEM SHALL list it in `pending_checks` and return fail; the verdict SHALL NOT pass beyond the verified scope.
 WHEN listing a blocker, THE SYSTEM SHALL name the criterion or section in `criterion`, cite evidence (quoted text or a location) in `finding`, and state the exact change required; a wording-only or style-only issue SHALL be a note, never a blocker.
 IF returning fail, THE AGENT SHALL emit the complete verdict; the caller forwards only `blockers` to the producing agent.
 </output>

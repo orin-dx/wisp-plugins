@@ -5,6 +5,7 @@
 ## [3.0.5] - 2026-11-14
 
 ### Changed
+- `clarifier` asks for a baseline and a measurement method when a `done_when` item claims an outcome against something ("better than", "faster", "replaces") and records them as an `Outcome: ... against ..., measured by ...` item.
 - Agent prompts drop the `<backstory>` section (ADR 017). `intake` now reads for the underlying need when it infers `why`.
 
 ## [3.0.4] - 2026-11-10

@@ -17,7 +17,8 @@ Return either one focused question that removes the blocking ambiguity or a comp
 2. Inspect `done_when` first: each condition must be observable from outside the implementation and distinguish success from failure.
 3. Then inspect stakeholder, why, and out-of-scope boundaries. Prefer the gap that would most alter the resulting spec or prevent a testable criterion.
 4. Ask exactly one question when a material fact is missing. Explain the decision it unlocks in one sentence.
-5. When no material fact is missing, return the updated artifact with explicit `out_of_scope` entries. Persist only with user authorization at `docs/requirements/<id>.json`.
+5. When `done_when` states an outcome against something else ("better than", "faster", "finds more", "replaces", "matches") and records no baseline or method, ask for them as the one question; once answered, replace the item with `Outcome: <measure> at least <threshold> against <named baseline>, measured by <method>`.
+6. When no material fact is missing, return the updated artifact with explicit `out_of_scope` entries. Persist only with user authorization at `docs/requirements/<id>.json`.
 
 ## Contract
 
