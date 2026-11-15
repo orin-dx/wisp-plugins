@@ -22,15 +22,37 @@ Agent memory is unshared and goes stale, so a decision never lives only there.
 
 ## Form
 
-Title, status, context, decision, options considered, consequences. Each rejected option carries its "because". Keep a record to one or two pages. Records written before this form may state the alternatives inside the context; leave them as written.
+Title, status, then:
 
-Add an `Enforced by` line only when a test, lint, type, or hook enforces the decision. A decision that a check can enforce should have the check; the record explains why it exists.
+- **Decision:** the rule, imperative, in one short paragraph.
+- **Why:** the lasting forces or constraints that make it the right call. Say a finding in words; keep a number only when the number is the constraint.
+- **Rejected:** each alternative with its "because", one line each.
+- **Consequences:** what is now true, what it costs, and `Revisit when ...`: the trigger that would justify reversing it.
+- **Evidence:** one line saying where the measurements and discussion live (an evaluation log section, a PR, a trail).
+
+About 250 to 350 words, one paragraph per line, no hard wrapping. Records written before this form keep their form.
+
+Add an `Enforced by` line only when a test, lint, type, or hook enforces the decision. A decision a check can enforce should have the check; the record explains why it exists.
 
 Add one line to the `docs/adr/README.md` index in the form `Do not <X> without a new ADR`, for a decision an agent could undo without noticing.
 
+## What stays
+
+The test for every sentence: would a reader two years from now need it to understand why the architecture is shaped this way, or to know when to change it? If it only tells how we got here, it belongs elsewhere.
+
+| Belongs in the record | Belongs elsewhere |
+| :--- | :--- |
+| The decision and its boundary | Measurements, run and call counts, token figures: the evaluation log |
+| Lasting forces and constraints | One-off test dates and "a live run showed": the evaluation log |
+| Rejected options and why | Files, tests and versions changed: the commit or PR |
+| Costs and the revisit trigger | "Not yet measured" lists: one `Revisit when` in the record |
+| The guardrail | A tour of the investigation: the PR or trail |
+
+The agent that writes the record has the session fresh and will want to record all of it. Cut to the table's left column. `scripts/check-adr-style.py` warns above about 350 words and on markers such as "live run", "in this session" and a count of runs; it never fails, so judgment stays with the writer.
+
 ## Prose
 
-Keep the causal "because" and the rejected alternative. Cut narration of the discussion, restated code, and hedging. Write one paragraph per line; do not hard-wrap.
+Keep the causal "because" and the rejected alternative. Cut narration of the discussion, restated code, and hedging.
 
 ## Status and change
 

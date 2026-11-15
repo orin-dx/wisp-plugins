@@ -4,7 +4,7 @@
 # Run every check (same set CI runs)
 # fmt-check is deliberately excluded: the repo isn't formatted yet. Run
 # `just fmt` once, review the diff, commit it, then add fmt-check here.
-check: manifests test versions skills-doc reference-size platform-limits claude-manifests marketplace-check mermaid wiring
+check: manifests test versions skills-doc reference-size adr-style platform-limits claude-manifests marketplace-check mermaid wiring
 
 # Install pinned tooling dependencies
 install:
@@ -34,6 +34,10 @@ skills-doc:
 # Enforce the reference file line cap
 reference-size:
     ./scripts/check-reference-size.sh
+
+# Warn when a decision record reads as a session log
+adr-style:
+    python3 scripts/check-adr-style.py
 
 # Check cross-references, skill metadata and the agent/skill description budgets hosts enforce
 platform-limits:
