@@ -1,0 +1,98 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7E9BHCF4FY032HKV3W3D6WV",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-15T00:23:01.619041Z",
+  "branch": "worktree-agent-ad4c8a2642dc1499f",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "docs/adr/015-two-rounds-one-reality-check.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "b0df8bb98496",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 6071,
+    "cache_read_tokens": 2375755,
+    "output_tokens": 2232,
+    "api_call_count": 3,
+    "subagent_tokens": {
+      "input_tokens": 2,
+      "cache_creation_tokens": 19713,
+      "cache_read_tokens": 20602,
+      "output_tokens": 278,
+      "api_call_count": 1
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 69
+  },
+  "summary": {
+    "intent": "Evaluate how well the wisp-plugins (muse, scribe, navigator, smith, etc.) served front-end work and design ideation on the techworx and orin-dx projects, then act on the findings by removing ceremony from the plugins and tightening how ADRs are written.",
+    "outcome": "Four investigations confirmed the plugins are too rigid for exploratory work and have no visual or ideation support. Ceremony was removed (44 persona backstories dropped via ablation, ADR 017, patch bumps, Entire findings fixed). ADRs 011-017 were condensed, writing guidance and a warn-only style check were added, and a scannability pass was still running at the end.",
+    "learnings": {
+      "repo": [
+        "The project dirs hold few real sessions (2 for orin-dx, ~7 for pages); the other hundreds of jsonl files are subagent transcripts. Plugin agents appear in only a handful of top-level sessions.",
+        "~/projects/orin-dx-site is not a git repo and holds only brand/ artifacts; all specs, plans, reviews and audits live in ~/projects/pages/docs.",
+        "The plugin set is a spec-driven lifecycle with typed JSON schemas in shared/schemas and default-fail gates. No plugin has a browser, screenshot, visual or generative mode, and spec@1 has no fields for tokens, layout or appearance.",
+        "Muse docs reference a ranger accessibility hazard taxonomy that does not exist, so implemented a11y is never checked.",
+        "The muse exit-gate caps retries at 3 then escalates, but the orchestrator carried on past escalation without asking the user (owner-directed gate pass).",
+        "Gates caught real cross-spec contradictions and contrast errors, but specs failed on visual intent. The user's eye caught defects like the NavSheet not being full screen. Specs also drifted from shipped code, e.g. rail breakpoint 1280px vs 768px.",
+        "The reasoning field is ~12% of handback characters but under 0.1% of subagent token spend, so it was kept.",
+        "Backstory ablation (3 agents, 5 runs each, seeded defects) showed no measurable difference, so all 44 backstories were removed. Agent structure is now constitution, optional load_first, goal, judgment, output (ADR 017 amends ADR 001 and 006).",
+        "Generated Codex output in dist/ must be regenerated with `just marketplace-sync` before `just check` passes. Released plugins (mason, vanguard, weaver) need patch bumps and changelog entries when changed.",
+        "scripts/check-adr-style.py is warn-only and runs in just check. It was calibrated from 350 to 450 words, then changed to flag only transient markers and records over 600 words (currently ADR 007 and 008). decision-records.md now states a reader-outcome goal and a consistent scannable shape (Decision, Why, Rejected, Consequences with Revisit when, Evidence). Transient evidence moves to docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md."
+      ],
+      "code": [],
+      "workflow": [
+        "Ideation worked best as rendered option boards or real pages with screenshots, where the user answers with short codes. Text-first descriptions forced the user to ask 'show me' repeatedly.",
+        "Run ablations with seeded defects and score only the agents' own output; the first scorer also read the fixtures and matched trivially.",
+        "Subagents asked to run other subagents may background them, so tell them to run in the foreground. Temp-dir fixtures can vanish between runs and break jobs.",
+        "The user prefers goals and outcomes over prescriptive targets, and ADRs should be scannable for humans (bullets, bold lead-ins, consistent headings).",
+        "Subagent reports are unverified model output, and the delegated agent tends to stop short of numeric targets when cutting would lose content.",
+        "GitHub pushes hit transient storage errors and succeeded on retry."
+      ]
+    },
+    "friction": [
+      "Initial session-count estimate (~810 sessions) was wrong because most files were subagent transcripts.",
+      "Large 60-130 KB spec and plan files stalled agents, with 17 failed agent tasks and 32 'stalled' mentions.",
+      "Wording-only gate churn: SPEC-001 needed 13 verdicts and SPEC-008 had a non-monotonic gate loop.",
+      "The user could not judge specs without pictures, and the decision about page widths was lost across sessions.",
+      "The first ablation run failed because the PR 483 diff was missing from /tmp, and the smoke run reported 0 turns until the subagents were told to run in the foreground.",
+      "The first push failed on a transient GitHub storage error.",
+      "A test in the ADR style check used padding that was too short, and just check failed until the stale generated Codex output was re-synced.",
+      "The 350-word ADR threshold flagged almost every record, which forced recalibration.",
+      "The condensing agent could not reach the 250-350 word target without losing content, so records landed at 417-519 words and the target was later dropped."
+    ],
+    "open_items": [
+      "Build a sketch/spike mode, a visual-exploration capability, a promote-prototype-to-spec path, visual criteria in muse specs, a decision log, and a browser/screenshot capability kind (gaps from the evaluation).",
+      "Fix or remove the muse docs reference to the nonexistent ranger accessibility taxonomy.",
+      "Enforce retry-cap and escalation in the orchestrator, and add convergence control for wording-only gate blockers.",
+      "Merge and verify the in-progress scannability pass on ADRs 011-017, and decide whether to trim ADR 007, 008, 009 and 016.",
+      "Trail #386 needs approval, and the three Entire findings need resolving by the reviewer.",
+      "orin-dx PRs await Entire, because the pr-bot token cannot be minted on this machine.",
+      "Old Monokl changesets with a breaking note inside a bullet were not rewritten.",
+      "Whether the ceremony removals reduce gate rounds, turns or tokens is unmeasured (docs/evaluation-runbook.md is ready).",
+      "The backstory ablation used easy defects, three agents and one model; re-test on harder agents if quality loss is suspected (ADR 017 explains how to restore one).",
+      "User decisions pending: Caliper's hard-coded rustup path, Pages' rtk rule, and orin-dx-site's status."
+    ]
+  }
+}

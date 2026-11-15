@@ -1,0 +1,7 @@
+{
+  "tool_use_id": "toolu_01UYxUPfBKkd7KBGViAzTjVi",
+  "agent_id": "ad4c8a2642dc1499f",
+  "subagent_type": "general-purpose",
+  "task_description": "Make ADRs 011-017 scannable",
+  "started_at": "2026-11-14T16:21:04.489211-08:00"
+}
