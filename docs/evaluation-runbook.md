@@ -57,6 +57,14 @@ python3 tools/paired-analysis.py compare trials.jsonl --baseline control --metri
 - **Primary metrics**: prompts to acceptance, `retries`, tokens (`agents` plus main-thread `context`), characters of text produced, quality score.
 - **Defects found later**: a release reader's questions the text did not answer, wrong semver impact, missing limits or breaking-change marks, found by someone who did not write either text.
 
+### D. Fix tasks in a sequence (reviewers and gates versus one agent looping against checks)
+
+- **Statement**: a series of 6 to 10 real fix tasks in one repository (for example findings from its review history), each stated as "fix this" with the claim to fix and the repository's own check command. Run them in order in one project, because savings from learned repository facts only show after about six tasks.
+- **Control**: one agent looping against the repository's CI-equivalent command, a test that fails on the original bug, and a search for the same mistake elsewhere. **Treatment**: the same, plus the independent `smith` reviewer and exit gate (`/guide:fix`).
+- **Fixed**: task order, repository commit per task, model, effort.
+- **Primary metrics**: prompts to acceptance, `retries`, tokens per task (`agents` plus main-thread `context`) and the trend across the sequence, gate rounds.
+- **Defects found later**: defects that escaped, found by a later review, CI, or a blind read by someone who did not write the fix. Score escapes per task, not just per sequence.
+
 ## Scoring
 
 A scorer who did not run the sessions scores both outputs **blind**: strip arm names, plugin names and agent-specific markers, and shuffle. The checklist is written before the first run and frozen. Each item is yes, no or not applicable, with a one-line evidence note. Score = yes / (yes + no).
@@ -86,6 +94,7 @@ Calibration: for task kind B and C, have a second scorer (or an LLM judge) score
 | A ideation |  |  |  |  |  | n/a |  |  |  |
 | B spec gate |  |  |  |  |  |  |  |  |  |
 | C changeset/PR |  |  |  |  | n/a |  |  |  |
+| D fix sequence |  |  |  |  |  |  |  |  |  |
 Provenance: model ___, effort ___, plugin commits ___ / ___, repo commit ___, dates ___, runs per task ___, excluded ___.
 Power note and what would change the conclusion: ___
 ```
