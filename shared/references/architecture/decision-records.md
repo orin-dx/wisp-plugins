@@ -30,7 +30,7 @@ Title, status, then:
 - **Consequences:** what is now true, what it costs, and `Revisit when ...`: the trigger that would justify reversing it.
 - **Evidence:** one line saying where the measurements and discussion live (an evaluation log section, a PR, a trail).
 
-About 250 to 350 words, one paragraph per line, no hard wrapping. Records written before this form keep their form.
+Aim for 300 to 400 words, one paragraph per line, no hard wrapping. Records written before this form keep their form.
 
 Add an `Enforced by` line only when a test, lint, type, or hook enforces the decision. A decision a check can enforce should have the check; the record explains why it exists.
 
@@ -48,7 +48,7 @@ The test for every sentence: would a reader two years from now need it to unders
 | Costs and the revisit trigger | "Not yet measured" lists: one `Revisit when` in the record |
 | The guardrail | A tour of the investigation: the PR or trail |
 
-The agent that writes the record has the session fresh and will want to record all of it. Cut to the table's left column. `scripts/check-adr-style.py` warns above about 350 words and on markers such as "live run", "in this session" and a count of runs; it never fails, so judgment stays with the writer.
+The agent that writes the record has the session fresh and will want to record all of it. Cut to the table's left column. `scripts/check-adr-style.py` warns above 450 words and on markers such as "live run", "in this session" and a count of runs; it never fails, so judgment stays with the writer.
 
 ## Prose
 

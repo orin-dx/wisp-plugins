@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path
 
-WORD_REVIEW = 350
+WORD_REVIEW = 450
 MARKERS = (
     (re.compile(r"\blive runs?\b", re.I), "a live run is evidence for the log, not the record"),
     (re.compile(r"\b(?:in|during) this session\b", re.I), "session narration"),
