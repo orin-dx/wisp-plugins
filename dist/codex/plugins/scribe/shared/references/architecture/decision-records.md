@@ -20,35 +20,35 @@ One decision per record. A choice that fails a gate belongs elsewhere.
 
 Agent memory is unshared and goes stale, so a decision never lives only there.
 
-## Form
+## Goal
 
-Title, status, then:
+A reader two years from now, human or agent, with no memory of the discussion, can see in a minute what was decided, why it was right here, what was rejected and why, what it costs, and when to reconsider it. Everything in a record serves that. Everything else is cheaper to keep elsewhere: measurements and discussion in the evaluation log, changes in the commit or PR.
 
-- **Decision:** the rule, imperative, in one short paragraph.
-- **Why:** the lasting forces or constraints that make it the right call. Say a finding in words; keep a number only when the number is the constraint.
-- **Rejected:** each alternative with its "because", one line each.
-- **Consequences:** what is now true, what it costs, and `Revisit when ...`: the trigger that would justify reversing it.
-- **Evidence:** one line saying where the measurements and discussion live (an evaluation log section, a PR, a trail).
+## Shape
 
-Aim for 300 to 400 words, one paragraph per line, no hard wrapping. Records written before this form keep their form.
+People scan records and look for the same thing in the same place, so the layout is consistent even though the content is not.
 
-Add an `Enforced by` line only when a test, lint, type, or hook enforces the decision. A decision a check can enforce should have the check; the record explains why it exists.
+- Headings in a fixed order: **Decision**, **Why**, **Rejected**, **Consequences** (with a `Revisit when` trigger), **Evidence** (one line: where the measurements and discussion live).
+- Lead with the point. Use short bullets for parallel items (rules, forces, alternatives, costs) and bold lead-ins so a skim finds each. Use a sentence or two of prose only where a causal "because" needs it.
+- Say a finding in words; keep a number only when the number is the constraint.
+- `Enforced by` when a test, lint, type or hook enforces the decision. A decision a check can enforce should have the check; the record explains why it exists.
+- An index line in `docs/adr/README.md` of the form `Do not <X> without a new ADR`, for a decision an agent could undo without noticing.
 
-Add one line to the `docs/adr/README.md` index in the form `Do not <X> without a new ADR`, for a decision an agent could undo without noticing.
+Let the decision set the shape and the length. A record that grows long usually holds several decisions (split it) or a session log (move the log). Records written before this form keep their form.
 
 ## What stays
 
-The test for every sentence: would a reader two years from now need it to understand why the architecture is shaped this way, or to know when to change it? If it only tells how we got here, it belongs elsewhere.
+For each sentence ask whether a reader two years on needs it to understand why the architecture is shaped this way, or to know when to change it. If it only tells how we got here, it belongs elsewhere.
 
 | Belongs in the record | Belongs elsewhere |
 | :--- | :--- |
-| The decision and its boundary | Measurements, run and call counts, token figures: the evaluation log |
-| Lasting forces and constraints | One-off test dates and "a live run showed": the evaluation log |
-| Rejected options and why | Files, tests and versions changed: the commit or PR |
-| Costs and the revisit trigger | "Not yet measured" lists: one `Revisit when` in the record |
-| The guardrail | A tour of the investigation: the PR or trail |
+| The decision and its boundary | Measurements, run counts, token figures: the evaluation log |
+| Lasting forces and constraints | One-off test dates, "a live run showed": the evaluation log |
+| Rejected options and why | Files, tests, versions changed: the commit or PR |
+| Costs and the revisit trigger | Open-measurement lists: one `Revisit when` in the record |
+| The guardrail | The tour of the investigation: the PR or trail |
 
-The agent that writes the record has the session fresh and will want to record all of it. Cut to the table's left column. `scripts/check-adr-style.py` warns above 450 words and on markers such as "live run", "in this session" and a count of runs; it never fails, so judgment stays with the writer.
+The agent writing a record has the session fresh and will want to include all of it. `scripts/check-adr-style.py` warns on session-log markers and on a record long enough to hold several decisions; it never fails, so judgment stays with the writer.
 
 ## Prose
 

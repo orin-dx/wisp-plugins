@@ -55,8 +55,8 @@ class AdrStyleTests(unittest.TestCase):
             self.assertIn(fragment, result.stdout)
 
     def test_a_long_record_is_flagged(self) -> None:
-        result = self.run_on(GOOD + "\n" + ("Another sentence of discussion. " * 100))
-        self.assertIn("words (review above", result.stdout)
+        result = self.run_on(GOOD + "\n" + ("Another sentence of discussion. " * 200))
+        self.assertIn("often holds several decisions", result.stdout)
 
     def test_the_title_status_and_date_lines_do_not_count(self) -> None:
         dated = GOOD.replace("**Date:** 2026-11-14", "**Date:** 2026-11-14\n**Amends:** 012 as of 2026-11-14")

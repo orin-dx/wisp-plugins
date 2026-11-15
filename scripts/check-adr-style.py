@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Warn when a decision record carries what a reader two years on does not need.
+"""Warn when a decision record reads like a session log or holds more than one decision.
 
 Usage: python3 scripts/check-adr-style.py [directory]   (default docs/adr)
 
-A record keeps the decision, the lasting reasons, the rejected options and why, what it costs and when to
-revisit it, and a pointer to its evidence. Measurements, run counts, one-off test dates and a tour of the
+A record lets a reader two years on see what was decided, why, what was rejected, what it costs and when to
+revisit it, with a pointer to the evidence. Measurements, run counts, one-off test dates and a tour of the
 investigation belong in the evaluation log, the commit or the pull request. The check only warns: judgment
 stays with the writer, and a long record that earns its length can say so in review. See
 shared/references/architecture/decision-records.md.
@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path
 
-WORD_REVIEW = 450
+WORD_REVIEW = 600
 MARKERS = (
     (re.compile(r"\blive runs?\b", re.I), "a live run is evidence for the log, not the record"),
     (re.compile(r"\b(?:in|during) this session\b", re.I), "session narration"),
@@ -38,7 +38,7 @@ def review(path: Path) -> list[str]:
     notes = []
     words = len(body(text).split())
     if words > WORD_REVIEW:
-        notes.append(f"{words} words (review above {WORD_REVIEW}): cut what a reader two years on does not need")
+        notes.append(f"{words} words: a record this long often holds several decisions (split it) or a session log (move the log)")
     for pattern, reason in MARKERS:
         hits = pattern.findall(body(text))
         if hits:
