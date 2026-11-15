@@ -1,0 +1,120 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7E90Q53ZJ0CRJ6BEJKTN4WR",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-15T00:17:09.119505Z",
+  "branch": "worktree-agent-aa1fd577a1c673d4a",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "docs/adr/015-two-rounds-one-reality-check.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "3fa2f6453f79",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 2,
+    "cache_creation_tokens": 701,
+    "cache_read_tokens": 772155,
+    "output_tokens": 350,
+    "api_call_count": 1,
+    "subagent_tokens": {
+      "input_tokens": 24,
+      "cache_creation_tokens": 90414,
+      "cache_read_tokens": 731488,
+      "output_tokens": 13228,
+      "api_call_count": 12
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 67
+  },
+  "summary": {
+    "intent": "Evaluate how well the wisp-plugins (muse, scribe, smith, etc.) served front-end work and design ideation on the techworx and orin-dx projects, then act on the findings: remove process ceremony, apply repo-wide conventions, and tighten how ADRs are written.",
+    "outcome": "Four investigations found the plugins strong on behavioural spec consistency but rigid and visually blind for exploratory work. Follow-on work removed ceremony (estimator, readiness gate, per-task commits, single-source versions, 44 persona backstories after a 30-run ablation), fixed three Entire findings, pushed conventions across five repos, and added an ADR style check plus new guidance. Condensing ADRs 011-017 was still in progress at the end.",
+    "learnings": {
+      "repo": [
+        "Session history is mostly subagent transcripts: orin-dx has only 2 real top-level sessions and pages about 7, so the ~810 file count overstated real sessions.",
+        "Plugin agents ran in only a few sessions (orin-dx b8d16e96, pages 24655582, one vanguard run). All design ideation ran through Artifacts, forks, general-purpose agents and local Playwright screenshots.",
+        "The spec@1 schema has no fields for tokens, layout, breakpoints, visual references or copy, so a spec can pass muse's binding gate while saying nothing about appearance. The workspace-manifest capability enum is closed and has no browser, visual or a11y kind.",
+        "Muse docs reference a ranger accessibility hazard taxonomy that does not exist (documentation defect since commit a859e2f), so implemented a11y is never checked.",
+        "The gate's 3-retry cap and escalate-to-human rule was not enforced by the orchestrator, which continued past escalation with 'owner-directed gate pass'.",
+        "Callisto's release PR lists breaking and action notes under 'Read before merging' only when a paragraph starts with **Breaking:** or **Action:**; bulleted notes are not picked up.",
+        "Generated Codex output (dist/codex) must be re-synced with `just marketplace-sync` after reference edits or `just check` fails.",
+        "The reasoning field is about 12% of handback characters but under 0.1% of subagent token spend, so it was kept.",
+        "Backstory ablation (3 agents, 5 runs per condition, seeded defects) showed no measurable difference in defects found, output size or cost, so ADR 017 removed all 44 backstories and amends ADRs 001 and 006.",
+        "Agent body structure is now constitution, optional load_first, goal, judgment, output; tests/test_agent_structure.py asserts backstory is never opened.",
+        "ADRs 011-017 ran 570-750 words with transient run counts and dates, against 180-450 words for ADRs 001-006."
+      ],
+      "code": [
+        {
+          "path": "shared/schemas/spec@1.json",
+          "finding": "Has no fields for visual intent (tokens, layout, breakpoints, motion, copy)."
+        },
+        {
+          "path": "shared/constitution.md",
+          "line": 104,
+          "end_line": 112,
+          "finding": "Blockers-only resubmission and persist-on-gate-pass rules. L154 and L162 add the plan-amendment adversarial review and the 2-round cap, which are the main rigidity language."
+        },
+        {
+          "path": "plugins/smith/README.md",
+          "line": 14,
+          "end_line": 14,
+          "finding": "Smith accepts a spec with no plan, but still runs recon, mutator, reviewer and a binding exit-gate, so there is no spike mode."
+        },
+        {
+          "path": "scripts/check-adr-style.py",
+          "finding": "New warn-only check that flags ADRs over 350 words and transient markers such as 'live run', 'in this session' and run/round counts."
+        }
+      ],
+      "workflow": [
+        "Check the gaps between sessions and top-level transcripts before sizing a corpus, since most jsonl files were subagent logs.",
+        "When a scorer matches trivially, check what text it reads: the first ablation scoring also read the fixtures and had to be redone on agent output only.",
+        "Subagent hand-backs are unverified model output and must be spot-checked; the Callisto commit signing was checked directly with git log rather than trusting the teammate.",
+        "Visual decisions worked best as rendered option boards the user answered with short codes; text-first descriptions made the user ask 'show me' repeatedly.",
+        "Measure before removing ceremony: the reasoning field was kept on cost evidence, backstories were removed on ablation evidence.",
+        "Runs that spawn background subagents need an explicit 'run in the foreground' instruction in headless ablation prompts, or the run reports 0 turns."
+      ]
+    },
+    "friction": [
+      "Agents stalled on 60-130 KB spec and plan files, with 17 failed agent tasks and 32 'stalled' mentions.",
+      "Gate loops churned on wording and closure blockers, with SPEC-001 needing 13 verdicts and some blockers caused by the previous round's prescribed fix.",
+      "Specs could not be judged without pictures, so the user had to ask for rendered examples, and prototypes then exposed bugs the gated specs missed such as the 44px touch target and the full-screen sheet.",
+      "Design decisions were lost across sessions ('did you lose that decision. I'm frustrated').",
+      "The first ablation run failed because the PR 483 diff had been deleted from the temp directory and had to be re-fetched.",
+      "Transient GitHub storage errors on git push needed retries.",
+      "My own ADR test used padding of about 335 words, under the 350 threshold, so it failed until corrected.",
+      "`just check` initially exited 2 because the generated Codex output was stale."
+    ],
+    "open_items": [
+      "Agents C and D reports and the full outcome-quality synthesis were not completed in the transcript; D's findings were truncated.",
+      "The three Entire findings on trail #386 are fixed and replied to but not yet resolved by a reviewer; trail #386 needs approval.",
+      "Condensing ADRs 011-017 is in progress in a separate worktree; its word counts and preservation of decisions and rejected alternatives still need review before merge.",
+      "The ADR style check flags 11 of 17 ADRs, including older 007-009, which are not condensed in this pass.",
+      "The proposed sketch/spike mode, visual-exploration agent, prototype-to-spec path, browser/screenshot capability kind and decision log are not built.",
+      "The muse docs still reference the nonexistent ranger accessibility taxonomy.",
+      "The effect of the ceremony removals on gate rounds, turns, tokens and routing is unmeasured; docs/evaluation-runbook.md is ready to run after release.",
+      "Existing Monokl changesets that put breaking notes in bullets were not rewritten and will not appear in 'Read before merging'.",
+      "orin-dx PRs wait for Entire to open them because the pr-bot token cannot be minted on this machine.",
+      "User decisions pending: Caliper's hard-coded rustup path, Pages' rtk rule, and orin-dx-site's status (not a git repo, conflicting claims about brand/).",
+      "Backstory ablation limits remain: easy defects, three agents, one model; a harder-defect re-run could change the result."
+    ]
+  }
+}
