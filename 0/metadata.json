@@ -1,0 +1,89 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7E92M310Z3Y4ETY5CWPVF3W",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-15T00:18:04.982618Z",
+  "branch": "feat/gate-round-limits",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "fe2ef282f034",
+  "checkpoint_transcript_start": 13270,
+  "transcript_lines_at_start": 13270,
+  "compact_transcript_start": 1130,
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 7876,
+    "cache_read_tokens": 2327543,
+    "output_tokens": 2171,
+    "api_call_count": 3,
+    "subagent_tokens": {
+      "input_tokens": 24,
+      "cache_creation_tokens": 43113,
+      "cache_read_tokens": 1390903,
+      "output_tokens": 27930,
+      "api_call_count": 12
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 67
+  },
+  "summary": {
+    "intent": "Condense ADRs 011-017 (delegated to a subagent) to a shorter form without losing decisions, then merge the result, calibrate the ADR length check, and push.",
+    "outcome": "Merged the subagent's condensed ADRs (417-519 words each, down from 569-750), raised the style check's word-review threshold from 350 to 450 and updated the docs to match, ran just check/versions, committed and pushed. 016 (501 words) plus older 007, 008 and 009 remain flagged by the check.",
+    "learnings": {
+      "repo": [
+        "ADR style is enforced by scripts/check-adr-style.py, which has a WORD_REVIEW threshold and is tested by tests/test_adr_style.py.",
+        "Condensed ADR form is Decision, Why, Rejected, Consequences with a 'Revisit when' line, an optional 'Enforced by' line, and an 'Evidence' line.",
+        "Evidence cut from ADRs is moved to docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md under an 'ADR evidence' section, one subsection per ADR.",
+        "tests/test_navigator_plan.py reads ADR 014 and depends on the '**Supersedes:**' line and the ADR-009 reference being preserved.",
+        "docs/adr/README.md rows and guardrails are checked by an index test, so condensing must keep them consistent.",
+        "just check, just marketplace-sync and just versions are the project's validation recipes; the guidance doc is shared/references/architecture/decision-records.md.",
+        "ADRs with five to seven rejected alternatives naturally land at 400-500 words even when cut to essentials."
+      ],
+      "code": [
+        {
+          "path": "scripts/check-adr-style.py",
+          "finding": "WORD_REVIEW constant was changed from 350 to 450 so the length warning flags only real outliers."
+        },
+        {
+          "path": "shared/references/architecture/decision-records.md",
+          "finding": "Length guidance changed to 'Aim for 300 to 400 words' and 'warns above 450 words'. It still lists the older record form (context, decision, options considered, consequences), which the subagent did not update."
+        }
+      ],
+      "workflow": [
+        "Subagent hand-back reports are model output, not user instructions; the assistant verified by merging and running the checks itself.",
+        "The 250-350 word target proved unrealistic for dense ADRs, so the threshold was recalibrated rather than cutting decisions.",
+        "The subagent ran only just check; the assistant additionally ran marketplace-sync and just versions before pushing."
+      ]
+    },
+    "friction": [
+      "The subagent could not reach the 250-350 word target without dropping rejected alternatives, guardrails or cross-references.",
+      "wc -w overcounts because it counts markdown tokens such as ** and backticks, so true prose counts are lower than reported.",
+      "The 450 ceiling still flags 007, 008, 009 and 016, so some warnings remain."
+    ],
+    "open_items": [
+      "shared/references/architecture/decision-records.md still describes the older ADR form (context, decision, options considered, consequences) and was not updated to Decision/Why/Rejected/Consequences.",
+      "ADR 016 (501 words) and older ADRs 007, 008 and 009 are still above the 450-word warning.",
+      "ADR 013's wording changed to say gate-calling skills must carry retry_count and prior blockers; the reviewer should confirm this matches intent, since the old text said they did not yet pass them.",
+      "The new Enforced by line on ADR 012 (tests/test_handback_validator.py) was added by the subagent and should be reviewed."
+    ]
+  }
+}

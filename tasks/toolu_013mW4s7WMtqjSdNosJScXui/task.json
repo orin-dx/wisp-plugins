@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_013mW4s7WMtqjSdNosJScXui",
+  "agent_id": "aa1fd577a1c673d4a",
+  "subagent_type": "general-purpose",
+  "task_description": "Condense ADRs 011 to 017",
+  "token_usage": {
+    "input_tokens": 48,
+    "cache_creation_tokens": 133527,
+    "cache_read_tokens": 2122391,
+    "output_tokens": 41158,
+    "api_call_count": 24
+  },
+  "started_at": "2026-11-14T16:12:32.542893-08:00",
+  "completed_at": "2026-11-14T16:17:18.982669-08:00"
+}
