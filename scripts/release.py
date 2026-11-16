@@ -41,6 +41,11 @@ def split_tags(planned: list[tuple[str, str]], local: set[str], remote: set[str]
     return to_create, to_push
 
 
+def misplaced_tags(to_push: list[str], local_commits: dict[str, str], head: str) -> list[str]:
+    """Tags a rerun would push that exist locally but point at a commit other than `head`."""
+    return [tag for tag in to_push if tag in local_commits and local_commits[tag] != head]
+
+
 def changelog_top(root: Path) -> tuple[str, str, str]:
     """(version, name, body) of the newest CHANGELOG.md entry."""
     match = ENTRY.search((root / "CHANGELOG.md").read_text(encoding="utf-8"))
@@ -76,6 +81,14 @@ def main(argv: list[str]) -> int:
         raise SystemExit(f"v{version} is already released; bump the version and changelog first")
     planned = tags_to_create(ROOT, set())
     to_create, to_push = split_tags(planned, local, remote)
+    head = run("/usr/bin/git", "rev-parse", "HEAD")
+    local_commits = {tag: run("/usr/bin/git", "rev-list", "-n", "1", tag) for tag in to_push if tag in local}
+    stale = misplaced_tags(to_push, local_commits, head)
+    if stale:
+        raise SystemExit(
+            f"unpushed local tag(s) point at an older commit than HEAD: {', '.join(stale)}. "
+            "Delete them with `git tag -d <tag>` and rerun, so the release is cut from the commit you checked."
+        )
     notes = args.notes or (ROOT / "docs" / "releases" / f"v{version}.md")
     if not notes.is_file():
         notes = None

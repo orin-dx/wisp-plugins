@@ -28,7 +28,7 @@ from pathlib import Path
 
 PACKS_LINE = re.compile(r"^\s*(?:[-*]\s+)?\**Packs:\**\s*(.+?)\s*$")
 PACK_NAME = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
-FENCE = re.compile(r"^\s*(```|~~~)")
+FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 SKIPPED_DIRECTORIES = {"node_modules", "target", "dist", "build", "vendor", "venv"}
 MAX_DEPTH_BELOW = 4
 MAX_FILES = 64
@@ -39,12 +39,18 @@ MAX_CONTEXT_CHARACTERS = 60_000
 def declared_in(text: str) -> list[str]:
     """Pack names from the `Packs:` lines of one AGENTS.md, in order, skipping fenced code blocks."""
     names: list[str] = []
-    fenced = False
+    opening: str | None = None
     for line in text.splitlines():
-        if FENCE.match(line):
-            fenced = not fenced
-            continue
-        if fenced:
+        fence = FENCE.match(line)
+        if fence is not None:
+            marker = fence.group(1)
+            if opening is None:
+                opening = marker
+                continue
+            if marker[0] == opening[0] and len(marker) >= len(opening) and not fence.group(2).strip():
+                opening = None
+                continue
+        if opening is not None:
             continue
         match = PACKS_LINE.match(line)
         if match is None:

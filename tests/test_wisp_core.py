@@ -189,6 +189,15 @@ class StopCheckTests(unittest.TestCase):
         self.dirty("second.txt")
         self.assert_blocked(self.run_hook(self.event("Done again.")))
 
+    def test_a_change_in_a_subdirectory_is_noticed_when_it_is_edited_again(self) -> None:
+        package = self.repository / "src"
+        package.mkdir()
+        (package / "file.py").write_text("one", encoding="utf-8")
+        inside = self.event("Not verified: nothing beyond the evidence above", cwd=str(package))
+        self.assert_allowed(self.run_hook(inside))
+        (package / "file.py").write_text("one, edited again", encoding="utf-8")
+        self.assert_blocked(self.run_hook({**inside, "last_assistant_message": "Done again."}))
+
     def test_the_final_message_falls_back_to_the_transcript(self) -> None:
         self.dirty()
         transcript = Path(self.directory.name) / "transcript.jsonl"

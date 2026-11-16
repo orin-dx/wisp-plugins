@@ -36,6 +36,11 @@ class DeclarationParsingTests(unittest.TestCase):
         text = "Example:\n\n```\nPacks: rust-house\n```\n\nPacks: ts-house\n"
         self.assertEqual(inject.declared_in(text), ["ts-house"])
 
+    def test_a_longer_fence_is_not_closed_by_a_shorter_one_inside_it(self) -> None:
+        text = "````markdown\n```\nPacks: rust-house\n```\nPacks: ui-house\n````\n\nPacks: ts-house\n"
+        self.assertEqual(inject.declared_in(text), ["ts-house"])
+        self.assertEqual(inject.declared_in("~~~\n```\nPacks: rust-house\n~~~\n"), [])
+
     def test_drops_names_that_are_not_pack_names(self) -> None:
         self.assertEqual(inject.declared_in("Packs: ../etc/passwd, Rust_House, ok-1\n"), ["ok-1"])
 

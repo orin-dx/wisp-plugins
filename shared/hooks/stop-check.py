@@ -63,8 +63,20 @@ def tree_status(cwd: str) -> str | None:
     return completed.stdout.decode("utf-8", "replace")
 
 
-def fingerprint(cwd: str, status: str) -> str:
-    """Hash of the status plus each changed path's size and modification time."""
+def tree_root(cwd: str) -> str:
+    """The work tree's top directory; porcelain paths are relative to it, not to `cwd`."""
+    completed = subprocess.run(
+        ["git", "-C", cwd, "rev-parse", "--show-toplevel"],
+        capture_output=True,
+        timeout=TIMEOUT_SECONDS,
+        check=False,
+    )
+    root = completed.stdout.decode("utf-8", "replace").strip()
+    return root if completed.returncode == 0 and root else cwd
+
+
+def fingerprint(root: str, status: str) -> str:
+    """Hash of the status plus each changed path's size and modification time, resolved against the tree root."""
     digest = hashlib.sha256(status.encode("utf-8"))
     tokens = status.split("\0")
     index = 0
@@ -77,7 +89,7 @@ def fingerprint(cwd: str, status: str) -> str:
         if "R" in code or "C" in code:
             index += 1  # the next token is the original path of a rename or copy
         try:
-            stat = (Path(cwd) / path).stat()
+            stat = (Path(root) / path).stat()
             digest.update(f"{path}:{stat.st_size}:{stat.st_mtime_ns}".encode("utf-8"))
         except OSError:
             digest.update(f"{path}:missing".encode("utf-8"))
@@ -130,7 +142,7 @@ def decide(event: dict[str, Any], state_directory: Path) -> dict[str, Any] | Non
     status = tree_status(str(cwd))
     if not status:
         return None
-    current = fingerprint(str(cwd), status)
+    current = fingerprint(tree_root(str(cwd)), status)
     record = state_file(state_directory, str(event.get("session_id", "unknown")))
     if event.get("stop_hook_active") or MARKER.search(final_message(event)):
         acknowledge(record, current)
