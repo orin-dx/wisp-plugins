@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_012CSZaboxuHjS8vwVoVk1JN",
+  "agent_id": "aadf584d05b6dbc36",
+  "subagent_type": "general-purpose",
+  "task_description": "Build the wisp core plugin",
+  "token_usage": {
+    "input_tokens": 150,
+    "cache_creation_tokens": 235826,
+    "cache_read_tokens": 12827482,
+    "output_tokens": 72528,
+    "api_call_count": 74
+  },
+  "started_at": "2026-11-15T18:04:50.177938-08:00",
+  "completed_at": "2026-11-15T18:20:37.32039-08:00"
+}

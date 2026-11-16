@@ -1,0 +1,48 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7H2J41XF5GB0NVQM3JG9V35",
+  "strategy": "manual-commit",
+  "branch": "worktree-agent-a1ca5ffeea62292a3",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".claude-plugin/marketplace.json",
+    "harnesses/codex/catalog.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 32,
+    "cache_creation_tokens": 18592,
+    "cache_read_tokens": 1874605,
+    "output_tokens": 5270,
+    "api_call_count": 15,
+    "subagent_tokens": {
+      "input_tokens": 70,
+      "cache_creation_tokens": 52635,
+      "cache_read_tokens": 8152615,
+      "output_tokens": 33612,
+      "api_call_count": 35
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
