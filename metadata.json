@@ -1,0 +1,68 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7H3B24D0FJS91T9WQTG7VZJ",
+  "strategy": "manual-commit",
+  "branch": "v5-core",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "ARCHITECTURE.md",
+    "dist/codex/plugins/courier/shared/references/delivery/commits.md",
+    "dist/codex/plugins/mason/shared/constitution.md",
+    "dist/codex/plugins/muse/shared/references/architecture/modes.md",
+    "dist/codex/plugins/muse/shared/references/verification/gate-readiness.md",
+    "dist/codex/plugins/wisp/shared/references/verification/gate-readiness.md",
+    "dist/codex/plugins/wisp/shared/references/workspace/conventions.md",
+    "plugins/mason/README.md",
+    "shared/agent-best-practices.md",
+    "shared/constitution.md",
+    "shared/references/architecture/boundary-values.md",
+    "shared/references/architecture/modes.md",
+    "shared/references/architecture/remediation.md",
+    "shared/references/architecture/rust.md",
+    "shared/references/architecture/typescript.md",
+    "shared/references/delivery/commits.md",
+    "shared/references/delivery/github.md",
+    "shared/references/verification/gate-readiness.md",
+    "shared/references/workspace/conventions.md",
+    "tests/fixtures/behavioral/implementation-verification.json",
+    "tests/test_reference_integrity.py",
+    "tests/test_transcript_metrics.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 12564,
+    "cache_read_tokens": 1607412,
+    "output_tokens": 5838,
+    "api_call_count": 10,
+    "subagent_tokens": {
+      "input_tokens": 65,
+      "cache_creation_tokens": 99485,
+      "cache_read_tokens": 2568817,
+      "output_tokens": 17958,
+      "api_call_count": 33
+    }
+  },
+  "redaction": {
+    "replacements": 15,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
