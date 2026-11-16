@@ -1,6 +1,12 @@
 # Agent-native architecture: design it twice
 
-Status: proposal for the owner, not a decision. No plugin, agent, skill or schema changes with this document, and it is not an ADR. If the measurement in section 5 supports a change, a record follows under [`shared/references/architecture/decision-records.md`](../../shared/references/architecture/decision-records.md), superseding what it reverses (ADR 001, 003 and 007 are the likely ones).
+**Status: option B was implemented as v5 in PR 24 on 2026-11-16 and recorded in [ADR 018](../adr/018-deep-core-by-context-and-risk.md), which superseded ADR 003 and 007 and part of 001.** The sections below are the proposal as written, kept as the reasoning; they are not updated. Deferred or still open:
+
+- **Measurement (section 5):** no arm has been run against another. The fix-task kind now exists as kind D in [`docs/evaluation-runbook.md`](../evaluation-runbook.md); the paired run, the pre-registered thresholds and the replay are not done, so B's advantage over A and C is unproven.
+- **The UI pack:** a design or UI pack for `wisp-packs` is not built; only the Rust and TypeScript house packs ship.
+- **The strategic layer (section 3):** detectors, the monitor step and the unattended loop are not built. Only the Stop hook and decision cards from the no-regret list shipped.
+- **Antigravity:** whether the v5 plugins, hooks and pack injection work there is not verified.
+- **Open questions (section 6):** answers are not recorded here.
 
 The question: the plugins mirror a human organization (role-named agents, handoff documents, sign-off gates). Agents are not a team of people, and models trained on human organizations reproduce that ceremony unless asked not to. What shape should the architecture take instead, and how do we find out?
 

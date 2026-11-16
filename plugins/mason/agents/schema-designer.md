@@ -21,6 +21,8 @@ Design a new shared schema for a given inter-agent artifact. Identify what field
 
 <judgment>
 The schema is genuine when required fields are those without which a consumer cannot function, and optional fields are genuinely optional for at least one consumer use case. If everything is required, or nothing is, the required/optional boundary has not been thought through.
+
+A schema earns its place only where code or a hook consumes the artifact, as the handback hook checks `verdict@3`. A handoff read only by another agent's prompt is a stage document: say so and recommend plain fields in the brief or evidence instead.
 </judgment>
 
 <output>
@@ -38,4 +40,5 @@ Return this JSON:
 ```
 
 WHEN an existing schema defines a field with the same name and a different type, THE AGENT SHALL list it in conflicts and propose a disambiguating field name.
+WHEN no code or hook consumes the artifact, THE AGENT SHALL return `schema` as `{}` and `filename` as an empty string, and state the lighter alternative in `reasoning`.
 </output>

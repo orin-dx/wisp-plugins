@@ -2,7 +2,7 @@
 """Claude Code hook that validates a gate subagent's handback against its verdict schema.
 
 Deterministic enforcement of gate output (WP-602, WP-624, ADR 012); registered by the hooks/hooks.json
-of each plugin with a routed agent (`wisp` for its verifier, `muse` for its exit gate).
+of each plugin with a routed agent (`wisp` for its verifier).
 
 Why a PreToolUse hook on `SubagentHandback`: in auto mode (Claude Code 2.1.271 and later) a
 subagent delivers its report through the `SubagentHandback` tool, so a `SubagentStop` hook's
@@ -55,8 +55,8 @@ RETRY_CAP = 1
 ESCALATION_CRITERION = "escalation_required"
 
 # A handback passes when it conforms to any listed schema. Every binding verdict is verdict@3:
-# the core's fresh-context verifier (ADR 018) and muse's component-spec gate. The per-stage gates
-# of the retired pipeline plugins are no longer routed.
+# the core's fresh-context verifier (ADR 018). The per-stage gates of the retired pipeline
+# plugins are no longer routed.
 ROUTES = {
     "wisp:verifier": ("verdict@3",),
 }

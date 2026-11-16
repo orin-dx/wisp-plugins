@@ -14,7 +14,7 @@
     },
     {
       "name": "mason",
-      "description": "Build, audit, and behaviorally evaluate plugins; design shared schemas and scaffold conformant agents. Skills: scaffold-plugin, audit-plugin, design-schema, scaffold-subagent, evaluate.",
+      "description": "Build, audit, and behaviorally evaluate plugins in the v5 shape: few agents, one entry skill, must-hold rules as hooks. Design shared schemas and scaffold conformant agents. Skills: scaffold-plugin, audit-plugin, design-schema, scaffold-subagent, evaluate.",
       "source": "./plugins/mason"
     },
     {

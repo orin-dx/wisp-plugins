@@ -2,6 +2,16 @@
 
 — mason
 
+## [5.0.0] - 2026-11-15
+
+### Changed
+- **Breaking:** scaffolds and audits now follow the v5 model instead of the pre-v5 pipeline. A new plugin gets one entry skill (modes as one-line aliases), only the agents that need their own context or risk tier, and no gate chain or stage handoff documents. An audit fails a role or stage agent, a schema no code or hook consumes, and a must-hold rule stated only as prompt text.
+- Must-hold rules are scaffolded as hooks or project checks, with `wisp:verifier`, the handback validator and the Stop hook as the pattern; Codex skills state the rule because Codex has no such hook. Language and house rules point to packs in `wisp-packs` instead of new agents.
+- `scaffold-subagent` first asks whether the work needs its own agent at all, and creates nothing for a role or stage. `design-schema` says when a schema is not warranted.
+- `scaffolder` and `auditor` finish by running the real commands: `just claude-manifests-sync`, `just marketplace-sync` and `just check`, judged by exit code. Both prompts are about half their former length with the same report format.
+- `evaluate` compares a plugin with a bare arm on the same fixture before claiming it adds value.
+- The Codex skills say the same, and no longer lean on a team of role cards for tightly coupled work.
+
 ## [3.2.4] - 2026-11-14
 
 ### Changed

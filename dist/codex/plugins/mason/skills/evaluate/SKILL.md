@@ -19,4 +19,6 @@ Use `shared/references/evaluation/behavioral.md` and return `shared/schemas/harn
 
 Tool use is not evidence by itself. A generative test needs a relevant generator and oracle; a semantic search needs plausible candidate sites; a boundary claim needs an observation across that boundary.
 
+To claim a plugin adds value, run the same fixture on a bare arm: no plugin, same model and workspace. Above the contained tier, a plugin that does not beat it on hidden checks at comparable cost has not earned its agents (ADR 018).
+
 When delegation is available, use `recon` for the isolated run and keep hidden-oracle adjudication with the primary `judge`. The same sequential method is required when delegation is unavailable.

@@ -1,6 +1,6 @@
 ---
 name: audit-plugin
-description: Audit a plugin against the repository's concrete authoring and packaging rules. Use when the user asks whether a plugin conforms, is installable, or is ready to release.
+description: Audit a plugin against the repository's v5 authoring and packaging rules. Use when the user asks whether a plugin conforms, is installable, or is ready to release.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -11,25 +11,26 @@ Inspect the named plugin and its declared harnesses rather than evaluating style
 
 ## Checks
 
-- Source manifest identity, semver, skills path, declared agents, and file presence.
-- Skill frontmatter, trigger discrimination, concrete workflow, safety boundaries, and artifact schema paths.
-- Agent prompt structure, model/effort routing, shared constitution prefix, progressive context loading, and handoff contracts.
-- Instruction economy: direct, atomic rules with no repeated rationale or process narration. Numbered procedures require order-dependent behavior. Length thresholds trigger review, not failure by themselves.
-- Runtime reference organization and quality: concern-first paths, language filenames only for language-specific evidence, no human index in a runtime route, stated outcome and applicability, evidence and refutation for heuristics, no project preference presented as universal, and complete coverage for every named language or platform.
-- Verification evidence: claimed boundaries, semantic searches, generated inputs, mutable state, asynchronous completion, and longitudinal comparisons require their matching evidence; unrelated methods are optional.
-- Shared schema versioning, required `reasoning`, and `additionalProperties: false` when a new handoff is introduced.
-- README, changelog, marketplace registration, and current installation guidance.
-- For Codex, `.codex-plugin/plugin.json`, native skill directories, interface metadata, generated bundle parity, and no unresolved source symlinks in distributable output.
+Run `just check` and judge it by exit code; it decides manifests, versions, wiring, references and tests. Then read what no script decides:
+
+- Agent set: each agent has a context or risk reason (a fresh context that must not share the worker's reasoning, one disputed claim, a bulk read-only sweep, a hidden oracle). A role or stage agent, a mandatory gate chain, or a stage handoff document fails.
+- Skills: one entry skill, with mode skills as one-line aliases unless the intents are independent. Trigger discrimination and a concrete workflow, not a procedure where an outcome and evidence bar would do.
+- Agent prompts: four-part body (constitution, optional load_first, goal, judgment, output), constitution byte-identical to another agent's, model and effort routing.
+- Schemas: only where code or a hook consumes the artifact; versioned, with required `reasoning` and `additionalProperties: false`.
+- Must-hold rules: enforced by a hook or project check; the Codex skill states the rule because Codex has no such hook.
+- Extension: language and house rules live in packs or references, not agents or per-language plugins.
+- Instruction economy: direct, atomic rules without repeated rationale or process narration. Length thresholds trigger review, not failure.
+- Runtime references: concern-first paths, language filenames only for language-specific evidence, no human index on a runtime path, applicability and refutation stated for heuristics, complete coverage for every named language or platform.
+- Verification evidence: claimed boundaries, semantic searches, generated inputs, mutable state, asynchronous completion and longitudinal comparisons carry their matching evidence; unrelated methods are optional.
+- Codex: `.codex-plugin/plugin.json`, native skill directories, interface metadata, catalog runtime files, generated bundle parity, and no unresolved source symlinks in distributable output.
 
 ## Evidence standard
 
-Return one row per check with status `pass`, `fail`, or `warn`, the observed path, consequence, confidence, and repair guidance. A missing file is a fail only when a manifest, contract, or required convention declares it. State blockers directly without manufacturing praise or asserting more certainty than the evidence supports. Do not call a plugin ready based on filenames alone.
+Return one row per check with status `pass`, `fail`, or `warn`, the observed path, consequence, confidence, and repair guidance. A check not run is a `warn`, never a `pass`. A missing file is a fail only when a manifest, contract, or required convention declares it. Do not call a plugin ready from filenames alone.
 
 ## Team use
 
-Before delegating, read `agent-roles/README.md`; use `recon` for surface inventory and `reviewer` for an independent conformance reading before the primary agent reconciles findings.
-
-When teams are available, split independent inspection by surface: source plugin, Codex adaptation, and generated distribution. The owner must reconcile findings against shared manifests and avoid duplicate reports. Perform the same passes sequentially when teams are unavailable.
+An independent conformance reading is a legitimate context split. Read `agent-roles/README.md` and start a fresh subagent with the `reviewer` card, read-only, to read the plugin without your findings; the `recon` card may inventory a large surface. Reconcile the results yourself. Without subagents, do the reading as a separate pass and say it was not independent.
 
 ## Safety
 

@@ -43,6 +43,7 @@ python3 tools/paired-analysis.py compare trials.jsonl --baseline control --metri
 
 ### B. Spec drafting and gating (gated pipeline now versus before gate hygiene)
 
+- **Note**: the spec and gate plugins this kind compares were retired in v5 (ADR 018). Run it only from checkouts that still hold them, or adapt it to `wisp:verifier` checking a spec.
 - **Statement**: "Draft and gate a spec for <requirement>" with a requirement of fixed text.
 - **Control**: the plugins at commit `50bdcf1b^` (before the gate-hygiene change), checked out in a separate worktree and loaded as the plugin source. **Treatment**: the plugins at the commit under test. Disable the installed marketplace copy in both so only one version loads, and record the commit in each trial.
 - **Fixed**: requirement text, model, effort, a prewritten set of answers to clarifying questions, retry cap.
@@ -57,12 +58,12 @@ python3 tools/paired-analysis.py compare trials.jsonl --baseline control --metri
 - **Primary metrics**: prompts to acceptance, `retries`, tokens (`agents` plus main-thread `context`), characters of text produced, quality score.
 - **Defects found later**: a release reader's questions the text did not answer, wrong semver impact, missing limits or breaking-change marks, found by someone who did not write either text.
 
-### D. Fix tasks in a sequence (reviewers and gates versus one agent looping against checks)
+### D. Fix tasks in a sequence (`/wisp:fix` with and without the verifier)
 
 - **Statement**: a series of 6 to 10 real fix tasks in one repository (for example findings from its review history), each stated as "fix this" with the claim to fix and the repository's own check command. Run them in order in one project, because savings from learned repository facts only show after about six tasks.
-- **Control**: one agent looping against the repository's CI-equivalent command, a test that fails on the original bug, and a search for the same mistake elsewhere. **Treatment**: the same, plus the independent `smith` reviewer and exit gate (`/guide:fix`).
-- **Fixed**: task order, repository commit per task, model, effort.
-- **Primary metrics**: prompts to acceptance, `retries`, tokens per task (`agents` plus main-thread `context`) and the trend across the sequence, gate rounds.
+- **Control**: `/wisp:fix` with `wisp:verifier` withheld: one agent looping against the repository's CI-equivalent command, a test that fails on the original bug, and a search for the same mistake elsewhere. **Treatment**: the same, with `wisp:verifier` running (two rounds at most). A third arm with no plugin gives the bare baseline ADR 018 asks for. Pick tasks of shared-tier risk, so the verifier would run by default.
+- **Fixed**: task order, repository commit per task, model, effort, the brief and evidence bar for each task.
+- **Primary metrics**: prompts to acceptance, `retries`, tokens per task (`agents` plus main-thread `context`) and the trend across the sequence, verifier rounds.
 - **Defects found later**: defects that escaped, found by a later review, CI, or a blind read by someone who did not write the fix. Score escapes per task, not just per sequence.
 
 ## Scoring

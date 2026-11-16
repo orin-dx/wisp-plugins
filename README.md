@@ -6,267 +6,308 @@
 </p>
 
 <p align="center">
-  <i>Four plugins and a pack set for working with AI coding agents: a risk-aware core, shipping, exploration and plugin authoring, connected by shared JSON schemas.</i>
-</p>
-
-<p align="center">
-  <b>Use this when you're building non-trivial software with AI coding agents and need to know every acceptance criterion was implemented and tested — not assumed.</b> The specific problem: agents working across long sessions silently drop criteria as context compresses. Specs live on disk. Agents read from disk. Drift is detectable, not silent.
-</p>
-
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
   <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v5.0.0-success.svg" alt="Marketplace v5.0.0" /></a>
-  <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/Docs-Architecture-informational.svg" alt="Architecture" /></a>
 </p>
 
----
+# Wisp Plugins
 
-## Wisp Plugins — v5
+Plugins for Claude Code, Codex and Antigravity that change how a coding agent takes on work, and the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. **The agent works from a brief, review scales with how reversible a change is, and you see decisions and evidence at the edges, not the steps in between.**
 
-Four plugins plus `wisp-packs`, together **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. v5 replaces the eleven-plugin lifecycle pipeline (a plugin per stage, a handoff document between each) with one deep core and three focused plugins. The retired stages' useful content now lives inside `wisp`; their schemas stay on disk, unchanged, because published schema versions are immutable. The plugins are composable: install only what your workflow needs.
+v5 is one core plugin, `wisp`, plus `courier` (shipping), `muse` (exploration), `wisp-packs` (house rules per repo) and `mason` (plugin authoring). Install `wisp` first; add the others when you need them.
 
-```mermaid
-%%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
-flowchart LR
-    classDef source fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#1e1b4b,rx:10px,ry:10px,font-weight:600;
-    classDef engine fill:#f5f3ff,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95,rx:10px,ry:10px;
-    classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
-
-    mu["<b>Muse</b><br/>sketch and render"] -->|"requirement@1"| wi["<b>Wisp</b><br/>work, verify"]
-    wi -->|"verified change"| co["<b>Courier</b><br/>ship"]
-    pk["<b>Wisp packs</b><br/>domain packs"] -.->|"loaded on demand"| wi
-    ma["<b>Mason</b><br/>build plugins"] -.->|"authors"| wi
-
-    class mu source
-    class wi,pk,ma engine
-    class co output
-```
-
-| Plugin | Job | Output |
-| :--- | :--- | :--- |
-| `wisp` | The core: one entry point that classifies a change by risk, does the work in full context, and runs an independent check where a confident mistake is costly | a diff or render, its evidence, and what was not verified |
-| [`courier`](./plugins/courier/) | Commits, opens PRs, triages review feedback, writes changesets and release notes | `changeset@3`, `release-artifact@3` |
-| [`muse`](./plugins/muse/) | Shows options before deciding: sketches and renders structurally different options, then promotes the chosen one | `option-set@1`, `requirement@1` |
-| [`mason`](./plugins/mason/) | Scaffolds and audits plugins, designs schemas, and evaluates workflow behavior | `harness-evaluation@2` |
-| `wisp-packs` | Domain packs that `wisp` loads when the work needs them | references loaded on demand |
+- **Brief first:** before any edit the agent states the outcome, the constraints and the evidence bar (the command, test, build or render that proves it).
+- **Review follows risk:** each change is sized as contained, shared or irreversible. Only shared and irreversible work goes to an independent verifier with a fresh context.
+- **You see the edges:** a brief and decision cards on the way in; the diff or render, the evidence, a `Not verified:` list and the PR on the way out.
 
 ---
 
 ## Install
 
-### One Ecosystem, Two Harnesses
-
-This repository publishes the same lifecycle ecosystem to Claude Code and Codex without pretending their runtimes are interchangeable. The durable boundary is the versioned JSON artifact in `shared/schemas/`; a requirement, research report, spec, or plan can move between harnesses when it validates against the same schema.
-
-| Concern | Claude Code | Codex | Source of truth |
-| :--- | :--- | :--- | :--- |
-| Shared ID, version, author, and artifact declarations | Uses `plugins/<id>/plugin.json` | Native manifest is checked against those shared fields | `plugins/<id>/plugin.json` |
-| Workflow prompts | Skills plus specialist agent prompts | Native Codex skills | Claude: `plugins/<id>/`; Codex: `harnesses/codex/plugins/<id>/` |
-| Durable handoffs | Versioned JSON artifacts | The same versioned JSON artifacts, materialized as regular files | `shared/schemas/` |
-| Installable marketplace | Root Claude marketplace files | Root discovery manifest plus generated bundle | `.agents/plugins/marketplace.json` and `dist/codex/` |
-
-`plugins/` is the authored source for the existing Claude/AGY marketplace. `harnesses/codex/plugins/<id>/` contains separately authored Codex manifests, skills, and optional resources. `harnesses/codex/catalog.json` controls marketplace order and materialized runtime files only. `tools/build-codex-marketplace.py` validates and packages those inputs into `dist/codex`, then emits `.agents/plugins/marketplace.json` at the repository root so Codex can discover the bundle from Git. Do not edit generated files by hand.
-
-Claude agents are not renamed and shipped as Codex agents. Each Codex skill has its own harness-appropriate instructions and can complete alone. When agent teams are enabled, a skill selects a packaged Codex role card for independent, bounded work; the artifact contract and single-agent result remain the same. Codex role cards are portable plugin resources, not TOML configuration.
-
-### Claude Code
-
-Add the repository marketplace from inside Claude Code, then install the plugins you want. `courier` ships work, `muse` explores options, `mason` authors plugins, and `wisp-packs` adds domain packs to `wisp`:
+**Claude Code**
 
 ```
 /plugin marketplace add orin-dx/wisp-plugins
 /plugin install wisp
 /plugin install courier
 /plugin install muse
-/plugin install mason
 /plugin install wisp-packs
+/plugin install mason
 ```
 
-If you registered the previous marketplace identity, replace it before installing from Wisp Plugins:
-
-```
-/plugin marketplace remove orin-dx-agent-plugins
-/plugin marketplace add orin-dx/wisp-plugins
-```
-
-### Codex
-
-Codex discovers the generated root manifest at `.agents/plugins/marketplace.json`; it points at the generated `dist/codex` bundle. Register the repository once, then add only the plugins you need:
+**Codex**
 
 ```bash
 codex plugin marketplace add orin-dx/wisp-plugins
+codex plugin add wisp@wisp-plugins
 codex plugin add courier@wisp-plugins
 codex plugin add muse@wisp-plugins
+codex plugin add wisp-packs@wisp-plugins
 codex plugin add mason@wisp-plugins
 ```
 
-Inspect marketplace availability with:
+`codex plugin list` shows what is available; `codex plugin marketplace upgrade wisp-plugins` refreshes after a release. Codex reads the generated `.agents/plugins/marketplace.json`, which points at `dist/codex/`. From a local checkout: `python3 tools/build-codex-marketplace.py`, then `codex plugin marketplace add .`.
 
-```bash
-codex plugin list
-```
-
-To refresh the registered Git marketplace after a release:
-
-```bash
-codex plugin marketplace upgrade wisp-plugins
-```
-
-For contributors using a local checkout, rebuild and verify the bundle before registering it:
-
-```bash
-python3 tools/build-codex-marketplace.py
-python3 tools/build-codex-marketplace.py --check
-codex plugin marketplace add .
-```
-
-If you previously registered the marketplace as `orin-dx-agent-plugins`, migrate to the Wisp Plugins identity:
-
-```bash
-codex plugin marketplace remove orin-dx-agent-plugins
-codex plugin marketplace add orin-dx/wisp-plugins
-codex plugin add <plugin>@wisp-plugins
-```
-
-### Session History Across Agent Hosts
-
-Entire-managed adapters expose the same repository-history search skill to Codex, Claude, Cursor, Gemini, and OpenCode. Cursor and OpenCode also carry host-native lifecycle hooks. These tracked files contain commands and adapter code—not session transcripts, credentials, or machine-specific paths—and should be regenerated through Entire rather than edited by hand.
-
-### Antigravity (AGY)
-
-Install individual plugins via the native CLI (uses a Git URL):
+**Antigravity (AGY)**
 
 ```bash
 agy plugin install https://github.com/orin-dx/wisp-plugins.git
 ```
 
-Or use [`agy-plugins-cli`](https://github.com/ZaunEkko/agy-plugins-cli) for an interactive TUI with update tracking:
+AGY uses the same source tree as Claude Code. Whether the v5 hooks and pack injection work there is not verified. The community [`agy-plugins-cli`](https://github.com/ZaunEkko/agy-plugins-cli) (`agy-plugin marketplace add orin-dx/wisp-plugins`, then `agy-plugin add <plugin>@wisp-plugins`) may not find plugins under `plugins/`; that path is not verified either.
 
-```bash
-npm install -g agy-plugins-cli
-agy-plugin marketplace add orin-dx/wisp-plugins
-agy-plugin add courier@wisp-plugins
-agy-plugin add muse@wisp-plugins
-agy-plugin add mason@wisp-plugins
+**Set it up for a project.** So everyone on a repo gets the plugins in Claude Code, commit this to `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "wisp-plugins": { "source": { "source": "github", "repo": "orin-dx/wisp-plugins" } }
+  },
+  "enabledPlugins": {
+    "wisp@wisp-plugins": true,
+    "courier@wisp-plugins": true,
+    "wisp-packs@wisp-plugins": true
+  }
+}
 ```
 
----
+and add this to the repo's `AGENTS.md`, which every harness reads (the `Packs:` line is optional; see [Packs](#packs)):
 
-## Design Principles
+```markdown
+## Work
+Start changes with /wisp:work (or /wisp:fix, /wisp:build, /wisp:check, /wisp:spike, /wisp:explore, /wisp:ship).
+State the tier, the brief and the evidence bar first; end with the evidence and a "Not verified:" list.
 
-Six decisions shape how every plugin and agent in this repository is built. They are enforced by `shared/constitution.md` and explained in `shared/agent-best-practices.md`.
+Packs: rust-house
+```
 
-**Schema-Driven Development** — every handoff between agents is a typed JSON document.
-- JSON Schema draft-2020-12 with `additionalProperties: false`; agents are told to conform to the cited schema, and a Claude Code hook rejects a non-conforming exit-gate `verdict@3` (other handoffs are not validated at runtime)
-- Schema versions are immutable — a breaking change creates `<name>@2.json`, never mutates the existing file
-- Every new schema includes a private `reasoning` scratchpad field that is never forwarded downstream
-
-**EARS output contracts** — hard constraints live exclusively in `<output>` sections, using `WHEN / IF / WHILE / WHERE / THE SYSTEM SHALL`.
-- Encodes what the agent must produce, must not produce, or must do under a specific condition
-- The prompt interior — how the agent searches, reasons, and decides — is intentionally unconstrained
-- EARS is the fence; goal and judgment fill the interior
-
-**4-part agent structure** — every Claude/AGY source agent body has exactly four sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
-- `<constitution>` — ecosystem-wide invariants, byte-identical across every agent (copied verbatim, never authored per-agent)
-- `<goal>` — intent, not steps
-- `<judgment>` — the specific failure mode that looks like success
-- `<output>` — schema reference and EARS contracts
-
-**Context and risk split** — work is divided by context and risk, not by role or cognitive mode (ADR 018).
-- One worker researches, implements and tests in one context; a second agent exists only for an independent check (`wisp:verifier`), one disputed finding (`wisp:adversary`), or a cheap read-only inventory (`wisp:recon`)
-- Tiers: `haiku / low` for enumeration, `opus / high` for the verifier and adversary, whose verdicts decide a finding
-
-**Instruction economy** — prompts preserve decisions, evidence, and consequences while removing filler, repeated rationale, and incidental process.
-
-- One independently actionable rule per paragraph or list item
-- Numbered procedures only when order affects correctness
-- Reference files hold detail needed by one phase; runtime prompts load it on demand
-
-**Verification evidence** — a check is useful only when its observation can falsify the claim.
-
-- Select project-native mutation, property, fuzz, race, integration, or boundary checks from the changed risk
-- Derive semantic sibling candidates from domain responsibility, state transitions, and architecture—not copied syntax alone
-- Record generators, oracles, coverage gaps, pending checks, fresh external state, and boundary observations where relevant
-
-See [`ARCHITECTURE.md §7`](./ARCHITECTURE.md#7-agent-authoring-principles) for the full authoring guide.
+**Registered the old marketplace id?** Run `/plugin marketplace remove orin-dx-agent-plugins` (Claude Code) or `codex plugin marketplace remove orin-dx-agent-plugins` (Codex), then add `orin-dx/wisp-plugins` as above. Upgrading from v4: see [Migrating from v4](#migrating-from-v4).
 
 ---
 
-## Shared Schema Contract
+## Quick start
 
-Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` and use JSON Schema draft-2020-12 with `additionalProperties: false`. Schema versions are immutable — a breaking change requires a new file (e.g. `requirement@2.json`). Every new schema includes a `reasoning` scratchpad field that is never forwarded downstream (`candidate@1` and `implementation-context@1` predate the rule).
+Start with `/wisp:work` and describe the change; it picks the mode. Or start a mode directly:
 
-| Schema | Produced by | Consumed by |
+| Command | Use it when | Example | What comes back |
+| :--- | :--- | :--- | :--- |
+| `/wisp:work` | Any change, or you are not sure which mode fits | `/wisp:work the export drops rows with empty dates` | The mode it chose, then as below |
+| `/wisp:explore` | You want to see options before deciding | `/wisp:explore three layouts for the settings page` | Rendered options and a decision log (`option-set@1`) through `muse:sketch` |
+| `/wisp:spike` | You want to know whether something works here | `/wisp:spike does this queue library run on our Node version?` | A `spike-report@1`: what ran, what was verified, what was not; files only under `.scratch/<id>/` |
+| `/wisp:fix` | Something is broken, or a review left findings | `/wisp:fix login fails when the email has a plus sign` | A test that failed before and passes after, the fix, and other places with the same mistake |
+| `/wisp:build` | You are building something real | `/wisp:build add CSV import to the contacts API` | The change and its evidence; a spec or plan only where one pays |
+| `/wisp:check` | You want work verified, or bugs found | `/wisp:check is the retry change done?` | A `verdict@3` from the verifier, or suspected bugs each confirmed or dismissed |
+| `/wisp:ship` | The work is ready to go out | `/wisp:ship changeset and PR` | Only the courier steps you asked for, confirmed before anything is pushed, posted or published |
+
+Every reply opens with the mode, the tier and the brief, and ends with the evidence and what was not checked. An abridged, made-up example:
+
+```text
+Mode: fix. Tier: shared.
+Outcome: a login with "a+b@x.com" succeeds.
+Constraints: the session token format does not change (AGENTS.md).
+Evidence bar: the repo's test command passes, with a new test that fails on the old code.
+
+...work...
+
+Evidence: test command: the new test failed before the fix; all tests pass after. Verifier: pass, round 1.
+Not verified: the mobile client; SSO logins were not exercised.
+Next: /wisp:ship
+```
+
+When a decision changes scope or cannot be undone, you get a **decision card**: the question, two or three structurally different options, a recommendation, and what happens if you do not answer. Everything else proceeds on a stated `Assumption:`.
+
+---
+
+## The plugin set
+
+| Plugin | Use it for | Commands | Agents (tier) |
+| :--- | :--- | :--- | :--- |
+| [`wisp`](./plugins/wisp/) | Every change: sizes it, states the brief, does the work, verifies where it pays | `work`, `explore`, `spike`, `fix`, `build`, `check`, `ship` | `verifier`, `adversary` (opus/high); `recon` (haiku/low) |
+| [`courier`](./plugins/courier/) | Commit messages, PRs, changesets, review feedback, release notes | `commit`, `pr`, `changeset`, `receive-feedback`, `post-review`, `release` | `pr-narrator`, `changeset-analyzer` (sonnet/medium); `commit-analyzer` (haiku/low) |
+| [`muse`](./plugins/muse/) | Seeing rendered options before deciding, and turning the chosen one into work | `sketch`, `promote` | `explorer` (sonnet/medium) |
+| [`wisp-packs`](./plugins/wisp-packs/) | Making the agent build the way your other repos are built | `load`, `list`, `suggest` | none |
+| [`mason`](./plugins/mason/) | Building, auditing and evaluating plugins like these | `scaffold-plugin`, `audit-plugin`, `design-schema`, `scaffold-subagent`, `evaluate` | `auditor`, `scaffolder`, `schema-designer` (sonnet/medium); `evaluation-runner` (haiku/low); `evaluation-adjudicator` (opus/high) |
+
+In Claude Code a command is `/<plugin>:<command>`, for example `/courier:pr` or `/wisp-packs:load rust-house`.
+
+---
+
+## How it works
+
+```mermaid
+%%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
+flowchart LR
+    classDef source fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#1e1b4b,rx:10px,ry:10px,font-weight:600;
+    classDef store fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a,rx:10px,ry:10px;
+    classDef engine fill:#f5f3ff,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95,rx:10px,ry:10px;
+    classDef router fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f,rx:10px,ry:10px,font-weight:600;
+    classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
+    classDef alert fill:#fff1f2,stroke:#f43f5e,stroke-width:1.5px,color:#881337,rx:10px,ry:10px,font-weight:600;
+
+    Req["<b>Request</b><br/>/wisp:work or a mode"] --> Work{{"<b>work</b><br/>brief, mode, tier"}}
+    Packs[("<b>Packs</b><br/>Packs: line in AGENTS.md")] -.->|"SessionStart hook"| Work
+    Work --> Worker["<b>Worker</b><br/>researches, edits, tests<br/>in one context"]
+    Worker -->|"contained"| Out(["diff or render, evidence,<br/>Not verified: list"])
+    Worker -->|"shared or irreversible"| Ver{{"<b>wisp:verifier</b><br/>fresh context, verdict@3"}}
+    Ver -->|"pass"| Out
+    Ver -.->|"fail: blockers, one retry"| Worker
+    Ver -.->|"fails again"| Owner(["you get the<br/>persistent blockers"])
+    Out -->|"irreversible: decision card first"| Ship["<b>courier</b><br/>changeset, commit, PR, release"]
+    Hand["<b>handback hook</b><br/>rejects an invalid verdict@3"] -.- Ver
+    Stop["<b>Stop hook</b><br/>asks once for Not verified:"] -.- Out
+
+    class Req source
+    class Packs,Hand,Stop store
+    class Worker,Ship engine
+    class Work,Ver router
+    class Out output
+    class Owner alert
+```
+
+| Tier | What it means | Review |
 | :--- | :--- | :--- |
-| `requirement@1` | muse promote | the `wisp` work skill |
-| `option-set@1` | muse sketch | muse promote, humans |
-| `spike-report@1` | a spike (`wisp`) | muse promote, humans |
-| `changeset@3` | courier | courier release |
-| `release-artifact@3` | courier | humans |
-| `evaluation-run@1` | mason evaluation runner | mason evaluation adjudicator |
-| `harness-evaluation@2` | mason | release reviewers and longitudinal analysis |
+| contained | Reverts cleanly, nothing depends on it, a project check exercises it | The project's checks, plus a test that fails before the change where behavior changed. No verifier. |
+| shared | Other code, users or sessions depend on it, or a spec or plan makes claims about code | The same, then the verifier: one round and one targeted retry, then the persistent blockers come to you |
+| irreversible | Hard to undo, or crosses the repo boundary: migration, deletion, publish, release, push to a shared branch | The verifier, then a decision card before the action itself |
 
-The schemas of the retired plugins (`research-report@1`, `spec@1`, `plan@1`, `finding-report@2`, `implementation-review@2` and the rest) stay on disk unchanged; the `wisp` plugin reuses the ones its work needs.
-
-Every gate produces `verdict@3`. `verdict@1` is retained unchanged for artifacts that already use it; immutable schema versions are not rewritten in place.
+When two tiers fit, the higher one applies. The verifier gets the brief, the change and the evidence, never the worker's reasoning, and runs the code, build or render itself. Details: [`shared/references/work/modes.md`](./shared/references/work/modes.md) and [ADR 018](./docs/adr/018-deep-core-by-context-and-risk.md).
 
 ---
 
-## Shared References
+## Hooks and switches
 
-Shared guides live in `shared/references/`. Paths start with the decision they support; language is the filename only when evidence is language-specific. Runtime instructions load exact files, while maintainers use the index and authoring-only guides directly.
+These run in Claude Code only. Each fails open: if a hook breaks, the session carries on.
 
-| Concern | Supports |
+| Hook | Plugin, event | Does | Switch |
+| :--- | :--- | :--- | :--- |
+| `shared/hooks/stop-check.py` | `wisp`, Stop | When the work tree has uncommitted changes and the final message has no `Not verified:` line, asks once for one | `WISP_STOP_CHECK=off` turns it off |
+| `shared/hooks/validate-handback.py` | `wisp`, PreToolUse `SubagentHandback` | Rejects a `wisp:verifier` report that is not a valid `verdict@3`, or that goes past the second round without escalating. Runs in auto mode, for local subagents only. | `WISP_HANDBACK_TRACE=<file>` logs each inspected event; `WISP_HANDBACK_STATE_DIR` sets where denial counts are kept (default `wisp-handback` in the temp directory) |
+| `shared/hooks/pack-inject.py` | `wisp-packs`, SessionStart | Injects the packs named on `Packs:` lines in `AGENTS.md` | Remove the `Packs:` line, or disable `wisp-packs` |
+
+On Codex the `wisp` skills state the `Not verified:` and round rules themselves, and packs load through `load`.
+
+---
+
+## Packs
+
+A pack is a short markdown file on how one owner builds in one area: when it applies, where the house rules differ from what a model would do by default, the checks that enforce them, and a file to imitate. Packs are mined from real repos and review findings.
+
+| Pack | Applies when |
 | :--- | :--- |
-| `hazards/` | Candidate defect signals and boundary tracing |
-| `architecture/` | Semantic models, structural causes, and remediation |
-| `verification/` | Evidence selection, project-native checks, review, and interface coverage |
-| `delivery/` | Changesets, commits, pull requests, and review operations |
-| `authoring/` | Reader-focused prose, comments, and diagrams |
-| `evaluation/` | Hidden-oracle behavioral comparison |
-| `workspace/` | Persisted artifact locations |
-| `tooling/` | Repository tool preferences |
+| `rust-house` | The repo is a Rust workspace (a `Cargo.toml` with `[workspace]`) |
+| `ts-house` | The repo has TypeScript packages or apps built with pnpm |
 
-See [`shared/references/README.md`](./shared/references/README.md) for the maintainer map.
+- **Adopt one:** add `Packs: rust-house` (several: `Packs: rust-house, ts-house`) to the `AGENTS.md` where it applies; in a monorepo, the package's nested `AGENTS.md`. The hook reads `AGENTS.md` from the working directory up to the repo root and up to four levels below. Unknown names and lines inside code blocks are ignored.
+- **Try one:** `/wisp-packs:load rust-house` applies it for this session. `/wisp-packs:list` shows available and declared packs; `/wisp-packs:suggest` recommends packs for the repo and edits nothing.
+- **What a pack may do:** it never adds a command the repo does not declare; the repo's `AGENTS.md` and your instructions win over it; it may tighten a check, but loosening one needs the owner.
+- **Write one:** add `plugins/wisp-packs/packs/<name>.md` (lowercase letters, digits and hyphens). The first line says when it applies. Each rule states the outcome and ends with what enforces it: `[lint]`, `[type]` or `[review]`. End with a file to imitate. A rule goes in a shared pack only when it holds in at least two repos. Run `just marketplace-sync` so the Codex bundle carries it.
+
+More: [`plugins/wisp-packs/`](./plugins/wisp-packs/).
 
 ---
 
-## Repository Structure
+## Shipping
+
+`/wisp:ship` runs only the steps you ask for, in this order, and confirms with you before anything leaves the machine:
+
+1. **Changeset** (`courier:changeset`), when the repo uses changesets and the change is user-visible: one `changeset@3` entry per user-visible outcome, or a recommendation that none is needed. A repo that keeps `.changeset/*.md` files gets them in its own format, through its own tool when it has one.
+2. **Commit** (`courier:commit`): a conventional commit message that explains why.
+3. **Pull request** (`courier:pr`): a title and body for a reviewer with no context. By default it pushes the branch and creates or links the branch's Entire trail (`entire trail create`), and Entire opens the PR. It runs `gh pr create` only when the repo's instructions say agents open PRs, and only after you confirm.
+4. **Release notes** (`courier:release`): aggregates changesets since the last release into a `release-artifact@3`. Not needed where the repo's release PR aggregates changesets.
+
+**Releasing this repository** has three levels; the marketplace installs from `main`:
+
+| Level | What it is | How |
+| :--- | :--- | :--- |
+| Shipped | Merged to `main` with the version bumped and the changelog written; Claude Code updates a plugin when its version changes | Edit `plugins/<id>/plugin.json` and its `CHANGELOG.md`, then `just claude-manifests-sync && just marketplace-sync` |
+| Pinned | Annotated tags `vX.Y.Z` (ecosystem) and `<plugin>--vA.B.C` on the merged commit | `just release` |
+| Announced | A GitHub release for the ecosystem tag, from `docs/releases/vX.Y.Z.md` or else the top changelog entry | `just release` |
+
+On a clean checkout of `origin/main`, run `just release --dry-run` to see the plan, then `just release`. It runs `just check`, creates and pushes the missing tags, and publishes the GitHub release (`--notes FILE` picks the notes, `--yes` skips the prompt). A person runs it, not an agent. Details: [CONTRIBUTING.md](./CONTRIBUTING.md#releasing).
+
+---
+
+## Harness differences
+
+| | Claude Code | Codex | Antigravity |
+| :--- | :--- | :--- | :--- |
+| Source | `plugins/<id>/` | Separately written skills in `harnesses/codex/plugins/<id>/`, built into `dist/codex/` | `plugins/<id>/`, shared with Claude Code |
+| Verifier | Named agent `wisp:verifier` (opus/high) | A fresh subagent with the `judge` role card; without subagents, a separate pass that `Not verified:` records as not independent | Not verified |
+| Stop and handback hooks | Yes | No; the skills state both rules | Not verified |
+| Packs | Injected at session start | `load` reads the `Packs:` line and applies the packs | Not verified; use `load` |
+| Model tiers | Taken from each agent's frontmatter | Chosen by the host | AGY applies its own routing |
+
+Artifacts are the same versioned JSON schemas in `shared/schemas/` on every harness. Background: [ARCHITECTURE.md section 8](./ARCHITECTURE.md#8-cross-harness-distribution).
+
+---
+
+## Migrating from v4
+
+v5 replaces the eight pipeline plugins with `wisp`. Their schemas stay in `shared/schemas/`, unchanged, so existing artifacts still validate.
+
+| v4 | Use in v5 |
+| :--- | :--- |
+| `weaver` (capture and rank requirements) | `/wisp:work` with the need in plain words; `muse:promote` writes a `requirement@1` from a chosen sketch or a spike that worked |
+| `vanguard` (research) | `/wisp:work` or `/wisp:spike`: the worker researches in its own context |
+| `scribe` (specs) | `/wisp:build`, which writes a spec only where one pays; the verifier checks a spec that makes claims about code |
+| `navigator` (plans) | `/wisp:build`, which writes a plan only where one pays |
+| `smith` (implement, spike) | `/wisp:build`, `/wisp:fix`, `/wisp:spike` |
+| `sentinel` (gates) | `/wisp:check` (the verifier) |
+| `ranger` (bug hunts) | `/wisp:check` asked to find bugs: hazard references, then the adversary on each suspected bug |
+| `guide` (intent commands) | The same six commands under `wisp`: `/wisp:explore`, `spike`, `fix`, `build`, `check`, `ship` |
+| `muse` component specs (the `component` skill, its drafter, auditor and exit gate) | `/wisp:build`; `muse` keeps only `sketch` and `promote` |
+| `courier`'s `release-summarizer` and `review-preprocessor` agents | Nothing to do: `courier:release` and `courier:receive-feedback` do that work themselves, with the same outputs |
+
+**Breaking changes and what to do:**
+
+- **The eight plugin ids are gone.** Install `wisp`, and remove `weaver`, `vanguard`, `scribe`, `navigator`, `smith`, `sentinel`, `ranger` and `guide` from your plugin settings (`enabledPlugins` in `.claude/settings.json`, or your harness's plugin list).
+- **No mandatory spec, plan or sign-off stage.** Where a project's `AGENTS.md` tells agents to run the old skills, replace that text with the [Work snippet](#install).
+- **`muse` no longer gates anything** and no longer produces `spec@1` or `verdict@3`.
+- **The routing guard and its `WISP_ROUTE_GUARD` switch are gone;** `wisp` has one entry point.
+
+Full list: [CHANGELOG.md](./CHANGELOG.md).
+
+---
+
+## Evaluate and tune
+
+Whether v5 beats the old pipeline, or a bare agent, has not been measured yet. To measure it on your own work, follow [`docs/evaluation-runbook.md`](./docs/evaluation-runbook.md): paired runs per task, blind scoring, at least six pairs per task kind.
+
+| Tool | Does |
+| :--- | :--- |
+| `python3 tools/transcript-metrics.py turns --file <transcript>` | Prompts, turns, tool calls, subagents, retries and subagent tokens for one session. Other subcommands: `agents`, `skills`, `context`, `gates`, `outputs` |
+| `python3 tools/paired-analysis.py compare trials.jsonl --baseline control` | Compares arms pair by pair (Wilcoxon and sign tests) and states the power limit |
+| `python3 tools/paired-analysis.py agreement labels.json` | Agreement between two scorers, before trusting an LLM judge |
+| `/mason:evaluate` | Hidden-oracle evaluation of a workflow's behavior (`harness-evaluation@2`) |
+
+---
+
+## Repository layout
 
 ```
 wisp-plugins/
-├── marketplace.json              ← Plugin registry
-├── .claude-plugin/               ← Claude marketplace metadata
-├── ARCHITECTURE.md               ← System architecture
-├── CONTRIBUTING.md               ← Plugin authoring guide
-├── harnesses/
-│   └── codex/
-│       ├── catalog.json          ← Marketplace order and runtime dependencies
-│       └── plugins/<id>/         ← Authored native Codex plugins and skills
+├── plugins/<id>/                  Claude Code and AGY sources: plugin.json, skills/, agents/, hooks/
+├── harnesses/codex/               Codex skills, role cards and catalog
 ├── shared/
-│   ├── schemas/                  ← Versioned inter-agent JSON schemas
-│   ├── references/               ← Runtime and authoring guides, split by concern
-│   ├── hooks/                    ← Claude Code hooks: gate handback validator
-│   └── agent-best-practices.md  ← Authoring-time principles
-├── plugins/
-│   ├── wisp/                      ← Core: risk-aware work and independent check
-│   ├── wisp-packs/                ← Domain packs loaded by wisp
-│   ├── courier/                   ← Ship tooling
-│   ├── muse/                      ← Sketching and promotion
-│   └── mason/                     ← Plugin authoring and behavioral evaluation
-├── .agents/
-│   ├── plugins/                   ← Generated Codex discovery manifest; never hand-edit
-│   └── skills/entire-search/      ← Entire-managed Codex history search
-├── .claude/skills/entire-search/  ← Entire-managed Claude history search
-├── .cursor/                       ← Entire-managed Cursor skill and hooks
-├── .gemini/skills/entire-search/  ← Entire-managed Gemini history search
-├── .opencode/                     ← Entire-managed OpenCode skill and plugin
-├── tools/
-│   └── build-codex-marketplace.py ← Deterministic Codex bundle generator
-└── dist/codex/                    ← Generated Codex bundle; never hand-edit
+│   ├── schemas/                   Versioned JSON schemas, immutable once published
+│   ├── references/                Guides the skills load on demand
+│   └── hooks/                     Claude Code hooks
+├── docs/adr/                      Architecture decisions
+├── tools/, scripts/               Generators, checks, release and evaluation tools
+├── tests/                         Python tests (just test)
+├── marketplace.json               Ecosystem version and plugin registry
+├── .claude-plugin/                Claude Code marketplace (generated)
+└── .agents/plugins/, dist/codex/  Codex marketplace and bundle (generated; never edit)
 ```
 
----
+## Contributing
+
+Run `just install` once, then `just check` (the checks CI runs) before you push; `just --list` shows each check on its own. Never hand-edit versions, the badge or generated Codex files: bump `plugins/<id>/plugin.json` and run `just claude-manifests-sync && just marketplace-sync`.
+
+- [CONTRIBUTING.md](./CONTRIBUTING.md): authoring guide, checklists, releasing
+- [ARCHITECTURE.md](./ARCHITECTURE.md): how the pieces fit
+- [AGENTS.md](./AGENTS.md) and [`shared/constitution.md`](./shared/constitution.md): rules for agents and plugin authors
+- [ADR index](./docs/adr/README.md): decisions and their guardrails
+- [CHANGELOG.md](./CHANGELOG.md)
 
 ## License
 

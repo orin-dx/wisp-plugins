@@ -28,6 +28,8 @@ IF a plugin is superseded by another, it SHALL be deleted from the repository ra
 
 ## Agent Structure
 
+WHEN an agent is added to a plugin, it SHALL exist for a context or risk reason (a fresh context that must not share the worker's reasoning, one disputed claim, a bulk read-only sweep, or a hidden oracle), not for a role, a lifecycle stage or a cognitive mode; the owner decides it (ADR 018).
+
 WHEN an agent prompt is authored, it SHALL define four named sections in the body, in this order: `<constitution>`, `<goal>`, `<judgment>`, and `<output>`.
 
 WHEN an agent body's `<constitution>` section is authored or amended, it SHALL be byte-for-byte identical across every agent file in the ecosystem — this is the shared static prefix the Static Prompt Prefix Invariant depends on; any per-character difference breaks prompt-cache matching for every agent, not just the one edited.
@@ -44,8 +46,8 @@ WHEN an agent is authored, its YAML frontmatter SHALL include: `name`, `role` (s
 
 WHEN assigning `model` and `effort`, the author SHALL apply dynamic routing based on task complexity:
 - `haiku / low` — deterministic enumeration and mechanical validation (recon, formatting, line citation lookups)
-- `sonnet / medium` — analysis and execution (scanning, drafting, planning, implementation, code reviews)
-- `opus / high` — judgment (exit gates and other terminal binding verdicts, cross-crate architectural boundary gates, system-wide architecture modeling, auditing, and structural remediation)
+- `sonnet / medium` — analysis and execution (drafting, tracing, implementation, conformance audits)
+- `opus / high` — independent judgment (the verifier's binding verdict, refutation of a disputed finding, and other decisions with downstream consequences)
   - A heavier tier than `opus / high` is not used; add one only after a paired comparison shows it catches what `opus / high` misses.
 
 ---
@@ -62,7 +64,7 @@ WHEN passing task-specific inputs (file paths, line ranges, criteria IDs, blocke
 
 ## API Grounding Invariant
 
-WHEN drafting or revising a specification (`spec@1` or `arch-spec@1`) or plan (`plan@1`) that references existing codebase functions, structs, or types in `api_surface`, THE AGENT SHALL inspect the live code definitions before declaring signatures rather than approximating from memory.
+WHEN drafting or revising a specification (`spec@1`) or plan (`plan@1`) that references existing codebase functions, structs, or types in `api_surface`, THE AGENT SHALL inspect the live code definitions before declaring signatures rather than approximating from memory.
 
 ---
 
@@ -74,7 +76,7 @@ WHERE an agent execution platform supports lifecycle hooks, THE SYSTEM SHALL loa
 
 IF a reference file exceeds 120 lines covering mixed concerns, it SHALL be split by concern before publishing.
 
-WHILE an agent is in pattern-matching mode (scanner), it SHALL NOT filter, analyze, or verdict matches — those belong to a later step in a fresh context, such as `wisp:verifier` or `wisp:adversary` (ADR 018).
+WHILE an agent is inventorying a workspace (`wisp:recon`), it SHALL NOT filter, analyze, or verdict what it finds — judgment belongs to the worker or to a fresh context, such as `wisp:verifier` or `wisp:adversary` (ADR 018).
 
 ---
 
@@ -110,15 +112,15 @@ IF a verdict fails on the second round (`retry_count` 1, set by the caller as th
 
 ## Spec Unknowns
 
-WHEN a spec@1 leaves something unknown, its drafter SHALL state it in `scope` as an `Assumption:` line, or as an `Open decision:` line for the owner when the answer changes scope, behavior other work depends on, or cost, as `shared/references/verification/gate-readiness.md` describes.
+WHEN a spec@1 leaves something unknown, its author SHALL state it in `scope` as an `Assumption:` line, or as an `Open decision:` line for the owner when the answer changes scope, behavior other work depends on, or cost, as `shared/references/verification/gate-readiness.md` describes.
 
-WHEN a spec gate judges unknowns, it SHALL fail an unknown that leaves a criterion untestable or an open decision the owner has not answered, and SHALL NOT fail a stated assumption on its own.
+WHEN the verifier judges a spec's unknowns, it SHALL fail an unknown that leaves a criterion untestable or an open decision the owner has not answered, and SHALL NOT fail a stated assumption on its own.
 
 ---
 
 ## Spec Persistence
 
-WHEN a spec@1 passes its verifier check, the agent or skill that wrote it SHALL write the spec to `<workspace_root>/docs/specs/<id>.json`, commit the file to version control, and set `spec_file_path` to the workspace-relative path in the spec@1.
+WHEN a spec@1 passes its verifier check, the worker that wrote it SHALL write the spec to `<workspace_root>/docs/specs/<id>.json`, commit the file to version control, and set `spec_file_path` to the workspace-relative path in the spec@1.
 
 WHEN any agent consumes a spec@1 to make implementation or verification decisions, it SHALL read from `spec_file_path` when set — forwarding spec content through conversation context is not a substitute. Context is compressed across long sessions; the file is not.
 
@@ -128,25 +130,15 @@ IF the spec is written to disk but not committed to version control, it SHALL be
 
 ## Plan Persistence
 
-WHEN a plan@1 passes its verifier check, the agent that wrote it SHALL write the plan to `<workspace_root>/docs/projects/<linked_spec>.json`, commit the file to version control, and set `plan_file_path` to the workspace-relative path in the plan@1.
+WHEN a plan@1 passes its verifier check, the worker that wrote it SHALL write the plan to `<workspace_root>/docs/projects/<linked_spec>.json`, commit the file to version control, and set `plan_file_path` to the workspace-relative path in the plan@1.
 
-WHEN the worker executes a plan, any agent it dispatches SHALL receive `plan_file_path` and SHALL read the plan from that path when set — the same lossy-context rationale as spec_file_path applies.
+WHEN the worker hands a plan to another agent, it SHALL pass `plan_file_path`, and that agent SHALL read the plan from that path when set — the same lossy-context rationale as spec_file_path applies.
 
 WHEN plan_file_path is absent, agents SHALL proceed with in-context plan content and record a plan_file_unset coverage gap — graceful degradation, not a hard block.
 
 IF a plan@1 is amended, the existing file at plan_file_path SHALL be overwritten and the change committed — the file path SHALL NOT change across an amendment, mirroring the Spec Correction Loop's rule for corrected specs.
 
 IF the plan is written to disk but not committed to version control, it SHALL be treated as not yet persisted, on the same terms as an uncommitted spec.
-
----
-
-## Spec Staleness Detection
-
-WHEN a plan@1 is produced from a spec at spec_file_path, the plan SHALL set `spec_hash` to a content hash computed over the raw file bytes as read from disk — not a parsed or re-serialized form.
-
-WHEN an agent receives a plan@1 carrying `spec_hash`, it SHALL recompute the current spec file's content hash the same way — over raw file bytes — and record a spec_drift_warning when the hashes differ.
-
-WHEN spec_drift_warning is set, downstream agents SHALL record a coverage gap noting the plan may not reflect the current spec — graceful degradation, not a hard block, because the warning already surfaced it.
 
 ---
 
@@ -164,21 +156,17 @@ IF the same criterion_id triggers a contradiction a second time after already be
 
 ## Epistemic Stopping & Circuit Breakers
 
-WHILE running iterative review loops without a deterministic execution compiler (such as a spec drafted and then reviewed by `wisp:verifier`), THE SYSTEM SHALL cap adversarial revision cycles at a maximum of 2 rounds.
+WHILE running iterative review loops without a deterministic execution compiler (such as a spec reviewed by `wisp:verifier`), THE SYSTEM SHALL cap adversarial revision cycles at a maximum of 2 rounds.
 
-WHEN a spec or plan enters round 2 of revision with disputed private helper names, internal control flow, or line citations, THE SYSTEM SHALL demote those items to non-blocking `api_notes` and issue a pass verdict rather than looping.
+WHEN a spec or plan enters round 2 of revision with disputed private helper names, internal control flow, or line citations, THE SYSTEM SHALL record those items as non-blocking `coverage_gaps` entries and issue a pass verdict rather than looping.
 
 WHEN re-evaluating an artifact after a fail verdict, `wisp:verifier` SHALL evaluate ONLY the blocker delta and SHALL NOT re-read the entire document unless an architectural invariant was violated.
 
 ---
 
-## Subsystem Compilation Batching
+## Minimal Diffs
 
-WHEN a spec is decomposed into an implementation plan@1, the plan SHALL group tasks into cohesive Subsystem Batches aligned with transactional crate/package compilation boundaries.
-
-WHEN the worker executes a plan@1, it SHALL give each Subsystem Batch one pass rather than separate passes for individual 10-line micro-tasks.
-
-WHILE implementing a batch, THE SYSTEM SHALL apply the YAGNI principle: write the minimum viable code diff required to make tests pass, avoiding speculative wrappers and premature abstractions.
+WHILE implementing, THE SYSTEM SHALL write the smallest diff that meets the brief's evidence bar, without speculative wrappers or premature abstractions (YAGNI).
 
 ---
 
@@ -230,17 +218,17 @@ WHEN a fact is relevant to more than one reader-scoped artifact (e.g. the reason
 
 IF the reader's need genuinely requires extended explanation — a non-obvious invariant, a subtle failure mode, a breaking change's migration path — THE SYSTEM SHALL write the full explanation rather than truncating it to satisfy a brevity expectation. Length SHALL be dictated by what the reader needs, not by a target word count in either direction.
 
-WHEN drafting or auditing `purpose`, `scope`, or `criterion` text in a spec@1 or arch-spec@1, or task descriptions in a plan@1, THE SYSTEM SHALL treat this rule as strict rather than aspirational: a spec's readers are the downstream agents that re-read it from disk at every subsequent pipeline stage, not a single human pass, so unnecessary prose is a cost paid on every read, not once. A criterion or task description being falsifiable/testable does not exempt it from this rule — testability and terseness are independent checks, and passing one does not excuse padding on the other.
+WHEN drafting or auditing `purpose`, `scope`, or `criterion` text in a spec@1, or task descriptions in a plan@1, THE SYSTEM SHALL treat this rule as strict rather than aspirational: a spec's readers are the verifier and later sessions that re-read it from disk, not a single human pass, so unnecessary prose is a cost paid on every read, not once. A criterion or task description being falsifiable/testable does not exempt it from this rule — testability and terseness are independent checks, and passing one does not excuse padding on the other.
 
 ---
 
 ## Schema-Driven Handoffs
 
-WHERE an agent produces structured output consumed by another agent, it SHALL reference a schema from `shared/schemas/`.
+WHERE an agent produces structured output consumed by code, a hook or another agent, it SHALL reference a schema from `shared/schemas/`.
 
 WHEN an agent emits structured output conforming to a schema, its output contract SHALL cite the exact relative path (`shared/schemas/<name>@<version>.json`) rather than un-pathed filenames.
 
-WHEN a new inter-agent handoff is introduced, a schema SHALL be defined in `shared/schemas/` before the agent prompts are written.
+WHEN a new handoff that code or a hook reads is introduced, a schema SHALL be defined in `shared/schemas/` before the agent prompts are written; a handoff only another prompt reads SHALL be plain fields in the brief or the evidence, not a stage document (ADR 018).
 
 IF a schema exists at version N and a breaking change is required, the author SHALL create `<name>@<N+1>.json` — the existing schema is immutable.
 
@@ -258,7 +246,7 @@ IF an agent prompt contains absolute paths, they SHALL be replaced with relative
 
 ## Skill Names
 
-WHEN a skill is named in `SKILL.md` frontmatter, it SHALL default to a single lifecycle-stage word.
+WHEN a skill is named in `SKILL.md` frontmatter, it SHALL default to a single verb or mode word.
 
 IF a single word does not communicate what the skill acts on, the plugin author SHALL use a more specific multi-word name instead (e.g. `post-review`, not `post`).
 

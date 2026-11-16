@@ -27,23 +27,22 @@ plugins/<plugin-id>/
 ├── skills/
 │   └── <plugin-id>/
 │       └── SKILL.md              <-- Skill definition (dispatch matrix, pipeline)
-└── agents/
-    ├── recon.md                  <-- haiku/low  — deterministic enumeration
-    ├── scanner.md                <-- sonnet/med — pattern matching
-    ├── adversary.md              <-- opus/high  — refutation that decides a finding
-    └── exit-gate.md              <-- opus/high  — binding judgment
+├── hooks/hooks.json              <-- Only when the plugin ships a Claude Code hook
+└── agents/                       <-- Few. `wisp`: verifier (opus/high), adversary (opus/high), recon (haiku/low)
 ```
 
-A plugin defaults to one skill directory named after the plugin id, as above. IF the plugin's scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<plugin-id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead. `courier`, `mason`, and `muse` are examples. The skill-routing key is the directory name, not the frontmatter `name:` field. A new skill name defaults to a single lifecycle-stage word; only go to a specific compound name (`audit-spec`, not `spec-audit`) when the bare word is ambiguous or collides with another plugin's existing skill name. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
+The v5 set is `wisp` (core), `wisp-packs`, `courier`, `muse` and `mason` (ADR 018).
 
-Agents are organized by **cognitive mode** (enumeration, tracing, adversarial, systemic, behavioral, judgment, repair) — not by pipeline position. See `shared/constitution.md` for the model/effort tier rules.
+A plugin defaults to one skill directory named after the plugin id, as above. IF the plugin's scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<plugin-id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead. `courier`, `mason`, and `muse` are examples; `wisp` keeps one `work` skill with mode skills as one-line aliases. The skill-routing key is the directory name, not the frontmatter `name:` field. A new skill name defaults to a single lifecycle-stage word; only go to a specific compound name when the bare word is ambiguous or collides with another plugin's existing skill name. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
+
+Agents are split by **context and risk**, not by role, cognitive mode or pipeline position: one worker holds the context, and a separate agent exists only for an independent check, one disputed finding, or a cheap read-only inventory (ADR 018). See `shared/constitution.md` for the model/effort tier rules.
 
 ---
 
 ## 3. Quick Checklist for Adding New Plugins
 
-1. **Use `mason`** — run `scaffolder` to generate the full directory structure and stubs.
-2. **4-part agent structure** — every agent body: `<constitution>` (copied byte-for-byte from an existing agent), `<goal>`, `<judgment>`, `<output>`. No `<role>` or `<backstory>` body sections. No `success_criteria` checklists.
+1. **Use `mason`** — run `mason:scaffold-plugin` to generate the directory structure and stubs, and `mason:audit-plugin` to check conformance.
+2. **Few agents, 4-part structure** — add an agent only for context isolation or a risk tier (ADR 018); no role agents, per-stage gates or mandatory spec or plan stages. Every agent body: `<constitution>` (copied byte-for-byte from an existing agent), `<goal>`, `<judgment>`, `<output>`. No `<role>` or `<backstory>` body sections (ADR 017). No `success_criteria` checklists.
 3. **EARS in output only** — WHEN/IF/WHILE/WHERE notation belongs only in `<output>` contracts and never-do rules.
 4. **Progressive context loading** — one `<load_first>` block per agent, naming only the focused references needed for its cognitive phase.
 5. **Schema-first handoffs** — define `shared/schemas/<name>@<version>.json` before writing the agent that produces it.
@@ -51,7 +50,7 @@ Agents are organized by **cognitive mode** (enumeration, tracing, adversarial, s
 7. **Instruction economy** — keep one actionable rule per item, remove repeated rationale, and number only order-dependent work.
 8. **Radical candor** — state material concerns, evidence, consequence, and confidence directly; do not soften blockers, manufacture praise, or overstate certainty.
 9. **Reference routing and quality** — organize by cognitive concern, use language filenames only for language-specific evidence, and state outcome, applicability, evidence, refutation, and disposition.
-10. **Verification evidence** — match checks to risk; require generators and oracles, independently derived semantic candidates, fresh state, terminal results, and explicit gaps when relevant.
+10. **Verification evidence** — match checks to risk; require generators and oracles, independently derived semantic candidates, fresh state, terminal results, and explicit gaps when relevant. A behavior that must hold gets a hook or a test in `tests/`, not only a prompt.
 11. **Cross-harness review** — preserve identity, skill routes, artifact contracts, evidence, and acceptance intent in Claude/AGY and Codex sources; native wording and delegation may differ.
 12. **Manifest registration** — add an entry to root `marketplace.json` and validate: `jq . marketplace.json`.
 13. **Legal attribution** — set `author` in `plugin.json` to the `{name, email}` object shown in `CONTRIBUTING.md`.
@@ -64,4 +63,4 @@ Agents are organized by **cognitive mode** (enumeration, tracing, adversarial, s
 just check
 ```
 
-`just --list` shows each check as its own recipe (`just manifests`, `just test`, `just versions`, `just skills-doc`, `just reference-size`, `just marketplace-check`, `just mermaid`) for running a subset while editing; run the full set before release. `just fmt`/`just fmt-check` format with `oxfmt`; not yet part of `just check` until the repo has a baseline format pass. To bump a version, edit `plugins/<id>/plugin.json` (the ecosystem's is `marketplace.json`'s top-level `version`), add the matching top `CHANGELOG.md` entry, and run `just claude-manifests-sync && just marketplace-sync`; never hand-edit the README `**Version:**` line, badge, marketplace entry, or Claude or Codex manifest versions. Generated Codex files in `.agents/plugins/` and `dist/codex/` must match their authored sources; never edit them directly — run `just marketplace-sync` after a Codex source change.
+`just --list` shows each check as its own recipe (`just manifests`, `just test` for `tests/test_*.py`, `just versions`, `just skills-doc`, `just reference-size`, `just adr-style`, `just platform-limits`, `just claude-manifests`, `just marketplace-check`, `just mermaid`, `just wiring`) for running a subset while editing; run the full set before release. `just fmt`/`just fmt-check` format with `oxfmt`; not yet part of `just check` until the repo has a baseline format pass. To bump a version, edit `plugins/<id>/plugin.json` (the ecosystem's is `marketplace.json`'s top-level `version`), add the matching top `CHANGELOG.md` entry, and run `just claude-manifests-sync && just marketplace-sync`; never hand-edit the README `**Version:**` line, badge, marketplace entry, or Claude or Codex manifest versions. Generated Codex files in `.agents/plugins/` and `dist/codex/` must match their authored sources; never edit them directly — run `just marketplace-sync` after a Codex source change.

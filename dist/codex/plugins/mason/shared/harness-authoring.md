@@ -20,7 +20,7 @@ Codex's own custom agents are TOML files (`.codex/agents/<name>.toml` with `name
 
 ## Claude-only enforcement
 
-Two Claude Code hooks enforce rules the skill text also states: the handback validator (`shared/hooks/validate-handback.py`) checks each exit gate's `verdict@3` and the retry cap (ADR 012, ADR 015), and the routing guard (`shared/hooks/route-guard.py`) sends a direct call to a pipeline agent through its skill first. Codex and Antigravity have neither, so a Codex skill must carry the rule itself (gate rounds, escalation, behavior evidence) and cannot rely on a hook to catch a miss.
+Two Claude Code hooks in `wisp` enforce rules the skill text also states: the handback validator (`shared/hooks/validate-handback.py`) checks the `wisp:verifier`'s `verdict@3` and the retry cap (ADR 012, ADR 015), and the Stop hook (`shared/hooks/stop-check.py`) asks once for a `Not verified:` line when changes are left uncommitted (ADR 018). Codex has neither and Antigravity's support is unverified, so a Codex skill must carry the rule itself (verifier rounds, escalation, the `Not verified:` list, behavior evidence) and cannot rely on a hook to catch a miss.
 
 ## Change procedure
 

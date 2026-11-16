@@ -2,56 +2,33 @@
 
 **Stage:** Exploration · **Output:** `option-set@1` · **Version:** 5.0.0
 
-Shows options before anything is decided. Muse builds structurally different options, renders them and shows them before describing them, keeps a decision log, and carries the chosen option into a `requirement@1` when the user is ready. It is non-binding: no gate, no spec, no tests.
+Shows you rendered options before anything is decided, then carries the one you choose into real work.
 
-- **Sketches** structurally different options, rendered and shown before they are described, with a decision log
-- **Promotes** a chosen option (or a spike that worked) into a `requirement@1`, the only route from a sketch into gated work
-
-`sketch` and `promote` are the exploration path and never gate anything (see `shared/references/architecture/modes.md`). Specifying a component's props, states and accessibility is the work skill's job in the `wisp` plugin; the UI-state and accessibility rules it uses live in `shared/references/`.
+Muse is non-binding: no gate, no spec, no tests. It builds structurally different options, renders them and shows them before describing them, keeps a decision log, and stops before implementing. `/wisp:explore` starts `sketch`; specifying and checking a component's props, states and accessibility is `/wisp:build`'s job.
 
 ---
 
-## When to Use
+## When to use
 
-- You want to see a few directions for a screen or component before deciding what to build (`sketch`)
-- A chosen option is ready to become real work (`promote`)
+| Situation | Skill |
+| :--- | :--- |
+| You want to see a few directions for a screen, component or approach before deciding | `muse/sketch` |
+| A chosen option, or a spike that worked, should become real work | `muse/promote` |
 
-**Invoke with:** `"Show me some options for this screen"`, `"Try a few directions"`, `"What could this look like"`, `"Promote option B"`
-
----
-
-## Install
-
-**Claude Code** — add the marketplace once, then install by ID:
-```
-/plugin marketplace add orin-dx/wisp-plugins
-/plugin install muse
-```
-
-**AGY** — installs the full repo; see the [root README](../../README.md#install) for instructions.
-
-**Codex** — see the [root Codex setup](../../README.md#codex), then run `codex plugin add muse@wisp-plugins`.
-
----
+Plain requests work: "show me some options for this screen", "try a few directions", "what could this look like", "promote option B", "that spike worked, make it a feature".
 
 ## Skills
 
-| Skill | What it does | Subagent |
+| Skill | What it does | Agent |
 | :--- | :--- | :--- |
-| `muse/sketch` | Builds and renders three structurally different options per round, shows them before describing them, and keeps a decision log in an `option-set@1`. Non-binding: no gate, no spec, no tests | `explorer` |
-| `muse/promote` | Turns a chosen option (or a spike that worked) into a `requirement@1` that carries the decision, the approved render, and what was and was not verified | none |
+| `muse/sketch` | Builds and renders three structurally different options per round (different arrangement, interaction model or hierarchy, not different colors), shows the renders first, and keeps a decision log in an `option-set@1` | `explorer` |
+| `muse/promote` | Turns a chosen option or a working spike into a `requirement@1` carrying the decision, the approved render, and what was and was not verified; the only route from exploration into real work | none |
 
----
+## Agents
 
-## Subagents
-
-| Subagent | Role | Tier | Description |
-| :--- | :--- | :--- | :--- |
-| `explorer` | Divergent Option Explorer | sonnet / medium | Builds and renders one structurally different option for a sketch and returns an `option-set@1` holding only that option. Writes only to a scratch directory, never ranks options. Internal to `sketch`. |
-
----
-
-## Flow
+| Agent | Tier | Does |
+| :--- | :--- | :--- |
+| `explorer` | sonnet / medium | Builds and renders one option for a sketch, writing only to a scratch directory, and returns an `option-set@1` holding only that option. Never ranks options. Started by `sketch`. |
 
 ```mermaid
 %%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
@@ -62,28 +39,41 @@ flowchart LR
 
     Intent["<b>Design intent</b><br/>free text or <code>requirement@1</code>"] --> Sketch["<b>sketch</b><br/>explorer builds and renders"]
     Sketch --> Options(["option-set@1"])
-    Options -->|"user chooses"| Promote["<b>promote</b>"]
+    Options -.->|"another round"| Sketch
+    Options -->|"you choose"| Promote["<b>promote</b>"]
     Spike(["spike-report@1"]) --> Promote
     Promote --> Req(["requirement@1"])
-    Options -.->|"another round"| Sketch
+    Req --> Build["<b>wisp</b><br/>/wisp:build"]
 
     class Intent source
-    class Sketch,Promote engine
+    class Sketch,Promote,Build engine
     class Options,Req,Spike output
 ```
 
-The user decides; nothing here advises or ranks. After about five rounds without a decision the skill offers to narrow the brief, park the exploration or abandon it.
+You decide; nothing here ranks or advises. For design work the first round starts with four one-line directions for you to pick from. After five rounds without a decision, `sketch` offers to narrow the brief, park the exploration or abandon it.
+
+## What it produces
+
+- **Renders and a board:** each option as a static page under `.scratch/<id>/<option-id>/`, rendered at the brief's viewports and themes (default 390x844 and 1440x900), with `.scratch/<id>/board.html` showing them side by side. If nothing can render, it says so and gives the command that opens the files.
+- **`option-set@1`** (`shared/schemas/option-set@1.json`), written to `docs/sketches/<id>.json`: the anchor brief, a status (`exploring`, `decided`, `abandoned`), one to five options each with its own status and reason, assumptions, open questions, renders, and an append-only decision log.
+- **`requirement@1`** (`shared/schemas/requirement@1.json`) from `promote`, written where the repository keeps requirements (a file or its issue tracker), linking the sketch or spike.
+
+`sketch` writes only under `.scratch/<id>/` and to `docs/sketches/<id>.json`, and never edits existing source, configuration or specs. Add `.scratch/` to your ignore file.
+
+## Hooks
+
+None.
 
 ---
 
-## Output Schemas
+## Install
 
-**`option-set@1`** — produced by `sketch`; see `shared/schemas/option-set@1.json`. A non-binding sketch (`fidelity: sketch`): an anchor `brief`, a `status` (`exploring`, `decided`, `abandoned`), a `round`, and one to five structurally different `options`, each with its own `status` (`open`, `parked`, `chosen`, `rejected`), a `reason` for every status except `open`, assumptions, open questions and `renders`; plus an append-only `decisions` log. Open questions are allowed here and not in a spec. Nothing in it enters planning until `promote` turns the chosen option into a requirement.
+**Claude Code:** `/plugin marketplace add orin-dx/wisp-plugins`, then `/plugin install muse`.
 
-**`requirement@1`** — produced by `promote` from a decided sketch; see `shared/schemas/requirement@1.json`.
+**Codex:** `codex plugin marketplace add orin-dx/wisp-plugins`, then `codex plugin add muse@wisp-plugins`.
 
----
+**Antigravity:** see the [root README](../../README.md#install).
 
-## Next Stage
+## Example
 
-Hand the `requirement@1` to the **wisp** plugin to build it through its work skill.
+`/muse:sketch three layouts for the billing settings page, using our tokens` writes a brief and offers four one-line directions. You pick one; it builds three options inside it (say a single long form, tabs by topic, and a summary with edit drawers), renders each at phone and desktop width, and shows the board before describing anything. You answer "B, but with the summary from C"; the decision goes in the log and the next round stays inside that direction. When you are happy, `/muse:promote` turns the chosen option into a `requirement@1` for `/wisp:build`.

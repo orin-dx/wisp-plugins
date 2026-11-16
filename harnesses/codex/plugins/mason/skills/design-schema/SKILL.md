@@ -1,6 +1,6 @@
 ---
 name: design-schema
-description: Design a versioned shared JSON Schema for an inter-agent handoff. Use when a workflow needs a durable producer-consumer contract or an existing contract must evolve.
+description: Design a versioned shared JSON Schema for an artifact that code or a hook consumes. Use when a workflow needs a durable producer-consumer contract or an existing contract must evolve.
 ---
 
 State material concerns, evidence, consequence, and confidence directly. Do not soften blockers, manufacture praise, or claim certainty beyond the evidence.
@@ -8,6 +8,8 @@ State material concerns, evidence, consequence, and confidence directly. Do not 
 # Design the boundary before the prompt
 
 Model the artifact's consumers, producers, durable evidence, and failure modes before deciding on fields. A schema exists to make handoffs stable across models and harnesses, not to serialize every thought.
+
+A schema is warranted where code or a hook consumes the artifact, as the handback validator checks `verdict@3`. A handoff only another agent's prompt reads is a stage document: recommend plain fields in the brief or the evidence and write no schema.
 
 ## Discovery
 
@@ -28,10 +30,8 @@ Create a Draft 2020-12 schema at `shared/schemas/<name>@<version>.json` with:
 
 ## Validation and output
 
-Validate representative valid and invalid examples against the draft. Report the producer/consumer map, compatibility decision, filename, validation evidence, and prompt sites that must cite the exact relative schema path.
+Validate representative valid and invalid examples against the draft, and run `just check`, judged by exit code. Report the producer/consumer map, compatibility decision, filename, validation evidence, and prompt sites that must cite the exact relative schema path.
 
 ## Team use
 
-Before delegating, read `agent-roles/README.md`; use `recon` to inventory existing contracts and `adversary` to pressure-test consumer assumptions before the primary agent authors the schema.
-
-When teams are available, one teammate may inventory existing contracts while another pressure-tests consumer needs. The schema author owns the compatibility decision and final draft. Without teams, do those passes in order.
+This is a tightly coupled design: the schema author owns the compatibility decision and the draft. Complete it yourself. To pressure-test consumer assumptions in a fresh context, read `agent-roles/README.md` and use the `adversary` card; without subagents, re-read the draft against each consumer in a separate pass.

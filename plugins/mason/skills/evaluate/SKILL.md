@@ -2,7 +2,7 @@
 name: evaluate
 description: >-
   Trigger for release gates, Claude/Codex comparisons, regression checks, or longitudinal quality analysis of a plugin workflow. Runs it against a fixed behavioral fixture and returns a `harness-evaluation@2`.
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Mason — Evaluate
@@ -25,6 +25,10 @@ Keep fixture input and oracle separate. The target workflow must not receive see
 The adjudicator validates schemas, follows evidence to source, checks downstream usability, and counts false passes and human corrections. Tool invocation earns no credit without a relevant generator and oracle, mutation discrimination, sibling search, or boundary observation.
 
 Run single-agent and team modes only when supported. Record unavailable modes as unverifiable. Do not infer improvement from time alone; compare results with the plugin versions and source revisions that actually ran.
+
+To claim a plugin adds value, compare it with a bare arm on the same fixture: no plugin, same model and workspace. Above the contained tier, a plugin that does not beat the bare arm on hidden checks at comparable cost has not earned its agents (ADR 018; `docs/evaluation-runbook.md`).
+
+The runner and the adjudicator are two agents because the oracle must stay hidden until the run ends, a context split, not a pipeline stage.
 
 ## Contracts
 
