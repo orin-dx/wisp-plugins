@@ -27,5 +27,5 @@ Performance shapes such as allocation strategy are architecture concerns only wi
 
 - Repair a local instance when no shared responsibility exists.
 - Unify behavior when several sites implement the same responsibility.
-- Escalate to `scribe:architect` when recurrence requires a new model, boundary, invariant, or enforcement mechanism.
+- Raise a decision card (`shared/references/work/decision-cards.md`) when recurrence requires a new model, boundary, invariant, or enforcement mechanism.
 - Name the required responsibility first. Propose a concrete type or trait only after live architecture evidence supports it.

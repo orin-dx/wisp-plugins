@@ -20,7 +20,7 @@ A wording-only or style-only issue is a note in `verdict_summary` or a non-block
 
 ## Spec checklist
 
-The `muse` and `scribe` gates judge a `spec@1` on these checks. The drafter runs each one against its own draft before returning it and fixes every miss.
+The `muse` gate and `wisp:verifier` judge a `spec@1` on these checks. The drafter runs each one against its own draft before returning it and fixes every miss.
 
 1. Every acceptance criterion is a falsifiable proposition: two developers watching the same observable behavior reach the same verdict. No "accessible", "gracefully", "appropriate", "fast", or "as expected" without a measurable condition.
 2. Every unknown is resolved, stated as an `Assumption:`, or put to the owner as an `Open decision:`, as Unknowns below says. No criterion rests on a TBD, "if needed", or placeholder value.

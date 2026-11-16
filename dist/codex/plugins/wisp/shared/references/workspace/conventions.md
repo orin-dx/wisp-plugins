@@ -4,9 +4,9 @@ Use this reference when an artifact path was not supplied, and for project invar
 
 | Artifact | Canonical path | Owner | Persistence event |
 | :--- | :--- | :--- | :--- |
-| Gated specification | `docs/specs/<id>.json` | `scribe/gate-spec` | Pass verdict; file committed |
-| Approved plan | `docs/projects/<linked_spec>.json` | `navigator/plan` | Challenger pass; file committed |
-| Architecture model | `docs/architecture/model.json` | `scribe/audit-architecture` | Build or refresh; same file updated and committed |
+| Gated specification | `docs/specs/<id>.json` | `wisp/build` | Verifier pass; file committed |
+| Approved plan | `docs/projects/<linked_spec>.json` | `wisp/build` | Verifier pass; file committed |
+| Architecture model | `docs/architecture/model.json` | Repository maintainers | Built or refreshed on request; same file updated and committed |
 | Decision records | `docs/adr/README.md` and linked records | Repository maintainers | Accepted record committed; later change creates a superseding record |
 
 Read a supplied `spec_file_path` or `plan_file_path` instead of reconstructing the path. An uncommitted artifact is not durable pipeline state.
@@ -15,7 +15,7 @@ Read a supplied `spec_file_path` or `plan_file_path` instead of reconstructing t
 
 - Missing spec: no matching gated spec was found. Draft or external requirements may still exist.
 - Missing plan: no matching approved plan was found. In-context or draft planning may still exist.
-- Missing architecture model: no model has been persisted. Live code still has structure; let `scribe/audit-architecture` bootstrap the model when needed.
+- Missing architecture model: no model has been persisted. Live code still has structure; read it directly.
 
 Record the missing artifact and search scope as a coverage gap. Do not treat an empty directory as proof that no related work or constraint exists.
 

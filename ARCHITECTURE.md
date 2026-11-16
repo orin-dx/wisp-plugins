@@ -205,10 +205,10 @@ Full guide: `shared/agent-best-practices.md`. Key constraints:
 
 Codex skills and role cards use native structures. Cross-harness parity applies to route names, artifacts, evidence, and acceptance intent—not prompt sections or delegation topology.
 
-**Cognitive mode dispatch** — agents are dispatched by the cognitive mode they require, not their pipeline position.
-- A scanner (exhaustive pattern matching, no filtering) and an adversary (default-to-skepticism, requires a concrete failing scenario) cannot share a mental mode — combining them produces an agent worse at both
-- Modes: enumeration such as recon (haiku/low); scanning, tracing, drafting, review and repair (sonnet/medium); binding verdicts and refutation that decides a finding, as in exit gates and refutation (opus/high). Auditors and challengers review in sonnet/medium; their verdicts are not binding
-- A plugin with distinct scanning, tracing, adversarial, and repair phases has a dedicated agent per mode
+**Context and risk split** — work is divided by context and risk, not by role or cognitive mode (ADR 018).
+- One worker researches, implements and tests in one context; a second agent exists only for an independent check (`wisp:verifier`), one disputed finding (`wisp:adversary`), or a cheap read-only inventory (`wisp:recon`)
+- Tiers: `haiku / low` for deterministic enumeration; `opus / high` for the verifier and adversary, whose verdicts decide a finding; `sonnet / medium` for the remaining plugin agents
+- Handoff documents between agents lose context, so independence rests on a fresh context and a checkable brief, not on more roles
 
 **Progressive context loading** — each agent loads only the focused references needed for its cognitive concern.
 

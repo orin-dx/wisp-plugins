@@ -5,7 +5,7 @@
     {
       "id": "typescript-semantic-sibling",
       "language": "typescript",
-      "route": "ranger:audit -> smith:implement",
+      "route": "wisp:check -> wisp:fix",
       "public_input": {
         "task": "Find and repair the reported loss of an optional registry value at the publish boundary.",
         "workspace_fixture": "typescript-semantic-sibling"
@@ -26,7 +26,7 @@
     {
       "id": "rust-process-boundary",
       "language": "rust",
-      "route": "smith:implement",
+      "route": "wisp:fix",
       "public_input": {
         "task": "Repair argument handling and prove the released process receives the intended value.",
         "workspace_fixture": "rust-process-boundary"
@@ -46,7 +46,7 @@
     {
       "id": "python-generated-input",
       "language": "python",
-      "route": "ranger:audit -> smith:implement",
+      "route": "wisp:check -> wisp:fix",
       "public_input": {
         "task": "Find and repair malformed nested configuration handling across supported input shapes.",
         "workspace_fixture": "python-generated-input"
@@ -67,7 +67,7 @@
     {
       "id": "go-fresh-state",
       "language": "go",
-      "route": "sentinel:gate",
+      "route": "wisp:check",
       "public_input": {
         "task": "Verify that a completed cache invalidation fix is ready to ship.",
         "workspace_fixture": "go-fresh-state"
@@ -75,7 +75,7 @@
       "oracle": {
         "seeded_defects": 1,
         "required_observations": [
-          "The gate reads current cache or service state after the mutation.",
+          "The verifier reads current cache or service state after the mutation.",
           "Concurrent or asynchronous checks reach a terminal result.",
           "Environment differences relevant to invalidation are stated."
         ],

@@ -172,9 +172,9 @@ Six decisions shape how every plugin and agent in this repository is built. They
 - `<judgment>` — the specific failure mode that looks like success
 - `<output>` — schema reference and EARS contracts
 
-**Cognitive mode separation** — agents are dispatched by the cognitive mode they require, not their pipeline position.
-- A scanner (exhaustive pattern matching, no filtering) and an adversary (default-to-skepticism, requires a concrete failing scenario) cannot share a mental mode — combining them produces an agent worse at both
-- Model and effort tiers follow the same logic: `haiku / low` for enumeration, `sonnet / medium` for analysis, `opus / high` for binding judgment
+**Context and risk split** — work is divided by context and risk, not by role or cognitive mode (ADR 018).
+- One worker researches, implements and tests in one context; a second agent exists only for an independent check (`wisp:verifier`), one disputed finding (`wisp:adversary`), or a cheap read-only inventory (`wisp:recon`)
+- Tiers: `haiku / low` for enumeration, `opus / high` for the verifier and adversary, whose verdicts decide a finding
 
 **Instruction economy** — prompts preserve decisions, evidence, and consequences while removing filler, repeated rationale, and incidental process.
 

@@ -12,7 +12,7 @@ Build mode, before the work starts. Fix, spike and explore never need one.
 
 - **Shared contract:** other code, teams or sessions will be built against the behavior (a public API, a schema, a shared component, a protocol).
 - **The owner asks to read it** before code exists, or the brief has open decisions that a written contract would settle faster than a render.
-- **A UI component** whose states and accessibility must not regress: use `muse:component`, which drafts and gates a `spec@1`.
+- **A UI component** whose states and accessibility must not regress: write the `spec@1` in build mode, and use `muse:sketch` first when the look is undecided.
 
 A spec follows `shared/schemas/spec@1.json` and the checklist and unknowns rules in `shared/references/verification/gate-readiness.md`: falsifiable criteria, error cases marked, unknowns stated as `Assumption:` or `Open decision:` lines in `scope` (ADR 016). It is persisted where `shared/references/workspace/conventions.md` says.
 

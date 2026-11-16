@@ -55,7 +55,7 @@ class TranscriptMetricsTests(unittest.TestCase):
             notification("a1", 250_000, 120_000),
             notification("a1", 250_000, 120_000),  # repeated in the transcript, counted once
             notification("a2", 100_000, 60_000),
-            assistant(tool_use("s1", "Skill", skill="muse:component"), tool_use("b1", "Bash", command="ls"), tool_use("r1", "Read", file_path="x")),
+            assistant(tool_use("s1", "Skill", skill="wisp:work"), tool_use("b1", "Bash", command="ls"), tool_use("r1", "Read", file_path="x")),
             tool_result("s1", "loaded"),
             tool_result("b1", "x" * 900),
             tool_result("r1", [{"type": "text", "text": "y" * 100}]),
@@ -74,7 +74,7 @@ class TranscriptMetricsTests(unittest.TestCase):
 
     def test_skills_counts_skill_agent_and_command_invocations(self) -> None:
         report = metrics.command_skills(self.files)["abcdef12"]
-        self.assertEqual(report["skills"], {"muse:component": 1})
+        self.assertEqual(report["skills"], {"wisp:work": 1})
         self.assertEqual(report["agents"], {"muse:exit-gate": 1, "fork": 1})
         self.assertEqual(report["commands"], {"resume": 1})
 

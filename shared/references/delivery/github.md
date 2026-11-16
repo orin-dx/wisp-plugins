@@ -57,7 +57,7 @@ Do not manufacture praise. When a material issue exists, state the problem, cite
 ## `gh` commands
 
 ```bash
-gh pr create --title "feat(ranger): add cross-language audit" --body-file body.md
+gh pr create --title "feat(wisp): add cross-language check" --body-file body.md
 gh pr list
 gh pr diff <number>
 gh pr status

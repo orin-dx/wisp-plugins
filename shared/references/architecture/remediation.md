@@ -10,7 +10,7 @@ Load the evidence needed to design a structural defect correction.
 - Load `shared/references/architecture/decision-records.md` when an accepted record governs the area or the chosen correction rejects a plausible alternative.
 - Other languages: use the live architecture and persisted model; record the missing language pack as a coverage gap.
 
-Read the live implementation and any persisted model before choosing a boundary. If the model is absent, inspect live structure and let `scribe:audit-architecture` bootstrap it before gate; absence does not prove that no constraint exists.
+Read the live implementation and any persisted model before choosing a boundary. If the model is absent, inspect live structure; absence does not prove that no constraint exists.
 
 Use the defect-family instances and shared cause to select the smallest enforceable correction. Separate families that require different boundaries.
 

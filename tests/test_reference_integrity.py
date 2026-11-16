@@ -27,9 +27,10 @@ AUTHORING_ONLY = {
     "shared/references/authoring/diagrams.md",
     "shared/references/tooling/cli.md",
 }
-# References the retired pipeline plugins (v4) loaded and no remaining skill or agent calls. They stay on
-# disk as shared guidance; the `wisp` plugin's skills are expected to load them. Delete an entry here when
-# a runtime caller appears, and delete the file when nothing is going to load it.
+# References the retired v4 lifecycle plugins loaded. No `wisp`, `muse`, `courier`, `mason` or `wisp-packs`
+# skill or agent calls them yet (checked when the plugins were retired); they stay on disk as shared
+# guidance until `wisp` loads them or they are deleted. Delete an entry here when a runtime caller appears,
+# and delete the file when nothing is going to load it.
 NO_CALLER_YET = {
     "shared/references/architecture/boundary-values.md",
     "shared/references/architecture/remediation.md",

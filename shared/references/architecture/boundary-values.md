@@ -33,5 +33,5 @@ Keep the existing shape when the state is local and immediately consumed, the la
 
 - Add local validation when one boundary owns the state and callers cannot bypass it.
 - Unify producer and consumer models when parallel representations drift.
-- Escalate to `scribe:architect` when the unsafe shape is public, widely constructed, or requires coordinated migration.
+- Raise a decision card (`shared/references/work/decision-cards.md`) when the unsafe shape is public, widely constructed, or requires coordinated migration.
 - Record a coverage gap when the external representation or callers cannot be inspected.
