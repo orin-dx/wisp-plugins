@@ -30,10 +30,10 @@ Every agent body drops `<backstory>` and defines four sections in order: `<const
 
 - **Now true:** each prompt is one paragraph shorter and the authoring rule has one fewer part.
 - **Cost:** the incident behind a failure mode is no longer in the file (history keeps it), and a real effect on harder tasks or other models would be missed.
-- **To restore one:** write a new ADR that supersedes this one, name the agents and the measured difference, and restore the section only for them, between `<constitution>` (and `<load_first>`) and `<goal>`. Update `PARTS` in `tests/test_agent_structure.py`, the structure rule in `shared/constitution.md`, and the docs and mason agents that state the structure.
+- **To restore one:** write a new ADR that supersedes this one, name the agents and the measured difference, and restore the section only for them, between `<constitution>` (and `<load_first>`) and `<goal>`. Update the structure rule in `shared/constitution.md`, and the docs and mason agents that state the structure.
 - **Revisit when:** a measurement shows a loss without the backstory: seeded defects hard enough not to saturate, more agents and models, and more than five runs per condition (`docs/evaluation-runbook.md`).
 
 ## Evidence
 
-- **Enforced by:** `tests/test_agent_structure.py` (four parts in order, no `<backstory>` or `<role>` section, byte-identical constitution).
+- **Enforced by:** the structure rule in `shared/constitution.md`; no test pins agent wording.
 - `docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md`, "ADR evidence", ADR 017.

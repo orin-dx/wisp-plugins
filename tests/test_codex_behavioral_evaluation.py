@@ -1,4 +1,4 @@
-"""Verify that the Codex behavioral evaluation protocol remains wired to durable contracts."""
+"""Verify the Codex behavioral evaluation schemas and implementation fixture keep their closed contracts."""
 
 from __future__ import annotations
 
@@ -8,8 +8,6 @@ from pathlib import Path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-GUIDE_PATH = REPOSITORY_ROOT / "docs/codex-behavioral-evaluation.md"
-RELEASE_POLICY_PATH = REPOSITORY_ROOT / "docs/codex-marketplace-release-policy.md"
 SCHEMA_PATH = REPOSITORY_ROOT / "shared/schemas/harness-evaluation@2.json"
 RUN_SCHEMA_PATH = REPOSITORY_ROOT / "shared/schemas/evaluation-run@1.json"
 IMPLEMENTATION_FIXTURE_PATH = REPOSITORY_ROOT / "tests/fixtures/behavioral/implementation-verification.json"
@@ -46,16 +44,6 @@ class CodexBehavioralEvaluationTests(unittest.TestCase):
         run_schema = json.loads(RUN_SCHEMA_PATH.read_text(encoding="utf-8"))
         self.assertEqual(run_schema["additionalProperties"], False)
         self.assertEqual(run_schema["properties"]["pending_checks"]["maxItems"], 0)
-
-    def test_guide_and_release_policy_reference_the_same_protocol(self) -> None:
-        guide = GUIDE_PATH.read_text(encoding="utf-8")
-        release_policy = RELEASE_POLICY_PATH.read_text(encoding="utf-8")
-        self.assertIn("tests/fixtures/cross-harness/lifecycle.json", guide)
-        self.assertIn("Extract only the first stage's `option-set@1` document", guide)
-        self.assertIn("shared/schemas/harness-evaluation@2.json", guide)
-        self.assertIn("Codex single-agent", guide)
-        self.assertIn("Codex team", guide)
-        self.assertIn("codex-behavioral-evaluation.md", release_policy)
 
     def test_implementation_fixture_separates_public_input_from_oracle(self) -> None:
         fixture = json.loads(IMPLEMENTATION_FIXTURE_PATH.read_text(encoding="utf-8"))

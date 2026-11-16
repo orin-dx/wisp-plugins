@@ -47,6 +47,17 @@ class ClaudeMarketplaceSourceTests(unittest.TestCase):
                 self.assertEqual(target, (REPOSITORY_ROOT / "shared").resolve())
                 self.assertTrue((target / "schemas").is_dir())
 
+    def test_every_marketplace_and_codex_manifest_uses_the_wisp_plugins_identity(self) -> None:
+        agy = json.loads((REPOSITORY_ROOT / "marketplace.json").read_text(encoding="utf-8"))
+        catalog = json.loads((REPOSITORY_ROOT / "harnesses/codex/catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(agy["name"], "wisp-plugins")
+        self.assertEqual(json.loads(MARKETPLACE.read_text(encoding="utf-8"))["name"], "wisp-plugins")
+        self.assertEqual(catalog["marketplace"], {"name": "wisp-plugins", "display_name": "Wisp Plugins"})
+        for manifest in (REPOSITORY_ROOT / "harnesses/codex/plugins").glob("*/.codex-plugin/plugin.json"):
+            metadata = json.loads(manifest.read_text(encoding="utf-8"))
+            if "repository" in metadata:
+                self.assertEqual(metadata["repository"], "https://github.com/orin-dx/wisp-plugins", manifest.parts[-3])
+
     def test_each_plugin_has_the_manifest_claude_reads(self) -> None:
         for entry in self.entries:
             with self.subTest(plugin=entry["name"]):

@@ -11,33 +11,27 @@ not enforced; a hook is. The owner reads the diff, the evidence and the `Not ver
 turn that leaves changes in the tree must end with that list.
 
 Behavior
-  - Reads the Stop hook JSON from stdin (`cwd`, `session_id`, `stop_hook_active`,
-    `last_assistant_message`, `transcript_path`).
+  - Reads the Stop hook JSON from stdin (`cwd`, `stop_hook_active`, `last_assistant_message`,
+    `transcript_path`).
   - Lets the stop through when `stop_hook_active` is set (the agent is already continuing because
-    of a stop hook), when `cwd` is not a work tree or the tree is clean, when the final assistant
-    message contains "not verified" (any case), or when the tree is unchanged since the last stop
-    this hook let through for the session. The last rule keeps a question asked over an
-    already-reported dirty tree from being blocked again.
+    of a stop hook), when `cwd` is not a work tree or the tree is clean, or when the final
+    assistant message contains "not verified" (any case).
   - Otherwise blocks once with {"decision": "block", "reason": ...}. The agent adds the line and
     stops; the next Stop carries `stop_hook_active` and passes.
   - The final message comes from `last_assistant_message`, or, when that is absent, from the last
     assistant text in the transcript file.
-  - WISP_STOP_CHECK=off disables it. WISP_STOP_CHECK_STATE_DIR overrides where the per-session
-    tree fingerprint is kept (default: the system temp directory).
+  - WISP_STOP_CHECK=off disables it.
   - Fails open: any internal error exits 1 with nothing on stdout, which does not block.
   - Standard library only.
 """
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
 import subprocess
 import sys
-import tempfile
-from pathlib import Path
 from typing import Any
 
 MARKER = re.compile(r"not\s+verified", re.IGNORECASE)
@@ -61,39 +55,6 @@ def tree_status(cwd: str) -> str | None:
     if completed.returncode != 0:
         return None
     return completed.stdout.decode("utf-8", "replace")
-
-
-def tree_root(cwd: str) -> str:
-    """The work tree's top directory; porcelain paths are relative to it, not to `cwd`."""
-    completed = subprocess.run(
-        ["git", "-C", cwd, "rev-parse", "--show-toplevel"],
-        capture_output=True,
-        timeout=TIMEOUT_SECONDS,
-        check=False,
-    )
-    root = completed.stdout.decode("utf-8", "replace").strip()
-    return root if completed.returncode == 0 and root else cwd
-
-
-def fingerprint(root: str, status: str) -> str:
-    """Hash of the status plus each changed path's size and modification time, resolved against the tree root."""
-    digest = hashlib.sha256(status.encode("utf-8"))
-    tokens = status.split("\0")
-    index = 0
-    while index < len(tokens):
-        entry = tokens[index]
-        index += 1
-        if len(entry) < 4:
-            continue
-        code, path = entry[:2], entry[3:]
-        if "R" in code or "C" in code:
-            index += 1  # the next token is the original path of a rename or copy
-        try:
-            stat = (Path(root) / path).stat()
-            digest.update(f"{path}:{stat.st_size}:{stat.st_mtime_ns}".encode("utf-8"))
-        except OSError:
-            digest.update(f"{path}:missing".encode("utf-8"))
-    return digest.hexdigest()
 
 
 def final_message(event: dict[str, Any]) -> str:
@@ -124,34 +85,14 @@ def final_message(event: dict[str, Any]) -> str:
     return last
 
 
-def state_file(state_directory: Path, session: str) -> Path:
-    safe = re.sub(r"[^A-Za-z0-9_-]", "_", session) or "unknown"
-    return state_directory / f"{safe}.fingerprint"
-
-
-def acknowledge(path: Path, value: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(value, encoding="utf-8")
-
-
-def decide(event: dict[str, Any], state_directory: Path) -> dict[str, Any] | None:
+def decide(event: dict[str, Any]) -> dict[str, Any] | None:
     """Return a block decision, or None to let the stop through."""
-    if os.environ.get("WISP_STOP_CHECK", "").lower() == "off":
+    if os.environ.get("WISP_STOP_CHECK", "").lower() == "off" or event.get("stop_hook_active"):
         return None
-    cwd = event.get("cwd") or os.getcwd()
-    status = tree_status(str(cwd))
-    if not status:
+    if not tree_status(str(event.get("cwd") or os.getcwd())):
         return None
-    current = fingerprint(tree_root(str(cwd)), status)
-    record = state_file(state_directory, str(event.get("session_id", "unknown")))
-    if event.get("stop_hook_active") or MARKER.search(final_message(event)):
-        acknowledge(record, current)
+    if MARKER.search(final_message(event)):
         return None
-    try:
-        if record.read_text(encoding="utf-8") == current:
-            return None
-    except OSError:
-        pass
     return {"decision": "block", "reason": REASON}
 
 
@@ -160,8 +101,7 @@ def main() -> int:
         event = json.load(sys.stdin)
         if not isinstance(event, dict):
             raise ValueError("hook input is not a JSON object")
-        state_directory = Path(os.environ.get("WISP_STOP_CHECK_STATE_DIR", Path(tempfile.gettempdir()) / "wisp-stop-check"))
-        decision = decide(event, state_directory)
+        decision = decide(event)
     except Exception as error:  # fail open: only exit code 2 or a block decision stops the agent
         print(f"stop-check: internal error, not blocking: {error}", file=sys.stderr)
         return 1

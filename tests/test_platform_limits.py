@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +15,16 @@ specification = importlib.util.spec_from_file_location("check_platform_limits", 
 assert specification is not None and specification.loader is not None
 limits = importlib.util.module_from_spec(specification)
 specification.loader.exec_module(limits)
+
+
+# Descriptions are routing text loaded into every session; keep them short.
+DESCRIPTION_CAP = 450
+
+
+def description(path: Path) -> str:
+    match = re.match(r"---\n(.*?)\n---\n", path.read_text(encoding="utf-8"), re.S)
+    found = re.search(r"^description:\s*(?:>-?|\|-?)?\s*\n?(.*?)(?=^[a-zA-Z_-]+:|\Z)", match.group(1) if match else "", re.S | re.M)
+    return re.sub(r"\s+", " ", found.group(1)).strip() if found else ""
 
 
 def write(root: Path, relative: str, text: str) -> None:
@@ -91,6 +102,13 @@ class PlatformLimitTests(unittest.TestCase):
         self.assertEqual(limits.check_skill_metadata(REPOSITORY_ROOT), [])
         self.assertEqual(limits.check_description_budget(REPOSITORY_ROOT)[0], [])
         self.assertEqual(limits.check_codex_budget(REPOSITORY_ROOT)[0], [])
+
+    def test_repository_agent_and_skill_descriptions_stay_routing_text(self) -> None:
+        paths = [*REPOSITORY_ROOT.glob("plugins/*/agents/*.md"), *REPOSITORY_ROOT.glob("plugins/*/skills/*/SKILL.md")]
+        self.assertTrue(paths)
+        for path in paths:
+            with self.subTest(path=path.relative_to(REPOSITORY_ROOT).as_posix()):
+                self.assertLessEqual(len(description(path)), DESCRIPTION_CAP)
 
 
 if __name__ == "__main__":

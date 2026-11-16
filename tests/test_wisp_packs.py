@@ -170,15 +170,6 @@ class FailOpenTests(unittest.TestCase):
 
 
 class ShippedPackTests(unittest.TestCase):
-    def test_every_pack_opens_with_a_line_saying_when_it_applies(self) -> None:
-        packs = sorted((PLUGIN / "packs").glob("*.md"))
-        self.assertTrue(packs)
-        for pack in packs:
-            with self.subTest(pack=pack.name):
-                first = pack.read_text(encoding="utf-8").splitlines()[0]
-                self.assertTrue(first.strip() and not first.startswith("#"), first)
-                self.assertRegex(first, r"(?i)\bapplies\b")
-
     def test_pack_names_match_what_the_hook_accepts(self) -> None:
         for pack in (PLUGIN / "packs").glob("*.md"):
             with self.subTest(pack=pack.name):

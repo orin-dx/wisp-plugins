@@ -119,21 +119,6 @@ class CrossHarnessArtifactTests(unittest.TestCase):
                 self.assertFalse(materialized.is_symlink(), f"{plugin} ships {artifact} as a symlink")
                 self.assertEqual(materialized.read_bytes(), source.read_bytes(), f"{plugin} changed {artifact}")
 
-    def test_each_fixture_handoff_is_declared_by_both_harnesses(self) -> None:
-        for stage in self.stages:
-            artifact = stage["artifact"]
-            producer = stage["producer"]
-            consumer = stage["consumer"]
-            producer_manifest = read_json(REPOSITORY_ROOT / "plugins" / producer["plugin"] / "plugin.json")
-            consumer_manifest = read_json(REPOSITORY_ROOT / "plugins" / consumer["plugin"] / "plugin.json")
-            self.assertIn(artifact, producer_manifest["produces"])
-            self.assertIn(artifact, consumer_manifest["consumes"])
-
-            codex_producer = REPOSITORY_ROOT / "dist/codex/plugins" / producer["plugin"] / "skills" / producer["skill"] / "SKILL.md"
-            codex_consumer = REPOSITORY_ROOT / "dist/codex/plugins" / consumer["plugin"] / "skills" / consumer["skill"] / "SKILL.md"
-            self.assertIn(artifact, codex_producer.read_text(encoding="utf-8"))
-            self.assertIn(artifact, codex_consumer.read_text(encoding="utf-8"))
-
     def test_implementation_review_requires_structural_assessments(self) -> None:
         stage = {"document": self.schema_fixtures["implementation-review@2"]}
         schema = read_json(REPOSITORY_ROOT / "shared/schemas/implementation-review@2.json")

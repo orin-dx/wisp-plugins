@@ -35,5 +35,5 @@ Each exit gate (`muse`, `scribe`, `smith`, `sentinel`, `ranger`) lists every blo
 
 ## Evidence
 
-- **Enforced by:** `tests/test_handback_validator.py` (blank text), `tests/test_agent_structure.py` and `tests/test_prompt_alignment.py` (agent shape). The round rules are prompt rules.
+- **Enforced by:** `tests/test_handback_validator.py` (blank text). The round rules are prompt rules.
 - `docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md`, "ADR evidence", ADR 013.

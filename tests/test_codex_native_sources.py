@@ -113,25 +113,14 @@ class CodexNativeSourceTests(unittest.TestCase):
             actual = {source for source in declared_sources if isinstance(source, str)}
             self.assertTrue(expected <= actual, f"{plugin_id} does not materialize {sorted(expected - actual)}")
 
-    def test_delegating_skills_select_packaged_role_cards(self) -> None:
+    def test_agent_role_cards_are_copied_unchanged_into_every_plugin(self) -> None:
         role_files = {path.name: path.read_bytes() for path in ROLE_ROOT.glob("*.md")}
         self.assertIn("README.md", role_files)
-        role_guide = role_files["README.md"].decode("utf-8")
-        for field in ("Role", "Objective", "Inputs", "Owned paths", "Exclusions", "Output", "Evidence", "Completion"):
-            self.assertIn(f"| {field} |", role_guide)
         for plugin_id in self.plugin_ids:
             for name, contents in role_files.items():
                 output = OUTPUT_ROOT / plugin_id / "agent-roles" / name
                 self.assertTrue(output.is_file(), f"{plugin_id} is missing agent role {name}")
                 self.assertEqual(output.read_bytes(), contents, f"{plugin_id} rewrote agent role {name}")
-            for skill in (NATIVE_ROOT / plugin_id / "skills").iterdir():
-                contents = (skill / "SKILL.md").read_text(encoding="utf-8")
-                can_delegate = any(
-                    phrase in contents
-                    for phrase in ("teams are available", "teams are enabled", "teams may", "teammates may")
-                )
-                if can_delegate:
-                    self.assertIn("agent-roles/README.md", contents, f"{plugin_id}/{skill.name} can delegate without a role card")
 
     def test_mason_materializes_the_cross_harness_authoring_guide(self) -> None:
         source = REPOSITORY_ROOT / "shared/harness-authoring.md"

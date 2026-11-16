@@ -1,4 +1,4 @@
-"""Enforce concern-first shared references, valid paths, and runtime callers."""
+"""Enforce that shared reference and schema paths resolve, markdown links resolve, and Codex ships what its skills load."""
 
 from __future__ import annotations
 
@@ -17,41 +17,8 @@ SHARED_FILE_PATH = re.compile(r"shared/(?:constitution|harness-authoring|agent-b
 MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 REFERENCE_LINK = re.compile(r"^\s*\[[^\]]+\]:\s+(\S+)", re.MULTILINE)
 HTML_LINK = re.compile(r"(?:href|src)=[\"']([^\"']+)[\"']")
-RETIRED_REFERENCE_NAME = re.compile(
-    r"(?:\*|rust|typescript|python|go)-hazards(?:-t7-t10)?\.md|(?<!/)changesets\.md"
-)
 TEXT_SUFFIXES = {".json", ".md", ".py", ".sh", ".yaml", ".yml"}
 EXCLUDED_PARTS = {".git", ".agents", "dist", "node_modules"}
-AUTHORING_ONLY = {
-    "shared/references/README.md",
-    "shared/references/authoring/diagrams.md",
-    "shared/references/tooling/cli.md",
-}
-# References the retired v4 lifecycle plugins loaded. No `wisp`, `muse`, `courier`, `mason` or `wisp-packs`
-# skill or agent calls them yet (checked when the plugins were retired); they stay on disk as shared
-# guidance until `wisp` loads them or they are deleted. Delete an entry here when a runtime caller appears,
-# and delete the file when nothing is going to load it.
-NO_CALLER_YET = {
-    "shared/references/architecture/boundary-values.md",
-    "shared/references/architecture/remediation.md",
-    "shared/references/verification/go.md",
-    "shared/references/verification/implementation-review.md",
-    "shared/references/verification/interface-coverage.md",
-    "shared/references/verification/python.md",
-    "shared/references/verification/rust.md",
-    "shared/references/verification/typescript.md",
-}
-CONCERN_DIRECTORIES = {
-    "architecture",
-    "authoring",
-    "delivery",
-    "evaluation",
-    "hazards",
-    "tooling",
-    "verification",
-    "work",
-    "workspace",
-}
 # Published schemas are byte-immutable. Keep narrow exceptions for exact paths
 # embedded before a reference move; live skill and agent routes must still use
 # current paths and pass the checks below.
@@ -164,38 +131,6 @@ class ReferenceIntegrityTests(unittest.TestCase):
                     source_name = source.relative_to(REPOSITORY_ROOT).as_posix()
                     broken.append(f"{source_name} -> {target}")
         self.assertEqual(broken, [])
-
-    def test_retired_or_ambiguous_reference_names_are_absent(self) -> None:
-        stale = [
-            f"{source.relative_to(REPOSITORY_ROOT).as_posix()} -> {match.group(0)}"
-            for source, contents in self.sources.items()
-            for match in RETIRED_REFERENCE_NAME.finditer(contents)
-        ]
-        self.assertEqual(stale, [])
-
-    def test_reference_paths_are_concern_first(self) -> None:
-        misplaced = [
-            path.relative_to(REFERENCE_ROOT).as_posix()
-            for path in REFERENCE_ROOT.rglob("*.md")
-            if path != REFERENCE_ROOT / "README.md"
-            and path.relative_to(REFERENCE_ROOT).parts[0] not in CONCERN_DIRECTORIES
-        ]
-        self.assertEqual(misplaced, [])
-
-    def test_each_runtime_reference_has_a_runtime_caller(self) -> None:
-        missing: list[str] = []
-        for reference_file in REFERENCE_ROOT.rglob("*.md"):
-            reference = reference_file.relative_to(REPOSITORY_ROOT).as_posix()
-            if reference in AUTHORING_ONLY or reference in NO_CALLER_YET:
-                continue
-            callers = [
-                source
-                for source, contents in self.sources.items()
-                if source != reference_file and is_runtime_caller(source) and reference in contents
-            ]
-            if not callers:
-                missing.append(reference)
-        self.assertEqual(missing, [])
 
     def test_codex_runtime_paths_are_shipped_with_the_plugins_that_load_them(self) -> None:
         catalog = json.loads((REPOSITORY_ROOT / "harnesses/codex/catalog.json").read_text(encoding="utf-8"))

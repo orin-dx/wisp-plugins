@@ -40,5 +40,5 @@ A spec states each unknown in `scope` as an assumption or an owner decision, one
 
 ## Evidence
 
-- **Enforced by:** `tests/test_spec_unknowns.py` (both lines fit `spec@1`; drafters, gates and skills in both harnesses use the convention and no longer ban every TBD) and `tests/test_verification_rules.py` (one owning reference). The gate disposition is a prompt rule.
+- **Enforced by:** the `spec@1` schema (both lines fit it). The convention and the gate disposition are prompt rules; no test pins their wording.
 - `docs/evaluations/frontend-design/IMPLEMENTATION-LOG.md`, "ADR evidence", ADR 016.
