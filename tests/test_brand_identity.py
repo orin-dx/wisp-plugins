@@ -27,10 +27,10 @@ class BrandIdentityTests(unittest.TestCase):
     def test_harness_docs_use_wisp_plugins_selectors(self) -> None:
         root_readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("/plugin marketplace remove orin-dx-agent-plugins", root_readme)
-        self.assertIn("codex plugin add weaver@wisp-plugins", root_readme)
+        self.assertIn("codex plugin add courier@wisp-plugins", root_readme)
         self.assertIn("codex plugin marketplace upgrade wisp-plugins", root_readme)
         self.assertIn("codex plugin marketplace remove orin-dx-agent-plugins", root_readme)
-        for plugin in ("courier", "mason", "muse", "navigator", "ranger", "scribe", "sentinel", "smith", "vanguard", "weaver"):
+        for plugin in ("courier", "mason", "muse"):
             readme = (REPOSITORY_ROOT / "plugins" / plugin / "README.md").read_text(encoding="utf-8")
             self.assertIn(f"codex plugin add {plugin}@wisp-plugins", readme)
             self.assertNotIn(f"codex plugin add {plugin}@orin-dx-agent-plugins", readme)

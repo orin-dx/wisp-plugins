@@ -8,7 +8,7 @@ version: 2.0.0
 # Courier — Post Review
 
 <overview>
-Posting a review comment is a visible, external, hard-to-reverse action — the kind this repo's action-safety guidance already requires confirmation for. There is no subagent here: drafting a critique is a judgment task owned by `code-review` (quality) and `sentinel` (spec conformance), and drafting a reply is owned by `courier/receive-feedback`'s response plan or the user directly. This skill's only job is the mechanical last step — show exactly what will be posted and where, get explicit confirmation, then run the `gh` command.
+Posting a review comment is a visible, external, hard-to-reverse action — the kind this repo's action-safety guidance already requires confirmation for. There is no subagent here: drafting a critique is a judgment task owned by `code-review`, and drafting a reply is owned by `courier/receive-feedback`'s response plan or the user directly. This skill's only job is the mechanical last step — show exactly what will be posted and where, get explicit confirmation, then run the `gh` command.
 </overview>
 
 <dispatch>

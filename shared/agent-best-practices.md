@@ -79,12 +79,19 @@ Current language packs cover Rust, TypeScript/JavaScript, Python, and Go. Cross-
 
 ---
 
-## 3. Cognitive Mode Separation
+## 3. Split by Context and Risk
 
-Agents are dispatched by the cognitive mode they require, not by pipeline position. A scan agent and an analysis agent can run sequentially but must be separate agents because they require different mental modes:
+Work is divided by context and risk, not by lifecycle stage, role or cognitive mode (ADR 018). One agent researches, implements and tests in one context. A second agent exists only where independence pays or a context must stay small:
 
-| Mode | What it requires | Agents |
+| Agent | Why it is separate | Example |
 | :--- | :--- | :--- |
+| Independent check | A fresh context that sees the brief, the change and the evidence, never the worker's reasoning | `wisp:verifier` |
+| Dispute settler | One finding or claim, refuted or confirmed against live code | `wisp:adversary` |
+| Inventory | A cheap read-only sweep that keeps bulk output out of the worker's context | `wisp:recon` |
+
+Do not add an agent for a role or a pipeline stage. A handoff document between agents loses context, and a verifier that is given the worker's reasoning stops being independent. Judgment keeps its own evidence: the verifier gathers and judges in one context.
+
+--- | :--- | :--- |
 | Enumeration | Mechanical completeness, no judgment | recon |
 | Pattern matching | Exhaustive matching, no filtering | scanner |
 | Tracing | Systematic data flow following | boundary-tracer |
@@ -155,7 +162,7 @@ description: >-
 ---
 ```
 
-**Namespacing Rule**: Claude Code automatically registers agents as `<plugin_id>:<agent_name>`. Naming an agent `name: drafter` in plugin `scribe` results in the clean namespace `scribe:drafter`. Never use `name: scribe-drafter`, which generates redundant `scribe:scribe-drafter` stuttering in logs and schemas.
+**Namespacing Rule**: Claude Code automatically registers agents as `<plugin_id>:<agent_name>`. Naming an agent `name: verifier` in plugin `wisp` results in the clean namespace `wisp:verifier`. Never use `name: wisp-verifier`, which generates redundant `wisp:wisp-verifier` stuttering in logs and schemas.
 
 ---
 
@@ -222,7 +229,7 @@ When authoring specifications (`spec@1` or `arch-spec@1`) or plans (`plan@1`), a
 
 ## 11. Just-In-Time (JIT) Context Hooks & Tool Guidance
 
-To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds `validate-handback.py`, which the five gate plugins register through `hooks/hooks.json` (ADR 012), `route-guard.py`, which the six pipeline plugins (`muse`, `navigator`, `ranger`, `scribe`, `sentinel`, `smith`) register to redirect a direct agent call to the skill that starts it, and two reference scripts that no plugin wires:
+To prevent context bloat, deliver tool preferences and language taxonomies dynamically via lifecycle hooks. `shared/hooks/` holds `validate-handback.py` and `stop-check.py`, which `wisp` registers through `hooks/hooks.json` (ADRs 012 and 018), `pack-inject.py`, which `wisp-packs` registers, and two reference scripts that no plugin wires:
 
 - **`PreToolUse` shell hook:** injects a short modern CLI hint on first shell use.
 - **`SubagentStart` language hook:** detects manifests and binds the language hazard taxonomy.

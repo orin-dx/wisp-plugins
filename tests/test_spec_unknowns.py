@@ -14,16 +14,11 @@ specification.loader.exec_module(validator)
 
 SPEC = validator.load_schema("spec@1")
 
-DRAFTERS = ["plugins/scribe/agents/drafter.md", "plugins/muse/agents/drafter.md"]
-GATES = ["plugins/scribe/agents/exit-gate.md", "plugins/muse/agents/exit-gate.md"]
-SKILLS = [
-    "plugins/scribe/skills/draft-spec/SKILL.md",
-    "plugins/scribe/skills/gate-spec/SKILL.md",
-    "plugins/muse/skills/component/SKILL.md",
-    "harnesses/codex/plugins/scribe/skills/draft-spec/SKILL.md",
-    "harnesses/codex/plugins/scribe/skills/gate-spec/SKILL.md",
-    "harnesses/codex/plugins/muse/skills/component/SKILL.md",
-]
+# v5 keeps the spec rules in the shared reference and the constitution; the plugins that drafted and gated
+# specs are gone. List a spec drafter, gate or skill here when one is added, and these checks cover it.
+DRAFTERS: list[str] = []
+GATES: list[str] = []
+SKILLS: list[str] = []
 REFERENCE = "shared/references/verification/gate-readiness.md"
 CONSTITUTION = "shared/constitution.md"
 
@@ -97,7 +92,7 @@ class SpecUnknownTests(unittest.TestCase):
                     self.assertNotIn(phrase, text)
 
     def test_gates_block_undecided_and_untestable_unknowns_but_not_a_stated_assumption(self) -> None:
-        for relative in [*GATES, "harnesses/codex/plugins/scribe/skills/gate-spec/SKILL.md", REFERENCE]:
+        for relative in [*GATES, REFERENCE]:
             with self.subTest(file=relative):
                 text = read(relative)
                 self.assertIn("owner_decision", text)

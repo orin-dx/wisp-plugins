@@ -4,6 +4,7 @@ References are organized by the decision they support. Start with the current co
 
 | Directory | Use for |
 | :--- | :--- |
+| `work/` | Risk tiers and modes, decision cards, the verifier brief, and when a spec or plan pays |
 | `hazards/` | Candidate defect signals, boundary hazards, confirmation, and refutation |
 | `architecture/` | Semantic models, structural causes, boundary value design, and remediation |
 | `verification/` | Evidence selection, language-native checks, implementation review, and interface coverage |

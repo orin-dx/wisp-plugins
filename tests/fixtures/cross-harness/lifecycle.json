@@ -1,121 +1,128 @@
 {
-  "fixture_version": 1,
-  "description": "A minimal portable requirement-to-plan handoff used to verify Claude source and generated Codex skills share the same JSON contracts.",
+  "fixture_version": 2,
+  "description": "A minimal portable handoff used to verify Claude source and generated Codex skills share the same JSON contracts: sketch to promote, and changeset to release. `schema_fixtures` holds documents that exercise a published schema without naming a plugin handoff.",
   "stages": [
     {
-      "artifact": "requirement@1",
-      "producer": {"plugin": "weaver", "skill": "capture-need"},
-      "consumer": {"plugin": "vanguard", "skill": "research"},
-      "document": {
-        "id": "REQ-CROSS-HARNESS-001",
-        "statement": "Keep durable lifecycle handoffs portable across supported agent harnesses.",
-        "stakeholder": "plugin maintainer",
-        "why": "A workflow must survive a handoff between Claude and Codex without relying on prompt-local state.",
-        "done_when": [
-          "A valid requirement can be consumed by the research stage in either harness."
-        ],
-        "out_of_scope": [
-          "Proving equivalent model judgment or prose."
-        ],
-        "priority": "high"
-      }
-    },
-    {
-      "artifact": "research-report@1",
-      "producer": {"plugin": "vanguard", "skill": "research"},
-      "consumer": {"plugin": "scribe", "skill": "draft-spec"},
-      "document": {
-        "question": "Which contract must cross a Claude-to-Codex research-to-spec handoff?",
-        "findings": [
-          {
-            "claim": "The versioned JSON schema is the portable handoff boundary.",
-            "evidence": "shared/schemas/research-report@1.json",
-            "source": "repository schema",
-            "confidence": "confirmed"
-          }
-        ],
-        "recommendation": "Pass a research-report@1 document rather than a harness-specific agent transcript.",
-        "confidence": "high",
-        "open_questions": [],
-        "linked_requirement": "REQ-CROSS-HARNESS-001"
-      }
-    },
-    {
-      "artifact": "spec@1",
-      "producer": {"plugin": "scribe", "skill": "draft-spec"},
-      "consumer": {"plugin": "navigator", "skill": "plan"},
-      "document": {
-        "id": "SPEC-CROSS-HARNESS-001",
-        "purpose": "Define the portable contract check for the core lifecycle handoff.",
-        "scope": "The requirement, research, specification, and plan contracts used by both harnesses.",
-        "non_goals": [
-          "Comparing harness-specific prompts or named agents."
-        ],
-        "acceptance_criteria": [
-          {
-            "id": "AC-001",
-            "criterion": "The artifact validates against its versioned JSON schema."
-          }
-        ],
-        "linked_requirement": "REQ-CROSS-HARNESS-001",
-        "linked_research": "RESEARCH-CROSS-HARNESS-001",
-        "spec_file_path": "docs/specs/SPEC-CROSS-HARNESS-001.json"
-      }
-    },
-    {
-      "artifact": "plan@1",
-      "producer": {"plugin": "navigator", "skill": "plan"},
-      "consumer": {"plugin": "smith", "skill": "implement"},
-      "document": {
-        "goal": "Verify a portable lifecycle handoff before release.",
-        "architecture": "Read the persisted specification and validate the compatibility fixture in CI.",
-        "tech_stack": ["JSON Schema", "Python standard library"],
-        "tasks": [
-          {
-            "id": "T1",
-            "title": "Validate the portable fixture",
-            "files": {"test": ["tests/test_cross_harness_artifacts.py"]},
-            "steps": ["Run the focused compatibility test."],
-            "commit_message": "test(codex): cover portable artifact handoff",
-            "covers_criteria": ["AC-001"]
-          }
-        ],
-        "linked_spec": "SPEC-CROSS-HARNESS-001",
-        "spec_file_path": "docs/specs/SPEC-CROSS-HARNESS-001.json",
-        "plan_file_path": "docs/projects/SPEC-CROSS-HARNESS-001.json",
-        "linked_requirement": "REQ-CROSS-HARNESS-001"
-      }
-    },
-    {
-      "artifact": "implementation-review@2",
+      "artifact": "option-set@1",
       "producer": {
-        "plugin": "smith",
-        "skill": "implement"
+        "plugin": "muse",
+        "skill": "sketch"
       },
       "consumer": {
-        "plugin": "scribe",
-      "skill": "architect"
+        "plugin": "muse",
+        "skill": "promote"
+      },
+      "document": {
+        "id": "SKETCH-001",
+        "title": "Portable handoff view",
+        "brief": {
+          "problem": "Show how a lifecycle handoff reads to a maintainer.",
+          "audience": "plugin maintainer",
+          "constraints": [
+            "Static page, no build step"
+          ],
+          "non_goals": [
+            "Proving equivalent model judgment or prose"
+          ]
+        },
+        "status": "decided",
+        "round": 1,
+        "options": [
+          {
+            "id": "OPT-table",
+            "title": "Handoff table",
+            "summary": "One row per artifact with its producer and consumer.",
+            "structure": "Tabular, organised by artifact.",
+            "status": "chosen",
+            "reason": "The maintainer can scan every handoff at once.",
+            "assumptions": [
+              "Few handoffs exist"
+            ],
+            "open_questions": [],
+            "renders": [
+              {
+                "kind": "file",
+                "location": ".scratch/SKETCH-001/OPT-table/index.html",
+                "viewport": "1440x900",
+                "theme": "light"
+              }
+            ]
+          },
+          {
+            "id": "OPT-flow",
+            "title": "Flow diagram",
+            "summary": "Boxes and arrows from producer to consumer.",
+            "structure": "Graph, organised by stage.",
+            "status": "rejected",
+            "reason": "Harder to scan when handoffs multiply."
+          }
+        ],
+        "decisions": [
+          {
+            "option_id": "OPT-table",
+            "decision": "chosen",
+            "reason": "The maintainer can scan every handoff at once.",
+            "date": "2026-11-15"
+          }
+        ],
+        "fidelity": "sketch",
+        "reasoning": "Two structurally different layouts for one fixture."
+      }
     },
-    "document": {
+    {
+      "artifact": "changeset@3",
+      "producer": {
+        "plugin": "courier",
+        "skill": "changeset"
+      },
+      "consumer": {
+        "plugin": "courier",
+        "skill": "release"
+      },
+      "document": {
+        "summary": "Links each change in the release PR to the pull request that added it.\n\n- Shown as `#123` next to the change.\n- A direct push gets no link.",
+        "disposition": "new",
+        "consumer_impact": "new-capability",
+        "semver_impact": "minor",
+        "files_changed": [
+          "src/release.rs"
+        ],
+        "acceptance_criteria_met": [
+          "unlinked"
+        ]
+      }
+    }
+  ],
+  "schema_fixtures": {
+    "implementation-review@2": {
       "id": "REVIEW-CROSS-HARNESS-001",
       "workspace": "fixtures/portable-workspace",
       "batch_id": "BATCH-T1",
-      "languages": ["typescript"],
+      "languages": [
+        "typescript"
+      ],
       "linked_spec": "SPEC-CROSS-HARNESS-001",
       "linked_plan": "docs/projects/SPEC-CROSS-HARNESS-001.json",
       "linked_requirement": "REQ-CROSS-HARNESS-001",
       "spec_file_path": "docs/specs/SPEC-CROSS-HARNESS-001.json",
       "status": "needs_architecture",
       "sibling_search": {
-        "scope": ["src/publish.ts", "src/tag.ts"],
+        "scope": [
+          "src/publish.ts",
+          "src/tag.ts"
+        ],
         "syntactic": {
           "method": "Search partial execution-option declarations and command builders.",
-          "evidence": ["No copied declaration matched outside publish."],
+          "evidence": [
+            "No copied declaration matched outside publish."
+          ],
           "matches": 0
         },
         "semantic": {
           "method": "Trace every command boundary that accepts execution options.",
-          "evidence": ["tag independently narrows the same domain value."],
+          "evidence": [
+            "tag independently narrows the same domain value."
+          ],
           "matches": 1,
           "basis": "Commands that translate execution options into process arguments.",
           "candidate_sites": [
@@ -157,53 +164,52 @@
         }
       },
       "issues": [],
-        "defect_families": [
-          {
-            "id": "DF-001",
-            "summary": "Execution options are narrowed before two command boundaries.",
-            "shared_root_cause": "The domain model has no canonical execution-options type.",
-            "instances": [
-              {
-                "file": "src/publish.ts",
-                "line": 42,
-                "relationship": "original",
-                "status": "unresolved",
-                "evidence": "publish receives a type that omits registry"
-              },
-              {
-                "file": "src/tag.ts",
-                "line": 37,
-                "relationship": "semantic_sibling",
-                "status": "unresolved",
-                "evidence": "tag independently narrows the same options"
-              }
-            ],
-            "semantic_model": {
-              "assessment": "missing_concept",
-              "description": "Execution options have no single domain representation.",
-              "evidence": [
-                "publish and tag declare separate partial shapes"
-              ]
+      "defect_families": [
+        {
+          "id": "DF-001",
+          "summary": "Execution options are narrowed before two command boundaries.",
+          "shared_root_cause": "The domain model has no canonical execution-options type.",
+          "instances": [
+            {
+              "file": "src/publish.ts",
+              "line": 42,
+              "relationship": "original",
+              "status": "unresolved",
+              "evidence": "publish receives a type that omits registry"
             },
-            "architecture": {
-              "assessment": "missing_boundary",
-              "description": "Command execution lacks one options boundary.",
-              "evidence": [
-                "both commands accept independently narrowed parameters"
-              ]
-            },
-            "disposition": "architecture_escalation"
-          }
-        ],
-        "coverage_gaps": [
-          {
-            "kind": "boundary",
-            "description": "Process-boundary verification is blocked until the structural correction is implemented.",
-            "blocking": true
-          }
-        ],
-        "reasoning": "Two related instances show a shared structural cause."
-      }
+            {
+              "file": "src/tag.ts",
+              "line": 37,
+              "relationship": "semantic_sibling",
+              "status": "unresolved",
+              "evidence": "tag independently narrows the same options"
+            }
+          ],
+          "semantic_model": {
+            "assessment": "missing_concept",
+            "description": "Execution options have no single domain representation.",
+            "evidence": [
+              "publish and tag declare separate partial shapes"
+            ]
+          },
+          "architecture": {
+            "assessment": "missing_boundary",
+            "description": "Command execution lacks one options boundary.",
+            "evidence": [
+              "both commands accept independently narrowed parameters"
+            ]
+          },
+          "disposition": "architecture_escalation"
+        }
+      ],
+      "coverage_gaps": [
+        {
+          "kind": "boundary",
+          "description": "Process-boundary verification is blocked until the structural correction is implemented.",
+          "blocking": true
+        }
+      ],
+      "reasoning": "Two related instances show a shared structural cause."
     }
-  ]
+  }
 }

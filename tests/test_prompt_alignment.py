@@ -50,7 +50,6 @@ class PromptAlignmentTests(unittest.TestCase):
         opus_line = next(line for line in constitution.splitlines() if line.startswith("- `opus / high`"))
         self.assertIn("exit gates", opus_line)
         gates = sorted(ROOT.glob("plugins/*/agents/exit-gate.md"))
-        self.assertGreaterEqual(len(gates), 5)
         for path in gates:
             with self.subTest(path=str(path.relative_to(ROOT))):
                 self.assertEqual("opus", field(path, "model"))

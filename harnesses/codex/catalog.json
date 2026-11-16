@@ -25,62 +25,36 @@
       ]
     },
     {
-      "id": "guide",
-      "runtime_files": []
-    },
-    {
       "id": "mason",
       "runtime_files": ["shared/schemas", "shared/constitution.md", "shared/harness-authoring.md", "shared/references/evaluation/behavioral.md"]
     },
     {
       "id": "muse",
-      "runtime_files": ["shared/schemas/option-set@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spec@1.json", "shared/schemas/spike-report@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/modes.md", "shared/references/tooling/context.md", "shared/references/verification/gate-readiness.md"]
+      "runtime_files": ["shared/schemas/option-set@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spike-report@1.json", "shared/references/architecture/modes.md", "shared/references/tooling/context.md", "shared/references/verification/gate-readiness.md"]
     },
     {
-      "id": "navigator",
-      "runtime_files": ["shared/schemas/plan@1.json", "shared/schemas/spec@1.json", "shared/references/verification/interface-coverage.md"]
-    },
-    {
-      "id": "ranger",
+      "id": "wisp",
       "runtime_files": [
-        "shared/schemas/candidate@1.json",
         "shared/schemas/candidate-assessment@1.json",
-        "shared/schemas/field-survival-map@1.json",
-        "shared/schemas/finding-report@2.json",
+        "shared/schemas/plan@1.json",
+        "shared/schemas/spec@1.json",
+        "shared/schemas/spike-report@1.json",
         "shared/schemas/verdict@3.json",
-        "shared/schemas/workspace-manifest@1.json",
-        "shared/references/hazards/go.md",
-        "shared/references/hazards/go-boundaries.md",
-        "shared/references/hazards/python.md",
-        "shared/references/hazards/python-boundaries.md",
-        "shared/references/hazards/rust.md",
-        "shared/references/hazards/rust-boundaries.md",
-        "shared/references/hazards/typescript.md",
-        "shared/references/hazards/typescript-boundaries.md",
-        "shared/references/workspace/conventions.md",
+        "shared/references/architecture/decision-records.md",
+        "shared/references/hazards",
         "shared/references/tooling/context.md",
-        "shared/references/verification/evidence.md"
+        "shared/references/verification/evidence.md",
+        "shared/references/verification/gate-readiness.md",
+        "shared/references/work/decision-cards.md",
+        "shared/references/work/modes.md",
+        "shared/references/work/specs-and-plans.md",
+        "shared/references/work/verifier-brief.md",
+        "shared/references/workspace/conventions.md"
       ]
     },
     {
-      "id": "scribe",
-      "runtime_files": ["shared/schemas/arch-audit@1.json", "shared/schemas/arch-model@2.json", "shared/schemas/finding-report@2.json", "shared/schemas/implementation-result@1.json", "shared/schemas/implementation-review@2.json", "shared/schemas/plan@1.json", "shared/schemas/requirement@1.json", "shared/schemas/research-report@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json", "shared/references/architecture/remediation.md", "shared/references/architecture/decision-records.md", "shared/references/architecture/go.md", "shared/references/architecture/python.md", "shared/references/architecture/rust.md", "shared/references/architecture/typescript.md", "shared/references/workspace/conventions.md", "shared/references/tooling/context.md", "shared/references/verification/gate-readiness.md"]
-    },
-    {
-      "id": "sentinel",
-      "runtime_files": ["shared/schemas/verdict@3.json", "shared/references/tooling/context.md", "shared/references/verification/evidence.md"]
-    },
-    {
-      "id": "smith",
-      "runtime_files": ["shared/schemas/spike-report@1.json", "shared/references/architecture/modes.md", "shared/schemas/implementation-context@1.json", "shared/schemas/implementation-result@1.json", "shared/schemas/implementation-review@2.json", "shared/schemas/mutation-report@2.json", "shared/schemas/plan@1.json", "shared/schemas/spec@1.json", "shared/schemas/verdict@3.json", "shared/schemas/workspace-manifest@1.json", "shared/references/authoring/comments.md", "shared/references/hazards/go.md", "shared/references/hazards/go-boundaries.md", "shared/references/architecture/go.md", "shared/references/verification/go.md", "shared/references/verification/implementation-review.md", "shared/references/hazards/python.md", "shared/references/hazards/python-boundaries.md", "shared/references/architecture/python.md", "shared/references/verification/python.md", "shared/references/hazards/rust.md", "shared/references/hazards/rust-boundaries.md", "shared/references/architecture/rust.md", "shared/references/verification/rust.md", "shared/references/hazards/typescript.md", "shared/references/hazards/typescript-boundaries.md", "shared/references/architecture/typescript.md", "shared/references/verification/typescript.md", "shared/references/verification/evidence.md", "shared/references/tooling/context.md", "shared/references/hazards/scripts-and-workflows.md", "shared/references/workspace/conventions.md"]
-    },
-    {
-      "id": "vanguard",
-      "runtime_files": ["shared/schemas/requirement@1.json", "shared/schemas/research-report@1.json"]
-    },
-    {
-      "id": "weaver",
-      "runtime_files": ["shared/schemas/plan@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spec@1.json"]
+      "id": "wisp-packs",
+      "runtime_files": [{ "source": "plugins/wisp-packs/packs", "destination": "packs" }]
     }
   ]
 }

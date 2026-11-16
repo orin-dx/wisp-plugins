@@ -18,7 +18,7 @@ plugins/<id>/
 └── agents/*.md
 ```
 
-A new plugin SHALL default to a single skill directory named after the plugin id. IF the plugin's scope grows to cover several genuinely independent, heterogeneous user intents on the same artifact (not a linear pipeline invoked as one flow), the plugin author MAY split `skills/<id>/` into multiple directories — `skills/<skill-name>/SKILL.md` per skill — each still conforming to the frontmatter and body rules below. The skill-routing key is the directory name, not the frontmatter `name:` field.
+A new plugin SHALL default to a single skill directory named after the plugin id. IF the plugin's scope grows to cover several genuinely independent, heterogeneous user intents on the same artifact (not a linear pipeline invoked as one flow), the plugin author MAY split `skills/<id>/` into multiple directories — `skills/<skill-name>/SKILL.md` per skill — each still conforming to the frontmatter and body rules below. The skill-routing key is the directory name, not the frontmatter `name:` field. A core plugin may instead keep one entry skill whose mode skills are one-line aliases into it (`wisp`'s `work`; ADR 018).
 
 WHEN a plugin manifest (`plugin.json`) is authored, it SHALL include: `id`, `version` (semver), `description`, `skills`, and `agents` (list of file paths).
 
@@ -74,7 +74,7 @@ WHERE an agent execution platform supports lifecycle hooks, THE SYSTEM SHALL loa
 
 IF a reference file exceeds 120 lines covering mixed concerns, it SHALL be split by concern before publishing.
 
-WHILE an agent is in pattern-matching mode (scanner), it SHALL NOT filter, analyze, or verdict matches — those belong to a separate cognitive-mode agent.
+WHILE an agent is in pattern-matching mode (scanner), it SHALL NOT filter, analyze, or verdict matches — those belong to a later step in a fresh context, such as `wisp:verifier` or `wisp:adversary` (ADR 018).
 
 ---
 
@@ -98,13 +98,13 @@ WHERE an agent loads workspace documentation files to extract architectural inva
 
 ---
 
-## Sentinel Retry Caller Constraint
+## Verifier Retry Caller Constraint
 
-WHEN re-submitting an artifact to exit-gate after a fail verdict, the caller SHALL pass only the revised artifact and the prior verdict's blockers array — not the full verification report context.
+WHEN re-submitting an artifact to `wisp:verifier` after a fail verdict, the caller SHALL pass only the revised artifact and the prior verdict's blockers array — not the full verification report context.
 
-IF exit-gate emits a blockers array in a fail verdict, the producing agent SHALL address only those blockers in its targeted patch.
+IF `wisp:verifier` emits a blockers array in a fail verdict, the producing agent SHALL address only those blockers in its targeted patch.
 
-IF a verdict fails on the second round (`retry_count` 1, set by the caller as the number of earlier rounds) or later, or a blocker repeats unchanged from the previous round, exit-gate SHALL add an `escalation_required` blocker and the caller SHALL halt automated retries.
+IF a verdict fails on the second round (`retry_count` 1, set by the caller as the number of earlier rounds) or later, or a blocker repeats unchanged from the previous round, `wisp:verifier` SHALL add an `escalation_required` blocker and the caller SHALL halt automated retries.
 
 ---
 
@@ -118,23 +118,23 @@ WHEN a spec gate judges unknowns, it SHALL fail an unknown that leaves a criteri
 
 ## Spec Persistence
 
-WHEN exit-gate issues a pass verdict, the scribe skill orchestrator SHALL write the spec to `<workspace_root>/docs/specs/<id>.json`, commit the file to version control, set `spec_file_path` to the workspace-relative path in the spec@1, and pass the updated spec to planner.
+WHEN a spec@1 passes its verifier check, the agent or skill that wrote it SHALL write the spec to `<workspace_root>/docs/specs/<id>.json`, commit the file to version control, and set `spec_file_path` to the workspace-relative path in the spec@1.
 
 WHEN any agent consumes a spec@1 to make implementation or verification decisions, it SHALL read from `spec_file_path` when set — forwarding spec content through conversation context is not a substitute. Context is compressed across long sessions; the file is not.
 
 WHEN spec_file_path is absent, agents SHALL proceed with in-context spec content and record a spec_file_unset coverage gap — graceful degradation, not a hard block.
 
-IF the spec is written to disk but not committed to version control, it SHALL be treated as not yet persisted — an uncommitted file is invisible to a fresh checkout, a future session, and drift-checker.
+IF the spec is written to disk but not committed to version control, it SHALL be treated as not yet persisted — an uncommitted file is invisible to a fresh checkout and a future session.
 
 ## Plan Persistence
 
-WHEN challenger issues an overall pass verdict on a plan@1, the navigator skill orchestrator SHALL write the plan to `<workspace_root>/docs/projects/<linked_spec>.json`, commit the file to version control, set `plan_file_path` to the workspace-relative path in the plan@1, and pass the updated plan to smith.
+WHEN a plan@1 passes its verifier check, the agent that wrote it SHALL write the plan to `<workspace_root>/docs/projects/<linked_spec>.json`, commit the file to version control, and set `plan_file_path` to the workspace-relative path in the plan@1.
 
-WHEN the smith implement skill is given a plan, it SHALL pass `plan_file_path` to every agent it dispatches, and those agents SHALL read the plan from that path when set — the same lossy-context rationale as spec_file_path applies.
+WHEN the worker executes a plan, any agent it dispatches SHALL receive `plan_file_path` and SHALL read the plan from that path when set — the same lossy-context rationale as spec_file_path applies.
 
 WHEN plan_file_path is absent, agents SHALL proceed with in-context plan content and record a plan_file_unset coverage gap — graceful degradation, not a hard block.
 
-IF an amended plan@1 (planner's amend mode) is produced, the navigator skill orchestrator SHALL overwrite the existing file at the same plan_file_path and commit the change — the file path SHALL NOT change across an amendment, mirroring the Spec Correction Loop's rule for corrected specs.
+IF a plan@1 is amended, the existing file at plan_file_path SHALL be overwritten and the change committed — the file path SHALL NOT change across an amendment, mirroring the Spec Correction Loop's rule for corrected specs.
 
 IF the plan is written to disk but not committed to version control, it SHALL be treated as not yet persisted, on the same terms as an uncommitted spec.
 
@@ -142,45 +142,41 @@ IF the plan is written to disk but not committed to version control, it SHALL be
 
 ## Spec Staleness Detection
 
-WHEN planner produces a plan@1 from a spec at spec_file_path, it SHALL set `spec_hash` to a content hash computed over the raw file bytes as read from disk — not a parsed or re-serialized form.
+WHEN a plan@1 is produced from a spec at spec_file_path, the plan SHALL set `spec_hash` to a content hash computed over the raw file bytes as read from disk — not a parsed or re-serialized form.
 
-WHEN recon receives a plan@1 carrying `spec_hash`, it SHALL recompute the current spec file's content hash the same way — over raw file bytes — and record a spec_drift_warning when the hashes differ.
+WHEN an agent receives a plan@1 carrying `spec_hash`, it SHALL recompute the current spec file's content hash the same way — over raw file bytes — and record a spec_drift_warning when the hashes differ.
 
-WHEN spec_drift_warning is set, downstream agents SHALL record a coverage gap noting the plan may not reflect the current spec — graceful degradation, not a hard block, because recon already surfaced it.
+WHEN spec_drift_warning is set, downstream agents SHALL record a coverage gap noting the plan may not reflect the current spec — graceful degradation, not a hard block, because the warning already surfaced it.
 
 ---
 
 ## Spec Correction Loop
 
-WHEN implementer determines that an acceptance criterion contradicts observed system behavior, it SHALL emit status spec_contradiction rather than implementing code that satisfies neither the spec nor reality.
+WHEN the worker determines that an acceptance criterion contradicts observed system behavior, it SHALL report the contradiction to the owner as a decision rather than implementing code that satisfies neither the spec nor reality.
 
-WHEN a spec_contradiction is reported, the caller SHALL halt remaining task execution and route the contradiction to scribe/correct-spec before any further task in the plan proceeds — an uncorrected spec SHALL NOT continue to govern implementation.
+WHEN a contradiction is reported, the worker SHALL halt work that depends on the contradicted criterion until the owner decides — an uncorrected spec SHALL NOT continue to govern implementation.
 
-WHEN scribe/correct-spec produces a corrected spec@1 that passes exit-gate, the skill orchestrator SHALL overwrite the existing file at the same spec_file_path and commit the change — the file path SHALL NOT change across a correction.
+WHEN a spec is corrected, the existing file at spec_file_path SHALL be overwritten and the change committed — the file path SHALL NOT change across a correction. A plan tied to the corrected criteria SHALL be amended the same way.
 
-WHEN a corrected spec@1 is handed to planner, it SHALL run in amend mode — patching only the tasks tied to the affected criteria — rather than re-decomposing the entire plan.
-
-WHEN an amended plan@1 is produced, it SHALL pass through challenger before smith resumes — amendment is not exempt from adversarial review.
-
-IF the same criterion_id triggers spec_contradiction a second time after already being corrected via scribe/correct-spec, the caller SHALL escalate to a human rather than routing to scribe/correct-spec again.
+IF the same criterion_id triggers a contradiction a second time after already being corrected, the worker SHALL escalate to the owner rather than correcting it again.
 
 ---
 
 ## Epistemic Stopping & Circuit Breakers
 
-WHILE running iterative review loops without a deterministic execution compiler (such as drafter-auditor or planner-challenger), THE SYSTEM SHALL cap adversarial revision cycles at a maximum of 2 rounds.
+WHILE running iterative review loops without a deterministic execution compiler (such as a spec drafted and then reviewed by `wisp:verifier`), THE SYSTEM SHALL cap adversarial revision cycles at a maximum of 2 rounds.
 
 WHEN a spec or plan enters round 2 of revision with disputed private helper names, internal control flow, or line citations, THE SYSTEM SHALL demote those items to non-blocking `api_notes` and issue a pass verdict rather than looping.
 
-WHEN re-evaluating an artifact after a fail verdict, the gatekeeper agent SHALL evaluate ONLY the blocker delta and SHALL NOT re-read the entire document on Opus unless an architectural invariant was violated.
+WHEN re-evaluating an artifact after a fail verdict, `wisp:verifier` SHALL evaluate ONLY the blocker delta and SHALL NOT re-read the entire document unless an architectural invariant was violated.
 
 ---
 
 ## Subsystem Compilation Batching
 
-WHEN planner decomposes a spec into an implementation plan@1, it SHALL group tasks into cohesive Subsystem Batches aligned with transactional crate/package compilation boundaries.
+WHEN a spec is decomposed into an implementation plan@1, the plan SHALL group tasks into cohesive Subsystem Batches aligned with transactional crate/package compilation boundaries.
 
-WHEN smith executes a plan@1, it SHALL dispatch one implementer subagent per Subsystem Batch rather than spawning separate subagents for individual 10-line micro-tasks.
+WHEN the worker executes a plan@1, it SHALL give each Subsystem Batch one pass rather than separate passes for individual 10-line micro-tasks.
 
 WHILE implementing a batch, THE SYSTEM SHALL apply the YAGNI principle: write the minimum viable code diff required to make tests pass, avoiding speculative wrappers and premature abstractions.
 
@@ -288,7 +284,7 @@ WHEN a reference claims cross-language or cross-platform coverage, it SHALL cove
 
 ## Documentation
 
-WHEN a plugin is published, it SHALL include a `README.md` with: purpose, when-to-use trigger phrases, agent table with modes and tiers, pipeline diagram, output schema reference, and install instructions. A plugin with no agents (such as `guide`) replaces the agent table, diagram and schema reference with a table of where each skill hands off.
+WHEN a plugin is published, it SHALL include a `README.md` with: purpose, when-to-use trigger phrases, agent table with modes and tiers, pipeline diagram, output schema reference, and install instructions. A plugin with no agents (such as `wisp-packs`) replaces the agent table, diagram and schema reference with a table of where each skill hands off.
 
 WHEN editing Markdown, THE SYSTEM SHALL keep each prose paragraph on one physical source line — Markdown prose SHALL NEVER be manually wrapped.
 

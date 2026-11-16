@@ -6,32 +6,19 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS = sorted(ROOT.glob("plugins/*/skills/*/SKILL.md"))
 DESCRIPTION_CAP = 450
 # Codex gate skills carry the gate round rule themselves: no role card is read on the single-agent path.
-CODEX_GATES = (
-    "muse/skills/component",
-    "ranger/skills/audit",
-    "scribe/skills/gate-spec",
-    "sentinel/skills/gate",
-    "smith/skills/implement",
-)
+# The remaining plugins have no gate skill; list one here when it is added.
+CODEX_GATES: tuple[str, ...] = ()
 # Codex skills that verify against evidence name the behavior-evidence reference and ship it.
-CODEX_EVIDENCE = ("ranger/skills/audit", "sentinel/skills/gate", "smith/skills/implement")
+CODEX_EVIDENCE: tuple[str, ...] = ()
 EVIDENCE = "shared/references/verification/evidence.md"
 CONTEXT = "shared/references/tooling/context.md"
 
 # Skills that run commands, builds or renders, or read the workspace broadly.
 RUNS_COMMANDS = {
-    "ranger/skills/audit",
-    "sentinel/skills/gate",
     "muse/skills/sketch",
-    "scribe/skills/audit-architecture",
-    "scribe/skills/spec-drift",
 }
 # Read-only analysis or exploration: no freehand alternative to replace.
 NO_FREEHAND_CLAIM = {
-    "scribe/skills/spec-drift",
-    "scribe/skills/audit-architecture",
-    "scribe/skills/verify-spec",
-    "scribe/skills/architect",
     "muse/skills/promote",
 }
 
@@ -83,7 +70,7 @@ class SkillRoutingTests(unittest.TestCase):
                     self.assertNotIn("freehand", codex_path(path).read_text().split("\n")[2].lower())
 
     def test_skills_that_replace_freehand_work_say_so_in_both_harnesses(self):
-        for name in ("ranger/skills/audit", "sentinel/skills/gate", "muse/skills/component", "scribe/skills/draft-spec"):
+        for name in ("courier/skills/changeset",):
             path = ROOT / "plugins" / name / "SKILL.md"
             with self.subTest(skill=name):
                 self.assertTrue(description(path).startswith("Use this, not"))

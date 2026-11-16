@@ -27,6 +27,20 @@ AUTHORING_ONLY = {
     "shared/references/authoring/diagrams.md",
     "shared/references/tooling/cli.md",
 }
+# References the retired v4 lifecycle plugins loaded. No `wisp`, `muse`, `courier`, `mason` or `wisp-packs`
+# skill or agent calls them yet (checked when the plugins were retired); they stay on disk as shared
+# guidance until `wisp` loads them or they are deleted. Delete an entry here when a runtime caller appears,
+# and delete the file when nothing is going to load it.
+NO_CALLER_YET = {
+    "shared/references/architecture/boundary-values.md",
+    "shared/references/architecture/remediation.md",
+    "shared/references/verification/go.md",
+    "shared/references/verification/implementation-review.md",
+    "shared/references/verification/interface-coverage.md",
+    "shared/references/verification/python.md",
+    "shared/references/verification/rust.md",
+    "shared/references/verification/typescript.md",
+}
 CONCERN_DIRECTORIES = {
     "architecture",
     "authoring",
@@ -35,6 +49,7 @@ CONCERN_DIRECTORIES = {
     "hazards",
     "tooling",
     "verification",
+    "work",
     "workspace",
 }
 # Published schemas are byte-immutable. Keep narrow exceptions for exact paths
@@ -171,7 +186,7 @@ class ReferenceIntegrityTests(unittest.TestCase):
         missing: list[str] = []
         for reference_file in REFERENCE_ROOT.rglob("*.md"):
             reference = reference_file.relative_to(REPOSITORY_ROOT).as_posix()
-            if reference in AUTHORING_ONLY:
+            if reference in AUTHORING_ONLY or reference in NO_CALLER_YET:
                 continue
             callers = [
                 source
@@ -212,6 +227,8 @@ class ReferenceIntegrityTests(unittest.TestCase):
             if card.name == "README.md":
                 continue
             users = roles_used.get(card.stem, set())
+            if not users:
+                continue  # no remaining skill selects this role, so nothing loads the card's references
             for path in REFERENCE_PATH.findall(card.read_text(encoding="utf-8")):
                 if not any(is_shipped(plugin, path) for plugin in users):
                     missing.append(f"harnesses/codex/agent-roles/{card.name} -> {path}")

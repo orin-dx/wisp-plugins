@@ -20,20 +20,15 @@ Breaking change: append `!` after type/scope, or add `BREAKING CHANGE:` footer.
 ```
 feat(courier): add changeset generation skill
 
-fix(sentinel): retry gate passes specific failure message to producer
+fix(wisp): pass the verifier's blockers to the retry
 
 docs(shared): add conventional-commits reference
 
-refactor(ranger): extract language detection into recon subagent
+refactor(wisp): extract workspace detection into recon subagent
 
-feat!: rename bug-hunter-rust to proof
+feat!: rename guard to wisp
 
-BREAKING CHANGE: plugin ID changed from bug-hunter-rust to proof.
-Update marketplace.json and skill trigger references.
-
-feat!: rename proof to ranger
-
-BREAKING CHANGE: plugin ID changed from proof to ranger.
+BREAKING CHANGE: plugin ID changed from guard to wisp.
 Update marketplace.json and skill trigger references.
 ```
 
@@ -51,14 +46,9 @@ Use active voice and imperative mood. Name the technical outcome in the subject 
 
 | Scope | Covers |
 |---|---|
-| `sentinel` | sentinel plugin and subagents |
-| `ranger` | ranger plugin and subagents |
+| `wisp` | wisp plugin, skills and subagents |
+| `wisp-packs` | wisp-packs plugin and packs |
 | `courier` | courier plugin and subagents |
-| `weaver` | weaver plugin and subagents |
-| `scribe` | scribe plugin and subagents |
-| `vanguard` | vanguard plugin and subagents |
-| `navigator` | navigator plugin and subagents |
-| `smith` | smith plugin and subagents |
 | `mason` | mason plugin and subagents |
 | `muse` | muse plugin and subagents |
 | `shared` | shared schemas, references, agent-best-practices |

@@ -32,6 +32,21 @@ class ReleaseTests(unittest.TestCase):
             self.assertEqual([tag for tag, _ in release.tags_to_create(root, set())], ["v4.6.0", "alpha--v1.2.0", "beta--v2.0.1"])
             self.assertEqual([tag for tag, _ in release.tags_to_create(root, {"v4.6.0", "alpha--v1.2.0"})], ["beta--v2.0.1"])
 
+    def test_a_rerun_after_a_partial_push_only_pushes_what_the_remote_lacks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            planned = release.tags_to_create(tree(directory), set())
+        local = {"v4.6.0", "alpha--v1.2.0", "beta--v2.0.1"}
+        to_create, to_push = release.split_tags(planned, local, {"alpha--v1.2.0"})
+        self.assertEqual(to_create, [])
+        self.assertEqual(to_push, ["v4.6.0", "beta--v2.0.1"])
+        to_create, to_push = release.split_tags(planned, set(), set())
+        self.assertEqual([tag for tag, _ in to_create], ["v4.6.0", "alpha--v1.2.0", "beta--v2.0.1"])
+        self.assertEqual(len(to_push), 3)
+
+    def test_an_unpushed_tag_on_an_older_commit_is_refused(self) -> None:
+        self.assertEqual(release.misplaced_tags(["v5.0.0", "alpha--v1.0.0"], {"v5.0.0": "old", "alpha--v1.0.0": "head"}, "head"), ["v5.0.0"])
+        self.assertEqual(release.misplaced_tags(["v5.0.0"], {}, "head"), [])
+
     def test_the_newest_changelog_entry_gives_the_version_name_and_body(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             version, name, body = release.changelog_top(tree(directory))

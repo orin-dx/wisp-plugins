@@ -7,12 +7,12 @@ Gating every step suits a contract many things depend on and fails an idea nobod
 | Mode | Use when | Writes | Gate | Entry skill | Artifact |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | sketch | You want to see options before deciding | `docs/sketches/<id>.json`, a scratch directory | None | `muse/sketch` | `option-set@1` |
-| spike | You need to know whether a tool or approach works | A scratch directory | None; a smoke check is reported | `smith/spike` | `spike-report@1` |
+| spike | You need to know whether a tool or approach works | A scratch directory | None; a smoke check is reported | `wisp/spike` | `spike-report@1` |
 | promote | A chosen option or working spike should become real work | A requirement draft | Gated later, by the consuming stage | `muse/promote` | `requirement@1` |
-| specify | Behavior must be pinned down | `docs/specs/` | Binding exit gate | `muse/component`, `scribe/draft-spec` | `spec@1`, `verdict@3` |
-| plan, implement | A gated spec exists and the change must be correct | The repository | Challenger, then recon, mutation, review, exit gate | `navigator/plan`, `smith/implement` | `plan@1`, `verdict@3` |
+| specify | A shared contract must be pinned down | `docs/specs/` | `wisp:verifier` | `wisp/build` | `spec@1`, `verdict@3` |
+| fix, build | The change must be correct | The repository | Tiered: executable evidence, plus `wisp:verifier` for shared or irreversible work | `wisp/fix`, `wisp/build` | `verdict@3` |
 
-Use the full pipeline, not an exploration mode, for shared components, anything other code depends on, behavior and accessibility that must not regress, and anything in production.
+Use the tiered modes, not an exploration mode, for shared components, anything other code depends on, behavior and accessibility that must not regress, and anything in production.
 
 ## Exploration rules
 
@@ -27,7 +27,7 @@ Use the full pipeline, not an exploration mode, for shared components, anything 
 
 ## Moving between modes
 
-- Exploration reaches a gated stage only through `promote`, which names the choice, carries its verified and unverified lists, and yields a requirement for the next stage to gate.
+- Exploration reaches gated work only through `promote`, which names the choice, carries its verified and unverified lists, and yields a requirement for the next stage to gate.
 - An exploration artifact is never evidence for a gate; a gate cites the requirement or spec.
 - When a gated stage keeps failing on something that cannot be specified yet, stop the retry loop, explore that part, and promote the result.
 - A reply that took a lighter path ends with one line naming the gates it did not run.
@@ -38,4 +38,4 @@ Three options per round, structurally different (not color or spacing), five at 
 
 ## In a repository
 
-Add one line to `AGENTS.md`: "For exploratory work use the sketch and spike skills; they are non-binding. Use the specify, plan and implement skills for shared or production work."
+Add one line to `AGENTS.md`: "For exploratory work use the sketch and spike skills; they are non-binding. Use the `wisp` work modes (fix, build, check) for shared or production work."

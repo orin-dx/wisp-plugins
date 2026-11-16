@@ -98,12 +98,14 @@ class CrossHarnessArtifactTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         fixture = read_json(FIXTURE_PATH)
         cls.stages = fixture["stages"]
+        cls.schema_fixtures = fixture["schema_fixtures"]
 
     def test_fixture_documents_validate_against_portable_contracts(self) -> None:
-        for stage in self.stages:
-            artifact = stage["artifact"]
+        documents = [(stage["artifact"], stage["document"]) for stage in self.stages]
+        documents += list(self.schema_fixtures.items())
+        for artifact, document in documents:
             source_schema = read_json(REPOSITORY_ROOT / "shared/schemas" / f"{artifact}.json")
-            errors = validate_subset(stage["document"], source_schema)
+            errors = validate_subset(document, source_schema)
             self.assertEqual(errors, [], f"{artifact} fixture is invalid: {errors}")
 
     def test_codex_materializes_the_same_contract_bytes_for_each_handoff(self) -> None:
@@ -133,7 +135,7 @@ class CrossHarnessArtifactTests(unittest.TestCase):
             self.assertIn(artifact, codex_consumer.read_text(encoding="utf-8"))
 
     def test_implementation_review_requires_structural_assessments(self) -> None:
-        stage = next(stage for stage in self.stages if stage["artifact"] == "implementation-review@2")
+        stage = {"document": self.schema_fixtures["implementation-review@2"]}
         schema = read_json(REPOSITORY_ROOT / "shared/schemas/implementation-review@2.json")
 
         missing_assessment = copy.deepcopy(stage["document"])

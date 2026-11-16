@@ -34,7 +34,7 @@ def split(path: Path) -> tuple[dict[str, str], str]:
 
 class AgentStructureTests(unittest.TestCase):
     def test_there_are_agents_to_check(self) -> None:
-        self.assertGreaterEqual(len(AGENTS), 40)
+        self.assertGreaterEqual(len(AGENTS), 8)
 
     def test_frontmatter_names_the_agent_and_its_tier(self) -> None:
         for path in AGENTS:

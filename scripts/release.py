@@ -34,6 +34,18 @@ def tags_to_create(root: Path, existing: set[str]) -> list[tuple[str, str]]:
     return [(tag, note) for tag, note in planned if tag not in existing]
 
 
+def split_tags(planned: list[tuple[str, str]], local: set[str], remote: set[str]) -> tuple[list[tuple[str, str]], list[str]]:
+    """What a rerun still has to do: tags to create (missing locally) and tags to push (missing on the remote)."""
+    to_create = [(tag, note) for tag, note in planned if tag not in local]
+    to_push = [tag for tag, _ in planned if tag not in remote]
+    return to_create, to_push
+
+
+def misplaced_tags(to_push: list[str], local_commits: dict[str, str], head: str) -> list[str]:
+    """Tags a rerun would push that exist locally but point at a commit other than `head`."""
+    return [tag for tag in to_push if tag in local_commits and local_commits[tag] != head]
+
+
 def changelog_top(root: Path) -> tuple[str, str, str]:
     """(version, name, body) of the newest CHANGELOG.md entry."""
     match = ENTRY.search((root / "CHANGELOG.md").read_text(encoding="utf-8"))
@@ -61,20 +73,34 @@ def main(argv: list[str]) -> int:
         raise SystemExit("working tree is not clean")
     if run("/usr/bin/git", "rev-parse", "HEAD") != run("/usr/bin/git", "rev-parse", "origin/main"):
         raise SystemExit("HEAD is not origin/main; check out the merged commit to release")
-    existing = set(run("/usr/bin/git", "tag", "--list").split())
-    planned = tags_to_create(ROOT, existing)
+    local = set(run("/usr/bin/git", "tag", "--list").split())
+    remote = {line.split("refs/tags/")[1].removesuffix("^{}") for line in run("/usr/bin/git", "ls-remote", "--tags", "origin").splitlines() if "refs/tags/" in line}
     version, name, body = changelog_top(ROOT)
-    if f"v{version}" in existing:
-        raise SystemExit(f"v{version} already exists; bump the version and changelog first")
+    published = bool(run("gh", "release", "view", f"v{version}", "--json", "tagName", check=False))
+    if f"v{version}" in remote and published:
+        raise SystemExit(f"v{version} is already released; bump the version and changelog first")
+    planned = tags_to_create(ROOT, set())
+    to_create, to_push = split_tags(planned, local, remote)
+    head = run("/usr/bin/git", "rev-parse", "HEAD")
+    local_commits = {tag: run("/usr/bin/git", "rev-list", "-n", "1", tag) for tag in to_push if tag in local}
+    stale = misplaced_tags(to_push, local_commits, head)
+    if stale:
+        raise SystemExit(
+            f"unpushed local tag(s) point at an older commit than HEAD: {', '.join(stale)}. "
+            "Delete them with `git tag -d <tag>` and rerun, so the release is cut from the commit you checked."
+        )
     notes = args.notes or (ROOT / "docs" / "releases" / f"v{version}.md")
     if not notes.is_file():
         notes = None
 
     print(f"Commit {run('/usr/bin/git', 'rev-parse', '--short', 'HEAD')} on origin/main")
-    print("Tags to create and push:")
-    for tag, _ in planned:
+    print("Tags to create:" + ("" if to_create else " none"))
+    for tag, _ in to_create:
         print(f"  {tag}")
-    print(f"GitHub release: v{version}" + (f" — {name}" if name else "") + f" (notes: {notes.relative_to(ROOT) if notes and notes.is_relative_to(ROOT) else notes or 'top CHANGELOG entry'})")
+    print("Tags to push:" + ("" if to_push else " none"))
+    for tag in to_push:
+        print(f"  {tag}")
+    print(f"GitHub release: v{version}" + (f" — {name}" if name else "") + (" (already exists, skipped)" if published else f" (notes: {notes.relative_to(ROOT) if notes and notes.is_relative_to(ROOT) else notes or 'top CHANGELOG entry'})"))
     if args.dry_run:
         return 0
     if not args.yes and input("Run just check, create and push these tags, and publish the release? [y/N] ").strip().lower() != "y":
@@ -82,9 +108,13 @@ def main(argv: list[str]) -> int:
         return 1
 
     run("just", "check")
-    for tag, note in planned:
+    for tag, note in to_create:
         run("/usr/bin/git", "tag", "-a", tag, "-m", f"{note} — {name}" if tag == f"v{version}" and name else note)
-    run("/usr/bin/git", "push", "origin", *[tag for tag, _ in planned])
+    if to_push:
+        run("/usr/bin/git", "push", "origin", *to_push)
+    if published:
+        print(f"Released v{version}: pushed {len(to_push)} tag(s); the GitHub release already existed.")
+        return 0
     notes_file = notes
     if notes_file is None:
         notes_file = ROOT / ".release-notes.tmp"
@@ -93,7 +123,7 @@ def main(argv: list[str]) -> int:
     run("gh", "release", "create", f"v{version}", "--title", title, "--notes-file", str(notes_file), "--verify-tag")
     if notes is None:
         notes_file.unlink()
-    print(f"Released v{version} with {len(planned)} tag(s).")
+    print(f"Released v{version}: pushed {len(to_push)} tag(s).")
     return 0
 
 

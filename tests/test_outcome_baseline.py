@@ -18,12 +18,10 @@ REQUIREMENT = validator.load_schema("requirement@1")
 CONVENTION = "Outcome: <measure> at least <threshold> against <named baseline>, measured by <method>"
 CONVENTION_PATTERN = re.compile(r"^Outcome: .+ at least .+ against .+, measured by .+$")
 
-CLARIFIERS = ["plugins/weaver/agents/clarifier.md", "harnesses/codex/plugins/weaver/skills/clarify-requirement/SKILL.md"]
-GATE_SOURCES = [
-    "plugins/sentinel/agents/exit-gate.md",
-    "plugins/sentinel/skills/gate/SKILL.md",
-    "harnesses/codex/plugins/sentinel/skills/gate/SKILL.md",
-]
+# v5 keeps no requirement clarifier or verification gate in the remaining plugins; list a prompt here when
+# one that asks for or gates on a baseline is added, and these checks cover it.
+CLARIFIERS: list[str] = []
+GATE_SOURCES: list[str] = []
 EVIDENCE = "shared/references/verification/evidence.md"
 
 
@@ -66,21 +64,12 @@ class OutcomeBaselineTests(unittest.TestCase):
                 self.assertIn("pending", text)
                 self.assertIn("verified scope", text)
 
-    def test_the_exit_gate_rule_names_pending_checks_and_fail(self) -> None:
-        text = read("plugins/sentinel/agents/exit-gate.md")
-        rule = next(line for line in text.splitlines() if "against a named baseline" in line)
-        self.assertIn("`pending_checks`", rule)
-        self.assertIn("return fail", rule)
-
     def test_the_evidence_reference_says_how_a_comparative_outcome_is_verified(self) -> None:
         text = read(EVIDENCE)
         bullet = next(line for line in text.splitlines() if line.startswith("- Comparative outcome"))
         for phrase in ("baseline and the product the same way", "what was not compared", "pending"):
             self.assertIn(phrase, bullet)
         self.assertLessEqual(len(text.splitlines()), 120)
-
-    def test_the_clarifier_keeps_one_question_per_invocation(self) -> None:
-        self.assertIn("One question per invocation", read("plugins/weaver/agents/clarifier.md"))
 
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ class CodexBehavioralEvaluationTests(unittest.TestCase):
         guide = GUIDE_PATH.read_text(encoding="utf-8")
         release_policy = RELEASE_POLICY_PATH.read_text(encoding="utf-8")
         self.assertIn("tests/fixtures/cross-harness/lifecycle.json", guide)
-        self.assertIn("Extract only the first stage's `requirement@1` document", guide)
+        self.assertIn("Extract only the first stage's `option-set@1` document", guide)
         self.assertIn("shared/schemas/harness-evaluation@2.json", guide)
         self.assertIn("Codex single-agent", guide)
         self.assertIn("Codex team", guide)

@@ -3,6 +3,14 @@
 All notable changes to the Wisp Plugins ecosystem are documented here.
 Individual plugin changelogs live in `plugins/<plugin-id>/CHANGELOG.md`.
 
+## [5.0.0] - 2026-11-15 — One core, fewer handoffs
+
+- **Breaking:** the eight pipeline plugins (`weaver`, `vanguard`, `scribe`, `navigator`, `smith`, `sentinel`, `ranger`, `guide`) are replaced by one core plugin, `wisp`. **Action:** install `wisp` and remove the old plugin ids from your settings; `/wisp:explore`, `spike`, `fix`, `build`, `check` and `ship` start work by intent.
+- **One `work` skill, one verifier.** `wisp:work` states the outcome, constraints and evidence bar first, then sizes review by how reversible the change is. `wisp:verifier` checks the result in a fresh context against the code, build or render, instead of a chain of gates.
+- **Fewer ceremonies.** No mandatory spec, plan or sign-off stage; a spec or plan is written only where it pays. A Stop hook asks for a `Not verified:` line when work is left uncommitted.
+- **`muse` is for exploration and render:** `sketch` and `promote`. **`courier`** drops its release-summarizer and review-preprocessor agents.
+- Claude Code, Codex and Antigravity are all kept.
+
 ## [4.6.0] - 2026-11-14 — Start by intent, two rounds, one reality check
 
 - New `guide` plugin: `/guide:explore`, `spike`, `fix`, `build`, `check` and `ship` start work by intent and hand off to the skill that does it, with a snippet for a project's `AGENTS.md`.

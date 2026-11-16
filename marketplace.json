@@ -1,8 +1,15 @@
 {
   "name": "wisp-plugins",
-  "version": "4.6.0",
+  "version": "5.0.0",
   "description": "Wisp Plugins marketplace for AGY and Claude Code, published by Orin DX",
   "plugins": [
+    {
+      "id": "wisp",
+      "name": "wisp",
+      "version": "1.0.0",
+      "path": "./plugins/wisp",
+      "description": "The core of Wisp Plugins. One work skill sizes each change by reversibility and blast radius, states outcome, constraints and evidence bar, picks the mode (explore, spike, fix, build, check, ship) and review depth, and sends shared or irreversible work to a fresh-context verifier."
+    },
     {
       "id": "mason",
       "name": "mason",
@@ -12,79 +19,25 @@
       "supersedes": "agent-plugin-builder"
     },
     {
-      "id": "ranger",
-      "name": "ranger",
-      "version": "3.2.5",
-      "path": "./plugins/ranger",
-      "description": "Bug hunting for Rust, TypeScript, JavaScript, Python, and Go. Confirms reachable defects, searches semantic siblings, and routes structural families for architectural correction.",
-      "supersedes": [
-        "bug-hunter-rust",
-        "bug-hunter-ts"
-      ]
-    },
-    {
-      "id": "sentinel",
-      "name": "sentinel",
-      "version": "2.1.4",
-      "path": "./plugins/sentinel",
-      "description": "Cross-cutting verification gate. Confirms any stage artifact meets its criteria before the next stage begins. Implements the sentinel protocol: recon \u2192 verify \u2192 exit-gate with retry-with-feedback.",
-      "supersedes": "verify-first"
-    },
-    {
-      "id": "weaver",
-      "name": "weaver",
-      "version": "3.0.5",
-      "path": "./plugins/weaver",
-      "description": "Need definition plugin. Captures and structures requirements before implementation begins. Integrates with GitHub Issues by default; extensible to any issue tracker that produces the requirement@1 schema. Skills: capture-need, clarify-requirement, prioritize-backlog, connect-requirement, audit-backlog."
-    },
-    {
-      "id": "vanguard",
-      "name": "vanguard",
-      "version": "2.0.4",
-      "path": "./plugins/vanguard",
-      "description": "Research plugin. Investigates questions and requirements to build a documented evidence base before committing to a solution direction. Distinguishes confirmed findings from assumptions. Produces research-report@1 for consumption by scribe (spec)."
-    },
-    {
-      "id": "scribe",
-      "name": "scribe",
-      "version": "3.6.0",
-      "path": "./plugins/scribe",
-      "description": "Specification plugin. Drafts and gates testable specs, checks whole-system architecture, detects drift, and turns Ranger findings or Smith implementation reviews into structural corrections. Skills: draft-spec, verify-spec, spec-drift, audit-spec, audit-architecture, gate-spec, correct-spec, architect."
-    },
-    {
       "id": "muse",
       "name": "muse",
-      "version": "1.2.0",
+      "version": "5.0.0",
       "path": "./plugins/muse",
-      "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs \u2014 props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by ranger. Also sketches options before anything is specified (sketch) and carries a chosen option into a requirement (promote)."
-    },
-    {
-      "id": "navigator",
-      "name": "navigator",
-      "version": "2.5.0",
-      "path": "./plugins/navigator",
-      "description": "Planning plugin. Decomposes specs into sequenced, bite-sized implementation plans where each task states its outcome, files, signatures and the tests proving each criterion, with code only where the logic is non-obvious \u2014 no write-test-first mandate. Tasks are sized to compilation boundaries, not a clock-time estimate. No TBDs. The challenger gets two rounds."
-    },
-    {
-      "id": "smith",
-      "name": "smith",
-      "version": "2.6.0",
-      "path": "./plugins/smith",
-      "description": "Implementation plugin. Executes tested plan batches, verifies risk at real boundaries, searches semantic defect siblings, and escalates shared model or architecture gaps. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike)."
+      "description": "Exploration and render plugin. Shows options before anything is decided: sketch builds and renders three structurally different options as an option-set@1 with a decision log, and promote carries a chosen option or a working spike into a requirement@1. Non-binding: no gate, spec or tests."
     },
     {
       "id": "courier",
       "name": "courier",
-      "version": "3.2.0",
+      "version": "5.0.0",
       "path": "./plugins/courier",
       "description": "Shipping plugin. Shepherds completed, verified code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release. Produces release-artifact@3 from changeset@3 inputs."
     },
     {
-      "id": "guide",
-      "name": "guide",
+      "id": "wisp-packs",
+      "name": "wisp-packs",
       "version": "1.0.0",
-      "path": "./plugins/guide",
-      "description": "Start here. Six commands named by intent (explore, spike, fix, build, check, ship) that pick the path by risk and hand off to the skill that does the work, so its checks run."
+      "path": "./plugins/wisp-packs",
+      "description": "House packs: plain markdown on how the owner builds (rust-house, ts-house), applied when a repo's AGENTS.md has a Packs: line or on /wisp-packs:load. Commands: load, list, suggest."
     }
   ]
 }

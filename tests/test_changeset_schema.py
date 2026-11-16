@@ -116,8 +116,8 @@ class CourierSourcesUseTheNewContractTests(unittest.TestCase):
             with self.subTest(skill=skill):
                 self.assertIn("Use this", description)
 
-    def test_the_release_summarizer_consumes_the_new_schema(self) -> None:
-        text = self.read("plugins/courier/agents/release-summarizer.md")
+    def test_the_release_skill_consumes_the_new_schema(self) -> None:
+        text = self.read("plugins/courier/skills/release/SKILL.md")
         self.assertIn("changeset@3", text)
         self.assertIn("release-artifact@3", text)
         self.assertNotIn("changeset@2", text)

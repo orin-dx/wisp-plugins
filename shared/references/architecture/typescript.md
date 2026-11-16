@@ -28,5 +28,5 @@ Repeated literals, mutable types, console output, or missing documentation are s
 - Repair isolated behavior locally.
 - Centralize one domain operation or state model when several sites own the same responsibility.
 - Add enforcement when a documented invariant can drift silently.
-- Escalate to `scribe:architect` when recurrence cannot be prevented within the current boundary.
+- Raise a decision card (`shared/references/work/decision-cards.md`) when recurrence cannot be prevented within the current boundary.
 - Derive names and abstractions from live code; do not import a design from the reference.

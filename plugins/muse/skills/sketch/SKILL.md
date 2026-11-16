@@ -61,7 +61,7 @@ Follow it exactly, because the file is checked against `option-set@1` and a reco
 </record_shape>
 
 <workflow>
-1. **State the mode, and check it fits.** Begin your first message with exactly: "Mode: sketch. Nothing here is binding." If the work is a shared component, something other code depends on, or behavior and accessibility that must not regress, say the gated path (`muse/component`) fits better and let the user choose.
+1. **State the mode, and check it fits.** Begin your first message with exactly: "Mode: sketch. Nothing here is binding." If the work is a shared component, something other code depends on, or behavior and accessibility that must not regress, say the work skill in the `wisp` plugin fits better (it specifies and checks the contract) and let the user choose.
 2. **Write the anchor brief**: the problem, the audience, the constraints (brand, stack, tokens, real content) and the non-goals. Ask at most three short questions, and only when an answer would change the options; otherwise state your assumptions and go on.
 3. **Commit a direction** (design work, first round only). Propose four distinct, concrete directions, one line each, and let the user pick one; if they say "you choose", pick and say why. Skip this for non-visual exploration. Later rounds stay inside the chosen direction.
 4. **Plan the round.** Name three structural bets (five at most) that differ in arrangement, interaction model or information hierarchy, not in color or spacing. If two options differ only in tint, replace one.

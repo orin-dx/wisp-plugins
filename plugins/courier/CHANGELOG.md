@@ -2,6 +2,15 @@
 
 — courier
 
+## [5.0.0] - 2026-11-15
+
+### Removed
+- The `release-summarizer` and `review-preprocessor` agents. Both did deterministic work: aggregating changesets by their own `semver_impact`, and bundling a diff, spec, test results and open questions. `courier/release` and `courier/receive-feedback` now do that themselves in the primary agent and return the same `release-artifact@3` and review package. `commit-analyzer`, `pr-narrator` and `changeset-analyzer` stay.
+
+### Changed
+- `courier/changeset` takes the `criteria_evidence` an implementation produced from whatever source, no longer from `smith` only, since `smith` is retired in v5.
+- `courier/post-review` no longer names `sentinel` as an owner of spec-conformance review.
+
 ## [3.2.0] - 2026-11-14
 
 ### Changed
