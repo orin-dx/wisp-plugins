@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_016AuGvdsuZaGutCmehedprL",
+  "agent_id": "acdabe40b1f797c5d",
+  "subagent_type": "general-purpose",
+  "task_description": "Delete the eight old plugins",
+  "token_usage": {
+    "input_tokens": 206,
+    "cache_creation_tokens": 223957,
+    "cache_read_tokens": 15605228,
+    "output_tokens": 56482,
+    "api_call_count": 102
+  },
+  "started_at": "2026-11-15T18:04:50.038671-08:00",
+  "completed_at": "2026-11-15T18:16:16.755795-08:00"
+}
