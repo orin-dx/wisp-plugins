@@ -1,8 +1,15 @@
 {
   "name": "wisp-plugins",
-  "version": "4.6.0",
+  "version": "5.0.0",
   "description": "Wisp Plugins marketplace for AGY and Claude Code, published by Orin DX",
   "plugins": [
+    {
+      "id": "wisp",
+      "name": "wisp",
+      "version": "1.0.0",
+      "path": "./plugins/wisp",
+      "description": "The core of Wisp Plugins. One work skill sizes each change by reversibility and blast radius, states outcome, constraints and evidence bar, picks the mode (explore, spike, fix, build, check, ship) and review depth, and sends shared or irreversible work to a fresh-context verifier."
+    },
     {
       "id": "mason",
       "name": "mason",
@@ -14,14 +21,14 @@
     {
       "id": "muse",
       "name": "muse",
-      "version": "1.2.0",
+      "version": "5.0.0",
       "path": "./plugins/muse",
       "description": "Exploration and render plugin. Shows options before anything is decided: sketch builds and renders three structurally different options as an option-set@1 with a decision log, and promote carries a chosen option or a working spike into a requirement@1. Non-binding: no gate, spec or tests."
     },
     {
       "id": "courier",
       "name": "courier",
-      "version": "3.2.0",
+      "version": "5.0.0",
       "path": "./plugins/courier",
       "description": "Shipping plugin. Shepherds completed, verified code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release. Produces release-artifact@3 from changeset@3 inputs."
     }

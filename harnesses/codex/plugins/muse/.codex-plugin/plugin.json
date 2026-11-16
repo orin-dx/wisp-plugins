@@ -1,6 +1,6 @@
 {
   "name": "muse",
-  "version": "1.2.0",
+  "version": "5.0.0",
   "description": "Sketch options before anything is specified: build and render structurally different options with a decision log, then promote a chosen option or a working spike into a requirement.",
   "author": {
     "name": "Gabriel Castro",

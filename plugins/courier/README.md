@@ -1,6 +1,6 @@
 # courier — Ship Tooling
 
-**Stage:** Ship · **Output:** `release-artifact@3` · **Version:** 3.2.0
+**Stage:** Ship · **Output:** `release-artifact@3` · **Version:** 5.0.0
 
 Handles everything after implementation: commit messages, PR descriptions, changeset extraction, review triage, posting a review, and release notes. Courier is not a linear pipeline — six independently-triggered skills. Three dispatch to a subagent for the writing; the other three (`post-review`, `receive-feedback`, `release`) are mechanical and run in the primary agent. It reads the staged diff, linked spec, and linked requirement at runtime to produce meaningful, context-aware output, not mechanical templates.
 

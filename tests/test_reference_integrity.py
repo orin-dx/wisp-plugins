@@ -48,6 +48,7 @@ CONCERN_DIRECTORIES = {
     "hazards",
     "tooling",
     "verification",
+    "work",
     "workspace",
 }
 # Published schemas are byte-immutable. Keep narrow exceptions for exact paths

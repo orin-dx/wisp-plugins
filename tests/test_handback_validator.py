@@ -42,7 +42,7 @@ VALID_FAIL_V3 = {
 VALID_V1 = {"verdict": "pass", "confidence": "high", "verdict_summary": "Complete."}
 
 
-def event(message: str, agent_type: str = "smith:exit-gate", agent_id: str = "agent-1") -> dict:
+def event(message: str, agent_type: str = "wisp:verifier", agent_id: str = "agent-1") -> dict:
     return {
         "hook_event_name": "PreToolUse",
         "tool_name": "SubagentHandback",
@@ -71,22 +71,22 @@ class HandbackValidatorTests(unittest.TestCase):
             with self.subTest(message=message[:40]):
                 self.assertIsNone(self.decide(event(message)))
 
-    def test_muse_gate_is_checked_against_verdict_3_like_the_others(self) -> None:
-        self.assertIsNone(self.decide(event(json.dumps(VALID_PASS_V3), "muse:exit-gate")))
-        denied = self.decide(event(json.dumps(VALID_V1), "muse:exit-gate"))
+    def test_the_verifier_is_checked_against_verdict_3(self) -> None:
+        self.assertIsNone(self.decide(event(json.dumps(VALID_PASS_V3), "wisp:verifier")))
+        denied = self.decide(event(json.dumps(VALID_V1), "wisp:verifier"))
         reason = denied["hookSpecificOutput"]["permissionDecisionReason"]
         self.assertIn("verdict@3", reason)
         self.assertIn("verified_scope", reason)
 
     def test_escalation_is_a_blocker_not_a_verdict_value(self) -> None:
         escalate = {**VALID_PASS_V3, "verdict": "escalate"}
-        denied = self.decide(event(json.dumps(escalate), "muse:exit-gate"))
+        denied = self.decide(event(json.dumps(escalate), "wisp:verifier"))
         self.assertIn("expected one of", denied["hookSpecificOutput"]["permissionDecisionReason"])
         escalation_blocker = {
             **VALID_FAIL_V3,
             "blockers": [{"criterion": "escalation_required", "finding": "Retry cap reached; human review needed."}],
         }
-        self.assertIsNone(self.decide(event(json.dumps(escalation_blocker), "muse:exit-gate", agent_id="esc")))
+        self.assertIsNone(self.decide(event(json.dumps(escalation_blocker), "wisp:verifier", agent_id="esc")))
 
     def test_summary_over_300_characters_is_the_recorded_real_world_violation(self) -> None:
         too_long = {**VALID_PASS_V3, "verdict_summary": "x" * 301}
@@ -138,7 +138,7 @@ class HandbackValidatorTests(unittest.TestCase):
         self.assertIn("no JSON object", denied["hookSpecificOutput"]["permissionDecisionReason"])
 
     def test_other_agents_and_tools_are_ignored(self) -> None:
-        self.assertIsNone(self.decide(event("not json", agent_type="smith:implementer")))
+        self.assertIsNone(self.decide(event("not json", agent_type="wisp:recon")))
         other_tool = event("not json")
         other_tool["tool_name"] = "Read"
         self.assertIsNone(self.decide(other_tool))
@@ -179,16 +179,17 @@ class HandbackValidatorTests(unittest.TestCase):
                 plugin, _, agent = agent_type.partition(":")
                 self.assertTrue((REPOSITORY_ROOT / "plugins" / plugin / "agents" / f"{agent}.md").is_file())
 
-    def test_every_exit_gate_agent_is_routed_and_its_plugin_registers_the_hook(self) -> None:
-        for gate in sorted((REPOSITORY_ROOT / "plugins").glob("*/agents/exit-gate.md")):
-            plugin = gate.parents[1].name
+    def test_every_routed_agent_s_plugin_registers_the_hook(self) -> None:
+        for agent_type in validate_handback.ROUTES:
+            plugin = agent_type.partition(":")[0]
             with self.subTest(plugin=plugin):
-                self.assertIn(f"{plugin}:exit-gate", validate_handback.ROUTES)
-                registration = json.loads((gate.parents[1] / "hooks" / "hooks.json").read_text(encoding="utf-8"))
-                entry = registration["hooks"]["PreToolUse"][0]
-                self.assertEqual(entry["matcher"], "SubagentHandback")
-                self.assertIn("shared/hooks/validate-handback.py", entry["hooks"][0]["command"])
+                registration = json.loads((REPOSITORY_ROOT / "plugins" / plugin / "hooks" / "hooks.json").read_text(encoding="utf-8"))
+                entries = [entry for entry in registration["hooks"]["PreToolUse"] if entry["matcher"] == "SubagentHandback"]
+                self.assertEqual(len(entries), 1)
+                self.assertIn("shared/hooks/validate-handback.py", entries[0]["hooks"][0]["command"])
 
+    def test_the_core_verifier_is_the_routed_verdict(self) -> None:
+        self.assertEqual(validate_handback.ROUTES, {"wisp:verifier": ("verdict@3",)})
 
 if __name__ == "__main__":
     unittest.main()

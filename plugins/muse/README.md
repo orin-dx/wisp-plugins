@@ -1,6 +1,6 @@
 # muse — Explore and Render
 
-**Stage:** Exploration · **Output:** `option-set@1` · **Version:** 1.2.0
+**Stage:** Exploration · **Output:** `option-set@1` · **Version:** 5.0.0
 
 Shows options before anything is decided. Muse builds structurally different options, renders them and shows them before describing them, keeps a decision log, and carries the chosen option into a `requirement@1` when the user is ready. It is non-binding: no gate, no spec, no tests.
 
