@@ -7,7 +7,7 @@ Each rule ends with what enforces it: `[lint]` a lint or CI job, `[type]` the sh
 - No `unwrap()` outside tests. `expect`, `panic!`, `unreachable!` and `todo!` follow the repo's lint table: where it denies them, use `?`; where it allows `expect`, the message names the invariant that makes the failure impossible. `[lint]` `unwrap_used` and friends in `[workspace.lints.clippy]`, run with `-D warnings`.
 - `unsafe_code` is forbidden or denied workspace-wide, and `unused_must_use`, `let_underscore_must_use` and `map_err_ignore` are denied. A crate opts in with `[lints] workspace = true`. `[lint]`
 - Failures are typed enums (`thiserror`; `miette::Diagnostic` for user-facing errors, with a stable code and a fix). No `String` variant when a structured one is possible; compose with `#[from]`/`#[source]`. Public error enums are `#[non_exhaustive]`. `[review]`
-- Never degrade silently: a skipped file, dropped item or defaulted value emits a diagnostic or a count. A swallowed error is the typical review finding (10 of 256 findings across the three repos). `[review]`
+- Never degrade silently: a skipped file, dropped item or defaulted value emits a diagnostic or a count. When one sibling of a family starts failing loudly, convert the rest in the same change. About 20 of 406 review findings in these repos are silent degradation (an over-size file skipped with no count; one lookup answering `null` where its siblings now error). `[review]`
 
 ## Types and API shape
 
@@ -23,8 +23,9 @@ Each rule ends with what enforces it: `[lint]` a lint or CI job, `[type]` the sh
 
 - Assert the exact value, not presence: `assert_eq!` over `contains`, `is_some` or "does not panic". A test of "X exists" survives X holding stale data. `[review]`
 - A fix gets a test that fails on the original bug. A function that mirrors an already-tested one (watch mode beside batch mode, a second ecosystem beside the first) gets a test asserting the same contract: sibling paths are where coverage lapses.
+- A test of a specified failure asserts that failure (the diagnostic code, the exit code), not only "it failed": any other failure would pass. A stub applies the logic it replaces (a fake `gh` that ignores `--jq` leaves the filter untested). A test never reads the code under test as text, and never mirrors the implementation's own constants back at it.
 - Snapshots (`insta`): accept a change only after confirming the new output is correct, not merely different.
-- Tests earn their place by covering a behavior, edge or error state, not a line. Do not scan source text for strings that code can expose directly, and do not keep hand-maintained lists that mirror code (error codes, command names): derive them from the type.
+- Tests earn their place by covering a behavior, edge or error state, not a line. Do not scan source text for strings that code can expose directly. Do not keep hand-maintained lists that mirror code or config (error codes, command names, the crates a release script loops over, option keys): derive them from the type or the config that owns them, and state a fact in one place.
 - Tests run with the repo's runner (`cargo nextest` plus doctests where declared). Coverage thresholds belong to the repo's recipe; never lower one to pass. `[lint]`
 
 ## Fixing a bug
@@ -34,7 +35,7 @@ Each rule ends with what enforces it: `[lint]` a lint or CI job, `[type]` the sh
 
 ## Comments and docs
 
-- A code comment states only a non-obvious why. No history ("used to", "previously": the commit records it), no spec, criterion or plan IDs (specs change; say what the code guarantees). Fill to 120 columns (`rustfmt.toml`); rewriting a block counts as writing it, so re-fill and cut. A comment, doc or report that claims what the code does not do is the second most common review finding (57 of 256).
+- A code comment states only a non-obvious why. No history ("used to", "previously": the commit records it), no spec, criterion or plan IDs (specs change; say what the code guarantees). Fill to 120 columns (`rustfmt.toml`); rewriting a block counts as writing it, so re-fill and cut. A comment, doc, help text or report that claims what the code no longer does is the most common finding after logic bugs (95 of 406 findings mention one, by keyword). When behavior changes, search docs, help output, comments and tests for the old claim, and make sure any file, section or command a comment cites exists at this commit.
 - Public items: first doc line is one third-person sentence ending in a period; link types by name; add `# Errors`, `# Panics` or `# Examples` only when they carry information.
 - Read the matching ADR (`docs/adr/README.md`) before changing what it guards. Reversing one needs a new ADR the owner accepts.
 
