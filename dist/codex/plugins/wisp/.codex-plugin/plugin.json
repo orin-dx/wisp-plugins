@@ -1,0 +1,38 @@
+{
+  "name": "wisp",
+  "version": "1.0.0",
+  "description": "Start any change by sizing its risk, stating outcome, constraints and evidence bar, and verifying shared or irreversible work with fresh eyes.",
+  "author": {
+    "name": "Gabriel Castro",
+    "email": "gabe@techworx.dev"
+  },
+  "homepage": "https://github.com/orin-dx/wisp-plugins",
+  "repository": "https://github.com/orin-dx/wisp-plugins",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "verification",
+    "risk",
+    "fix",
+    "build"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Wisp",
+    "shortDescription": "Size the change, prove it, verify where it pays",
+    "longDescription": "One work skill that classifies a change as contained, shared or irreversible, states its brief before editing, picks the mode, and spends independent verification only on shared or irreversible work.",
+    "developerName": "Gabriel Castro (Orin DX)",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/orin-dx/wisp-plugins",
+    "defaultPrompt": [
+      "Fix this bug with a test that fails first",
+      "Is this change done? Verify it",
+      "Spike whether this library works here"
+    ]
+  }
+}

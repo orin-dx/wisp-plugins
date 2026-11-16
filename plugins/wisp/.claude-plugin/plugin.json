@@ -1,0 +1,9 @@
+{
+  "name": "wisp",
+  "version": "1.0.0",
+  "description": "The core of Wisp Plugins. One work skill sizes each change by reversibility and blast radius, states outcome, constraints and evidence bar, picks the mode (explore, spike, fix, build, check, ship) and review depth, and sends shared or irreversible work to a fresh-context verifier.",
+  "author": {
+    "name": "Gabriel Castro",
+    "email": "gabe@techworx.dev"
+  }
+}

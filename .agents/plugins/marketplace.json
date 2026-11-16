@@ -135,6 +135,18 @@
         "authentication": "ON_INSTALL"
       },
       "category": "define"
+    },
+    {
+      "name": "wisp",
+      "source": {
+        "source": "local",
+        "path": "./dist/codex/plugins/wisp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     }
   ]
 }

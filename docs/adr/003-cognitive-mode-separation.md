@@ -1,6 +1,6 @@
 # ADR-003: Cognitive mode separation
 
-**Status:** Accepted
+**Status:** Superseded by ADR-018 (agents are split by context and risk; the verifier gathers evidence and judges in one fresh context)
 **Date:** 2026-08-08
 
 ## Context
