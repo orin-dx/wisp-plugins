@@ -1,0 +1,9 @@
+{
+  "name": "wisp-packs",
+  "version": "1.0.0",
+  "description": "House packs: plain markdown on how the owner builds (rust-house, ts-house), applied when a repo's AGENTS.md has a Packs: line or on /wisp-packs:load. Commands: load, list, suggest.",
+  "author": {
+    "name": "Gabriel Castro",
+    "email": "gabe@techworx.dev"
+  }
+}

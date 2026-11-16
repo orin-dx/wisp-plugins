@@ -51,6 +51,10 @@
         "shared/references/work/verifier-brief.md",
         "shared/references/workspace/conventions.md"
       ]
+    },
+    {
+      "id": "wisp-packs",
+      "runtime_files": [{ "source": "plugins/wisp-packs/packs", "destination": "packs" }]
     }
   ]
 }
