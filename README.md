@@ -169,7 +169,7 @@ flowchart LR
 | shared | Other code, users or sessions depend on it, or a spec or plan makes claims about code | The same, then the verifier: one round and one targeted retry, then the persistent blockers come to you |
 | irreversible | Hard to undo, or crosses the repo boundary: migration, deletion, publish, release, push to a shared branch | The verifier, then a decision card before the action itself |
 
-When two tiers fit, the higher one applies. The verifier gets the brief, the change and the evidence, never the worker's reasoning, and runs the code, build or render itself. Details: [`shared/references/work/modes.md`](./shared/references/work/modes.md) and [ADR 018](./docs/adr/018-deep-core-by-context-and-risk.md).
+When two tiers fit, the higher one applies. The verifier gets the brief, the change and the evidence, never the worker's reasoning, and runs the code, build or render itself. Details: [`shared/references/work/modes.md`](./shared/references/work/modes.md), [ARCHITECTURE.md section 2](./ARCHITECTURE.md#2-how-a-request-flows-through-wisp) and [ADR 018](./docs/adr/018-deep-core-by-context-and-risk.md).
 
 ---
 
@@ -183,7 +183,7 @@ These run in Claude Code only. Each fails open: if a hook breaks, the session ca
 | `shared/hooks/validate-handback.py` | `wisp`, PreToolUse `SubagentHandback` | Rejects a `wisp:verifier` report that is not a valid `verdict@3`, or that goes past the second round without escalating. Runs in auto mode, for local subagents only. | `WISP_HANDBACK_TRACE=<file>` logs each inspected event; `WISP_HANDBACK_STATE_DIR` sets where denial counts are kept (default `wisp-handback` in the temp directory) |
 | `shared/hooks/pack-inject.py` | `wisp-packs`, SessionStart | Injects the packs named on `Packs:` lines in `AGENTS.md` | Remove the `Packs:` line, or disable `wisp-packs` |
 
-On Codex the `wisp` skills state the `Not verified:` and round rules themselves, and packs load through `load`.
+On Codex the `wisp` skills state the `Not verified:` and round rules themselves, and packs load through `load`. Per-hook switches and tests: [`docs/repository-hooks.md`](./docs/repository-hooks.md); design: [ARCHITECTURE.md section 5](./ARCHITECTURE.md#5-hooks-and-where-they-run).
 
 ---
 
@@ -201,7 +201,7 @@ A pack is a short markdown file on how one owner builds in one area: when it app
 - **What a pack may do:** it never adds a command the repo does not declare; the repo's `AGENTS.md` and your instructions win over it; it may tighten a check, but loosening one needs the owner.
 - **Write one:** add `plugins/wisp-packs/packs/<name>.md` (lowercase letters, digits and hyphens). The first line says when it applies. Each rule states the outcome and ends with what enforces it: `[lint]`, `[type]` or `[review]`. End with a file to imitate. A rule goes in a shared pack only when it holds in at least two repos. Run `just marketplace-sync` so the Codex bundle carries it.
 
-More: [`plugins/wisp-packs/`](./plugins/wisp-packs/).
+More: [`plugins/wisp-packs/`](./plugins/wisp-packs/) and [ARCHITECTURE.md section 6](./ARCHITECTURE.md#6-packs).
 
 ---
 
