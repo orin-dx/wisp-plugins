@@ -2,9 +2,9 @@
 
 **Stage:** Ship · **Output:** `release-artifact@3` · **Version:** 3.2.0
 
-Handles everything after implementation: commit messages, PR descriptions, changeset extraction, review triage, posting a review, and release notes. Courier is not a linear pipeline — six independently-triggered skills, each dispatching to the subagent that matches the task. It reads the staged diff, linked spec, and linked requirement at runtime to produce meaningful, context-aware output, not mechanical templates.
+Handles everything after implementation: commit messages, PR descriptions, changeset extraction, review triage, posting a review, and release notes. Courier is not a linear pipeline — six independently-triggered skills. Three dispatch to a subagent for the writing; the other three (`post-review`, `receive-feedback`, `release`) are mechanical and run in the primary agent. It reads the staged diff, linked spec, and linked requirement at runtime to produce meaningful, context-aware output, not mechanical templates.
 
-Courier does not critique code quality or spec conformance — that's the built-in `code-review` skill and `sentinel`'s job respectively. Courier consumes their findings when relevant (e.g. `courier/post-review` can post an already-drafted `code-review` finding) rather than re-implementing them.
+Courier does not critique code quality — that's the built-in `code-review` skill's job. Courier consumes its findings when relevant (e.g. `courier/post-review` can post an already-drafted `code-review` finding) rather than re-implementing them.
 
 ---
 
@@ -53,9 +53,9 @@ When a commit, a PR description or a changeset needs writing, invoke the matchin
 | `courier/commit` | Reads staged diff, produces a conventional commit message explaining the *why* | `commit-analyzer` |
 | `courier/pr` | Produces a PR title and body a reviewer with zero prior context can understand, opens the PR after confirmation | `pr-narrator` |
 | `courier/changeset` | Splits a diff into independent topics if it has more than one, classifies consumer_impact and semver_impact per topic, and writes a changeset whose detail scales with that classification | `changeset-analyzer` |
-| `courier/receive-feedback` | Assembles the review package (diff, linked spec, test results, open questions) for feedback received on the user's own PR | `review-preprocessor` |
+| `courier/receive-feedback` | Assembles the review package (diff, linked spec, test results, open questions) for feedback received on the user's own PR | none — mechanical assembly |
 | `courier/post-review` | Posts an already-drafted review or reply via `gh pr review`/`gh pr comment`, gated by explicit confirmation | none — mechanical orchestration only |
-| `courier/release` | Aggregates changesets since the last release; version is `max(semver_impact)` across included changesets | `release-summarizer` |
+| `courier/release` | Aggregates changesets since the last release; version is `max(semver_impact)` across included changesets | none — deterministic aggregation |
 
 ---
 
@@ -66,10 +66,8 @@ When a commit, a PR description or a changeset needs writing, invoke the matchin
 | `commit-analyzer` | Commit Author | haiku / low | Reads staged diff and produces a conventional commit message explaining why, not what. |
 | `changeset-analyzer` | Changeset Extractor | sonnet / medium | Classifies `consumer_impact` and `semver_impact` from a git diff per `shared/references/delivery/changesets.md`, then produces a `changeset@3` whose summary detail scales with that classification. |
 | `pr-narrator` | PR Author | sonnet / medium | Writes a PR title and body from the reviewer's perspective — zero prior context assumed. |
-| `review-preprocessor` | Review Package Assembler | haiku / low | Bundles the diff, linked spec, test results, and open questions into a structured review package. Does not categorize comments — that's the caller's call, made with `shared/references/delivery/github.md`'s vocabulary. |
-| `release-summarizer` | Release Author | haiku / low | Aggregates `changeset@3` entries into a `release-artifact@3`, computing the version as `max(semver_impact)` and filtering `internal-only` entries. |
 
-`courier/post-review` has no subagent — posting is mechanical execution of already-drafted content, gated by user confirmation, not a judgment task.
+`courier/post-review`, `courier/receive-feedback` and `courier/release` have no subagent. Posting, assembling a package and aggregating changesets are mechanical, so the skill does them itself; posting is gated by user confirmation.
 
 ---
 
@@ -84,11 +82,11 @@ flowchart TD
 
     Diff["Git diff"] --> Changeset["<b>changeset</b><br/>changeset-analyzer"] --> CS(["changeset@3"])
     Diff --> PR["<b>pr</b><br/>pr-narrator"] --> PROut(["PR opened"])
-    CS --> Release["<b>release</b><br/>release-summarizer"] --> RelOut(["release-artifact@3"])
+    CS --> Release["<b>release</b><br/>aggregates"] --> RelOut(["release-artifact@3"])
 
     Staged["Staged diff"] --> Commit["<b>commit</b><br/>commit-analyzer"] --> CommitOut(["conventional commit"])
 
-    Comments["PR comments"] --> Receive["<b>receive-feedback</b><br/>review-preprocessor"]
+    Comments["PR comments"] --> Receive["<b>receive-feedback</b><br/>assembles"]
     Receive -->|"review package"| Draft["Caller drafts response"] --> Post["<b>post-review</b><br/>confirmed delivery"] --> Reply(["posted reply"])
 
     class Diff,Staged,Comments source
@@ -96,7 +94,7 @@ flowchart TD
     class CS,PROut,RelOut,CommitOut,Reply output
 ```
 
-`fix code` is the one step courier doesn't do — a human or `smith` closes that gap before `courier/post-review` picks back up.
+`fix code` is the one step courier doesn't do — a person or the work skill in the `wisp` plugin closes that gap before `courier/post-review` picks back up.
 
 ---
 
@@ -120,4 +118,4 @@ Agents read these at runtime — they are not injected at startup:
 
 ## Previous Stage
 
-Consumes smith's per-task `criteria_evidence` from **[smith](../smith/)** (aggregated across the implementation run) as the precise input to `courier/changeset`, or produces `changeset@3` directly from a staged git diff when no smith run backs the change.
+Takes the `criteria_evidence` the implementation produced, when there is one, as the precise input to `courier/changeset`, or produces `changeset@3` directly from a staged diff when no such record backs the change.

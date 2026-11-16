@@ -24,7 +24,7 @@ A sketch or a spike is non-binding and never counts as evidence for a gate. This
    - `linked_issues`: the sketch or spike and option (for example `SKETCH-001/OPT-rail`), the artifact path and the approved render.
 3. Make sure the sketch is `decided` and its `decisions` include the choice; for a spike, copy its `verified` and `unverified` lists. Do not rewrite earlier entries.
 4. Say the scratch builds are throwaway: they are discarded or rebuilt through a planned implementation, never extended in place.
-5. Name the next stage and stop: `component` for a component whose behavior and accessibility must be pinned down, a specification skill for other work, or requirement clarification if the requirement has gaps. End with one line: "Skipped by design: a gate on the sketch; the requirement is gated by the next stage."
+5. Name the next stage and stop: hand the requirement to the `wisp` plugin's work skill, which decides how much specification and review it needs, and say which gaps the requirement has, if any. End with one line: "Skipped by design: a gate on the sketch; the requirement is gated by the next stage."
 
 ## Requirement shape
 

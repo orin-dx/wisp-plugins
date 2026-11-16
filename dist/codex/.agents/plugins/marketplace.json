@@ -17,18 +17,6 @@
       "category": "Productivity"
     },
     {
-      "name": "guide",
-      "source": {
-        "source": "local",
-        "path": "./plugins/guide"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "plan"
-    },
-    {
       "name": "mason",
       "source": {
         "source": "local",
@@ -51,90 +39,6 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"
-    },
-    {
-      "name": "navigator",
-      "source": {
-        "source": "local",
-        "path": "./plugins/navigator"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "plan"
-    },
-    {
-      "name": "ranger",
-      "source": {
-        "source": "local",
-        "path": "./plugins/ranger"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Developer Tools"
-    },
-    {
-      "name": "scribe",
-      "source": {
-        "source": "local",
-        "path": "./plugins/scribe"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "specify"
-    },
-    {
-      "name": "sentinel",
-      "source": {
-        "source": "local",
-        "path": "./plugins/sentinel"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Developer Tools"
-    },
-    {
-      "name": "smith",
-      "source": {
-        "source": "local",
-        "path": "./plugins/smith"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "implement"
-    },
-    {
-      "name": "vanguard",
-      "source": {
-        "source": "local",
-        "path": "./plugins/vanguard"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "research"
-    },
-    {
-      "name": "weaver",
-      "source": {
-        "source": "local",
-        "path": "./plugins/weaver"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "define"
     }
   ]
 }

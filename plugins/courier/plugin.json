@@ -11,11 +11,11 @@
   "agents": [
     "./agents/changeset-analyzer.md",
     "./agents/commit-analyzer.md",
-    "./agents/pr-narrator.md",
-    "./agents/release-summarizer.md",
-    "./agents/review-preprocessor.md"
+    "./agents/pr-narrator.md"
   ],
-  "consumes": [],
+  "consumes": [
+    "changeset@3"
+  ],
   "produces": [
     "changeset@3",
     "release-artifact@3"

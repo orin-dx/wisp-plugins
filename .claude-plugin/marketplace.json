@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "wisp-plugins",
-  "description": "Wisp Plugins: eleven cooperating plugins covering the full development lifecycle — from requirement capture through spec, plan, implementation, verification, and shipping.",
+  "description": "Wisp Plugins for Claude Code: a core plugin for risk-aware work, plus courier for shipping, muse for exploring and rendering options, mason for building plugins, and domain packs.",
   "owner": {
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
@@ -13,54 +13,14 @@
       "source": "./plugins/mason"
     },
     {
-      "name": "ranger",
-      "description": "Bug hunting for Rust, TypeScript, JavaScript, Python, and Go. Confirms reachable defects, searches semantic siblings, and routes structural families for architectural correction.",
-      "source": "./plugins/ranger"
-    },
-    {
-      "name": "sentinel",
-      "description": "Cross-cutting verification gate. Confirms any stage artifact meets its criteria before the next stage begins. Implements the sentinel protocol: recon → verify → exit-gate with retry-with-feedback.",
-      "source": "./plugins/sentinel"
-    },
-    {
-      "name": "weaver",
-      "description": "Need definition plugin. Captures and structures requirements before implementation begins. Integrates with GitHub Issues by default; extensible to any issue tracker that produces the requirement@1 schema. Skills: capture-need, clarify-requirement, prioritize-backlog, connect-requirement, audit-backlog.",
-      "source": "./plugins/weaver"
-    },
-    {
-      "name": "vanguard",
-      "description": "Research plugin. Investigates questions and requirements to build a documented evidence base before committing to a solution direction. Distinguishes confirmed findings from assumptions. Produces research-report@1 for consumption by scribe (spec).",
-      "source": "./plugins/vanguard"
-    },
-    {
-      "name": "scribe",
-      "description": "Specification plugin. Drafts and gates testable specs, checks whole-system architecture, detects drift, and turns Ranger findings or Smith implementation reviews into structural corrections. Skills: draft-spec, verify-spec, spec-drift, audit-spec, audit-architecture, gate-spec, correct-spec, architect.",
-      "source": "./plugins/scribe"
-    },
-    {
       "name": "muse",
-      "description": "Component specification plugin. Turns UI/design intent into unambiguous, testable component specs — props, variants, per-state behavior, and accessibility criteria as testable propositions, gated before planning. Audits the spec, not the implementation; code-level accessibility scanning of the built component is not yet covered by ranger. Also sketches options before anything is specified (sketch) and carries a chosen option into a requirement (promote).",
+      "description": "Exploration and render plugin. Shows options before anything is decided: sketch builds and renders three structurally different options as an option-set@1 with a decision log, and promote carries a chosen option or a working spike into a requirement@1. Non-binding: no gate, spec or tests.",
       "source": "./plugins/muse"
-    },
-    {
-      "name": "navigator",
-      "description": "Planning plugin. Decomposes specs into sequenced, bite-sized implementation plans where each task states its outcome, files, signatures and the tests proving each criterion, with code only where the logic is non-obvious — no write-test-first mandate. Tasks are sized to compilation boundaries, not a clock-time estimate. No TBDs. The challenger gets two rounds.",
-      "source": "./plugins/navigator"
-    },
-    {
-      "name": "smith",
-      "description": "Implementation plugin. Executes tested plan batches, verifies risk at real boundaries, searches semantic defect siblings, and escalates shared model or architecture gaps. Also spikes: a throwaway experiment that checks whether a tool or approach works (spike).",
-      "source": "./plugins/smith"
     },
     {
       "name": "courier",
       "description": "Shipping plugin. Shepherds completed, verified code through commit, PR creation, review response, and changeset documentation. Skills: commit, pr, changeset, receive-feedback, post-review, release. Produces release-artifact@3 from changeset@3 inputs.",
       "source": "./plugins/courier"
-    },
-    {
-      "name": "guide",
-      "description": "Start here. Six commands named by intent (explore, spike, fix, build, check, ship) that pick the path by risk and hand off to the skill that does the work, so its checks run.",
-      "source": "./plugins/guide"
     }
   ]
 }

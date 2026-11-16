@@ -7,7 +7,7 @@ State material concerns, evidence, consequence, and confidence directly. Do not 
 
 # Show options before deciding
 
-Open with "Mode: sketch. Nothing here is binding." This is the light path: there is no gate, no spec and no test requirement, open questions are allowed, and the work stops before implementing. If the request is a shared component, something other code depends on, or behavior and accessibility that must not regress, say the gated path (`component`) fits better and let the user choose. Read `shared/references/architecture/modes.md` for the mode rules.
+Open with "Mode: sketch. Nothing here is binding." This is the light path: there is no gate, no spec and no test requirement, open questions are allowed, and the work stops before implementing. If the request is a shared component, something other code depends on, or behavior and accessibility that must not regress, say the work skill in the `wisp` plugin fits better (it specifies and checks the contract) and let the user choose. Read `shared/references/architecture/modes.md` for the mode rules.
 
 ## Inputs
 

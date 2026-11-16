@@ -39,7 +39,7 @@ Follow this shape exactly, because the requirement is checked against `requireme
    - `linked_issues`: the sketch or spike and option (for example `SKETCH-001/OPT-rail`), the path of the artifact, and the approved render.
 3. **Keep the log honest.** Make sure the sketch is `decided` and its `decisions` include the choice; for a spike, copy its `verified` and `unverified` lists. Do not rewrite earlier entries.
 4. **Do not carry code over.** The scratch builds are throwaway. Say they will be discarded or rebuilt through a planned implementation, not extended in place.
-5. **Name the next stage and stop.** For a component with behavior and accessibility to pin down, `muse/component`; for other work, `scribe/draft-spec`; if the requirement has gaps, `weaver/clarify-requirement`. Do not start it. End with one line naming what this skill skipped: "Skipped by design: a gate on the sketch; the requirement is gated by the next stage."
+5. **Name the next stage and stop.** Hand the requirement to the `wisp` plugin's work skill, which classifies the change by risk and decides how much specification and review it needs; if the requirement has gaps, say which. Do not start it. End with one line naming what this skill skipped: "Skipped by design: a gate on the sketch; the requirement is gated by the next stage."
 </workflow>
 
 <rules>

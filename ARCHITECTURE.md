@@ -44,75 +44,43 @@ plugins/<id>/
 
 `plugin.json` fields: `id`, `version` (semver), `description`, `skills` (path to skills dir), `agents` (list of agent file paths).
 
-A plugin defaults to one skill directory named after the plugin id. IF the plugin's scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead; `courier`, `scribe`, `weaver`, `mason`, `muse`, `smith`, and `guide` all do. The routing key is the directory name, not the frontmatter `name:` field. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
+A plugin defaults to one skill directory named after the plugin id. IF the plugin's scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead; `courier`, `mason`, and `muse` do. The routing key is the directory name, not the frontmatter `name:` field. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
 
 ---
 
-## 3. The Lifecycle Pipeline
+## 3. The v5 Plugin Set
 
-Ten plugins form a directed pipeline, and `guide` starts work in it by intent (explore, spike, fix, build, check, ship). Structured handoffs use typed artifacts; implementation and shipping also exchange verified workspace state.
+v5 is a deep core and three focused plugins, plus a pack set. It replaces the eleven-plugin lifecycle pipeline, where each stage was a plugin and each handoff a document. The design reasoning is in [`docs/design/agent-native-architecture.md`](./docs/design/agent-native-architecture.md) (option B: split by context and risk, not by role).
 
-**The primary flow** — one direction, no side-taps:
+| Plugin | Role |
+| :--- | :--- |
+| `wisp` | The core. One entry point classifies a change by reversibility and blast radius, does the work in one full context, and runs a fresh-context independent check where a confident mistake is costly |
+| `wisp-packs` | Domain packs that `wisp` loads when the work needs them |
+| `courier` | Shipping: commit, pull request, changeset, review feedback, post-review, release |
+| `muse` | Exploration and render: `sketch` builds options, `promote` carries a chosen option into a requirement |
+| `mason` | Plugin authoring, schema design and behavioral evaluation |
+
+Structured handoffs that remain use typed artifacts: `option-set@1` and `requirement@1` from `muse`, `changeset@3` and `release-artifact@3` from `courier`, `verdict@3` from a gate. Schemas of the retired plugins stay on disk, immutable.
 
 ```mermaid
 %%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
 flowchart LR
     classDef source fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#1e1b4b,rx:10px,ry:10px,font-weight:600;
     classDef engine fill:#f5f3ff,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95,rx:10px,ry:10px;
-    classDef router fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f,rx:10px,ry:10px,font-weight:600;
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
-    we["<b>Weaver</b><br/>capture need"] -->|"requirement@1"| va["<b>Vanguard</b><br/>research"]
-    va -->|"research-report@1"| sc["<b>Scribe</b><br/>specify"]
-    mu["<b>Muse</b><br/>component spec"] -->|"spec@1"| na["<b>Navigator</b><br/>plan"]
-    sc -->|"spec@1"| na
-    na -->|"plan@1"| sm["<b>Smith</b><br/>implement"]
-    sm -->|"verified change"| co["<b>Courier</b><br/>ship"]
-    co -.->|"next need"| we
+    mu["<b>Muse</b><br/>sketch and render"] -->|"requirement@1"| wi["<b>Wisp</b><br/>work, verify"]
+    wi -->|"verified change"| co["<b>Courier</b><br/>ship"]
+    pk["<b>Wisp packs</b>"] -.->|"loaded on demand"| wi
 
-    class we,mu source
-    class va,sc,sm engine
-    class na router
+    class mu source
+    class wi,pk engine
     class co output
 ```
 
-**Verification** — Sentinel and Ranger attach to the flow above but aren't stops in its sequence; the muted dashed boxes below are the same personas shown only as attachment points:
+**Composable:** every plugin installs on its own. `courier` needs no other plugin, and `muse` only hands a requirement onward.
 
-```mermaid
-%%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
-flowchart LR
-    classDef store fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a,rx:10px,ry:10px;
-    classDef router fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f,rx:10px,ry:10px,font-weight:600;
-
-    sc2["Scribe"]:::store
-    sm2["Smith"]:::store
-    co2["Courier"]:::store
-
-    se{{"<b>Sentinel</b><br/>independent gate"}}
-    ra{{"<b>Ranger</b><br/>defect audit"}}
-
-    sc2 -.->|"spec@1"| se
-    sm2 -.->|"code + verdict@3"| se
-    sm2 -.->|"implementation-review@2"| sc2
-    se -.->|"verdict@3"| co2
-
-    sm2 -->|"live code"| ra
-    ra -.->|"finding-report@2"| sc2
-
-    class se,ra router
-```
-
-![Define](https://img.shields.io/badge/-Define-6366f1) ![Design](https://img.shields.io/badge/-Design-8b5cf6) ![Build](https://img.shields.io/badge/-Build-3b82f6) ![Verify](https://img.shields.io/badge/-Verify-f59e0b) ![Ship](https://img.shields.io/badge/-Ship-10b981)
-
-*Pill-shaped nodes are cross-cutting checkpoints, not sequence stops. Solid arrows are direct handoffs; dashed arrows are verification side-channels. Ranger's input is the live codebase Smith just wrote, not a schema handoff — the one solid arrow in the second diagram.*
-
-Smith resolves scoped defect families before its exit gate. A structural family enters Scribe as `implementation-review@2`, returns through the normal spec and plan gates, and ends with an architecture-model refresh after implementation passes.
-
-**Composable:** any contiguous subset installs cleanly. Start at `scribe` if requirements come from an external tracker. End at `smith` if automated shipping tooling isn't needed. Layer `sentinel` in at any stage for an independent verification pass.
-
-**Substitutable:** any stage can be replaced by a different implementation that honours the same schema contract. A Jira plugin replacing `weaver` just needs to emit `requirement@1`.
-
-**Cross-cutting, not inline:** `sentinel`'s `plugin.json` declares `consumes: []` — nothing invokes it automatically. Smith's and Ranger's exit gates independently implement the same recon → verify → judge discipline Sentinel formalizes; they do not call Sentinel's agents. Install Sentinel for a standalone second opinion.
+**Substitutable:** any plugin can be replaced by one that honours the same schema contract. A Jira plugin replacing the requirement source just needs to emit `requirement@1`.
 
 ---
 
@@ -137,7 +105,7 @@ Verification is claim-driven, not tool-driven. Workflows choose available projec
 | A boundary preserves behavior | An observation at the nearest executable compile, serialization, process, network, storage, render, or environment boundary |
 | Generated inputs explore the risk | A named generator plus a behavioral oracle that can reject bad output |
 | A defect family is exhausted | Candidate sites derived independently from domain responsibility, state transitions, and architecture, with an outcome for each site |
-| A fix is structurally complete | A shared root cause and an explicit decision: scoped repair, consolidation, or Scribe architecture remediation |
+| A fix is structurally complete | A shared root cause and an explicit decision: scoped repair, consolidation, or structural remediation |
 | Mutable or asynchronous behavior passes | Fresh state and terminal results for every relevant started check |
 
 Unavailable or disproportionate checks become explicit coverage gaps; invoking a tool without a relevant oracle proves nothing. Rust, TypeScript/JavaScript, Python, and Go references suggest compatible tools without making one command mandatory.
@@ -173,9 +141,9 @@ Use the lowest tier that produces correct output. Opus is reserved for decisions
 
 ---
 
-## 6. The Sentinel Gate Protocol
+## 6. The Gate Protocol
 
-`sentinel` is a reusable, artifact-agnostic verification gate. Any artifact type — spec, plan, changeset, finding report — can be run through it.
+A gate is a reusable, artifact-agnostic verification protocol. Any plugin that gates an artifact (a spec, a plan, a finding report, a change) follows it.
 
 ```mermaid
 %%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
@@ -218,7 +186,7 @@ On `fail`, the orchestrator passes **only the blockers array** back to the produ
 
 `retry_count` is tracked inside `verdict@3`; the caller sets it to the number of earlier rounds (0 in round one) and passes the prior blockers on a retry. A fail at `retry_count` 1 or later, or a repeated blocker, adds an `escalation_required` blocker and goes to a human.
 
-Two Claude Code hooks enforce parts of this. `shared/hooks/validate-handback.py` denies an exit-gate handback that does not conform to `verdict@3` or that goes past the two-round limit without escalating (ADR 012, 015); it runs only in auto mode for local subagents and fails open. `shared/hooks/route-guard.py` redirects a direct call to a pipeline agent to the skill that starts it, once per session. Both are registered through `plugins/<id>/hooks/hooks.json`. Codex and Antigravity have no equivalent; they rely on the skill text and the same prompt rules.
+A Claude Code hook enforces part of this. `shared/hooks/validate-handback.py` denies an exit-gate handback that does not conform to `verdict@3` or that goes past the two-round limit without escalating (ADR 012, 015); it runs only in auto mode for local subagents and fails open, and a plugin registers it through `plugins/<id>/hooks/hooks.json`. The routing guard that redirected a direct agent call to its skill is gone: v5 has a single entry point, so the guard's job moves there. Codex and Antigravity have no equivalent hook; they rely on the skill text and the same prompt rules.
 
 ---
 
@@ -239,7 +207,7 @@ Codex skills and role cards use native structures. Cross-harness parity applies 
 
 **Cognitive mode dispatch** — agents are dispatched by the cognitive mode they require, not their pipeline position.
 - A scanner (exhaustive pattern matching, no filtering) and an adversary (default-to-skepticism, requires a concrete failing scenario) cannot share a mental mode — combining them produces an agent worse at both
-- Modes: enumeration such as recon (haiku/low); scanning, tracing, drafting, review and repair (sonnet/medium); binding verdicts and refutation that decides a finding, as in exit gates and ranger's adversary (opus/high). Spec and plan auditors and challengers review in sonnet/medium; their verdicts are not binding
+- Modes: enumeration such as recon (haiku/low); scanning, tracing, drafting, review and repair (sonnet/medium); binding verdicts and refutation that decides a finding, as in exit gates and refutation (opus/high). Auditors and challengers review in sonnet/medium; their verdicts are not binding
 - A plugin with distinct scanning, tracing, adversarial, and repair phases has a dedicated agent per mode
 
 **Progressive context loading** — each agent loads only the focused references needed for its cognitive concern.
@@ -409,4 +377,4 @@ CI runs `just manifests`, `test`, `versions`, `skills-doc`, `reference-size`, `p
 | Agent teams are unavailable | Codex skill does not delegate | Complete the same workflow in one agent and preserve the same artifact contract |
 | Two harnesses produce different prose or reasoning | Not automatically a compatibility failure | Run [`docs/codex-behavioral-evaluation.md`](./docs/codex-behavioral-evaluation.md) and compare valid artifacts, evidence, and acceptance criteria |
 
-The compatibility fixture covers the core `requirement@1 → research-report@1 → spec@1 → plan@1` lifecycle plus Smith's `implementation-review@2 → scribe:architect` structural escalation. It proves shared schema validity, materialized schema identity, and declared handoff links; it does not prove model-equivalent judgment, tool use, or transcript content.
+The compatibility fixture covers the `option-set@1` (muse `sketch` to `promote`) and `changeset@3` (courier `changeset` to `release`) handoffs, plus an `implementation-review@2` document that exercises that published schema. It proves shared schema validity, materialized schema identity, and declared handoff links; it does not prove model-equivalent judgment, tool use, or transcript content.

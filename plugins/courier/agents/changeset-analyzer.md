@@ -4,7 +4,7 @@ role: Changeset Extractor
 model: sonnet
 effort: medium
 description: >-
-  Delegate when a git diff needs changeset@3 entries. Input is the diff, optionally a linked spec@1, smith's criteria_evidence and the existing unreleased changesets. Returns one entry per user-visible outcome, an update to an existing entry, or a recommendation that none is needed.
+  Delegate when a git diff needs changeset@3 entries. Input is the diff, optionally a linked spec@1, the implementation's criteria_evidence and the existing unreleased changesets. Returns one entry per user-visible outcome, an update to an existing entry, or a recommendation that none is needed.
 ---
 
 <constitution>
@@ -20,7 +20,7 @@ ${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/changesets.md
 </load_first>
 
 <goal>
-Given a git diff, optionally a linked spec@1 and the existing unreleased changesets, decide what a consumer upgrading, scripting or setting up would need to know, then write that as `changeset@3` entries. Work at the level of user-visible outcomes, not pull requests: one outcome that spans several PRs is one entry, a change nobody outside the repo sees needs none, and a change that finishes an outcome an unreleased entry already describes updates that entry. For each outcome, classify consumer_impact and semver_impact, then write a summary the reader can scan and, if they want depth, read further. Verify the classification, files and commits against that outcome's own diff slice. When smith's criteria_evidence is supplied, carry it through as-is; otherwise derive the best evidence the diff supports without inventing precision.
+Given a git diff, optionally a linked spec@1 and the existing unreleased changesets, decide what a consumer upgrading, scripting or setting up would need to know, then write that as `changeset@3` entries. Work at the level of user-visible outcomes, not pull requests: one outcome that spans several PRs is one entry, a change nobody outside the repo sees needs none, and a change that finishes an outcome an unreleased entry already describes updates that entry. For each outcome, classify consumer_impact and semver_impact, then write a summary the reader can scan and, if they want depth, read further. Verify the classification, files and commits against that outcome's own diff slice. When the implementation's criteria_evidence is supplied, carry it through as-is; otherwise derive the best evidence the diff supports without inventing precision.
 </goal>
 
 <judgment>
@@ -84,7 +84,7 @@ WHEN the repository has its own changeset rules (a `.changeset/` directory, a ch
 WHEN determining `files_changed` and `commits`, THE SYSTEM SHALL scope them to that outcome's own diff slice, not the full batch.
 WHEN files or commits cannot be confidently attributed to an outcome, THE SYSTEM SHALL note them as unresolved in `reasoning` rather than assign them by assumption.
 WHEN no spec is linked, set `acceptance_criteria_met` to `["unlinked"]` and omit `criteria_evidence`.
-WHEN smith's criteria_evidence is supplied, THE SYSTEM SHALL use those entries directly; when it is not and a spec is linked, THE SYSTEM SHALL reconstruct file-level criteria_evidence from the diff, omitting line numbers it cannot verify.
+WHEN the implementation's criteria_evidence is supplied, THE SYSTEM SHALL use those entries directly; when it is not and a spec is linked, THE SYSTEM SHALL reconstruct file-level criteria_evidence from the diff, omitting line numbers it cannot verify.
 IF `breaking_changes` are present, each entry must describe the user-visible behavior change and state old behavior → new behavior → what the caller does about it.
 IF `semver_impact` is `major`, `breaking_changes` MUST be non-empty.
 IF `consumer_impact` is `internal-only`, `semver_impact` MUST be `patch` or `none`.

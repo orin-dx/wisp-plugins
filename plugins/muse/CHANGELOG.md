@@ -2,6 +2,15 @@
 
 — muse
 
+## [5.0.0] - 2026-11-15
+
+### Removed
+- The `component` skill and the `drafter`, `auditor` and `exit-gate` agents, with the plugin's hooks. Component specs and their gate belong to the work skill in the `wisp` plugin in v5; the UI-state and accessibility spec rules stay available as shared references.
+- The `spec@1` and `verdict@3` outputs of this plugin. It no longer gates anything.
+
+### Changed
+- `muse` is now exploration and render only: `sketch` and `promote` with the `explorer` agent. `promote` hands the requirement to the `wisp` plugin instead of naming the retired spec and planning plugins.
+
 ## [1.2.0] - 2026-11-14
 
 ### Changed
