@@ -1,0 +1,63 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7HB9QN024DDCJWNGF27DSKS",
+  "strategy": "manual-commit",
+  "branch": "v5-core",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "shared/hooks/stop-check.py",
+    "tests/test_agent_structure.py",
+    "tests/test_brand_identity.py",
+    "tests/test_changeset_schema.py",
+    "tests/test_claude_marketplace_sources.py",
+    "tests/test_codex_behavioral_evaluation.py",
+    "tests/test_codex_native_sources.py",
+    "tests/test_cross_harness_artifacts.py",
+    "tests/test_outcome_baseline.py",
+    "tests/test_platform_limits.py",
+    "tests/test_prompt_alignment.py",
+    "tests/test_reasoning_wording.py",
+    "tests/test_reference_integrity.py",
+    "tests/test_skill_routing.py",
+    "tests/test_spec_unknowns.py",
+    "tests/test_verification_rules.py",
+    "tests/test_wisp_packs.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 44,
+    "cache_creation_tokens": 17156,
+    "cache_read_tokens": 4227333,
+    "output_tokens": 12315,
+    "api_call_count": 21,
+    "subagent_tokens": {
+      "input_tokens": 23,
+      "cache_creation_tokens": 125102,
+      "cache_read_tokens": 1131391,
+      "output_tokens": 13060,
+      "api_call_count": 13
+    }
+  },
+  "redaction": {
+    "replacements": 17,
+    "layers": {
+      "betterleaks": 2,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 11,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
