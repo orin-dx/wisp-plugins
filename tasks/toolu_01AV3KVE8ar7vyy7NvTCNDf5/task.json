@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01AV3KVE8ar7vyy7NvTCNDf5",
+  "agent_id": "a1ca5ffeea62292a3",
+  "subagent_type": "general-purpose",
+  "task_description": "Build wisp-packs plugin and mine packs",
+  "token_usage": {
+    "input_tokens": 208,
+    "cache_creation_tokens": 234878,
+    "cache_read_tokens": 17888399,
+    "output_tokens": 68900,
+    "api_call_count": 104
+  },
+  "started_at": "2026-11-15T18:04:50.441608-08:00",
+  "completed_at": "2026-11-15T18:29:33.89771-08:00"
+}
