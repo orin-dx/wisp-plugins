@@ -61,6 +61,11 @@
       "name": "guide",
       "description": "Start here. Six commands named by intent (explore, spike, fix, build, check, ship) that pick the path by risk and hand off to the skill that does the work, so its checks run.",
       "source": "./plugins/guide"
+    },
+    {
+      "name": "wisp-packs",
+      "description": "House packs: plain markdown on how the owner builds (rust-house, ts-house), applied when a repo's AGENTS.md has a Packs: line or on /wisp-packs:load. Commands: load, list, suggest.",
+      "source": "./plugins/wisp-packs"
     }
   ]
 }

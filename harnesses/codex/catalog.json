@@ -81,6 +81,10 @@
     {
       "id": "weaver",
       "runtime_files": ["shared/schemas/plan@1.json", "shared/schemas/requirement@1.json", "shared/schemas/spec@1.json"]
+    },
+    {
+      "id": "wisp-packs",
+      "runtime_files": [{ "source": "plugins/wisp-packs/packs", "destination": "packs" }]
     }
   ]
 }
