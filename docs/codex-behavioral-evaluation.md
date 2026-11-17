@@ -11,11 +11,11 @@ Run the affected case before release when changing a critical workflow, role car
 Use `tests/fixtures/cross-harness/lifecycle.json` as the fixed contract reference and evaluate this route:
 
 ```text
-requirement@1 -> research-report@1 -> spec@1 -> plan@1
-weaver/capture-need -> vanguard/research -> scribe/draft-spec -> navigator/plan
+option-set@1 -> requirement@1
+muse/sketch -> muse/promote
 ```
 
-Extract only the first stage's `requirement@1` document as the run input. Do not expose the fixture's later example artifacts to the executing harness. Make a clean, disposable workspace with that input and any target code needed to ground the task. Do not use a self-authored toy answer as the expected result. The evaluator reviews artifacts and their evidence against the requirement's intent and the live workspace.
+Extract only the first stage's `option-set@1` document as the run input. Do not expose the fixture's later example artifacts to the executing harness. Make a clean, disposable workspace with that input and any target code needed to ground the task. Do not use a self-authored toy answer as the expected result. The evaluator reviews artifacts and their evidence against the chosen option's intent and the live workspace.
 
 ## Runs
 

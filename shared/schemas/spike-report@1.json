@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "spike-report@1",
+  "title": "Spike Report",
+  "description": "The outcome of a throwaway experiment that checks whether a tool, library or approach works. It records what was observed and what was not verified. It carries no gate and is not evidence that production code is correct.",
+  "type": "object",
+  "required": ["id", "question", "approach", "observed", "verified", "unverified", "conclusion", "fidelity", "reasoning"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^SPIKE-[0-9]{3,}$",
+      "description": "Unique spike identifier (e.g. SPIKE-001)"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The one question the spike answers, for example whether a library renders in the target stack"
+    },
+    "approach": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The smallest experiment that could answer it"
+    },
+    "environment": {
+      "type": "string",
+      "description": "Versions, host and stack the experiment ran in"
+    },
+    "scratch_path": {
+      "type": "string",
+      "description": "Where the throwaway code lives. It is discarded or rebuilt through a planned implementation, never extended in place."
+    },
+    "observed": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "What actually happened, including output and errors"
+    },
+    "verified": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "What the experiment demonstrated, each backed by something observed"
+    },
+    "unverified": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "What the experiment did not check: other platforms, scale, accessibility, edge cases"
+    },
+    "conclusion": {
+      "enum": ["works", "partly", "fails", "inconclusive"],
+      "description": "The answer to the question. works needs at least one verified item."
+    },
+    "followups": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "What to do next, for example promote to a requirement or discard"
+    },
+    "fidelity": {
+      "const": "spike",
+      "description": "Marks the artifact as a non-binding spike"
+    },
+    "reasoning": {
+      "type": "string",
+      "description": "Private scratchpad; not forwarded downstream."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "conclusion": { "const": "works" } }, "required": ["conclusion"] },
+      "then": { "properties": { "verified": { "minItems": 1 } } }
+    }
+  ]
+}

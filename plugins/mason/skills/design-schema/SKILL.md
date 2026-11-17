@@ -1,7 +1,7 @@
 ---
 name: design-schema
 description: >-
-  Trigger when the user wants to design a new inter-agent artifact schema: "design a schema for X", "add a new schema to shared/schemas", "what should this handoff look like?". Given a description of what the artifact represents, who produces it, and who consumes it, produces a JSON Schema (draft 2020-12) following ecosystem conventions — $id as name@version, additionalProperties false, a reasoning scratchpad field, all fields documented — and checks for conflicts with existing schemas.
+  Trigger when the user wants a new inter-agent artifact schema: "design a schema for X", "add a new schema to shared/schemas", "what should this handoff look like?". Given what the artifact represents, its producer, and its consumer, returns a draft 2020-12 JSON Schema checked for conflicts with existing schemas.
 version: 2.0.0
 ---
 
@@ -18,10 +18,10 @@ The schema that ships first sets the pattern every consumer inherits — require
 </dispatch>
 
 <references>
-`shared/schemas/` (existing schemas, checked for conflicts before proposing a new one)
+`${CLAUDE_PLUGIN_ROOT}/shared/schemas/` (existing schemas, checked for conflicts before proposing a new one)
 </references>
 
 <io>
 **Consumes**: artifact description, producer, consumer(s)
-**Produces**: JSON Schema object plus a recommended filename (`shared/schemas/<name>@<version>.json`).
+**Produces**: JSON Schema object plus a recommended filename (`${CLAUDE_PLUGIN_ROOT}/shared/schemas/<name>@<version>.json`).
 </io>

@@ -42,7 +42,7 @@ plugins/<id>/
 
 Organize agents by **cognitive mode**, not pipeline position. A scan agent and an analysis agent require different mental modes — split them even if they run sequentially. Agent files are never prefixed with the plugin id (`worker.md`, not `my-plugin-worker.md`) — Claude Code already namespaces agents as `<plugin_id>:<agent_name>`, so a prefix produces redundant `my-plugin:my-plugin-worker` stuttering. See `shared/agent-best-practices.md`'s Namespacing Rule.
 
-A plugin defaults to this single-skill layout. IF its scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead (see `courier`, `scribe`, `weaver`, `mason`). A new skill name defaults to a single lifecycle-stage word; go to a specific compound name (`audit-spec`, not `scribe-audit`) only when the bare word is ambiguous or collides with another plugin's existing skill name — never resolve a collision by prefixing the plugin id, since `plugin:skill` invocation already disambiguates that. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
+A plugin defaults to this single-skill layout. IF its scope covers several genuinely independent, heterogeneous intents on the same artifact — not a linear pipeline invoked as one flow — `skills/<id>/` may split into `skills/<skill-name>/SKILL.md` per skill instead (see `courier`, `mason`, `muse`). A new skill name defaults to a single lifecycle-stage word; go to a specific compound name (`audit-spec`, not `spec-audit`) only when the bare word is ambiguous or collides with another plugin's existing skill name — never resolve a collision by prefixing the plugin id, since `plugin:skill` invocation already disambiguates that. See `shared/constitution.md`'s Plugin Structure and Skill Names sections.
 
 ### `plugin.json`
 
@@ -78,15 +78,14 @@ The skill prompt is what the user invokes. It should:
 
 Read `shared/agent-best-practices.md` before authoring. The hard requirements:
 
-### 5-part structure (frontmatter + body)
+### 4-part structure (frontmatter + body)
 
 - [ ] **Constitution** — copied byte-for-byte from an existing agent, never authored fresh. See `shared/constitution.md`'s Static Prompt Prefix Invariant.
-- [ ] **Backstory** — 2–4 sentences. What has this agent been burned by? What does it value? Guides judgment without constraining method.
 - [ ] **Goal** — what the agent must produce and why. Intent, not steps.
 - [ ] **Judgment** — how to tell if the goal was genuinely achieved vs. output that merely looks like it was. Name the key failure mode.
 - [ ] **Output** — structured shape; reference a schema from `shared/schemas/` when output flows to another agent.
 
-No `<role>` section in the body — that's what `<backstory>` replaced. The frontmatter `role:` field is platform metadata (short display label for routing) and should be kept. No `success_criteria:` checklist. No filler: "your job is to", "make sure to", "please ensure".
+No `<role>` or `<backstory>` section in the body (ADR 017). The frontmatter `role:` field is platform metadata (short display label for routing) and should be kept. No `success_criteria:` checklist. No filler: "your job is to", "make sure to", "please ensure".
 
 ### Instruction economy
 
@@ -115,7 +114,14 @@ No `<role>` section in the body — that's what `<backstory>` replaced. The fron
 
 - [ ] `haiku` / `low` — deterministic enumeration only (manifest building, file inventory)
 - [ ] `sonnet` / `medium` — analysis (scanning, drafting, planning, tracing)
-- [ ] `opus` / `high` — judgment (adversarial reasoning, exit gates, final verdicts)
+- [ ] `opus` / `high` — judgment (exit gates, final verdicts, refutation that decides a finding)
+- [ ] Reviewers and auditors whose output a gate or a human judges again stay `sonnet` / `medium`
+
+### Routing and hooks
+
+- [ ] An agent's `description` names the skill that starts it, so the model reaches it through the skill and its checks run; there is no routing guard hook, and the plugin's single entry point is where routing lives
+- [ ] A new gate agent (`verdict@3`) gets a `ROUTES` entry in `shared/hooks/validate-handback.py` and the plugin registers `validate-handback.py` in `hooks/hooks.json` (ADR 012)
+- [ ] These hooks run only in Claude Code; the skill text must still state the rule for Codex and Antigravity
 
 ### Tool language
 
@@ -152,7 +158,7 @@ Shared schemas in `shared/schemas/` are the inter-plugin API. To add one:
 
 1. Create `shared/schemas/<name>@<version>.json` using JSON Schema draft-2020-12
 2. Set `additionalProperties: false`
-3. Include a `reasoning: string` field
+3. Include a `reasoning: string` field (`candidate@1` and `implementation-context@1` predate this rule)
 4. Document which plugin produces it and which consume it
 5. **Never modify an existing versioned schema** — create `<name>@<version+1>.json` instead
 
@@ -189,8 +195,7 @@ When you add or change what an existing agent can do — a new dimension, a new 
   - SKILL.md overview, dispatch, and I/O sections
   - Narrowed or corrected capabilities, not only additions
 - [ ] Plugin `CHANGELOG.md` gets a new dated entry
-- [ ] `plugin.json` version bumped (see `shared/references/delivery/changesets.md`)
-- [ ] Root `marketplace.json`'s matching plugin entry version bumped to the same value
+- [ ] Version bumped in `plugin.json` only (see `shared/references/delivery/changesets.md`), then `just claude-manifests-sync && just marketplace-sync` write the README, marketplace, Claude and Codex copies; a bump needs no other hand edit
 - [ ] `mason:scaffolder` and `mason:auditor` reflect any new structural convention; capability-only changes need no Mason update
 
 This isn't automated. `mason:audit-plugin` checks structural conformance; it does not (yet) check that every downstream doc/version file was updated to match a capability change. Until it does, this checklist is the thing standing between "the agent works" and "the ecosystem knows the agent works."
@@ -209,6 +214,16 @@ This isn't automated. `mason:audit-plugin` checks structural conformance; it doe
 - **Diagrams:** follow `shared/references/authoring/diagrams.md` when Mermaid materially clarifies a relationship.
 
 ---
+
+## Releasing
+
+A release has three levels, and this marketplace installs from `main`:
+
+- **Shipped:** merged to `main` with the version bumped and the changelog entry written. Claude Code updates a plugin when its version changes, so this is what users get.
+- **Pinned:** annotated git tags: `vX.Y.Z` for the ecosystem and `<plugin>--vA.B.C` for each plugin version, all on the merged commit. They give a rollback point and an exact version to install.
+- **Announced:** a GitHub release for the ecosystem tag. Write its notes in `docs/releases/vX.Y.Z.md` (short highlights, then a pointer to the changelog); without that file the release uses the top changelog entry.
+
+After the version-bump PR merges, check out `origin/main` and run `just release --dry-run`, then `just release`. It checks the tree is clean and on `origin/main`, runs `just check`, creates and pushes the missing tags (your git configuration signs them) and creates the GitHub release. You run it, not an agent: it publishes.
 
 ## Development Setup
 

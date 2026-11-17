@@ -9,14 +9,11 @@ Versioned JSON artifacts in `shared/schemas/` are the compatibility boundary bet
 The focused compatibility fixture at `tests/fixtures/cross-harness/lifecycle.json` covers the core handoff:
 
 ```text
-weaver/capture-need  requirement@1  vanguard/research
-vanguard/research    research-report@1  scribe/draft-spec
-scribe/draft-spec    spec@1  navigator/plan
-navigator/plan       plan@1  smith/implement
-smith/implement       implementation-review@2  scribe/architect
+muse/sketch          option-set@1  muse/promote
+courier/changeset    changeset@3  courier/release
 ```
 
-Its test validates fixture documents against the source schemas, confirms the same schema bytes are materialized into the relevant Codex plugins, and checks that both harnesses declare each producer/consumer relationship. It is a contract compatibility evaluation, not proof that two models reach identical judgment or prose.
+The fixture also holds an `implementation-review@2` document under `schema_fixtures`, which exercises that published schema without naming a plugin handoff. Its test validates fixture documents against the source schemas, confirms the same schema bytes are materialized into the relevant Codex plugins, and checks that both harnesses declare each producer/consumer relationship. It is a contract compatibility evaluation, not proof that two models reach identical judgment or prose.
 
 ## Change and release procedure
 

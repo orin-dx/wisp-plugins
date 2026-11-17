@@ -11,11 +11,11 @@ Release notes are an aggregation of already-classified changesets, not a second 
 
 ## Workflow
 
-1. Validate every candidate entry against `shared/schemas/changeset@2.json`.
-2. Exclude entries whose `consumer_impact` is `internal-only`.
+1. Validate every candidate entry against `shared/schemas/changeset@3.json`.
+2. Exclude entries whose `consumer_impact` is `internal-only` or whose `disposition` is `none`.
 3. Apply the largest remaining `semver_impact` to the supplied prior version.
 4. Carry each approved changeset summary forward without rewriting its consumer meaning.
-5. Produce `shared/schemas/release-artifact@2.json` with the computed version, date, changesets, and any breaking-change or migration information already present in the inputs.
+5. Produce `shared/schemas/release-artifact@3.json` with the computed version, date, changesets, and any breaking-change or migration information already present in the inputs.
 
 ## Evidence and failure handling
 

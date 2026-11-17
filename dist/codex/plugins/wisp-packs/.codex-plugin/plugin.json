@@ -1,0 +1,23 @@
+{
+  "name": "wisp-packs",
+  "version": "1.0.0",
+  "description": "House packs: plain markdown on how the owner builds (rust-house, ts-house), applied when a repo's AGENTS.md has a Packs: line or on request. Commands: load, list, suggest.",
+  "author": {
+    "name": "Gabriel Castro",
+    "email": "gabe@techworx.dev"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Wisp Packs",
+    "shortDescription": "Apply house packs for Rust and TypeScript work.",
+    "longDescription": "Short markdown packs on how the owner builds: deviations from model defaults, the checks that prove them and a file to imitate. A repo opts in with a Packs: line in AGENTS.md; load applies packs, list shows them, suggest recommends them.",
+    "developerName": "Gabriel Castro",
+    "category": "Developer Tools",
+    "capabilities": [
+      "skills"
+    ],
+    "defaultPrompt": [
+      "Load the rust-house pack and follow it for this task."
+    ]
+  }
+}

@@ -4,7 +4,7 @@
 # Run every check (same set CI runs)
 # fmt-check is deliberately excluded: the repo isn't formatted yet. Run
 # `just fmt` once, review the diff, commit it, then add fmt-check here.
-check: manifests test versions skills-doc reference-size marketplace-check mermaid
+check: manifests test versions skills-doc reference-size adr-style platform-limits claude-manifests marketplace-check mermaid wiring
 
 # Install pinned tooling dependencies
 install:
@@ -23,7 +23,7 @@ manifests:
 test:
     python3 -m unittest discover -s tests
 
-# Check plugin.json/README/CHANGELOG/marketplace.json versions agree
+# Check every copy of a version matches its source and each CHANGELOG top entry agrees (the same check as claude-manifests)
 versions:
     ./scripts/check-versions.sh
 
@@ -34,6 +34,27 @@ skills-doc:
 # Enforce the reference file line cap
 reference-size:
     ./scripts/check-reference-size.sh
+
+# Warn when a decision record reads as a session log
+adr-style:
+    python3 scripts/check-adr-style.py
+
+# Check cross-references, skill metadata and the agent/skill description budgets hosts enforce
+platform-limits:
+    python3 scripts/check-platform-limits.py
+
+# Confirm every generated manifest, README version, marketplace entry and badge matches its source, and CHANGELOG top entries agree
+claude-manifests:
+    python3 tools/sync-claude-manifests.py --check
+
+# Regenerate every version copy and manifest from plugins/<id>/plugin.json (ecosystem: marketplace.json); run marketplace-sync after
+claude-manifests-sync:
+    python3 tools/sync-claude-manifests.py
+
+# Run `claude plugin validate --strict` on every plugin and the marketplace (needs the claude CLI; not part of `just check`)
+claude-validate:
+    for dir in plugins/*/; do claude plugin validate "$dir" --strict || exit 1; done
+    claude plugin validate .claude-plugin/marketplace.json --strict
 
 # Confirm the generated Codex marketplace matches its authored sources
 marketplace-check:
@@ -54,3 +75,11 @@ fmt-check:
 # Format the repo in place
 fmt:
     pnpm exec oxfmt --write .
+
+# Check declared agents, skills and schemas exist for every plugin
+wiring:
+    bash shared/scripts/validate-wiring.sh
+
+# Tag and publish a release from origin/main (shows the plan and asks first; add --dry-run to only show it)
+release *args:
+    python3 scripts/release.py {{args}}

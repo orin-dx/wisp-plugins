@@ -3,31 +3,35 @@
 **Status:** Accepted
 **Date:** 2026-09-01
 
-## Context
-
-`smith` (formerly `lambda`) mandated a strict TDD cycle for every task: write the failing test, confirm it fails (red), write the minimal implementation, confirm it passes (green), commit. `navigator`'s `planner` encoded this into `plan@1` itself — every task specified "a failing test written before any implementation code" and "expected failure output" as required fields, and rejected any task not in that order.
-
-The rationale for this ordering was that the red phase is the only moment you know a test would actually fail if the code were wrong — without it, a test could be written after the fact to match whatever the implementation happened to do, producing coverage numbers rather than evidence.
-
-A controlled comparison of TDD-in-the-agent-loop versus non-TDD agent workflows (Birgitta Böckeler, ThoughtWorks, published on martinfowler.com, "TDD inside the agent loop — theater or actual value?") found:
-
-- Agent-written code showed no discernible quality difference between TDD and non-TDD workflows when blind-judged by another model — non-TDD solutions were ranked as good or slightly better in most batches.
-- TDD workflows used 2.96x–8.50x more tokens across small/medium/large tasks, with no corresponding benefit.
-- Mutation scores — a harder, more direct signal of whether a test suite would catch a wrong implementation than pass/fail alone — showed no meaningful difference between TDD and non-TDD runs. Regression-catching capability was equal either way.
-- The mechanism: "the TDD instructions actively work against \[an] up front design step. The design in those runs emerged from the sum of many locally-minimal decisions and was rarely revisited, so it tended to land on whatever shape the first test happened to lock in." Non-TDD runs "created the full design (architecture, data types, edge cases, contracts) before writing any code or tests."
-
-The stated rationale for TDD's red phase — confidence, discipline, permission to relax — is a psychological effect for a human implementer. It does not obviously transfer to an agent, which has no fear to manage and no confidence to build. This repo's own `mutator` agent already runs mutation testing after every task, independent of write order — the finding above suggests that gate is what was actually verifying test quality all along, not the red-then-green sequence layered on top of it.
-
 ## Decision
 
-`smith`'s `implementer` no longer requires a failing test to exist before implementation. The task cycle becomes: read the criteria, design the approach, write the implementation, write comprehensive tests proving each `covers_criteria` criterion, run the full suite, commit. Test quality is verified by `mutator`'s mutation-testing gate (unchanged) — a survived mutant is the concrete signal a test doesn't check what it claims to, regardless of which was written first.
+`smith`'s `implementer` and `navigator`'s `planner` no longer require a failing test before implementation; `mutator` verifies test quality instead.
 
-`navigator`'s `planner` no longer requires "a failing test written before any implementation code" or "expected failure output" as task fields. A task now specifies a brief implementation approach (decided first, so tests prove a chosen design rather than accidentally locking one in), the exact implementation, and the exact tests proving its criteria — order between the latter two is not mandated.
+- **Implementer cycle:** read the criteria, design the approach, write the implementation, write tests proving each `covers_criteria` criterion, run the full suite, commit.
+- **Planner tasks:** a task states a brief implementation approach, decided first, then the exact implementation and the exact tests. It no longer carries "a failing test written before any implementation code" or "expected failure output", and the order of implementation and tests is not mandated.
+- **Test quality:** `mutator`'s mutation gate is unchanged; a surviving mutant is the signal that a test does not check what it claims, whichever was written first.
+- **Unchanged:** `mutator`, `reviewer` and `exit-gate`.
+- **Bug repair keeps red-green:** reproducing the failure before fixing it stays the practice (`shared/agent-best-practices.md`, "Repair"), because proving the bug is real is a causal reason that does not apply to fresh feature work.
+- **ADR 003:** this narrows its "minimum change + red-green verification" for `implementer`'s fresh implementation only; 003 is left as written.
 
-This does not touch `mutator`, `reviewer`, or `exit-gate` — every downstream check ("does the full suite pass," "did mutation testing run," "is every criterion proven") is unchanged. It also does not touch bug-repair workflows elsewhere in the ecosystem where reproducing a failure before fixing it remains the right practice (see `shared/agent-best-practices.md`'s "Repair" cognitive mode) — that case has a clear causal reason for the ordering (proving the bug is real) that doesn't apply to fresh feature implementation from a spec.
+## Why
 
-This updates the "repair" cognitive mode's characterization in `docs/adr/003-cognitive-mode-separation.md` ("minimum change + red-green verification") for `implementer` specifically — that ADR is left as historical record rather than rewritten; this decision supersedes it for `smith`'s fresh-implementation case, not for genuine bug-repair workflows where reproduce-then-fix still applies.
+- **The red phase is a human aid:** its stated value, confidence and discipline, is psychological and does not obviously transfer to an agent.
+- **Comparison found no benefit:** Birgitta Böckeler's controlled comparison of TDD and non-TDD agent workflows (martinfowler.com, "TDD inside the agent loop — theater or actual value?") found no quality difference under blind model judging and no meaningful difference in mutation scores, at several times the tokens for TDD.
+- **TDD fights up-front design:** TDD runs let the design emerge from locally minimal steps and land on whatever shape the first test fixed; non-TDD runs designed architecture, types, edge cases and contracts before any code or test.
+- **The gate was doing the work:** `mutator` already ran after every task regardless of write order.
+
+## Rejected
+
+- **Keep strict test-first for every task:** because it cost several times the tokens with no measured gain in quality or regression catching, and it pushed design onto the first test.
 
 ## Consequences
 
-Lower token cost per task (the Böckeler comparison suggests several times lower, though this repo has not run its own controlled comparison). Implementation approach is decided before any test exists to lock it in prematurely. The safety net that previously came from "the test failed first" now comes entirely from mutation testing — if a target workspace's mutation tool is unavailable, `mutator` already records this as a coverage gap rather than a hard block (pre-existing behavior), which means test-quality assurance is weaker in that specific case than it would be under strict TDD's red-phase guarantee; this is an accepted tradeoff, not an oversight. This change is based on one practitioner's controlled comparison, not a study of this ecosystem's own agents — if evidence emerges that this repo's tasks behave differently, this decision should be revisited the same way it was made: by measuring, not by argument.
+- **Now true:** lower token cost per task, and the approach is chosen before a test can lock it in.
+- **Cost:** the safety net rests wholly on mutation testing. Where a workspace has no mutation tool, `mutator` records a coverage gap instead of blocking (existing behavior), so test-quality assurance is weaker there than under strict TDD. This is an accepted tradeoff.
+- **Limit:** the basis is one practitioner's comparison, not this ecosystem's own agents.
+- **Revisit when:** this repo's own tasks show a different result, decided by measuring, not argument.
+
+## Evidence
+
+- The Böckeler article above; the change is commit `25d87a73`. This repo has run no controlled comparison of its own.

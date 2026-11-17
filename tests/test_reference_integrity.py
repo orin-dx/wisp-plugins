@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -12,6 +13,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_ROOT = REPOSITORY_ROOT / "shared/references"
 REFERENCE_PATH = re.compile(r"shared/references/[A-Za-z0-9@._/-]+\.md")
 SCHEMA_PATH = re.compile(r"shared/schemas/[A-Za-z0-9@._/-]+\.json")
+SHARED_FILE_PATH = re.compile(r"shared/(?:constitution|harness-authoring|agent-best-practices)\.md")
 MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 REFERENCE_LINK = re.compile(r"^\s*\[[^\]]+\]:\s+(\S+)", re.MULTILINE)
 HTML_LINK = re.compile(r"(?:href|src)=[\"']([^\"']+)[\"']")
@@ -25,6 +27,20 @@ AUTHORING_ONLY = {
     "shared/references/authoring/diagrams.md",
     "shared/references/tooling/cli.md",
 }
+# References the retired v4 lifecycle plugins loaded. No `wisp`, `muse`, `courier`, `mason` or `wisp-packs`
+# skill or agent calls them yet (checked when the plugins were retired); they stay on disk as shared
+# guidance until `wisp` loads them or they are deleted. Delete an entry here when a runtime caller appears,
+# and delete the file when nothing is going to load it.
+NO_CALLER_YET = {
+    "shared/references/architecture/boundary-values.md",
+    "shared/references/architecture/remediation.md",
+    "shared/references/verification/go.md",
+    "shared/references/verification/implementation-review.md",
+    "shared/references/verification/interface-coverage.md",
+    "shared/references/verification/python.md",
+    "shared/references/verification/rust.md",
+    "shared/references/verification/typescript.md",
+}
 CONCERN_DIRECTORIES = {
     "architecture",
     "authoring",
@@ -33,6 +49,7 @@ CONCERN_DIRECTORIES = {
     "hazards",
     "tooling",
     "verification",
+    "work",
     "workspace",
 }
 # Published schemas are byte-immutable. Keep narrow exceptions for exact paths
@@ -66,6 +83,8 @@ def is_runtime_caller(path: Path) -> bool:
         return True
     if parts and parts[0] == "plugins":
         return "agents" in parts or "skills" in parts
+    if parts[:3] == ("harnesses", "codex", "agent-roles"):
+        return path.name != "README.md"
     return parts[:3] == ("harnesses", "codex", "plugins") and "skills" in parts
 
 
@@ -167,7 +186,7 @@ class ReferenceIntegrityTests(unittest.TestCase):
         missing: list[str] = []
         for reference_file in REFERENCE_ROOT.rglob("*.md"):
             reference = reference_file.relative_to(REPOSITORY_ROOT).as_posix()
-            if reference in AUTHORING_ONLY:
+            if reference in AUTHORING_ONLY or reference in NO_CALLER_YET:
                 continue
             callers = [
                 source
@@ -176,6 +195,43 @@ class ReferenceIntegrityTests(unittest.TestCase):
             ]
             if not callers:
                 missing.append(reference)
+        self.assertEqual(missing, [])
+
+    def test_codex_runtime_paths_are_shipped_with_the_plugins_that_load_them(self) -> None:
+        catalog = json.loads((REPOSITORY_ROOT / "harnesses/codex/catalog.json").read_text(encoding="utf-8"))
+        shipped = {
+            entry["id"]: [
+                item if isinstance(item, str) else item["source"] for item in entry.get("runtime_files", [])
+            ]
+            for entry in catalog["plugins"]
+        }
+
+        def is_shipped(plugin: str, path: str) -> bool:
+            return any(path == item or path.startswith(item.rstrip("/") + "/") for item in shipped[plugin])
+
+        missing: list[str] = []
+        roles_used: dict[str, set[str]] = {}
+        for source, contents in self.sources.items():
+            parts = source.relative_to(REPOSITORY_ROOT).parts
+            if parts[:3] != ("harnesses", "codex", "plugins") or "skills" not in parts:
+                continue
+            plugin = parts[3]
+            for role in re.findall(r"`(recon|tracer|research|author|implementer|adversary|reviewer|judge)`", contents):
+                roles_used.setdefault(role, set()).add(plugin)
+            for path in REFERENCE_PATH.findall(contents) + SCHEMA_PATH.findall(contents) + SHARED_FILE_PATH.findall(contents):
+                if not is_shipped(plugin, path):
+                    missing.append(f"{source.relative_to(REPOSITORY_ROOT).as_posix()} -> {path}")
+        # Role cards ship to every plugin; a path a card names must be shipped with at least
+        # one plugin whose skills use that role, since the card applies it only where relevant.
+        for card in (REPOSITORY_ROOT / "harnesses/codex/agent-roles").glob("*.md"):
+            if card.name == "README.md":
+                continue
+            users = roles_used.get(card.stem, set())
+            if not users:
+                continue  # no remaining skill selects this role, so nothing loads the card's references
+            for path in REFERENCE_PATH.findall(card.read_text(encoding="utf-8")):
+                if not any(is_shipped(plugin, path) for plugin in users):
+                    missing.append(f"harnesses/codex/agent-roles/{card.name} -> {path}")
         self.assertEqual(missing, [])
 
     def test_adr_index_matches_records(self) -> None:

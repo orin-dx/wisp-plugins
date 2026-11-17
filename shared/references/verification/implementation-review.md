@@ -8,6 +8,7 @@ Load only the evidence needed for the current review.
 - TypeScript or JavaScript: load `shared/references/hazards/typescript.md` and `shared/references/hazards/typescript-boundaries.md` for defect checks; load `shared/references/architecture/typescript.md` for semantic-model and architecture signals.
 - Python: load `shared/references/hazards/python.md` and `shared/references/hazards/python-boundaries.md` for defect checks; load `shared/references/architecture/python.md` for semantic-model and architecture signals.
 - Go: load `shared/references/hazards/go.md` and `shared/references/hazards/go-boundaries.md` for defect checks; load `shared/references/architecture/go.md` for semantic-model and architecture signals.
+- Shell scripts, CI workflow YAML, `jq` filters, or generated templates: load `shared/references/hazards/scripts-and-workflows.md` for defect checks.
 - Other languages: perform the core review and record the missing language pack as a coverage gap.
 - If the diff adds or changes comments, load `shared/references/authoring/comments.md`.
 
@@ -17,7 +18,9 @@ Load only the evidence needed for the current review.
 - Behavior: tests prove specified outcomes rather than implementation shape.
 - Verification: method choice, boundary coverage, environment assumptions, and external-state freshness follow `shared/references/verification/evidence.md`.
 - Hazards: changed code does not introduce a language-specific violation.
-- Siblings: the search covers matching syntax and candidate sites with equivalent domain behavior.
+- Siblings: the search covers matching syntax and candidate sites with equivalent domain behavior, lists the sites searched, and pairs each fix with a regression test that fails on the pre-fix source.
+- Reuse: a new helper, string, or list does not duplicate one the codebase already defines.
+- Invariants: the change respects the project's stated invariants (`shared/references/workspace/conventions.md`); a violated or convention-only invariant is a sibling-search lead.
 - Structure: repeated defects are assessed for a missing concept, state, operation, boundary, abstraction, invariant, or enforcement mechanism.
 
 A taxonomy match is a search lead, not proof. Cite live code for every issue and structural assessment.

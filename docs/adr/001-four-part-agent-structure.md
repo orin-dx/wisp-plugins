@@ -1,6 +1,6 @@
 # ADR-001: 4-part agent structure
 
-**Status:** Accepted
+**Status:** Partially superseded; the `<backstory>` section is removed by ADR-017, and the premise of many role agents each owning a stage is superseded by ADR-018 (the section structure stands)
 **Date:** 2026-08-08
 **Extended by:** ADR-006, which adds a 5th `<constitution>` section. The four sections and rationale below are otherwise unchanged.
 

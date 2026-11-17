@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <i>Ten cooperating plugins covering the full development lifecycle, connected by shared JSON schemas and a common verification gate.</i>
+  <i>Four plugins and a pack set for working with AI coding agents: a risk-aware core, shipping, exploration and plugin authoring, connected by shared JSON schemas.</i>
 </p>
 
 <p align="center">
@@ -15,86 +15,40 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
-  <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v4.4.5-success.svg" alt="Marketplace v4.4.5" /></a>
+  <a href="marketplace.json"><img src="https://img.shields.io/badge/Marketplace-v5.0.0-success.svg" alt="Marketplace v5.0.0" /></a>
   <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/Docs-Architecture-informational.svg" alt="Architecture" /></a>
 </p>
 
 ---
 
-## Wisp Plugins — the Lifecycle Ecosystem
+## Wisp Plugins — v5
 
-Ten plugins, each a specialist persona covering one stage of the development lifecycle — together they're **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. Lifecycle handoffs use typed artifacts where applicable. The plugins are composable: install only the personas your workflow needs.
-
-**The primary flow** — one direction, no side-taps:
+Four plugins plus `wisp-packs`, together **Wisp Plugins**, the agent-side companions to the [Wisp](https://github.com/orin-dx/wisp) project-intelligence library. v5 replaces the eleven-plugin lifecycle pipeline (a plugin per stage, a handoff document between each) with one deep core and three focused plugins. The retired stages' useful content now lives inside `wisp`; their schemas stay on disk, unchanged, because published schema versions are immutable. The plugins are composable: install only what your workflow needs.
 
 ```mermaid
 %%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
 flowchart LR
     classDef source fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#1e1b4b,rx:10px,ry:10px,font-weight:600;
     classDef engine fill:#f5f3ff,stroke:#8b5cf6,stroke-width:1.5px,color:#4c1d95,rx:10px,ry:10px;
-    classDef router fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f,rx:10px,ry:10px,font-weight:600;
     classDef output fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b,rx:10px,ry:10px,font-weight:600;
 
-    we["<b>Weaver</b><br/>capture need"] -->|"requirement@1"| va["<b>Vanguard</b><br/>research"]
-    va -->|"research-report@1"| sc["<b>Scribe</b><br/>specify"]
-    mu["<b>Muse</b><br/>component spec"] -->|"spec@1"| na["<b>Navigator</b><br/>plan"]
-    sc -->|"spec@1"| na
-    na -->|"plan@1"| sm["<b>Smith</b><br/>implement"]
-    sm -->|"verified change"| co["<b>Courier</b><br/>ship"]
-    co -.->|"next need"| we
+    mu["<b>Muse</b><br/>sketch and render"] -->|"requirement@1"| wi["<b>Wisp</b><br/>work, verify"]
+    wi -->|"verified change"| co["<b>Courier</b><br/>ship"]
+    pk["<b>Wisp packs</b><br/>domain packs"] -.->|"loaded on demand"| wi
+    ma["<b>Mason</b><br/>build plugins"] -.->|"authors"| wi
 
-    class we,mu source
-    class va,sc,sm engine
-    class na router
+    class mu source
+    class wi,pk,ma engine
     class co output
 ```
 
-**Verification** — Sentinel and Ranger attach to the flow above but aren't stops in its sequence; the muted dashed boxes below are the same personas shown only as attachment points:
-
-```mermaid
-%%{init: {'theme': 'base', 'flowchart': {'curve': 'basis', 'nodeSpacing': 40, 'rankSpacing': 56}, 'themeVariables': {'fontFamily': 'Inter, ui-sans-serif, system-ui, sans-serif', 'fontSize': '14px', 'lineColor': '#94a3b8', 'edgeLabelBackground': '#ffffff'}}}%%
-flowchart LR
-    classDef store fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a,rx:10px,ry:10px;
-    classDef router fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f,rx:10px,ry:10px,font-weight:600;
-
-    sc2["Scribe"]:::store
-    sm2["Smith"]:::store
-    co2["Courier"]:::store
-
-    se{{"<b>Sentinel</b><br/>independent gate"}}
-    ra{{"<b>Ranger</b><br/>defect audit"}}
-
-    sc2 -.->|"spec@1"| se
-    sm2 -.->|"code + verdict@3"| se
-    sm2 -.->|"implementation-review@2"| sc2
-    se -.->|"verdict@3"| co2
-
-    sm2 -->|"live code"| ra
-    ra -.->|"finding-report@2"| sc2
-
-    class se,ra router
-```
-
-![Define](https://img.shields.io/badge/-Define-6366f1) ![Design](https://img.shields.io/badge/-Design-8b5cf6) ![Build](https://img.shields.io/badge/-Build-3b82f6) ![Verify](https://img.shields.io/badge/-Verify-f59e0b) ![Ship](https://img.shields.io/badge/-Ship-10b981) ![Meta](https://img.shields.io/badge/-Meta-64748b)
-
-*Pill-shaped nodes are cross-cutting checkpoints, not sequence stops. Solid arrows are direct handoffs; dashed arrows are verification side-channels. Ranger's input is the live codebase Smith just wrote, not a schema handoff — the one solid arrow in the second diagram.*
-
-Smith repairs scoped defect families before its exit gate. Structural families route through `scribe:architect`, the normal spec gates, Navigator plan amendment, and Smith implementation; after verification, Scribe refreshes the persisted architecture model.
-
-Grouped by what each persona actually does — five bands across the lifecycle, plus one that stands outside it and maintains the rest:
-
-| Category | Persona | Job | Output |
-| :--- | :--- | :--- | :--- |
-| **Define** | [`weaver`](./plugins/weaver/) | Captures and structures scattered need into requirements | `requirement@1` |
-| **Define** | [`vanguard`](./plugins/vanguard/) | Goes first — researches prior art, risk, and patterns before anyone commits to a direction | `research-report@1` |
-| **Design** | [`scribe`](./plugins/scribe/) | Drafts and gates the unambiguous, binding spec | `spec@1` |
-| **Design** | [`muse`](./plugins/muse/) | Drafts and gates component specs — props, variants, per-state behavior, accessibility | `spec@1` |
-| **Build** | [`navigator`](./plugins/navigator/) | Decomposes the spec into an executable plan | `plan@1` |
-| **Build** | [`smith`](./plugins/smith/) | Implements, selects risk-matched tests, reviews defect families, and verifies criteria | `implementation-review@2`, `verdict@3` |
-| **Verify** | [`sentinel`](./plugins/sentinel/) | Cross-cutting gate — confirms any artifact meets its criteria before the next stage begins | `verdict@3` |
-| **Verify** | [`ranger`](./plugins/ranger/) | Hunts reachable defects and semantic siblings in Rust, TypeScript, JavaScript, Python, and Go | `finding-report@2` |
-| **Ship** | [`courier`](./plugins/courier/) | Commits, opens PRs, responds to review, writes changelogs and release notes | `release-artifact@2` |
-| **Meta** | [`mason`](./plugins/mason/) | Scaffolds and audits plugins, designs schemas, and evaluates workflow behavior | `harness-evaluation@2` |
+| Plugin | Job | Output |
+| :--- | :--- | :--- |
+| `wisp` | The core: one entry point that classifies a change by risk, does the work in full context, and runs an independent check where a confident mistake is costly | a diff or render, its evidence, and what was not verified |
+| [`courier`](./plugins/courier/) | Commits, opens PRs, triages review feedback, writes changesets and release notes | `changeset@3`, `release-artifact@3` |
+| [`muse`](./plugins/muse/) | Shows options before deciding: sketches and renders structurally different options, then promotes the chosen one | `option-set@1`, `requirement@1` |
+| [`mason`](./plugins/mason/) | Scaffolds and audits plugins, designs schemas, and evaluates workflow behavior | `harness-evaluation@2` |
+| `wisp-packs` | Domain packs that `wisp` loads when the work needs them | references loaded on demand |
 
 ---
 
@@ -117,25 +71,15 @@ Claude agents are not renamed and shipped as Codex agents. Each Codex skill has 
 
 ### Claude Code
 
-Add the repository marketplace from inside Claude Code, then install the plugins you want:
+Add the repository marketplace from inside Claude Code, then install the plugins you want. `courier` ships work, `muse` explores options, `mason` authors plugins, and `wisp-packs` adds domain packs to `wisp`:
 
 ```
 /plugin marketplace add orin-dx/wisp-plugins
-/plugin install weaver
-/plugin install vanguard
-/plugin install scribe
-/plugin install navigator
-/plugin install smith
-```
-
-Add `muse` for component specifications, `sentinel` and `ranger` for verification, `courier` for shipping work, and `mason` for plugin authoring:
-
-```
-/plugin install muse
-/plugin install sentinel
-/plugin install ranger
+/plugin install wisp
 /plugin install courier
+/plugin install muse
 /plugin install mason
+/plugin install wisp-packs
 ```
 
 If you registered the previous marketplace identity, replace it before installing from Wisp Plugins:
@@ -151,14 +95,12 @@ Codex discovers the generated root manifest at `.agents/plugins/marketplace.json
 
 ```bash
 codex plugin marketplace add orin-dx/wisp-plugins
-codex plugin add weaver@wisp-plugins
-codex plugin add vanguard@wisp-plugins
-codex plugin add scribe@wisp-plugins
-codex plugin add navigator@wisp-plugins
-codex plugin add smith@wisp-plugins
+codex plugin add courier@wisp-plugins
+codex plugin add muse@wisp-plugins
+codex plugin add mason@wisp-plugins
 ```
 
-Other available selectors are `muse`, `sentinel`, `ranger`, `courier`, and `mason`. Inspect marketplace availability with:
+Inspect marketplace availability with:
 
 ```bash
 codex plugin list
@@ -203,15 +145,8 @@ Or use [`agy-plugins-cli`](https://github.com/ZaunEkko/agy-plugins-cli) for an i
 ```bash
 npm install -g agy-plugins-cli
 agy-plugin marketplace add orin-dx/wisp-plugins
-agy-plugin add weaver@wisp-plugins
-agy-plugin add vanguard@wisp-plugins
-agy-plugin add scribe@wisp-plugins
-agy-plugin add muse@wisp-plugins
-agy-plugin add navigator@wisp-plugins
-agy-plugin add smith@wisp-plugins
-agy-plugin add sentinel@wisp-plugins
 agy-plugin add courier@wisp-plugins
-agy-plugin add ranger@wisp-plugins
+agy-plugin add muse@wisp-plugins
 agy-plugin add mason@wisp-plugins
 ```
 
@@ -222,25 +157,24 @@ agy-plugin add mason@wisp-plugins
 Six decisions shape how every plugin and agent in this repository is built. They are enforced by `shared/constitution.md` and explained in `shared/agent-best-practices.md`.
 
 **Schema-Driven Development** — every handoff between agents is a typed JSON document.
-- JSON Schema draft-2020-12 with `additionalProperties: false` — a schema-invalid output halts the pipeline before any downstream agent acts on bad data
+- JSON Schema draft-2020-12 with `additionalProperties: false`; agents are told to conform to the cited schema, and a Claude Code hook rejects a non-conforming exit-gate `verdict@3` (other handoffs are not validated at runtime)
 - Schema versions are immutable — a breaking change creates `<name>@2.json`, never mutates the existing file
-- Every schema includes a private `reasoning` scratchpad field that is never forwarded downstream
+- Every new schema includes a private `reasoning` scratchpad field that is never forwarded downstream
 
 **EARS output contracts** — hard constraints live exclusively in `<output>` sections, using `WHEN / IF / WHILE / WHERE / THE SYSTEM SHALL`.
 - Encodes what the agent must produce, must not produce, or must do under a specific condition
 - The prompt interior — how the agent searches, reasons, and decides — is intentionally unconstrained
-- EARS is the fence; backstory and goal fill the interior with judgment
+- EARS is the fence; goal and judgment fill the interior
 
-**5-part agent structure** — every Claude/AGY source agent body has exactly five sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
+**4-part agent structure** — every Claude/AGY source agent body has exactly four sections; no role labels, no success-criteria checklists. Codex skills and role cards use native structures while preserving lifecycle intent.
 - `<constitution>` — ecosystem-wide invariants, byte-identical across every agent (copied verbatim, never authored per-agent)
-- `<backstory>` — experiential perspective that shapes judgment in open situations (not a role label)
 - `<goal>` — intent, not steps
 - `<judgment>` — the specific failure mode that looks like success
 - `<output>` — schema reference and EARS contracts
 
-**Cognitive mode separation** — agents are dispatched by the cognitive mode they require, not their pipeline position.
-- A scanner (exhaustive pattern matching, no filtering) and an adversary (default-to-skepticism, requires a concrete failing scenario) cannot share a mental mode — combining them produces an agent worse at both
-- Model and effort tiers follow the same logic: `haiku / low` for enumeration, `sonnet / medium` for analysis, `opus / high` for binding judgment
+**Context and risk split** — work is divided by context and risk, not by role or cognitive mode (ADR 018).
+- One worker researches, implements and tests in one context; a second agent exists only for an independent check (`wisp:verifier`), one disputed finding (`wisp:adversary`), or a cheap read-only inventory (`wisp:recon`)
+- Tiers: `haiku / low` for enumeration, `opus / high` for the verifier and adversary, whose verdicts decide a finding
 
 **Instruction economy** — prompts preserve decisions, evidence, and consequences while removing filler, repeated rationale, and incidental process.
 
@@ -254,37 +188,27 @@ Six decisions shape how every plugin and agent in this repository is built. They
 - Derive semantic sibling candidates from domain responsibility, state transitions, and architecture—not copied syntax alone
 - Record generators, oracles, coverage gaps, pending checks, fresh external state, and boundary observations where relevant
 
-See [`ARCHITECTURE.md §7`](./ARCHITECTURE.md#7-agent-authoring-principles) for the full authoring guide, and [`docs/pipeline-walkthrough.md`](./docs/pipeline-walkthrough.md) for a concrete end-to-end example showing schemas at each stage.
+See [`ARCHITECTURE.md §7`](./ARCHITECTURE.md#7-agent-authoring-principles) for the full authoring guide.
 
 ---
 
 ## Shared Schema Contract
 
-Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` and use JSON Schema draft-2020-12 with `additionalProperties: false`. Schema versions are immutable — a breaking change requires a new file (e.g. `requirement@2.json`). Every schema includes a `reasoning` scratchpad field that is never forwarded downstream.
+Structured inter-plugin handoffs are typed. Schemas live in `shared/schemas/` and use JSON Schema draft-2020-12 with `additionalProperties: false`. Schema versions are immutable — a breaking change requires a new file (e.g. `requirement@2.json`). Every new schema includes a `reasoning` scratchpad field that is never forwarded downstream (`candidate@1` and `implementation-context@1` predate the rule).
 
 | Schema | Produced by | Consumed by |
 | :--- | :--- | :--- |
-| `requirement@1` | weaver | vanguard, scribe |
-| `research-report@1` | vanguard | scribe |
-| `spec@1` | scribe, muse | navigator, sentinel |
-| `verdict@1` | muse | component-spec gate consumers |
-| `plan@1` | navigator | smith |
-| `workspace-manifest@1` | smith, ranger | their implementation and audit pipelines |
-| `implementation-result@1` | smith implementer | smith reviewer, scribe architect on escalation |
-| `implementation-review@2` | smith | smith exit-gate, scribe architect |
-| `changeset@2` | courier | courier release, sentinel |
-| `verdict@3` | scribe, smith, ranger, sentinel | gate consumers and humans |
-| `candidate-assessment@1` | ranger adversary | ranger report aggregation |
-| `finding-report@2` | ranger | scribe architect, humans |
-| `field-survival-map@1` | boundary-tracer | adversary |
-| `mutation-report@2` | smith mutator | reviewer, implementer |
+| `requirement@1` | muse promote | the `wisp` work skill |
+| `option-set@1` | muse sketch | muse promote, humans |
+| `spike-report@1` | a spike (`wisp`) | muse promote, humans |
+| `changeset@3` | courier | courier release |
+| `release-artifact@3` | courier | humans |
 | `evaluation-run@1` | mason evaluation runner | mason evaluation adjudicator |
 | `harness-evaluation@2` | mason | release reviewers and longitudinal analysis |
-| `arch-audit@1` | scribe | architecture-gate callers and humans |
-| `arch-model@2` | scribe | scribe architecture checks and remediation |
-| `release-artifact@2` | courier | humans |
 
-`verdict@1` remains Muse's component-spec gate contract. Other current gates use `verdict@3`; immutable schema versions are not rewritten in place.
+The schemas of the retired plugins (`research-report@1`, `spec@1`, `plan@1`, `finding-report@2`, `implementation-review@2` and the rest) stay on disk unchanged; the `wisp` plugin reuses the ones its work needs.
+
+Every gate produces `verdict@3`. `verdict@1` is retained unchanged for artifacts that already use it; immutable schema versions are not rewritten in place.
 
 ---
 
@@ -322,18 +246,14 @@ wisp-plugins/
 ├── shared/
 │   ├── schemas/                  ← Versioned inter-agent JSON schemas
 │   ├── references/               ← Runtime and authoring guides, split by concern
+│   ├── hooks/                    ← Claude Code hooks: gate handback validator
 │   └── agent-best-practices.md  ← Authoring-time principles
 ├── plugins/
-    ├── weaver/                    ← Requirement capture
-    ├── vanguard/                  ← Research synthesis
-    ├── scribe/                    ← Specification drafting and gating
-    ├── muse/                      ← Component spec drafting and gating
-    ├── navigator/                 ← Implementation planning
-    ├── smith/                     ← Implementation and risk-matched verification
-    ├── sentinel/                  ← Verification gate
-    ├── courier/                   ← Ship tooling
-    ├── ranger/                    ← Cross-language reachable-defect audit
-    └── mason/                     ← Plugin authoring and behavioral evaluation
+│   ├── wisp/                      ← Core: risk-aware work and independent check
+│   ├── wisp-packs/                ← Domain packs loaded by wisp
+│   ├── courier/                   ← Ship tooling
+│   ├── muse/                      ← Sketching and promotion
+│   └── mason/                     ← Plugin authoring and behavioral evaluation
 ├── .agents/
 │   ├── plugins/                   ← Generated Codex discovery manifest; never hand-edit
 │   └── skills/entire-search/      ← Entire-managed Codex history search

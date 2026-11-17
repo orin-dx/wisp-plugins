@@ -1,0 +1,9 @@
+{
+  "name": "muse",
+  "version": "5.0.0",
+  "description": "Exploration and render plugin. Shows options before anything is decided: sketch builds and renders three structurally different options as an option-set@1 with a decision log, and promote carries a chosen option or a working spike into a requirement@1. Non-binding: no gate, spec or tests.",
+  "author": {
+    "name": "Gabriel Castro",
+    "email": "gabe@techworx.dev"
+  }
+}

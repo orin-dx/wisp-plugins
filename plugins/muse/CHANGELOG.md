@@ -2,6 +2,40 @@
 
 — muse
 
+## [5.0.0] - 2026-11-15
+
+### Removed
+- The `component` skill and the `drafter`, `auditor` and `exit-gate` agents, with the plugin's hooks. Component specs and their gate belong to the work skill in the `wisp` plugin in v5; the UI-state and accessibility spec rules stay available as shared references.
+- The `spec@1` and `verdict@3` outputs of this plugin. It no longer gates anything.
+
+### Changed
+- `muse` is now exploration and render only: `sketch` and `promote` with the `explorer` agent. `promote` hands the requirement to the `wisp` plugin instead of naming the retired spec and planning plugins.
+
+## [1.2.0] - 2026-11-14
+
+### Changed
+- A direct call to one of this plugin's agents is redirected once per session to the skill that starts it, so that skill's checks run; a second call goes through (`shared/hooks/route-guard.py`, off with `WISP_ROUTE_GUARD=off`).
+- The exit gate gets two rounds; after a second failing round, or a repeated blocker, the decision goes to you with the persistent blockers (ADR 015).
+- The drafter self-checks and the gate judges; the auditor runs only when you ask, because it reviewed the same draft.
+- The gate checks claims and citations against the code, build or spec they refer to; an issue it cannot tie to a source is a note.
+- Unknowns no longer fail a component spec. The drafter states each in `scope` as an `Assumption:` or, when it changes scope, behavior other work depends on, or cost, an `Open decision:` that comes to you before the gate. The gate blocks only an unknown that leaves a criterion untestable or a decision you have not made (ADR 016).
+- Pipeline agents' descriptions now say which skill starts them, so work goes through the skill where its checks run; they are also shorter.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
+
+## [1.1.0] - 2026-11-10
+
+### Added
+- `sketch` and `promote` skills and the `explorer` agent: non-binding exploration with three structurally different options per round, a decision log, and `promote` as the only route into the gated pipeline (ADR 011). New schema `option-set@1`.
+
+### Changed
+- The exit gate returns `verdict@3`; it was told to emit a verdict value no schema allows.
+- The exit gate lists the complete blocker set in round one and, on a retry, only unresolved or newly introduced blockers; `drafter` self-checks against the same list (ADR 013).
+- Output is checked by a hook before it reaches the caller (ADR 012).
+- Skill descriptions lead with the request they serve. References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
+### Fixed
+- Removed a reference to a `ranger` accessibility skill that does not exist.
+
 ## [1.0.1] - 2026-09-09
 
 ### Changed

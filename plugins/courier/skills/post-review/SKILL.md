@@ -1,14 +1,14 @@
 ---
 name: post-review
 description: >-
-  Trigger when the user has an already-drafted review or reply and wants it posted: "post this review", "reply to this comment", "mark this thread resolved", "submit my review comments". Takes drafted content — from the built-in `code-review` skill's findings, from `courier/receive-feedback`'s response plan, or typed directly by the user — and posts it to GitHub via `gh pr review` or `gh pr comment`. Does not draft content itself; this skill is purely mechanical execution of something already written, gated by explicit user confirmation before any post fires.
+  Trigger when the user has an already-drafted review or reply and wants it posted: "post this review", "reply to this comment", "mark this thread resolved", "submit my review comments". Posts drafted content to GitHub after explicit user confirmation; does not draft.
 version: 2.0.0
 ---
 
 # Courier — Post Review
 
 <overview>
-Posting a review comment is a visible, external, hard-to-reverse action — the kind this repo's action-safety guidance already requires confirmation for. There is no subagent here: drafting a critique is a judgment task owned by `code-review` (quality) and `sentinel` (spec conformance), and drafting a reply is owned by `courier/receive-feedback`'s response plan or the user directly. This skill's only job is the mechanical last step — show exactly what will be posted and where, get explicit confirmation, then run the `gh` command.
+Posting a review comment is a visible, external, hard-to-reverse action — the kind this repo's action-safety guidance already requires confirmation for. There is no subagent here: drafting a critique is a judgment task owned by `code-review`, and drafting a reply is owned by `courier/receive-feedback`'s response plan or the user directly. This skill's only job is the mechanical last step — show exactly what will be posted and where, get explicit confirmation, then run the `gh` command.
 </overview>
 
 <dispatch>
@@ -16,7 +16,7 @@ No subagent. Orchestration only: assemble the exact comment/review body and targ
 </dispatch>
 
 <references>
-`shared/references/delivery/github.md` — `gh` CLI commands for posting reviews and comments.
+`${CLAUDE_PLUGIN_ROOT}/shared/references/delivery/github.md` — `gh` CLI commands for posting reviews and comments.
 </references>
 
 <io>

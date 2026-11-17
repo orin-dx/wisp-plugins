@@ -1,7 +1,7 @@
 {
   "name": "muse",
-  "version": "1.0.1",
-  "description": "Turn UI intent into testable component specifications with behavior and accessibility criteria.",
+  "version": "5.0.0",
+  "description": "Sketch options before anything is specified: build and render structurally different options with a decision log, then promote a chosen option or a working spike into a requirement.",
   "author": {
     "name": "Gabriel Castro",
     "email": "gabe@techworx.dev"
@@ -9,16 +9,29 @@
   "homepage": "https://github.com/orin-dx/wisp-plugins",
   "repository": "https://github.com/orin-dx/wisp-plugins",
   "license": "MIT",
-  "keywords": ["ui", "components", "accessibility", "specification", "design"],
+  "keywords": [
+    "ui",
+    "design",
+    "exploration",
+    "sketch",
+    "prototype"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Muse",
-    "shortDescription": "Specify components precisely",
-    "longDescription": "Convert UI intent and repository evidence into implementation-ready component specifications with externally testable accessibility criteria.",
+    "shortDescription": "Explore options before deciding",
+    "longDescription": "Build and render structurally different options, keep a decision log, and carry the chosen option into a requirement. Non-binding: no gate, spec or tests.",
     "developerName": "Gabriel Castro (Orin DX)",
     "category": "Developer Tools",
-    "capabilities": ["Interactive", "Read", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://github.com/orin-dx/wisp-plugins",
-    "defaultPrompt": ["Write a component spec from this design", "Audit this component spec", "Make this UI intent implementation-ready"]
+    "defaultPrompt": [
+      "Sketch three options for this screen",
+      "Promote the chosen option into a requirement"
+    ]
   }
 }

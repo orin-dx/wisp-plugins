@@ -2,6 +2,37 @@
 
 — courier
 
+## [5.0.0] - 2026-11-15
+
+### Removed
+- The `release-summarizer` and `review-preprocessor` agents. Both did deterministic work: aggregating changesets by their own `semver_impact`, and bundling a diff, spec, test results and open questions. `courier/release` and `courier/receive-feedback` now do that themselves in the primary agent and return the same `release-artifact@3` and review package. `commit-analyzer`, `pr-narrator` and `changeset-analyzer` stay.
+
+### Changed
+- `courier/changeset` takes the `criteria_evidence` an implementation produced from whatever source, no longer from `smith` only, since `smith` is retired in v5.
+- `courier/post-review` no longer names `sentinel` as an owner of spec-conformance review.
+
+## [3.2.0] - 2026-11-14
+
+### Changed
+- Changesets follow the owner's changelog convention: a bold lead-in naming the change as the user sees it, its value, then short bullets for why, how to adopt and limits, with bold labels instead of headings; breaking changes and required steps go in their own `**Breaking:**` and `**Action:**` paragraphs so release tools list them.
+- `courier:pr` hands the title and body to the branch's Entire trail by default; Entire opens the PR. It opens one itself only where a repository says agents do.
+- Changesets follow the repository's own rules and file format (`.changeset/*.md`, its CLI and contributing guide) and are saved there with the package and bump, instead of only returned as JSON.
+- `courier:pr` does not open a pull request when the repository says another system (for example Entire) opens them.
+- Agent prompts drop the `<backstory>` persona paragraph, leaving four sections; a paired ablation on three agents found no change in what they catch, in output size or in cost (ADR 017).
+
+## [3.1.0] - 2026-11-09
+
+### Added
+- `changeset@3` and `release-artifact@3`: the summary has no length cap and may be layered Markdown, and `disposition` lets `changeset-analyzer` update an existing entry or recommend none. `changeset@2` and `release-artifact@2` are unchanged.
+- Semver rows for a CLI's flags, output and exit codes, and serialized files, with a worked layered entry and a bad-versus-good pair, in `shared/references/delivery/changesets.md`.
+
+### Changed
+- `release-summarizer` runs on `haiku / low`: it filters, takes the highest semver and carries summaries through unedited, so it needs no reasoning.
+- References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+- `changeset-analyzer` works at the level of user-visible outcomes, states limits in the entry instead of `reasoning`, and drops the one-clause and one-sentence limits. `release-summarizer` carries layered summaries through and skips `disposition: none` entries.
+- The `changeset`, `commit` and `pr` skill descriptions now say to use the skill instead of writing the text by hand, and the README says when to use each.
+- `commit-analyzer` follows the repository's own scopes and subject style, puts limits in the body instead of the scratchpad, and marks breaking changes to command output, exit codes and file formats. `pr-narrator` follows a repository's pull request template, states what a consumer sees and the limits they will hit, and names or recommends a changeset.
+
 ## [3.0.3] - 2026-09-10
 
 ### Changed

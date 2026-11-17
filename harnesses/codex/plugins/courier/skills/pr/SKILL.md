@@ -24,11 +24,13 @@ Write a concise title and body with:
 - Observed verification with exact commands or inspections and results.
 - Reasons and coverage gaps for checks not run.
 - Risks, migrations, limitations, or follow-up only when they apply.
-- Existing issue, requirement, spec, plan, or changeset links only when they help review.
+- Existing issue, requirement, spec, plan, or changeset links only when they help review. When the change is consumer-visible in a repository that uses changesets, name the changeset or say one is needed.
+- The repository's pull request template sections, when it has one, with this content filled into them.
+- For a consumer-visible change, what the consumer sees and where, and the limit they will hit.
 
 Use enough summary bullets to explain one coherent change. If the summary reveals independent topics, recommend separate PRs or state the dependency that requires one delivery.
 
-Show the exact title, body, labels, base branch, and repository target before creating anything remotely. Create the PR only after explicit user confirmation.
+Show the exact title, body, labels, base branch, and repository target before creating anything remotely. By default, push the branch and create or link its Entire trail (`entire trail create`); Entire opens the pull request, so return the title and body. Create a PR yourself only when the repository's instructions say agents open them, and only after explicit user confirmation.
 
 ## Team use
 

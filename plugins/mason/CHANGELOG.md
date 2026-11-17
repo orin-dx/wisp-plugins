@@ -2,6 +2,16 @@
 
 — mason
 
+## [3.2.4] - 2026-11-14
+
+### Changed
+- Agent prompts drop the `<backstory>` section (ADR 017); the scaffolder and auditor describe the four-part structure.
+
+## [3.2.3] - 2026-11-10
+
+### Changed
+- Shorter agent and skill descriptions (routing text only). References load from the plugin root (`${CLAUDE_PLUGIN_ROOT}/shared/...`), so an agent finds them on the first read from any project.
+
 ## [3.2.2] - 2026-09-10
 
 ### Changed
