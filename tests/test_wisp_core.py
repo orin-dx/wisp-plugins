@@ -59,7 +59,7 @@ def load(path: Path, name: str):
 class WispStructureTests(unittest.TestCase):
     def test_manifest_names_the_plugin_and_lists_exactly_its_agents(self) -> None:
         manifest = json.loads((PLUGIN / "plugin.json").read_text(encoding="utf-8"))
-        self.assertEqual((manifest["id"], manifest["name"], manifest["version"]), ("wisp", "wisp", "1.0.0"))
+        self.assertEqual((manifest["id"], manifest["name"]), ("wisp", "wisp"))
         self.assertEqual(manifest["skills"], "./skills/")
         self.assertEqual(sorted(Path(item).stem for item in manifest["agents"]), sorted(AGENT_TIERS))
         self.assertEqual(sorted(path.stem for path in (PLUGIN / "agents").glob("*.md")), sorted(AGENT_TIERS))

@@ -2,6 +2,13 @@
 
 — wisp
 
+## [1.0.1] - 2026-11-16
+
+### Changed
+- **Less to read per run:** `work` reads only `modes.md` and `conventions.md` up front and loads the other references when the path needs them, so a contained fix starts with about 1,400 fewer words of context.
+- **Packs count as project invariants:** the packs a repo's `AGENTS.md` declares are read with its other invariants, and a pack never overrides a repo check.
+- **Question-only turns:** with uncommitted changes, a turn that only answers a question can end with `Not verified: nothing changed this turn`.
+
 ## [1.0.0] - 2026-11-15
 
 ### Added

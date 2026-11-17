@@ -1,6 +1,6 @@
 # wisp — Core
 
-**Stage:** Any · **Output:** the change, its evidence and a `Not verified:` list · **Version:** 1.0.0
+**Stage:** Any · **Output:** the change, its evidence and a `Not verified:` list · **Version:** 1.0.1
 
 One way to start work. `wisp` sizes each change by how hard it is to undo and how far it reaches, states what done means and how it will be proven before anything is edited, and spends independent review only where a confident mistake would be costly.
 

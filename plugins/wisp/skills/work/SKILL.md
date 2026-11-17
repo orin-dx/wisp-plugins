@@ -12,11 +12,12 @@ One entry for all work. The primary agent is the worker: it researches, decides,
 </capability>
 
 <references>
-`${CLAUDE_PLUGIN_ROOT}/shared/references/work/modes.md` (tiers, modes, autonomy, output), `${CLAUDE_PLUGIN_ROOT}/shared/references/work/decision-cards.md`, `${CLAUDE_PLUGIN_ROOT}/shared/references/work/verifier-brief.md`, `${CLAUDE_PLUGIN_ROOT}/shared/references/work/specs-and-plans.md`, `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md`, `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md`, `${CLAUDE_PLUGIN_ROOT}/shared/references/workspace/conventions.md`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/spike-report@1.json`, `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json`
+Read first: `${CLAUDE_PLUGIN_ROOT}/shared/references/work/modes.md` (tiers, modes, autonomy, output) and `${CLAUDE_PLUGIN_ROOT}/shared/references/workspace/conventions.md`.
+Read when the path needs it: `${CLAUDE_PLUGIN_ROOT}/shared/references/verification/evidence.md` (before claiming a result), `${CLAUDE_PLUGIN_ROOT}/shared/references/work/verifier-brief.md` (before starting the verifier), `${CLAUDE_PLUGIN_ROOT}/shared/references/work/decision-cards.md` (before asking the owner), `${CLAUDE_PLUGIN_ROOT}/shared/references/work/specs-and-plans.md` (before writing a spec or plan), `${CLAUDE_PLUGIN_ROOT}/shared/references/tooling/context.md` (large or unfamiliar codebase), `${CLAUDE_PLUGIN_ROOT}/shared/schemas/spike-report@1.json` (spike) and `${CLAUDE_PLUGIN_ROOT}/shared/schemas/verdict@3.json` (reading a verdict).
 </references>
 
 <start>
-Open the reply with `Mode: <mode>. Tier: <tier>.` and the brief: outcome, constraints, evidence bar (`modes.md`, Brief and Tiers). Read the project's invariants as `conventions.md` describes before choosing the tier. If an alias started this skill, its mode stands unless the request plainly fits another; say so if you switch.
+Open the reply with `Mode: <mode>. Tier: <tier>.` and the brief: outcome, constraints, evidence bar (`modes.md`, Brief and Tiers). Read the project's invariants as `conventions.md` describes before choosing the tier; they include the packs its `AGENTS.md` declares, and a pack never overrides a repo check. If an alias started this skill, its mode stands unless the request plainly fits another; say so if you switch.
 </start>
 
 <modes>
@@ -49,5 +50,5 @@ When the work keeps hitting the same friction (the same area fixed again, the sa
 </decisions>
 
 <finish>
-End with what the owner reads: the diff or render, the evidence (each command and its observed result), a `Not verified:` list, and the next step (`ship`, or the open card). Never report a claim done that you did not see pass. With uncommitted changes, the Stop hook asks once for a missing `Not verified:` line.
+End with what the owner reads: the diff or render, the evidence (each command and its observed result), a `Not verified:` list, and the next step (`ship`, or the open card). Never report a claim done that you did not see pass. With uncommitted changes, the Stop hook asks once for a missing `Not verified:` line; a turn that only answers a question can say `Not verified: nothing changed this turn`.
 </finish>
