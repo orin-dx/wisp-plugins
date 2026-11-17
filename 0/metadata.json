@@ -1,0 +1,114 @@
+{
+  "cli_version": "0.13.5-nightly.202611131617.95eabf579",
+  "checkpoint_id": "01M7KJA8DBNJDCAF2QFHKMTP6B",
+  "session_id": "2d213021-b81b-4c65-bf45-650696cba2f4",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-17T01:35:52.658538Z",
+  "branch": "feat/wisp-lean-work",
+  "checkpoints_count": 5,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "73708f467dd0",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 72,
+    "cache_creation_tokens": 900211,
+    "cache_read_tokens": 9266667,
+    "output_tokens": 14578,
+    "api_call_count": 34,
+    "subagent_tokens": {
+      "input_tokens": 19,
+      "cache_creation_tokens": 139702,
+      "cache_read_tokens": 675858,
+      "output_tokens": 3402,
+      "api_call_count": 10
+    }
+  },
+  "redaction": {
+    "replacements": 19,
+    "layers": {
+      "betterleaks": 2,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 4,
+      "credentialed_uri": 0,
+      "entropy": 13,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 131
+  },
+  "summary": {
+    "intent": "Evaluate how well the Wisp plugins (muse, scribe, smith, etc.) served front-end work and design ideation across the orin-dx and techworx sites, and identify gaps, especially their rigidity for early/experimental work. The session later moved to finishing the v5 plugin rewrite (docs, mason, repo migrations) and then refining wisp.",
+    "outcome": "Four investigations found the old plugin set was spec-first and converge-only, with no visual or sketch mode, and that ideation ran outside the plugins. The v5 work was documented, committed and pushed (#419 plus four repo migrations), but #416 and #419 were not yet merged, so the 5.0.0 release was blocked, and the three small wisp tweaks were committed on a branch.",
+    "learnings": {
+      "repo": [
+        "Old plugin set was a spec-driven lifecycle (weaver, vanguard, scribe/muse, navigator, smith, courier) with typed JSON handoffs in shared/schemas and default-fail gates; no plugin had a browser, screenshot, visual or generative mode.",
+        "spec@1 has no fields for tokens, layout, breakpoints, visual references or motion, so a spec could pass muse's exit-gate while saying nothing about appearance.",
+        "muse docs referenced a ranger accessibility taxonomy that never existed, so implemented a11y was never checked.",
+        "Project session dirs mostly hold subagent transcripts: orin-dx has 2 real sessions and pages about 7, despite ~810 jsonl files.",
+        "Gates checked spec internal consistency (e.g. SPEC-001 needed 13 verdicts) but did not render anything, so visual defects such as non-full-screen NavSheet and NaN% glass opacity were caught by the user's eye or later audits.",
+        "Gate wins were behavioural: contrast recomputation (2.82:1), cross-spec contradictions, stale breakpoints, and plan ordering defects.",
+        "Entire opens PRs as trails; repos like Pages have a rule against opening PRs with gh.",
+        "A wisp manifest test pinned version 1.0.0 and failed on any version bump; the trim branch already removes that pin.",
+        "v5 constitution and agent-best-practices now say agents exist for a context or risk reason, and schemas are only for handoffs read by code or a hook.",
+        "Hook facts: validate-handback.py denies an invalid handback up to 3 times per agent (MAX_DENIALS=3), RETRY_CAP=1, wisp:verifier is the only routed agent, and WISP_HANDBACK_TRACE is the trace switch."
+      ],
+      "code": [
+        {
+          "path": "shared/hooks/validate-handback.py",
+          "finding": "Docstring and a comment wrongly said muse has an exit gate/registers the handback hook; fixed because in v5 muse has no hooks.json and ROUTES lists only wisp:verifier."
+        },
+        {
+          "path": "tests/test_wisp_core.py",
+          "finding": "Hardcoded wisp version string 1.0.0 broke just check on version bump; the hardcoded pin was removed."
+        },
+        {
+          "path": "shared/schemas/plan@1.json",
+          "finding": "Still has a spec_hash field with no producer after the staleness rule was removed; removal is a breaking schema change and was left."
+        }
+      ],
+      "workflow": [
+        "Run mechanical transcript scans for skill/agent usage first, then delegate parallel subagents for plugin inventory, per-project sessions and outcome audits.",
+        "Subagent hand-back reports are unverified model output; verify facts (e.g. the denial cap) against files before repeating them.",
+        "Teammate agents may report done while still editing; check git status for uncommitted changes after a commit and re-run just check.",
+        "Agents asked to run just ci can go quiet; nudge them to check the result and commit.",
+        "Check the live state of origin/main and trail status before claiming something is merged; here #416 and #419 were not merged despite the user's 'all merged'.",
+        "Prose spec approval fails for visual work; rendered option boards with short-code replies worked well for design ideation.",
+        "Stacked PRs (#419 on #416) must be merged in order before a release or the tag misses content."
+      ]
+    },
+    "friction": [
+      "Initial corpus assumption was wrong: ~810 sessions were mostly subagent transcripts.",
+      "Large 60-130 KB spec and plan files stalled agent streams; 17 failed agent tasks and 32 stall mentions.",
+      "Gate loops churned on wording and citation residue; SPEC-005 reached retry 6, and the orchestrator carried on past the escalate signal without asking the user.",
+      "Specs were written before visuals settled, then rewritten after the user's visual review; ceremony cost ~75 minutes and ~110 agent calls before any visual existed.",
+      "Design decisions were lost across sessions, frustrating the user.",
+      "The user said 'All merged' but #416 and #419 were not merged.",
+      "The first Edit on the wisp skill failed because the string had been typed incorrectly (specs-and-plans.md twice).",
+      "The first just check on the wisp tweaks failed on the pinned 1.0.0 version test.",
+      "Branch creation needed several attempts, because the first attempt left an existing branch.",
+      "v5-docs and v5-readme edited the root README concurrently.",
+      "The repo-wide pre-commit gate cost many waits during parallel smith runs."
+    ],
+    "open_items": [
+      "Merge #416 then #419, then run just release --dry-run and just release for 5.0.0.",
+      "Wisp tweaks commit made on a branch; check result and push/open a trail.",
+      "Decide whether to delete or keep the unwired hooks shared/hooks/subagent-start.sh and pre-command.sh.",
+      "Decide whether to remove mason's worker agents scaffolder and schema-designer.",
+      "About 35 orphaned schemas for the deleted pipeline and several unused references remain; spec_hash in plan@1 undecided.",
+      "Pages PR #45 was opened with gh against that repo's rule: close and redo as a trail, or keep.",
+      "Delete merged remote branches including the stray v5-core, and resolve Entire findings on trail #386.",
+      "Stale trails #388, #389 and #390 appear to be old guide-era work; user to decide whether to close.",
+      "Callisto's just ci ran before its commit and was not re-run on the committed tree.",
+      "Live use of v5 in the four repos is not verified; measuring rounds, turns and tokens needs a week or two of use.",
+      "Codex and Antigravity install lines, the .claude/settings.json snippet and the quick-start examples in the README are unverified.",
+      "Design gaps identified: sketch/explore mode, visual-intent criteria in specs, render-based gating, a promote-prototype-to-spec path, and cross-session decision memory."
+    ]
+  }
+}
